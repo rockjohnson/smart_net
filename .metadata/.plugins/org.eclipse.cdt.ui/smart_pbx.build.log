@@ -1,9 +1,0 @@
-
-**** Build of configuration Debug for project smart_pbx ****
-
-make all 
-Building file: ../src/smart_pbx.cpp
-Invoking: GCC C++ Compiler
-g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/smart_pbx.d" -MT"src/smart_pbx.d" -o"src/smart_pbx.o" "../src/smart_pbx.cpp"
-../src/smart_pbx.cpp:12:10: error: empty filename in #include
-make: *** [src/smart_pbx.o] Error 1
