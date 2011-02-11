@@ -1,0 +1,25 @@
+/*
+ * service.h
+ *
+ *  Created on: Feb 11, 2011
+ *      Author: rock
+ */
+
+#ifndef __SERVICE_H__
+#define __SERVICE_H__
+
+namespace nm_smartnet {
+
+class IService
+{
+public:
+	CService();
+	virtual ~CService();
+
+public:
+
+};
+
+}
+
+#endif /* SERVICE_H_ */

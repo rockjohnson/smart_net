@@ -1,0 +1,21 @@
+/*
+ * smart_net.h
+ *
+ *  Created on: Feb 11, 2011
+ *      Author: rock
+ */
+
+#ifndef SMART_NET_H_
+#define SMART_NET_H_
+
+namespace nm_smartnet {
+
+class CSmartNet {
+public:
+	CSmartNet();
+	virtual ~CSmartNet();
+};
+
+}
+
+#endif /* SMART_NET_H_ */

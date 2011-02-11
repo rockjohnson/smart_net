@@ -1,0 +1,184 @@
+
+**** Build of configuration Debug for project smart_net ****
+
+make all 
+Building file: ../network/conn.cpp
+Invoking: GCC C++ Compiler
+g++ -I"/home/rock/workspace/smartnet/comm_utils" -O0 -g3 -Wall -c -fmessage-length=0 -M -v -MMD -MP -MF"network/conn.d" -MT"network/conn.d" -o"network/conn.o" "../network/conn.cpp"
+Using built-in specs.
+COLLECT_GCC=/usr/bin/g++
+COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/lto-wrapper
+Target: x86_64-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,lto --enable-plugin --enable-java-awt=gtk --disable-dssi --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-1.5.0.0/jre --enable-libgcj-multifile --enable-java-maintainer-mode --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --disable-libjava-multilib --with-ppl --with-cloog --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux
+Finished building: ../network/conn.cpp
+ 
+Building file: ../network/socket.cpp
+Invoking: GCC C++ Compiler
+g++ -I"/home/rock/workspace/smartnet/comm_utils" -O0 -g3 -Wall -c -fmessage-length=0 -M -v -MMD -MP -MF"network/socket.d" -MT"network/socket.d" -o"network/socket.o" "../network/socket.cpp"
+Thread model: posix
+gcc version 4.5.1 20100924 (Red Hat 4.5.1-4) (GCC) 
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFnetwork/conn.d' '-MTnetwork/conn.d' '-o' 'network/conn.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+Finished building: ../network/socket.cpp
+ 
+Building file: ../framework/io_evt_notify.cpp
+Invoking: GCC C++ Compiler
+g++ -I"/home/rock/workspace/smartnet/comm_utils" -O0 -g3 -Wall -c -fmessage-length=0 -M -v -MMD -MP -MF"framework/io_evt_notify.d" -MT"framework/io_evt_notify.d" -o"framework/io_evt_notify.o" "../framework/io_evt_notify.cpp"
+ /usr/libexec/gcc/x86_64-redhat-linux/4.5.1/cc1plus -E -quiet -v -I/home/rock/workspace/smartnet/comm_utils -MMD network/conn.d -M -MFnetwork/conn.d -MP -MTnetwork/conn.d -dD -D_GNU_SOURCE ../network/conn.cpp -o network/conn.o -mtune=generic -march=x86-64 -Wall -fmessage-length=0 -g3 -fworking-directory -O0
+Finished building: ../framework/io_evt_notify.cpp
+ 
+Building file: ../framework/io_obj.cpp
+Invoking: GCC C++ Compiler
+g++ -I"/home/rock/workspace/smartnet/comm_utils" -O0 -g3 -Wall -c -fmessage-length=0 -M -v -MMD -MP -MF"framework/io_obj.d" -MT"framework/io_obj.d" -o"framework/io_obj.o" "../framework/io_obj.cpp"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/include-fixed"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../x86_64-redhat-linux/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/rock/workspace/smartnet/comm_utils
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/x86_64-redhat-linux
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/backward
+ /usr/local/include
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/include
+ /usr/include
+End of search list.
+COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../:/lib/:/usr/lib/
+Finished building: ../framework/io_obj.cpp
+ 
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFnetwork/conn.d' '-MTnetwork/conn.d' '-o' 'network/conn.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+Building file: ../framework/io_task.cpp
+Invoking: GCC C++ Compiler
+g++ -I"/home/rock/workspace/smartnet/comm_utils" -O0 -g3 -Wall -c -fmessage-length=0 -M -v -MMD -MP -MF"framework/io_task.d" -MT"framework/io_task.d" -o"framework/io_task.o" "../framework/io_task.cpp"
+Using built-in specs.
+COLLECT_GCC=/usr/bin/g++
+COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/lto-wrapper
+Target: x86_64-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,lto --enable-plugin --enable-java-awt=gtk --disable-dssi --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-1.5.0.0/jre --enable-libgcj-multifile --enable-java-maintainer-mode --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --disable-libjava-multilib --with-ppl --with-cloog --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux
+Finished building: ../framework/io_task.cpp
+ 
+Building file: ../framework/shared_obj.cpp
+Invoking: GCC C++ Compiler
+g++ -I"/home/rock/workspace/smartnet/comm_utils" -O0 -g3 -Wall -c -fmessage-length=0 -M -v -MMD -MP -MF"framework/shared_obj.d" -MT"framework/shared_obj.d" -o"framework/shared_obj.o" "../framework/shared_obj.cpp"
+Thread model: posix
+gcc version 4.5.1 20100924 (Red Hat 4.5.1-4) (GCC) 
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFnetwork/socket.d' '-MTnetwork/socket.d' '-o' 'network/socket.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+Finished building: ../framework/shared_obj.cpp
+ 
+Building target: libsmart_net.a
+Invoking: GCC Archiver
+ar -r "libsmart_net.a"  ./network/conn.o ./network/socket.o  ./framework/io_evt_notify.o ./framework/io_obj.o ./framework/io_task.o ./framework/shared_obj.o   
+ /usr/libexec/gcc/x86_64-redhat-linux/4.5.1/cc1plus -E -quiet -v -I/home/rock/workspace/smartnet/comm_utils -MMD network/socket.d -M -MFnetwork/socket.d -MP -MTnetwork/socket.d -dD -D_GNU_SOURCE ../network/socket.cpp -o network/socket.o -mtune=generic -march=x86-64 -Wall -fmessage-length=0 -g3 -fworking-directory -O0
+Finished building target: libsmart_net.a
+ 
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/include-fixed"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../x86_64-redhat-linux/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/rock/workspace/smartnet/comm_utils
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/x86_64-redhat-linux
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/backward
+ /usr/local/include
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/include
+ /usr/include
+End of search list.
+COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFnetwork/socket.d' '-MTnetwork/socket.d' '-o' 'network/socket.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+Using built-in specs.
+COLLECT_GCC=/usr/bin/g++
+COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/lto-wrapper
+Target: x86_64-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,lto --enable-plugin --enable-java-awt=gtk --disable-dssi --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-1.5.0.0/jre --enable-libgcj-multifile --enable-java-maintainer-mode --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --disable-libjava-multilib --with-ppl --with-cloog --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux
+Thread model: posix
+gcc version 4.5.1 20100924 (Red Hat 4.5.1-4) (GCC) 
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFframework/io_evt_notify.d' '-MTframework/io_evt_notify.d' '-o' 'framework/io_evt_notify.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/libexec/gcc/x86_64-redhat-linux/4.5.1/cc1plus -E -quiet -v -I/home/rock/workspace/smartnet/comm_utils -MMD framework/io_evt_notify.d -M -MFframework/io_evt_notify.d -MP -MTframework/io_evt_notify.d -dD -D_GNU_SOURCE ../framework/io_evt_notify.cpp -o framework/io_evt_notify.o -mtune=generic -march=x86-64 -Wall -fmessage-length=0 -g3 -fworking-directory -O0
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/include-fixed"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../x86_64-redhat-linux/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/rock/workspace/smartnet/comm_utils
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/x86_64-redhat-linux
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/backward
+ /usr/local/include
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/include
+ /usr/include
+End of search list.
+COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFframework/io_evt_notify.d' '-MTframework/io_evt_notify.d' '-o' 'framework/io_evt_notify.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+Using built-in specs.
+COLLECT_GCC=/usr/bin/g++
+COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/lto-wrapper
+Target: x86_64-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,lto --enable-plugin --enable-java-awt=gtk --disable-dssi --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-1.5.0.0/jre --enable-libgcj-multifile --enable-java-maintainer-mode --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --disable-libjava-multilib --with-ppl --with-cloog --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux
+Thread model: posix
+gcc version 4.5.1 20100924 (Red Hat 4.5.1-4) (GCC) 
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFframework/io_obj.d' '-MTframework/io_obj.d' '-o' 'framework/io_obj.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/libexec/gcc/x86_64-redhat-linux/4.5.1/cc1plus -E -quiet -v -I/home/rock/workspace/smartnet/comm_utils -MMD framework/io_obj.d -M -MFframework/io_obj.d -MP -MTframework/io_obj.d -dD -D_GNU_SOURCE ../framework/io_obj.cpp -o framework/io_obj.o -mtune=generic -march=x86-64 -Wall -fmessage-length=0 -g3 -fworking-directory -O0
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/include-fixed"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../x86_64-redhat-linux/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/rock/workspace/smartnet/comm_utils
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/x86_64-redhat-linux
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/backward
+ /usr/local/include
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/include
+ /usr/include
+End of search list.
+COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFframework/io_obj.d' '-MTframework/io_obj.d' '-o' 'framework/io_obj.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+Using built-in specs.
+COLLECT_GCC=/usr/bin/g++
+COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/lto-wrapper
+Target: x86_64-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,lto --enable-plugin --enable-java-awt=gtk --disable-dssi --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-1.5.0.0/jre --enable-libgcj-multifile --enable-java-maintainer-mode --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --disable-libjava-multilib --with-ppl --with-cloog --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux
+Thread model: posix
+gcc version 4.5.1 20100924 (Red Hat 4.5.1-4) (GCC) 
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFframework/io_task.d' '-MTframework/io_task.d' '-o' 'framework/io_task.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/libexec/gcc/x86_64-redhat-linux/4.5.1/cc1plus -E -quiet -v -I/home/rock/workspace/smartnet/comm_utils -MMD framework/io_task.d -M -MFframework/io_task.d -MP -MTframework/io_task.d -dD -D_GNU_SOURCE ../framework/io_task.cpp -o framework/io_task.o -mtune=generic -march=x86-64 -Wall -fmessage-length=0 -g3 -fworking-directory -O0
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/include-fixed"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../x86_64-redhat-linux/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/rock/workspace/smartnet/comm_utils
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/x86_64-redhat-linux
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/backward
+ /usr/local/include
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/include
+ /usr/include
+End of search list.
+COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFframework/io_task.d' '-MTframework/io_task.d' '-o' 'framework/io_task.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+Using built-in specs.
+COLLECT_GCC=/usr/bin/g++
+COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/lto-wrapper
+Target: x86_64-redhat-linux
+Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,lto --enable-plugin --enable-java-awt=gtk --disable-dssi --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-1.5.0.0/jre --enable-libgcj-multifile --enable-java-maintainer-mode --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --disable-libjava-multilib --with-ppl --with-cloog --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux
+Thread model: posix
+gcc version 4.5.1 20100924 (Red Hat 4.5.1-4) (GCC) 
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFframework/shared_obj.d' '-MTframework/shared_obj.d' '-o' 'framework/shared_obj.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/libexec/gcc/x86_64-redhat-linux/4.5.1/cc1plus -E -quiet -v -I/home/rock/workspace/smartnet/comm_utils -MMD framework/shared_obj.d -M -MFframework/shared_obj.d -MP -MTframework/shared_obj.d -dD -D_GNU_SOURCE ../framework/shared_obj.cpp -o framework/shared_obj.o -mtune=generic -march=x86-64 -Wall -fmessage-length=0 -g3 -fworking-directory -O0
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/include-fixed"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../x86_64-redhat-linux/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/rock/workspace/smartnet/comm_utils
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/x86_64-redhat-linux
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/backward
+ /usr/local/include
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/include
+ /usr/include
+End of search list.
+COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/4.5.1/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/4.5.1/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-I/home/rock/workspace/smartnet/comm_utils' '-O0' '-g3' '-Wall' '-c' '-fmessage-length=0' '-M' '-v' '-MMD' '-MP' '-MFframework/shared_obj.d' '-MTframework/shared_obj.d' '-o' 'framework/shared_obj.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ar: creating libsmart_net.a

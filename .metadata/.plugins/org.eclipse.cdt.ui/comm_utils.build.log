@@ -1,0 +1,47 @@
+
+**** Build of configuration Debug for project comm_utils ****
+
+make all 
+Building file: ../utils/file.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"utils/file.d" -MT"utils/file.d" -o"utils/file.o" "../utils/file.cpp"
+Finished building: ../utils/file.cpp
+ 
+Building file: ../utils/time_info.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"utils/time_info.d" -MT"utils/time_info.d" -o"utils/time_info.o" "../utils/time_info.cpp"
+Finished building: ../utils/time_info.cpp
+ 
+Building file: ../utils/utils.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"utils/utils.d" -MT"utils/utils.d" -o"utils/utils.o" "../utils/utils.cpp"
+../utils/utils.cpp: In function ‘char* nm_utils::get_cur_exe_path(char*, u_int32_t)’:
+../utils/utils.cpp:187:14: warning: comparison between signed and unsigned integer expressions
+Finished building: ../utils/utils.cpp
+ 
+Building file: ../thread/thread_ex.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"thread/thread_ex.d" -MT"thread/thread_ex.d" -o"thread/thread_ex.o" "../thread/thread_ex.cpp"
+../thread/thread_ex.cpp: In member function ‘int32_t nm_thread::CThread::start()’:
+../thread/thread_ex.cpp:75:15: warning: converting to non-pointer type ‘long int’ from NULL
+../thread/thread_ex.cpp: In member function ‘int32_t nm_thread::CThread::stop()’:
+../thread/thread_ex.cpp:85:15: warning: converting to non-pointer type ‘long int’ from NULL
+Finished building: ../thread/thread_ex.cpp
+../thread/thread_ex.cpp: In member function ‘int32_t nm_thread::CThread::assign_task(nm_thread::thread_task_ptr_t&)’:
+ 
+../thread/thread_ex.cpp:116:3: warning: converting to non-pointer type ‘long int’ from NULL
+../thread/thread_ex.cpp: In member function ‘int32_t nm_thread::CThread::reset_task()’:
+Building file: ../log/smart_log.cpp
+../thread/thread_ex.cpp:124:3: warning: converting to non-pointer type ‘long int’ from NULL
+../thread/thread_ex.cpp: In member function ‘void* nm_thread::CThread::exec()’:
+../thread/thread_ex.cpp:151:4: warning: converting to non-pointer type ‘long int’ from NULL
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"log/smart_log.d" -MT"log/smart_log.d" -o"log/smart_log.o" "../log/smart_log.cpp"
+Finished building: ../log/smart_log.cpp
+ 
+Building target: libcomm_utils.a
+Invoking: GCC Archiver
+ar -rs "libcomm_utils.a"  ./utils/file.o ./utils/time_info.o ./utils/utils.o  ./thread/thread_ex.o  ./log/smart_log.o   
+ar: creating libcomm_utils.a
+Finished building target: libcomm_utils.a
+ 

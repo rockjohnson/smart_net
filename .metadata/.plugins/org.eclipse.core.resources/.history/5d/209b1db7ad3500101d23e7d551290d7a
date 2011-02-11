@@ -1,0 +1,36 @@
+/*
+ * io_task.cpp
+ *
+ *  Created on: Nov 30, 2010
+ *      Author: rock
+ */
+
+#include "io_task.h"
+
+namespace nm_framework
+{
+
+	CIoTask::CIoTask()
+	{
+		// TODO Auto-generated constructor stub
+
+	}
+
+	CIoTask::~CIoTask()
+	{
+		// TODO Auto-generated destructor stub
+	}
+
+	void CIoTask::exec()
+	{
+#if __PLATFORM__ == __PLATFORM_LINUX__
+#elif __PLATFORM__ == __PLATFORM_WINDOWS__
+#endif
+
+		while (!is_stopped())
+		{
+
+		}
+	}
+
+}

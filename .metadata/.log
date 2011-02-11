@@ -1,0 +1,150 @@
+!SESSION 2011-02-11 11:00:46.567 -----------------------------------------------
+eclipse.buildId=M20100909-0800
+java.version=1.6.0_20
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -data /home/rock/workspace/smartnet -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.cdt.core 1 0 2011-02-11 11:03:26.294
+!MESSAGE Indexed 'comm_utils_test' (1 sources, 225 headers) in 54.04 sec: 17,701 declarations; 29,405 references; 0 unresolved inclusions; 0 syntax errors; 180 unresolved names (0.38%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2011-02-11 11:03:28.428
+!MESSAGE Indexed 'rmp' (0 sources, 75 headers) in 2.12 sec: 2,141 declarations; 2,343 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0.00%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2011-02-11 11:03:44.995
+!MESSAGE Indexed 'comm_utils' (5 sources, 170 headers) in 7.82 sec: 10,407 declarations; 15,429 references; 0 unresolved inclusions; 0 syntax errors; 57 unresolved names (0.22%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2011-02-11 11:03:45.963
+!MESSAGE Indexed 'smart_net' (6 sources, 19 headers) in 0.94 sec: 123 declarations; 107 references; 0 unresolved inclusions; 0 syntax errors; 5 unresolved names (2.13%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2011-02-11 11:03:53.165
+!MESSAGE Indexed 'smart_net_test' (1 sources, 33 headers) in 7.19 sec: 3,170 declarations; 6,860 references; 0 unresolved inclusions; 0 syntax errors; 39 unresolved names (0.39%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2011-02-11 11:03:57.745
+!MESSAGE Indexed 'smart_pbx' (1 sources, 146 headers) in 4.57 sec: 10,248 declarations; 15,390 references; 0 unresolved inclusions; 1 syntax errors; 84 unresolved names (0.33%)
+!SESSION 2011-02-11 11:09:03.769 -----------------------------------------------
+eclipse.buildId=M20100909-0800
+java.version=1.6.0_20
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.egit.core 4 0 2011-02-11 11:09:21.485
+!MESSAGE A mapped resource no longer exists in Eclipse.
+!STACK 0
+java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:450)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:420)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:413)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:168)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:78)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:211)
+	at org.eclipse.egit.ui.internal.decorators.GitLightweightDecorator.decorate(GitLightweightDecorator.java:214)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.decorate(LightweightDecoratorDefinition.java:263)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager$LightweightRunnable.run(LightweightDecoratorManager.java:81)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.decorate(LightweightDecoratorManager.java:365)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.getDecorations(LightweightDecoratorManager.java:347)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.ensureResultCached(DecorationScheduler.java:371)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.run(DecorationScheduler.java:331)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.egit.core 4 0 2011-02-11 11:09:24.263
+!MESSAGE A mapped resource no longer exists in Eclipse.
+!STACK 0
+java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:450)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:420)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:413)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:168)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:78)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:211)
+	at org.eclipse.egit.ui.internal.decorators.GitLightweightDecorator.decorate(GitLightweightDecorator.java:214)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.decorate(LightweightDecoratorDefinition.java:263)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager$LightweightRunnable.run(LightweightDecoratorManager.java:81)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.decorate(LightweightDecoratorManager.java:365)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.getDecorations(LightweightDecoratorManager.java:347)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.ensureResultCached(DecorationScheduler.java:371)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.run(DecorationScheduler.java:331)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.egit.core 4 0 2011-02-11 11:09:24.270
+!MESSAGE A mapped resource no longer exists in Eclipse.
+!STACK 0
+java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:450)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:420)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:413)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:168)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:78)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:211)
+	at org.eclipse.egit.ui.internal.decorators.GitLightweightDecorator.decorate(GitLightweightDecorator.java:214)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.decorate(LightweightDecoratorDefinition.java:263)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager$LightweightRunnable.run(LightweightDecoratorManager.java:81)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.decorate(LightweightDecoratorManager.java:365)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.getDecorations(LightweightDecoratorManager.java:347)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.ensureResultCached(DecorationScheduler.java:371)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.run(DecorationScheduler.java:331)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.egit.core 4 0 2011-02-11 11:09:24.303
+!MESSAGE A mapped resource no longer exists in Eclipse.
+!STACK 0
+java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:450)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:420)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:413)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:168)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:78)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:211)
+	at org.eclipse.egit.ui.internal.decorators.GitLightweightDecorator.decorate(GitLightweightDecorator.java:214)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.decorate(LightweightDecoratorDefinition.java:263)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager$LightweightRunnable.run(LightweightDecoratorManager.java:81)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.decorate(LightweightDecoratorManager.java:365)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.getDecorations(LightweightDecoratorManager.java:347)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.ensureResultCached(DecorationScheduler.java:371)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.run(DecorationScheduler.java:331)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.egit.core 4 0 2011-02-11 11:09:24.304
+!MESSAGE A mapped resource no longer exists in Eclipse.
+!STACK 0
+java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:450)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:420)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:413)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:168)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:78)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:211)
+	at org.eclipse.egit.ui.internal.decorators.GitLightweightDecorator.decorate(GitLightweightDecorator.java:214)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.decorate(LightweightDecoratorDefinition.java:263)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager$LightweightRunnable.run(LightweightDecoratorManager.java:81)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.decorate(LightweightDecoratorManager.java:365)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.getDecorations(LightweightDecoratorManager.java:347)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.ensureResultCached(DecorationScheduler.java:371)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.run(DecorationScheduler.java:331)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.egit.core 4 0 2011-02-11 11:09:24.305
+!MESSAGE A mapped resource no longer exists in Eclipse.
+!STACK 0
+java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:450)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:420)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:413)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:168)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:78)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:211)
+	at org.eclipse.egit.ui.internal.decorators.GitLightweightDecorator.decorate(GitLightweightDecorator.java:214)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorDefinition.decorate(LightweightDecoratorDefinition.java:263)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager$LightweightRunnable.run(LightweightDecoratorManager.java:81)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.decorate(LightweightDecoratorManager.java:365)
+	at org.eclipse.ui.internal.decorators.LightweightDecoratorManager.getDecorations(LightweightDecoratorManager.java:347)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.ensureResultCached(DecorationScheduler.java:371)
+	at org.eclipse.ui.internal.decorators.DecorationScheduler$1.run(DecorationScheduler.java:331)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
