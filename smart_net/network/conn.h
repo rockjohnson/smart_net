@@ -12,6 +12,7 @@
 
 namespace nm_net
 {
+
 /**
  * base connection class
  * */
@@ -31,7 +32,6 @@ private:
 	virtual void on_closed(int32_t iErrCode) = 0;
 
 };
-
 
 /**
  * tcp connection
@@ -54,7 +54,6 @@ private:
 	tcp_sock_ptr_t m_pSock;
 };
 
-
 /**
  * udp connection
  * */
@@ -64,7 +63,6 @@ public:
 	CUdpConn();
 	virtual ~CUdpConn();
 };
-
 
 /**
  *

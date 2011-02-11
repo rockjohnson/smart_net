@@ -12,6 +12,12 @@
 
 #include <log/smart_log.h>
 
+
+int32_t test()
+{
+	IF_TRUE_THEN_RETURN_CODE(1, 1);
+}
+
 class CTestSmartLog : public CxxTest::TestSuite
 {
 	public:
@@ -21,6 +27,8 @@ class CTestSmartLog : public CxxTest::TestSuite
 			log.init("./test_smartlog/haha/", "smartlog_", nm_utils::ELL_DEBUG, 30);
 
 			TRACE_LOG(log, nm_utils::ELL_ERR, "this is a error test!\n");
+
+			IF_TRUE_THEN_RETURN(1);
 		}
 
 //		void test_detail_log()

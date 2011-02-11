@@ -65,5 +65,16 @@
 #define SYS_ASSERT(expr) \
 	assert((expr))
 
+#define IF_TRUE_THEN_RETURN_CODE(expr, retcode) \
+	if ((expr)) \
+	{ \
+		return retcode; \
+	}
+
+#define IF_TRUE_THEN_RETURN(expr) \
+	if ((expr)) \
+	{ \
+		return; \
+	}
 
 #endif /* DEFINES_H_ */

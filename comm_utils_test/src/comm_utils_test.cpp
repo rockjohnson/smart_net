@@ -32,11 +32,11 @@ public:
 static CTestSmartLog suite_CTestSmartLog;
 
 static CxxTest::List Tests_CTestSmartLog = { 0, 0 };
-CxxTest::StaticSuiteDescription suiteDescription_CTestSmartLog( "../test/test_smartlog.h", 15, "CTestSmartLog", suite_CTestSmartLog, Tests_CTestSmartLog );
+CxxTest::StaticSuiteDescription suiteDescription_CTestSmartLog( "../test/test_smartlog.h", 21, "CTestSmartLog", suite_CTestSmartLog, Tests_CTestSmartLog );
 
 static class TestDescription_CTestSmartLog_test_log : public CxxTest::RealTestDescription {
 public:
- TestDescription_CTestSmartLog_test_log() : CxxTest::RealTestDescription( Tests_CTestSmartLog, suiteDescription_CTestSmartLog, 18, "test_log" ) {}
+ TestDescription_CTestSmartLog_test_log() : CxxTest::RealTestDescription( Tests_CTestSmartLog, suiteDescription_CTestSmartLog, 24, "test_log" ) {}
  void runTest() { suite_CTestSmartLog.test_log(); }
 } testDescription_CTestSmartLog_test_log;
 

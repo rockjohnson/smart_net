@@ -110,5 +110,8 @@ namespace nm_utils
 
 	///split file name
 	int32_t split_file_name(const string_t &strFullFileName, string_t &strDir, string_t &strFile);
+
+	///get sys error msg
+	const char* get_sys_err_msg(int32_t iErrNo, char *pszErrBuf, u_int32_t uiBufSize);
 }
 #endif /* __COMM_H__ */

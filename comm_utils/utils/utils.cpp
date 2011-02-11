@@ -344,5 +344,30 @@ namespace nm_utils
 //							== SCHED_OTHER) ? "SCHED_OTHER" : "???",
 //									param->sched_priority);
 //} /* display_sched_attr */
+
+    const char* get_sys_err_msg(int32_t iErrNo, char *pszErrBuf, u_int32_t uiBufSize)
+    {
+#if __PLATFORM__ == __PLATFORM_LINUX__
+            char *psz = NULL;
+            return (psz = (char*)strerror_r(iErrNo, pszErrBuf, uiBufSize)) == NULL ? pszErrBuf
+                            : strcpy(pszErrBuf, psz); //note, according to the definition of the strerror_r, pszErrBuf may not be filled with the error message, but the return does.
+#elif defined(__PLATEFORM_WINDOWS__)
+            void *lpMsgBuf = 0;
+
+            ::FormatMessageA(
+                    FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                    FORMAT_MESSAGE_FROM_SYSTEM,
+                    NULL,
+                    iErrNo,
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                    (char*)&lpMsgBuf,
+                    0, NULL );
+            strcpy_s(pszErrBuf, uiBufSize, (const char*)lpMsgBuf);
+            ::LocalFree(lpMsgBuf);
+
+            return pszErrBuf;
+#endif
+    }
+
 }
 

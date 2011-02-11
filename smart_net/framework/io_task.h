@@ -40,6 +40,8 @@ namespace nm_framework
 			///...
 			io_obj_set_t m_setInvalidIoObjs;
 			CSpinLock m_splkInvalidIoObjs;
+			///max io wait interval.
+			u_int32_t m_ui32MaxIoEvtWaitInterval;
 	};
 
 	typedef nm_utils::CSmartPtr<nm_framework::CIoTask> io_task_ptr_t;
