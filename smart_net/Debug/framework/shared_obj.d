@@ -1,7 +1,7 @@
 framework/shared_obj.d: ../framework/shared_obj.cpp \
  ../framework/shared_obj.h ../framework/io_task.h \
- /home/rock/workspace/smartnet/comm_utils/thread/thread_ex.h \
- /home/rock/workspace/smartnet/comm_utils/thread/../common/common.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/thread_ex.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../common/common.h \
  /usr/include/assert.h /usr/include/features.h /usr/include/sys/cdefs.h \
  /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
  /usr/include/gnu/stubs-64.h \
@@ -62,8 +62,8 @@ framework/shared_obj.d: ../framework/shared_obj.cpp \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/x86_64-redhat-linux/bits/atomic_word.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/initializer_list \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/basic_string.tcc \
- /home/rock/workspace/smartnet/comm_utils/thread/../common/defines.h \
- /home/rock/workspace/smartnet/comm_utils/thread/../common/containers.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../common/defines.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../common/containers.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/map \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_tree.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_map.h \
@@ -71,24 +71,24 @@ framework/shared_obj.d: ../framework/shared_obj.cpp \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/set \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_set.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_multiset.h \
- /home/rock/workspace/smartnet/comm_utils/thread/../common/types.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../common/types.h \
  /usr/include/sys/types.h /usr/include/sys/select.h \
  /usr/include/bits/select.h /usr/include/bits/sigset.h \
  /usr/include/sys/sysmacros.h \
- /home/rock/workspace/smartnet/comm_utils/thread/../common/base.h \
- /home/rock/workspace/smartnet/comm_utils/thread/../common/../utils/smart_ptr.h \
- /home/rock/workspace/smartnet/comm_utils/thread/../common/../utils/atomic.h \
- /home/rock/workspace/smartnet/comm_utils/thread/../common/../utils/../common/common.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../common/base.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/smart_ptr.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/atomic.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/../common/common.h \
  ../framework/io_evt_notify.h ../framework/io_obj.h \
- /home/rock/workspace/smartnet/comm_utils/common/common.h
+ /home/rock/workspace/smart_net/comm_utils/common/common.h
 
 ../framework/shared_obj.h:
 
 ../framework/io_task.h:
 
-/home/rock/workspace/smartnet/comm_utils/thread/thread_ex.h:
+/home/rock/workspace/smart_net/comm_utils/thread/thread_ex.h:
 
-/home/rock/workspace/smartnet/comm_utils/thread/../common/common.h:
+/home/rock/workspace/smart_net/comm_utils/thread/../common/common.h:
 
 /usr/include/assert.h:
 
@@ -240,9 +240,9 @@ framework/shared_obj.d: ../framework/shared_obj.cpp \
 
 /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/basic_string.tcc:
 
-/home/rock/workspace/smartnet/comm_utils/thread/../common/defines.h:
+/home/rock/workspace/smart_net/comm_utils/thread/../common/defines.h:
 
-/home/rock/workspace/smartnet/comm_utils/thread/../common/containers.h:
+/home/rock/workspace/smart_net/comm_utils/thread/../common/containers.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/map:
 
@@ -258,7 +258,7 @@ framework/shared_obj.d: ../framework/shared_obj.cpp \
 
 /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_multiset.h:
 
-/home/rock/workspace/smartnet/comm_utils/thread/../common/types.h:
+/home/rock/workspace/smart_net/comm_utils/thread/../common/types.h:
 
 /usr/include/sys/types.h:
 
@@ -270,16 +270,16 @@ framework/shared_obj.d: ../framework/shared_obj.cpp \
 
 /usr/include/sys/sysmacros.h:
 
-/home/rock/workspace/smartnet/comm_utils/thread/../common/base.h:
+/home/rock/workspace/smart_net/comm_utils/thread/../common/base.h:
 
-/home/rock/workspace/smartnet/comm_utils/thread/../common/../utils/smart_ptr.h:
+/home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/smart_ptr.h:
 
-/home/rock/workspace/smartnet/comm_utils/thread/../common/../utils/atomic.h:
+/home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/atomic.h:
 
-/home/rock/workspace/smartnet/comm_utils/thread/../common/../utils/../common/common.h:
+/home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/../common/common.h:
 
 ../framework/io_evt_notify.h:
 
 ../framework/io_obj.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/common.h:
+/home/rock/workspace/smart_net/comm_utils/common/common.h:

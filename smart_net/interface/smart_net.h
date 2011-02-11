@@ -8,18 +8,21 @@
 #ifndef __SMART_NET_H__
 #define __SMART_NET_H__
 
-namespace nm_smartnet {
+namespace nm_smartnet
+{
 
-class CSmartNet {
+class CSmartNet
+{
 public:
 	CSmartNet();
 	virtual ~CSmartNet();
 
 public:
-	template <class C>
+	template<class C>
 	int32_t add_tcp_listen_service();
-	template <class C>
+	template<class C>
 	int32_t add_tcp_connect_service();
+
 };
 
 }

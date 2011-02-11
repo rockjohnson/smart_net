@@ -47,7 +47,7 @@ main-build: comm_utils_test
 comm_utils_test: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L"/home/rock/workspace/smartnet/comm_utils/Debug" -o"comm_utils_test" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"/home/rock/workspace/smart_net/comm_utils/Debug" -o"comm_utils_test" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

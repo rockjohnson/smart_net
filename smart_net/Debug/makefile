@@ -10,6 +10,7 @@ RM := rm -rf
 -include sources.mk
 -include subdir.mk
 -include network/subdir.mk
+-include interface/subdir.mk
 -include framework/subdir.mk
 -include objects.mk
 

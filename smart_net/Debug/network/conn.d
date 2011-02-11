@@ -1,6 +1,6 @@
 network/conn.d: ../network/conn.cpp ../network/conn.h ../network/socket.h \
  ../network/../framework/io_obj.h \
- /home/rock/workspace/smartnet/comm_utils/common/common.h \
+ /home/rock/workspace/smart_net/comm_utils/common/common.h \
  /usr/include/assert.h /usr/include/features.h /usr/include/sys/cdefs.h \
  /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
  /usr/include/gnu/stubs-64.h \
@@ -61,8 +61,8 @@ network/conn.d: ../network/conn.cpp ../network/conn.h ../network/socket.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/x86_64-redhat-linux/bits/atomic_word.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/initializer_list \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/basic_string.tcc \
- /home/rock/workspace/smartnet/comm_utils/common/defines.h \
- /home/rock/workspace/smartnet/comm_utils/common/containers.h \
+ /home/rock/workspace/smart_net/comm_utils/common/defines.h \
+ /home/rock/workspace/smart_net/comm_utils/common/containers.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/map \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_tree.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_map.h \
@@ -70,14 +70,14 @@ network/conn.d: ../network/conn.cpp ../network/conn.h ../network/socket.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/set \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_set.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_multiset.h \
- /home/rock/workspace/smartnet/comm_utils/common/types.h \
+ /home/rock/workspace/smart_net/comm_utils/common/types.h \
  /usr/include/sys/types.h /usr/include/sys/select.h \
  /usr/include/bits/select.h /usr/include/bits/sigset.h \
  /usr/include/sys/sysmacros.h \
- /home/rock/workspace/smartnet/comm_utils/common/base.h \
- /home/rock/workspace/smartnet/comm_utils/common/../utils/smart_ptr.h \
- /home/rock/workspace/smartnet/comm_utils/common/../utils/atomic.h \
- /home/rock/workspace/smartnet/comm_utils/common/../utils/../common/common.h
+ /home/rock/workspace/smart_net/comm_utils/common/base.h \
+ /home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h \
+ /home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h \
+ /home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h
 
 ../network/conn.h:
 
@@ -85,7 +85,7 @@ network/conn.d: ../network/conn.cpp ../network/conn.h ../network/socket.h \
 
 ../network/../framework/io_obj.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/common.h:
+/home/rock/workspace/smart_net/comm_utils/common/common.h:
 
 /usr/include/assert.h:
 
@@ -237,9 +237,9 @@ network/conn.d: ../network/conn.cpp ../network/conn.h ../network/socket.h \
 
 /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/basic_string.tcc:
 
-/home/rock/workspace/smartnet/comm_utils/common/defines.h:
+/home/rock/workspace/smart_net/comm_utils/common/defines.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/containers.h:
+/home/rock/workspace/smart_net/comm_utils/common/containers.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/map:
 
@@ -255,7 +255,7 @@ network/conn.d: ../network/conn.cpp ../network/conn.h ../network/socket.h \
 
 /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_multiset.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/types.h:
+/home/rock/workspace/smart_net/comm_utils/common/types.h:
 
 /usr/include/sys/types.h:
 
@@ -267,10 +267,10 @@ network/conn.d: ../network/conn.cpp ../network/conn.h ../network/socket.h \
 
 /usr/include/sys/sysmacros.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/base.h:
+/home/rock/workspace/smart_net/comm_utils/common/base.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/../utils/smart_ptr.h:
+/home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/../utils/atomic.h:
+/home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/../utils/../common/common.h:
+/home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h:

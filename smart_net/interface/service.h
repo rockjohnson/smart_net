@@ -8,7 +8,8 @@
 #ifndef __SERVICE_H__
 #define __SERVICE_H__
 
-namespace nm_smartnet {
+namespace nm_smartnet
+{
 
 class IService
 {
@@ -19,8 +20,6 @@ public:
 public:
 	virtual int32_t start() = 0;
 	virtual int32_t stop() = 0;
-
-
 };
 
 /**

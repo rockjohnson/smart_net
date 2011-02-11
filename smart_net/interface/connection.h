@@ -65,7 +65,6 @@ public:
 };
 
 /**
- *
  * rmp connection
  * */
 class CRmpConn: public nm_net::CConn
