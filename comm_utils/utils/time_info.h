@@ -1,0 +1,27 @@
+/*
+ * time_info.h
+ *
+ *  Created on: Apr 3, 2009
+ *      Author: rock
+ */
+
+#ifndef __TIME_INFO_H__
+#define __TIME_INFO_H__
+
+#include "../common/common.h"
+
+namespace nm_utils
+{
+	class CTimeInfo
+	{
+	public:
+		CTimeInfo();
+		virtual ~CTimeInfo();
+
+	public:
+		static time_t get_time_in_seconds();
+		static cstr_t get_day_time(char_t *pwszBuf);
+	};
+}
+
+#endif /* __TIME_INFO_H__ */
