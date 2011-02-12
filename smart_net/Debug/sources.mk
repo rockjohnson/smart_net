@@ -26,4 +26,5 @@ SUBDIRS := \
 network \
 interface \
 framework \
+common \
 

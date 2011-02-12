@@ -11,6 +11,8 @@
 #include <signal.h>
 #if __PLATFORM__ == __PLATFORM_LINUX__
 #include <errno.h>
+#include <unistd.h>
+#include <fcntl.h>
 #endif
 #include <string.h>
 #include <sys/stat.h>
@@ -369,5 +371,25 @@ namespace nm_utils
 #endif
     }
 
+
+    int32_t get_block_flag(int32_t i32fd)
+    {
+    	SYS_ASSERT(-1 < i32fd);
+    	return fcntl(i32fd, F_GETFL, 0);
+    }
+
+    int32_t set_block_flag(int32_t i32fd, bool bBlockOrNot)
+    {
+    	SYS_ASSERT(-1 < i32fd);
+    	int32_t i32Flags = get_block_flag(i32fd);
+    	if (0 > i32Flags)
+    	{
+    		return CMNERR_CALL_FCNTL_FAILED;
+    	}
+
+    	return bBlockOrNot ?
+    			fcntl(i32fd, F_SETFL, i32Flags & (~O_NONBLOCK)) :
+    			fcntl(i32fd, F_SETFL, i32Flags | O_NONBLOCK);
+    }
 }
 

@@ -31,7 +31,8 @@ public:
 	virtual ~CTcpListener();
 
 public:
-	int32_t init();
+	int32_t init(INetAddr &bindAddr, int32_t i32Backlog);
+	int32_t destroy();
 	void handle_read_evt();
 	void handle_write_evt();
 	void handle_error_evt();
@@ -41,6 +42,8 @@ public:
 private:
 	CTcpSock m_tcpSock;
 };
+typedef nm_utils::CSmartPtr<nm_network::CTcpListener> tcp_listener_ptr_t;
+
 
 }
 

@@ -8,7 +8,7 @@
 #ifndef _IO_OBJ_H___
 #define _IO_OBJ_H___
 
-#include "../share/sn_common.h"
+#include "../common/sn_common.h"
 
 namespace nm_framework
 {

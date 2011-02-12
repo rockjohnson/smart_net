@@ -8,7 +8,7 @@
 #ifndef __SERVICE_H__
 #define __SERVICE_H__
 
-#include "../share/sn_common.h"
+#include "../common/sn_common.h"
 #include "../network/net_addr.h"
 
 namespace nm_smartnet
@@ -58,6 +58,7 @@ public:
 	int32_t init(INetAddr &localAddr, INetAddr &remoteAddr, int32_t i32MaxInboundConnectionCnt, int32_t i32MinOutboundConnectionCnt);
 	int32_t start();
 	int32_t stop();
+	void set_backlog(int32_t i32Backlog);
 
 private:
 	int32_t start_listen_service();
@@ -70,6 +71,10 @@ private:
 	///max connection count, NO_CONNECTIONS_LIMIT means no limit.
 	int32_t m_i32MaxInboundConnCnt;
 	int32_t m_i32MinOutboundConnCnt;
+	///
+	tcp_listener_ptr_t m_pTcpListener;
+	///
+	int32_t m_i32Backlog;
 };
 
 class CRudpService : public INetService

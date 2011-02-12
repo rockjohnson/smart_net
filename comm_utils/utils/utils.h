@@ -113,5 +113,9 @@ namespace nm_utils
 
 	///get sys error msg
 	const char* get_sys_err_msg(int32_t iErrNo, char *pszErrBuf, u_int32_t uiBufSize);
+
+	///get or set socket block.
+	int32_t get_block_flag(int32_t i32fd);
+	int32_t set_block_flag(int32_t i32fd, bool bBlockOrNot);
 }
 #endif /* __COMM_H__ */

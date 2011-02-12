@@ -75,11 +75,15 @@ framework/io_task.d: ../framework/io_task.cpp ../framework/io_task.h \
  /usr/include/bits/select.h /usr/include/bits/sigset.h \
  /usr/include/sys/sysmacros.h \
  /home/rock/workspace/smart_net/comm_utils/thread/../common/base.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../common/err_info.h \
  /home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/smart_ptr.h \
  /home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/atomic.h \
  /home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/../common/common.h \
  ../framework/io_evt_notify.h ../framework/io_obj.h \
- /home/rock/workspace/smart_net/comm_utils/common/common.h
+ ../framework/../common/sn_common.h \
+ /home/rock/workspace/smart_net/comm_utils/common/common.h \
+ ../framework/../common/sn_defines.h ../framework/../common/sn_err_info.h \
+ ../framework/../common/sn_revision.h
 
 ../framework/io_task.h:
 
@@ -269,6 +273,8 @@ framework/io_task.d: ../framework/io_task.cpp ../framework/io_task.h \
 
 /home/rock/workspace/smart_net/comm_utils/thread/../common/base.h:
 
+/home/rock/workspace/smart_net/comm_utils/thread/../common/err_info.h:
+
 /home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/smart_ptr.h:
 
 /home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/atomic.h:
@@ -279,4 +285,12 @@ framework/io_task.d: ../framework/io_task.cpp ../framework/io_task.h \
 
 ../framework/io_obj.h:
 
+../framework/../common/sn_common.h:
+
 /home/rock/workspace/smart_net/comm_utils/common/common.h:
+
+../framework/../common/sn_defines.h:
+
+../framework/../common/sn_err_info.h:
+
+../framework/../common/sn_revision.h:

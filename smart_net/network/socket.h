@@ -27,10 +27,11 @@ public:
 	virtual int32_t init(int32_t i32fd = INVALID_SOCKET) = 0;
 	virtual int32_t destroy() = 0;
 	virtual int32_t bind(INetAddr &localAddr) = 0;
-	virtual int32_t listen() = 0;
+	virtual int32_t listen(int32_t i32Backlog) = 0;
 	virtual int32_t connect(INetAddr &remoteAddr) = 0;
 	virtual int32_t get_fd() = 0;
 	virtual bool is_valid() = 0;
+	virtual int32_t set_nonblock(bool bFlag) = 0;
 };
 typedef nm_utils::CSmartPtr<nm_network::ISocket> sock_ptr_t;
 
@@ -48,10 +49,11 @@ public:
 	int32_t init(int32_t i32fd = INVALID_SOCKET);
 	int32_t destroy();
 	int32_t bind(INetAddr &localAddr);
-	int32_t listen();
+	int32_t listen(int32_t i32Backlog);
 	int32_t connect(INetAddr &remoteAddr);
 	int32_t get_fd();
 	bool is_valid();
+	int32_t set_nonblock(bool bFlag);
 
 private:
 	int32_t m_i32fd;

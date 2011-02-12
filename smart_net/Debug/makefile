@@ -12,6 +12,7 @@ RM := rm -rf
 -include network/subdir.mk
 -include interface/subdir.mk
 -include framework/subdir.mk
+-include common/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)

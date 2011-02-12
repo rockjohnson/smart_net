@@ -9,6 +9,8 @@
 #define __DEFINES_H__
 
 #include <assert.h>
+#include <new>
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define __PLATFORM_WINDOWS__ (0)
@@ -78,5 +80,8 @@
 	{ \
 		return; \
 	}
+
+#define SYS_NOTRW_NEW(cls) \
+		new(std::nothrow) cls
 
 #endif /* DEFINES_H_ */

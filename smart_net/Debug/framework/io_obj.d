@@ -1,4 +1,5 @@
 framework/io_obj.d: ../framework/io_obj.cpp ../framework/io_obj.h \
+ ../framework/../common/sn_common.h \
  /home/rock/workspace/smart_net/comm_utils/common/common.h \
  /usr/include/assert.h /usr/include/features.h /usr/include/sys/cdefs.h \
  /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
@@ -74,11 +75,16 @@ framework/io_obj.d: ../framework/io_obj.cpp ../framework/io_obj.h \
  /usr/include/bits/select.h /usr/include/bits/sigset.h \
  /usr/include/sys/sysmacros.h \
  /home/rock/workspace/smart_net/comm_utils/common/base.h \
+ /home/rock/workspace/smart_net/comm_utils/common/err_info.h \
  /home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h \
  /home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h
+ /home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h \
+ ../framework/../common/sn_defines.h ../framework/../common/sn_err_info.h \
+ ../framework/../common/sn_revision.h
 
 ../framework/io_obj.h:
+
+../framework/../common/sn_common.h:
 
 /home/rock/workspace/smart_net/comm_utils/common/common.h:
 
@@ -264,8 +270,16 @@ framework/io_obj.d: ../framework/io_obj.cpp ../framework/io_obj.h \
 
 /home/rock/workspace/smart_net/comm_utils/common/base.h:
 
+/home/rock/workspace/smart_net/comm_utils/common/err_info.h:
+
 /home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h:
 
 /home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h:
 
 /home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h:
+
+../framework/../common/sn_defines.h:
+
+../framework/../common/sn_err_info.h:
+
+../framework/../common/sn_revision.h:

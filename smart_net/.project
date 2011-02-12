@@ -4,7 +4,6 @@
 	<comment></comment>
 	<projects>
 		<project>comm_utils</project>
-		<project>rmp</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

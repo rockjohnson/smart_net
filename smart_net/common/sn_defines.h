@@ -17,4 +17,9 @@
 #define __IO_EVT_NOTIFY_MECHANISM__ __SELECT__
 #endif
 
+#define HTONS(u16) \
+	htons(u16)
+#define HTONL(u32) \
+	htonl(u32)
+
 #endif /* DEFINES_H_ */

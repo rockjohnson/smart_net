@@ -1,5 +1,6 @@
 network/socket.d: ../network/socket.cpp ../network/socket.h \
  ../network/../framework/io_obj.h \
+ ../network/../framework/../common/sn_common.h \
  /home/rock/workspace/smart_net/comm_utils/common/common.h \
  /usr/include/assert.h /usr/include/features.h /usr/include/sys/cdefs.h \
  /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
@@ -75,13 +76,23 @@ network/socket.d: ../network/socket.cpp ../network/socket.h \
  /usr/include/bits/select.h /usr/include/bits/sigset.h \
  /usr/include/sys/sysmacros.h \
  /home/rock/workspace/smart_net/comm_utils/common/base.h \
+ /home/rock/workspace/smart_net/comm_utils/common/err_info.h \
  /home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h \
  /home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h
+ /home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h \
+ ../network/../framework/../common/sn_defines.h \
+ ../network/../framework/../common/sn_err_info.h \
+ ../network/../framework/../common/sn_revision.h \
+ /usr/include/sys/socket.h /usr/include/sys/uio.h /usr/include/bits/uio.h \
+ /usr/include/bits/socket.h /usr/include/bits/sockaddr.h \
+ /usr/include/asm/socket.h /usr/include/asm-generic/socket.h \
+ /usr/include/asm/sockios.h /usr/include/asm-generic/sockios.h
 
 ../network/socket.h:
 
 ../network/../framework/io_obj.h:
+
+../network/../framework/../common/sn_common.h:
 
 /home/rock/workspace/smart_net/comm_utils/common/common.h:
 
@@ -267,8 +278,34 @@ network/socket.d: ../network/socket.cpp ../network/socket.h \
 
 /home/rock/workspace/smart_net/comm_utils/common/base.h:
 
+/home/rock/workspace/smart_net/comm_utils/common/err_info.h:
+
 /home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h:
 
 /home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h:
 
 /home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h:
+
+../network/../framework/../common/sn_defines.h:
+
+../network/../framework/../common/sn_err_info.h:
+
+../network/../framework/../common/sn_revision.h:
+
+/usr/include/sys/socket.h:
+
+/usr/include/sys/uio.h:
+
+/usr/include/bits/uio.h:
+
+/usr/include/bits/socket.h:
+
+/usr/include/bits/sockaddr.h:
+
+/usr/include/asm/socket.h:
+
+/usr/include/asm-generic/socket.h:
+
+/usr/include/asm/sockios.h:
+
+/usr/include/asm-generic/sockios.h:

@@ -8,7 +8,7 @@
 #ifndef CONN_H_
 #define CONN_H_
 
-#include "socket.h"
+#include "../network/socket.h"
 
 namespace nm_network
 {
