@@ -21,4 +21,15 @@ INetListener::~INetListener()
 	// TODO Auto-generated destructor stub
 }
 
+/**
+ * CTcpListener
+ * */
+
+int32_t CTcpListener::init()
+{
+	///create listen socket.
+	m_tcpSock
+
+}
+
 }

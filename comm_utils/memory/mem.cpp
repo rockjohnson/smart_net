@@ -1,22 +1,22 @@
 /*
- * io_obj.cpp
+ * mem.cpp
  *
- *  Created on: Dec 29, 2010
+ *  Created on: Feb 12, 2011
  *      Author: rock
  */
 
-#include "io_obj.h"
+#include "mem.h"
 
-namespace nm_framework
+namespace nm_memory
 {
 
-IIoObj::IIoObj()
+IMemBlock::IMemBlock()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-IIoObj::~IIoObj()
+IMemBlock::~IMemBlock()
 {
 	// TODO Auto-generated destructor stub
 }

@@ -43,12 +43,12 @@ int32_t CTcpService::init(INetAddr &localAddr, INetAddr &remoteAddr, int32_t i32
 	m_i32MaxInboundConnCnt = i32MaxInboundConnectionCnt;
 	m_i32MinOutboundConnCnt = i32MinOutboundConnectionCnt;
 
-	return CMNER_SUC;
+	return CMNERR_SUC;
 }
 
 int32_t CTcpService::start()
 {
-	int32_t i32Ret = CMNER_SUC;
+	int32_t i32Ret = CMNERR_SUC;
 
 	if (m_localAddr.is_valid())
 	{

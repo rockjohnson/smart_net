@@ -11,7 +11,9 @@ RM := rm -rf
 -include subdir.mk
 -include utils/subdir.mk
 -include thread/subdir.mk
+-include memory/subdir.mk
 -include log/subdir.mk
+-include common/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)

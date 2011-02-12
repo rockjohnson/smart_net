@@ -25,5 +25,7 @@ C_UPPER_DEPS :=
 SUBDIRS := \
 utils \
 thread \
+memory \
 log \
+common \
 

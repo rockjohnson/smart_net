@@ -10,8 +10,8 @@
 
 #include <common/common.h>
 
-#include "defines.h"
+#include "sn_defines.h"
 #include "sn_err_info.h"
-#include "revision.h"
+#include "sn_revision.h"
 
 #endif /* SMART_COMMON_H_ */

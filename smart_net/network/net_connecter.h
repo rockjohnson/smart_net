@@ -13,7 +13,7 @@
 namespace nm_network
 {
 
-class IConnecter : public nm_framework::CIoObj
+class IConnecter : public nm_framework::IIoObj
 {
 public:
 	IConnecter();

@@ -9,6 +9,7 @@
 #define __TYPES_H__
 
 #include <sys/types.h>
+#include <string>
 
 typedef void* pvoid_t;
 typedef char char_t;

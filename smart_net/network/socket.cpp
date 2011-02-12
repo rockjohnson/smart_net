@@ -6,20 +6,29 @@
  */
 
 #include "socket.h"
+#if __PLATFORM__ == __PLATFORM_LINUX__
+#include <sys/types.h>
+#include <sys/socket.h>
+#endif
+
 
 namespace nm_network
 {
 
-CSocket::CSocket()
+ISocket::ISocket()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-CSocket::~CSocket()
+ISocket::~ISocket()
 {
 	// TODO Auto-generated destructor stub
 }
+
+/**
+ * tcp socket.
+ * */
 
 CTcpSock::CTcpSock()
 {
@@ -31,6 +40,29 @@ CTcpSock::~CTcpSock()
 {
 	// TODO Auto-generated destructor stub
 }
+
+int32_t CTcpSock::init(int32_t i32fd)
+{
+	SYS_ASSERT(!is_valid());
+	if (is_valid())
+	{
+		destroy();
+	}
+
+	if (0 <= i32fd)
+	{
+		m_i32fd = i32fd;
+	}
+	else
+	{
+		m_i32fd = socket(AF_INET, SOCK_STREAM, 0);
+	}
+
+	return 0 > m_i32fd ? SNERR_CREAT_SOCK_FAILDED : CMNERR_SUC;
+}
+
+
+
 
 CUdpSock::CUdpSock()
 {

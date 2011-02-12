@@ -6,6 +6,7 @@ src/comm_utils_test.d: ../src/comm_utils_test.cpp \
  /home/rock/workspace/smart_net/comm_utils/utils/../common/containers.h \
  /home/rock/workspace/smart_net/comm_utils/utils/../common/types.h \
  /home/rock/workspace/smart_net/comm_utils/utils/../common/base.h \
+ /home/rock/workspace/smart_net/comm_utils/utils/../common/err_info.h \
  /home/rock/workspace/smart_net/comm_utils/utils/../common/../utils/smart_ptr.h \
  /home/rock/workspace/smart_net/comm_utils/utils/../common/../utils/atomic.h \
  /home/rock/workspace/smart_net/comm_utils/utils/../common/../utils/../common/common.h \
@@ -34,6 +35,8 @@ src/comm_utils_test.d: ../src/comm_utils_test.cpp \
 /home/rock/workspace/smart_net/comm_utils/utils/../common/types.h:
 
 /home/rock/workspace/smart_net/comm_utils/utils/../common/base.h:
+
+/home/rock/workspace/smart_net/comm_utils/utils/../common/err_info.h:
 
 /home/rock/workspace/smart_net/comm_utils/utils/../common/../utils/smart_ptr.h:
 
