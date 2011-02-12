@@ -3,6 +3,8 @@
  *
  *  Created on: Feb 11, 2011
  *      Author: rock
+ *
+ *      smart_net is a powerful network engine.
  */
 
 #ifndef __SMART_NET_H__

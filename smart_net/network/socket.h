@@ -10,7 +10,7 @@
 
 #include "../framework/io_obj.h"
 
-namespace nm_net
+namespace nm_network
 {
 
 /**
@@ -23,13 +23,13 @@ public:
 	virtual ~CSocket();
 };
 
-typedef nm_utils::CSmartPtr<nm_net::CSocket> sock_ptr_t;
+typedef nm_utils::CSmartPtr<nm_network::CSocket> sock_ptr_t;
 
 /**
  * tcp socket
  *
  * */
-class CTcpSock: public nm_net::CSocket
+class CTcpSock: public nm_network::CSocket
 {
 public:
 	CTcpSock();
@@ -40,7 +40,7 @@ public:
 /**
  * udp socket
  * */
-class CUdpSock: public nm_net::CSocket
+class CUdpSock: public nm_network::CSocket
 {
 public:
 	CUdpSock();
@@ -51,7 +51,7 @@ public:
 /**
  * rmp(reliable multicast protocal) socket
  * */
-class CRmpSock: public nm_net::CSocket
+class CRmpSock: public nm_network::CSocket
 {
 public:
 	CRmpSock();

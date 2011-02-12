@@ -12,11 +12,14 @@
 
 namespace nm_framework
 {
-	class CSharedObj
+	/**
+	 * the smart net manager.
+	 * */
+	class CNetEngine
 	{
 		public:
-			CSharedObj();
-			virtual ~CSharedObj();
+			CNetEngine();
+			virtual ~CNetEngine();
 
 		public:
 			int32_t add_io_obj();

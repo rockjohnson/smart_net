@@ -7,7 +7,7 @@
 
 #include "socket.h"
 
-namespace nm_net
+namespace nm_network
 {
 
 CSocket::CSocket()

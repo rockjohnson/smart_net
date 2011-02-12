@@ -7,16 +7,16 @@
 
 #include "conn.h"
 
-namespace nm_net
+namespace nm_network
 {
 
-CConn::CConn()
+CConnection::CConnection()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-CConn::~CConn()
+CConnection::~CConnection()
 {
 	// TODO Auto-generated destructor stub
 }

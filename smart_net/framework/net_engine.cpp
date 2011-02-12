@@ -5,18 +5,18 @@
  *      Author: rock
  */
 
-#include "shared_obj.h"
+#include "net_engine.h"
 
 namespace nm_framework
 {
 
-	CSharedObj::CSharedObj()
+	CNetEngine::CNetEngine()
 	{
 		// TODO Auto-generated constructor stub
 
 	}
 
-	CSharedObj::~CSharedObj()
+	CNetEngine::~CNetEngine()
 	{
 		// TODO Auto-generated destructor stub
 	}
