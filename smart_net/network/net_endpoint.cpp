@@ -5,9 +5,9 @@
  *      Author: rock
  */
 
-#include "endpoint.h"
+#include "net_endpoint.h"
 
-namespace nm_smartnet
+namespace nm_network
 {
 
 IEndpoint::IEndpoint()

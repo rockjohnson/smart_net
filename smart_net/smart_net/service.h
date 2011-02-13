@@ -14,7 +14,7 @@
 namespace nm_smartnet
 {
 
-	using namespace nm_network;
+using namespace nm_network;
 
 /**
  * the base net service interface

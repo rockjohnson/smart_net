@@ -8,15 +8,16 @@
 #ifndef CONN_H_
 #define CONN_H_
 
+#include "../framework/io_obj.h"
 #include "../network/socket.h"
 
-namespace nm_smartnet
+namespace nm_network
 {
 
 /**
  * base endpoint class
  * */
-class IEndpoint
+class IEndpoint : public nm_framework::IIoObj
 {
 public:
 	IEndpoint();
