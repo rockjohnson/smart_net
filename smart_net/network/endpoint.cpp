@@ -5,7 +5,7 @@
  *      Author: rock
  */
 
-#include "net_endpoint.h"
+#include "endpoint.h"
 
 namespace nm_network
 {
