@@ -15,7 +15,7 @@ namespace nm_framework
 
 class CIotask;
 
-class IIoObj __SUPPORT_REF_CNT__
+class IIoObj : public nm_utils::CRefCnt
 {
 	friend class CIoTask;
 public:
