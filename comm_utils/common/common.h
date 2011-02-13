@@ -16,7 +16,6 @@
 #include "types.h"
 #include "base.h"
 #include "err_info.h"
-#include "../utils/smart_ptr.h"
 
 
 #endif /* COMMON_H_ */

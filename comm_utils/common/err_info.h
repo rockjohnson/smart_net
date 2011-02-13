@@ -17,7 +17,8 @@ enum
 	CMNERR_SUC = 0, ///no error.
 	CMNERR_BEGINNING = COMMON_ERR_CODE_BEGINNING,
 	CMNERR_INVALID_PARAMS, ///invalid parameters.
-	CMNERR_NO_MATCH_ITEM ///no matched item.
+	CMNERR_NO_MATCH_ITEM, ///no matched item.
+	CMNERR_CALL_SYS_FUN_FAILED
 };
 
 const char* get_cmn_err_info(int32_t i32ErrCode);

@@ -77,16 +77,25 @@ network/socket.d: ../network/socket.cpp ../network/socket.h \
  /usr/include/sys/sysmacros.h \
  /home/rock/workspace/smart_net/comm_utils/common/base.h \
  /home/rock/workspace/smart_net/comm_utils/common/err_info.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h \
  ../network/../framework/../common/sn_defines.h \
  ../network/../framework/../common/sn_err_info.h \
  ../network/../framework/../common/sn_revision.h \
  /usr/include/sys/socket.h /usr/include/sys/uio.h /usr/include/bits/uio.h \
  /usr/include/bits/socket.h /usr/include/bits/sockaddr.h \
  /usr/include/asm/socket.h /usr/include/asm-generic/socket.h \
- /usr/include/asm/sockios.h /usr/include/asm-generic/sockios.h
+ /usr/include/asm/sockios.h /usr/include/asm-generic/sockios.h \
+ /home/rock/workspace/smart_net/comm_utils/utils/utils.h \
+ /home/rock/workspace/smart_net/comm_utils/utils/../common/common.h \
+ /usr/include/sys/syscall.h /usr/include/asm/unistd.h \
+ /usr/include/asm/unistd_64.h /usr/include/bits/syscall.h \
+ /usr/include/sys/time.h /usr/include/sys/resource.h \
+ /usr/include/bits/resource.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/vector \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_construct.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_uninitialized.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_vector.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_bvector.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/vector.tcc
 
 ../network/socket.h:
 
@@ -280,12 +289,6 @@ network/socket.d: ../network/socket.cpp ../network/socket.h \
 
 /home/rock/workspace/smart_net/comm_utils/common/err_info.h:
 
-/home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h:
-
-/home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h:
-
-/home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h:
-
 ../network/../framework/../common/sn_defines.h:
 
 ../network/../framework/../common/sn_err_info.h:
@@ -309,3 +312,33 @@ network/socket.d: ../network/socket.cpp ../network/socket.h \
 /usr/include/asm/sockios.h:
 
 /usr/include/asm-generic/sockios.h:
+
+/home/rock/workspace/smart_net/comm_utils/utils/utils.h:
+
+/home/rock/workspace/smart_net/comm_utils/utils/../common/common.h:
+
+/usr/include/sys/syscall.h:
+
+/usr/include/asm/unistd.h:
+
+/usr/include/asm/unistd_64.h:
+
+/usr/include/bits/syscall.h:
+
+/usr/include/sys/time.h:
+
+/usr/include/sys/resource.h:
+
+/usr/include/bits/resource.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/vector:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_construct.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_uninitialized.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_vector.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_bvector.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/vector.tcc:

@@ -1,5 +1,4 @@
-network/net_listener.d: ../network/net_listener.cpp \
- ../network/net_listener.h ../network/socket.h \
+network/endpoint.d: ../network/endpoint.cpp ../network/endpoint.h \
  ../network/../framework/io_obj.h \
  ../network/../framework/../common/sn_common.h \
  /home/rock/workspace/smart_net/comm_utils/common/common.h \
@@ -78,16 +77,13 @@ network/net_listener.d: ../network/net_listener.cpp \
  /usr/include/sys/sysmacros.h \
  /home/rock/workspace/smart_net/comm_utils/common/base.h \
  /home/rock/workspace/smart_net/comm_utils/common/err_info.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h \
  ../network/../framework/../common/sn_defines.h \
  ../network/../framework/../common/sn_err_info.h \
- ../network/../framework/../common/sn_revision.h
+ ../network/../framework/../common/sn_revision.h \
+ ../network/../network/socket.h \
+ ../network/../network/../framework/io_obj.h
 
-../network/net_listener.h:
-
-../network/socket.h:
+../network/endpoint.h:
 
 ../network/../framework/io_obj.h:
 
@@ -279,14 +275,12 @@ network/net_listener.d: ../network/net_listener.cpp \
 
 /home/rock/workspace/smart_net/comm_utils/common/err_info.h:
 
-/home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h:
-
-/home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h:
-
-/home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h:
-
 ../network/../framework/../common/sn_defines.h:
 
 ../network/../framework/../common/sn_err_info.h:
 
 ../network/../framework/../common/sn_revision.h:
+
+../network/../network/socket.h:
+
+../network/../network/../framework/io_obj.h:

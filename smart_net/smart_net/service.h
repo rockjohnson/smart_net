@@ -10,11 +10,13 @@
 
 #include "../common/sn_common.h"
 #include "../network/net_addr.h"
+#include "../framework/net_engine.h"
 
 namespace nm_smartnet
 {
 
 using namespace nm_network;
+using namespace nm_framework;
 
 /**
  * the base net service interface
@@ -26,6 +28,7 @@ public:
 	virtual ~INetService();
 
 public:
+	virtual int32_t init() = 0;
 	virtual int32_t start() = 0;
 	virtual int32_t stop() = 0;
 };

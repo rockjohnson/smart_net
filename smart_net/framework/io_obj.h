@@ -13,17 +13,19 @@
 namespace nm_framework
 {
 
+class CIotask;
+
 class IIoObj __SUPPORT_REF_CNT__
 {
+	friend class CIoTask;
 public:
 	IIoObj();
 	virtual ~IIoObj();
 
-public:
+protected:
 	virtual void handle_read_evt() = 0;
 	virtual void handle_write_evt() = 0;
 	virtual void handle_error_evt() = 0;
-
 	virtual int32_t get_fd() = 0;
 };
 

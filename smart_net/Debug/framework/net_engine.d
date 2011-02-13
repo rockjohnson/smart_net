@@ -77,9 +77,9 @@ framework/net_engine.d: ../framework/net_engine.cpp \
  /usr/include/sys/sysmacros.h \
  /home/rock/workspace/smart_net/comm_utils/thread/../common/base.h \
  /home/rock/workspace/smart_net/comm_utils/thread/../common/err_info.h \
- /home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/smart_ptr.h \
- /home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/atomic.h \
- /home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/../common/common.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../utils/smart_ptr.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../utils/atomic.h \
+ /home/rock/workspace/smart_net/comm_utils/thread/../utils/../common/common.h \
  ../framework/io_evt_notify.h ../framework/io_obj.h \
  ../framework/../common/sn_common.h \
  /home/rock/workspace/smart_net/comm_utils/common/common.h \
@@ -278,11 +278,11 @@ framework/net_engine.d: ../framework/net_engine.cpp \
 
 /home/rock/workspace/smart_net/comm_utils/thread/../common/err_info.h:
 
-/home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/smart_ptr.h:
+/home/rock/workspace/smart_net/comm_utils/thread/../utils/smart_ptr.h:
 
-/home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/atomic.h:
+/home/rock/workspace/smart_net/comm_utils/thread/../utils/atomic.h:
 
-/home/rock/workspace/smart_net/comm_utils/thread/../common/../utils/../common/common.h:
+/home/rock/workspace/smart_net/comm_utils/thread/../utils/../common/common.h:
 
 ../framework/io_evt_notify.h:
 

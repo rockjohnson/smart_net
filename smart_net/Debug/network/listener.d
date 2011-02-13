@@ -1,5 +1,6 @@
-framework/io_obj.d: ../framework/io_obj.cpp ../framework/io_obj.h \
- ../framework/../common/sn_common.h \
+network/listener.d: ../network/listener.cpp ../network/listener.h \
+ ../network/socket.h ../network/../framework/io_obj.h \
+ ../network/../framework/../common/sn_common.h \
  /home/rock/workspace/smart_net/comm_utils/common/common.h \
  /usr/include/assert.h /usr/include/features.h /usr/include/sys/cdefs.h \
  /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
@@ -76,12 +77,17 @@ framework/io_obj.d: ../framework/io_obj.cpp ../framework/io_obj.h \
  /usr/include/sys/sysmacros.h \
  /home/rock/workspace/smart_net/comm_utils/common/base.h \
  /home/rock/workspace/smart_net/comm_utils/common/err_info.h \
- ../framework/../common/sn_defines.h ../framework/../common/sn_err_info.h \
- ../framework/../common/sn_revision.h
+ ../network/../framework/../common/sn_defines.h \
+ ../network/../framework/../common/sn_err_info.h \
+ ../network/../framework/../common/sn_revision.h
 
-../framework/io_obj.h:
+../network/listener.h:
 
-../framework/../common/sn_common.h:
+../network/socket.h:
+
+../network/../framework/io_obj.h:
+
+../network/../framework/../common/sn_common.h:
 
 /home/rock/workspace/smart_net/comm_utils/common/common.h:
 
@@ -269,8 +275,8 @@ framework/io_obj.d: ../framework/io_obj.cpp ../framework/io_obj.h \
 
 /home/rock/workspace/smart_net/comm_utils/common/err_info.h:
 
-../framework/../common/sn_defines.h:
+../network/../framework/../common/sn_defines.h:
 
-../framework/../common/sn_err_info.h:
+../network/../framework/../common/sn_err_info.h:
 
-../framework/../common/sn_revision.h:
+../network/../framework/../common/sn_revision.h:

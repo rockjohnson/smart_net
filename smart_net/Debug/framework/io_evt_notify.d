@@ -77,9 +77,6 @@ framework/io_evt_notify.d: ../framework/io_evt_notify.cpp \
  /usr/include/sys/sysmacros.h \
  /home/rock/workspace/smart_net/comm_utils/common/base.h \
  /home/rock/workspace/smart_net/comm_utils/common/err_info.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h \
  ../framework/../common/sn_defines.h ../framework/../common/sn_err_info.h \
  ../framework/../common/sn_revision.h
 
@@ -274,12 +271,6 @@ framework/io_evt_notify.d: ../framework/io_evt_notify.cpp \
 /home/rock/workspace/smart_net/comm_utils/common/base.h:
 
 /home/rock/workspace/smart_net/comm_utils/common/err_info.h:
-
-/home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h:
-
-/home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h:
-
-/home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h:
 
 ../framework/../common/sn_defines.h:
 

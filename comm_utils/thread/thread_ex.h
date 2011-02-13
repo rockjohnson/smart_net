@@ -9,6 +9,7 @@
 #define _THREAD_EX_H__
 
 #include "../common/common.h"
+#include "../utils/smart_ptr.h"
 
 namespace nm_thread
 {

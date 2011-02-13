@@ -1,5 +1,5 @@
-network/net_connecter.d: ../network/net_connecter.cpp \
- ../network/net_connecter.h ../network/../framework/io_obj.h \
+network/connecter.d: ../network/connecter.cpp ../network/connecter.h \
+ ../network/../framework/io_obj.h \
  ../network/../framework/../common/sn_common.h \
  /home/rock/workspace/smart_net/comm_utils/common/common.h \
  /usr/include/assert.h /usr/include/features.h /usr/include/sys/cdefs.h \
@@ -77,14 +77,11 @@ network/net_connecter.d: ../network/net_connecter.cpp \
  /usr/include/sys/sysmacros.h \
  /home/rock/workspace/smart_net/comm_utils/common/base.h \
  /home/rock/workspace/smart_net/comm_utils/common/err_info.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h \
- /home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h \
  ../network/../framework/../common/sn_defines.h \
  ../network/../framework/../common/sn_err_info.h \
  ../network/../framework/../common/sn_revision.h
 
-../network/net_connecter.h:
+../network/connecter.h:
 
 ../network/../framework/io_obj.h:
 
@@ -275,12 +272,6 @@ network/net_connecter.d: ../network/net_connecter.cpp \
 /home/rock/workspace/smart_net/comm_utils/common/base.h:
 
 /home/rock/workspace/smart_net/comm_utils/common/err_info.h:
-
-/home/rock/workspace/smart_net/comm_utils/common/../utils/smart_ptr.h:
-
-/home/rock/workspace/smart_net/comm_utils/common/../utils/atomic.h:
-
-/home/rock/workspace/smart_net/comm_utils/common/../utils/../common/common.h:
 
 ../network/../framework/../common/sn_defines.h:
 

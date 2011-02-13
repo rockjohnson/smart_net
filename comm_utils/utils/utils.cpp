@@ -384,7 +384,7 @@ namespace nm_utils
     	int32_t i32Flags = get_block_flag(i32fd);
     	if (0 > i32Flags)
     	{
-    		return CMNERR_CALL_FCNTL_FAILED;
+    		return CMNERR_CALL_SYS_FUN_FAILED;
     	}
 
     	return bBlockOrNot ?
