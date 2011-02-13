@@ -15,7 +15,7 @@ namespace nm_framework
 	/**
 	 * the smart net manager.
 	 * */
-	class CNetEngine
+	class CNetEngine __SUPPORT_REF_CNT__
 	{
 		public:
 			CNetEngine();
@@ -28,6 +28,7 @@ namespace nm_framework
 			typedef std::set<io_task_ptr_t> io_task_set_t;
 
 	};
+	typedef nm_utils::CSmartPtr<nm_framework::CNetEngine> net_engine_ptr_t;
 
 }
 

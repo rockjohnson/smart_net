@@ -75,6 +75,8 @@ private:
 	tcp_listener_ptr_t m_pTcpListener;
 	///
 	int32_t m_i32Backlog;
+	///
+	net_engine_ptr_t m_pNetEngine;
 };
 
 class CRudpService : public INetService

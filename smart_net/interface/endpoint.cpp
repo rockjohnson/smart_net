@@ -5,52 +5,52 @@
  *      Author: rock
  */
 
-#include "connection.h"
+#include "endpoint.h"
 
-namespace nm_network
+namespace nm_smartnet
 {
 
-CConnection::CConnection()
+IEndpoint::IEndpoint()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-CConnection::~CConnection()
+IEndpoint::~IEndpoint()
 {
 	// TODO Auto-generated destructor stub
 }
 
-CTcpConn::CTcpConn()
+CTcpEndpoint::CTcpEndpoint()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-CTcpConn::~CTcpConn()
+CTcpEndpoint::~CTcpEndpoint()
 {
 	// TODO Auto-generated destructor stub
 }
 
-CUdpConn::CUdpConn()
+CUdpEndpoint::CUdpEndpoint()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-CUdpConn::~CUdpConn()
+CUdpEndpoint::~CUdpEndpoint()
 {
 	// TODO Auto-generated destructor stub
 }
 
 
-CRmpConn::CRmpConn()
+CRmpEndpoint::CRmpEndpoint()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-CRmpConn::~CRmpConn()
+CRmpEndpoint::~CRmpEndpoint()
 {
 	// TODO Auto-generated destructor stub
 }

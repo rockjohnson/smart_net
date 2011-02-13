@@ -10,17 +10,17 @@
 
 #include "../network/socket.h"
 
-namespace nm_network
+namespace nm_smartnet
 {
 
 /**
- * base connection class
+ * base endpoint class
  * */
-class CConnection
+class IEndpoint
 {
 public:
-	CConnection();
-	virtual ~CConnection();
+	IEndpoint();
+	virtual ~IEndpoint();
 
 public:
 	virtual int32_t init() = 0;
@@ -34,13 +34,13 @@ protected:
 };
 
 /**
- * tcp connection
+ * tcp endpoint
  * */
-class CTcpConn: public nm_network::CConnection
+class CTcpEndpoint: public nm_network::IEndpoint
 {
 public:
-	CTcpConn();
-	virtual ~CTcpConn();
+	CTcpEndpoint();
+	virtual ~CTcpEndpoint();
 
 public:
 	virtual int send_data(mem_ptr_t &pData);
@@ -55,23 +55,23 @@ private:
 };
 
 /**
- * udp connection
+ * udp endpoint
  * */
-class CUdpConn: public nm_network::CConnection
+class CUdpEndpoint: public nm_network::IEndpoint
 {
 public:
-	CUdpConn();
-	virtual ~CUdpConn();
+	CUdpEndpoint();
+	virtual ~CUdpEndpoint();
 };
 
 /**
- * rmp connection
+ * rmp endpoint
  * */
-class CRmpConn: public nm_network::CConnection
+class CRmpEndpoint: public nm_network::IEndpoint
 {
 public:
-	CRmpConn();
-	virtual ~CRmpConn();
+	CRmpEndpoint();
+	virtual ~CRmpEndpoint();
 };
 
 }

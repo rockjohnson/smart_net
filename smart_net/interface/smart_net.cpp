@@ -7,7 +7,8 @@
 
 #include "smart_net.h"
 
-namespace nm_smartnet {
+namespace nm_smartnet
+{
 
 CSmartNet::CSmartNet() {
 	// TODO Auto-generated constructor stub
