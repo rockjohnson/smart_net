@@ -5,8 +5,8 @@
  *      Author: rock
  */
 
-#include "service.h"
-#include "../network/socket.h"
+#include "sn_service.h"
+#include "../network/sn_socket.h"
 
 namespace nm_smartnet
 {

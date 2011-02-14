@@ -8,7 +8,7 @@
 #ifndef CONNECTOR_H_
 #define CONNECTOR_H_
 
-#include "../framework/io_obj.h"
+#include "../framework/sn_io_obj.h"
 
 namespace nm_network
 {

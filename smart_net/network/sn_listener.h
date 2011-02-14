@@ -8,8 +8,8 @@
 #ifndef NET_LISTENER_H_
 #define NET_LISTENER_H_
 
-#include "socket.h"
-#include "../framework/io_obj.h"
+#include "sn_socket.h"
+#include "../framework/sn_io_obj.h"
 
 namespace nm_network
 {

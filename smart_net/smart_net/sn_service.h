@@ -9,8 +9,8 @@
 #define __SERVICE_H__
 
 #include "../common/sn_common.h"
-#include "../network/net_addr.h"
-#include "../framework/engine.h"
+#include "../network/sn_net_addr.h"
+#include "../framework/sn_engine.h"
 
 namespace nm_smartnet
 {

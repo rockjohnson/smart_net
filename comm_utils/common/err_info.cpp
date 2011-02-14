@@ -14,6 +14,8 @@ static const char* arrCmnErrInfo[] =
 		"invalid parameters",
 		"no matched iterm",
 		"call system function failed"
+		"common error",
+		"fatal error"
 };
 
 const char* get_cmn_err_info(int32_t i32ErrCode)

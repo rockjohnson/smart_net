@@ -8,8 +8,8 @@
 #ifndef CONN_H_
 #define CONN_H_
 
-#include "../framework/io_obj.h"
-#include "../network/socket.h"
+#include "../framework/sn_io_obj.h"
+#include "../network/sn_socket.h"
 
 namespace nm_network
 {

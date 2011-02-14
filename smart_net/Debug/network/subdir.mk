@@ -4,25 +4,25 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../network/connecter.cpp \
-../network/endpoint.cpp \
-../network/listener.cpp \
-../network/net_addr.cpp \
-../network/socket.cpp 
+../network/sn_connecter.cpp \
+../network/sn_endpoint.cpp \
+../network/sn_listener.cpp \
+../network/sn_net_addr.cpp \
+../network/sn_socket.cpp 
 
 OBJS += \
-./network/connecter.o \
-./network/endpoint.o \
-./network/listener.o \
-./network/net_addr.o \
-./network/socket.o 
+./network/sn_connecter.o \
+./network/sn_endpoint.o \
+./network/sn_listener.o \
+./network/sn_net_addr.o \
+./network/sn_socket.o 
 
 CPP_DEPS += \
-./network/connecter.d \
-./network/endpoint.d \
-./network/listener.d \
-./network/net_addr.d \
-./network/socket.d 
+./network/sn_connecter.d \
+./network/sn_endpoint.d \
+./network/sn_listener.d \
+./network/sn_net_addr.d \
+./network/sn_socket.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

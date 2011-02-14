@@ -4,22 +4,22 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../framework/engine.cpp \
-../framework/io_evt_notify.cpp \
-../framework/io_obj.cpp \
-../framework/io_task.cpp 
+../framework/sn_engine.cpp \
+../framework/sn_io_evt_notify.cpp \
+../framework/sn_io_obj.cpp \
+../framework/sn_io_task.cpp 
 
 OBJS += \
-./framework/engine.o \
-./framework/io_evt_notify.o \
-./framework/io_obj.o \
-./framework/io_task.o 
+./framework/sn_engine.o \
+./framework/sn_io_evt_notify.o \
+./framework/sn_io_obj.o \
+./framework/sn_io_task.o 
 
 CPP_DEPS += \
-./framework/engine.d \
-./framework/io_evt_notify.d \
-./framework/io_obj.d \
-./framework/io_task.d 
+./framework/sn_engine.d \
+./framework/sn_io_evt_notify.d \
+./framework/sn_io_obj.d \
+./framework/sn_io_task.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

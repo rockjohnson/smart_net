@@ -5,7 +5,7 @@
  *      Author: rock
  */
 
-#include "socket.h"
+#include "sn_socket.h"
 #if __PLATFORM__ == __PLATFORM_LINUX__
 #include <sys/types.h>
 #include <sys/socket.h>
