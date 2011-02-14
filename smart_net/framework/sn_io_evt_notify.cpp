@@ -22,7 +22,7 @@ IIoEvtNotify::~IIoEvtNotify()
 	// TODO Auto-generated destructor stub
 }
 
-io_evt_notify_ptr_t IIoEvtNotify::create_obj(int32_t i32IoEvtNotify)
+io_evt_notify_ptr_t IIoEvtNotify::create_obj(int32_t i32IoEvtNotifier)
 {
 	io_evt_notify_ptr_t pIoEvtNotify = NULL;
 
@@ -32,7 +32,7 @@ io_evt_notify_ptr_t IIoEvtNotify::create_obj(int32_t i32IoEvtNotify)
 		return pIoEvtNotify;
 	}
 
-	switch (i32IoEvtNotify)
+	switch (i32IoEvtNotifier)
 	{
 	case EIEN_SELECT:
 	{
@@ -116,17 +116,19 @@ int32_t CEpoll::dispatch_evts()
 		{
 			pIoObj->handle_error_evt();
 		}
-
-		//input
-		if (ui32Evts & EPOLLIN)
+		else
 		{
-			pIoObj->handle_input_evt();
-		}
+			//input
+			if (ui32Evts & EPOLLIN)
+			{
+				pIoObj->handle_input_evt();
+			}
 
-		//output
-		if (ui32Evts & EPOLLOUT)
-		{
-			pIoObj->handle_output_evt();
+			//output
+			if (ui32Evts & EPOLLOUT)
+			{
+				pIoObj->handle_output_evt();
+			}
 		}
 	}
 

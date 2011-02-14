@@ -29,6 +29,7 @@ public:
 
 public:
 	virtual int32_t init() = 0;
+	virtual int32_t destroy() = 0;
 	virtual int32_t start() = 0;
 	virtual int32_t stop() = 0;
 };

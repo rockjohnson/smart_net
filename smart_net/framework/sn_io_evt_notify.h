@@ -33,7 +33,7 @@ public:
 		EIEN_ALL
 	};
 
-	static nm_utils::CSmartPtr<nm_framework::IIoEvtNotify> create_obj(int32_t i32IoEvtNotify);
+	static nm_utils::CSmartPtr<nm_framework::IIoEvtNotify> create_obj(int32_t i32IoEvtNotifier);
 
 public:
 	IIoEvtNotify();

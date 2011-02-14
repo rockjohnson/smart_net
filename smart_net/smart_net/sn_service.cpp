@@ -16,12 +16,11 @@ using namespace nm_network;
 CService::CService()
 {
 	// TODO Auto-generated constructor stub
-
 }
 
 CService::~CService()
 {
-	// TODO Auto-generated destructor stub
+	destroy();
 }
 
 

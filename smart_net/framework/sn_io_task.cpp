@@ -20,14 +20,18 @@ namespace nm_framework
 		destroy();
 	}
 
-	int32_t CIoTask::init(int32_t i32IoEvtNofify)
+	int32_t CIoTask::init(int32_t i32IoEvtNotifier)
 	{
 		///create io event notify mechanism obj.
-		m_pIoEvtNotifier = IIoEvtNotify::create_obj(i32IoEvtNofify);
+		m_pIoEvtNotifier = IIoEvtNotify::create_obj(i32IoEvtNotifier);
 		if (NULL == m_pIoEvtNotifier)
 		{
 			return CMNERR_COMMON_ERR;
 		}
+
+		SYS_ASSERT(m_setIoObjCache.empty());
+		SYS_ASSERT(m_setValidIoObjs.empty());
+		SYS_ASSERT(m_setInvalidIoObjs.empty());
 
 		return m_pIoEvtNotifier->init();
 	}
@@ -40,19 +44,23 @@ namespace nm_framework
 		}
 
 		///io obj add cache
-		io_obj_set_t m_setIoObjCache;
-		CSpinLock m_splkIoObjCache;
-		///the current valid io objs
-		io_obj_set_t m_setValidIoObjs;
+		m_splkIoObjCache.lock();
+		m_setIoObjCache.clear();
+		m_splkIoObjCache.unlock();
+
+		///
+		m_setValidIoObjs.clear();
+
 		///...
-		io_obj_set_t m_setInvalidIoObjs;
-		CSpinLock m_splkInvalidIoObjs;
+		m_splkInvalidIoObjs.lock();
+		m_setInvalidIoObjs.clear();
+		m_splkInvalidIoObjs.unlock();
+
+		return CMNERR_SUC;
 	}
 
 	void CIoTask::exec()
 	{
-		IF_TRUE_THEN_RETURN(init() < 0);
-
 		///main logic circle
 		while (!is_stopped())
 		{
@@ -76,6 +84,11 @@ namespace nm_framework
 		{
 			///do something.
 		}
+	}
+
+	void handle_bad_io_objs()
+	{
+
 	}
 
 }

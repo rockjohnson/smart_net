@@ -15,7 +15,6 @@ using namespace nm_framework;
 CNetEngine::CNetEngine()
 {
 	// TODO Auto-generated constructor stub
-
 }
 
 CNetEngine::~CNetEngine()
@@ -86,18 +85,19 @@ int32_t CNetEngine::start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier)
 int32_t CNetEngine::stop()
 {
 	///stop all io thread
-	for (io_thread_vec_t::iterator iter = m_vecIoThreads.begin();
-			iter != m_vecIoThreads.end(); iter++)
+	for (io_thread_vec_t::iterator iter = m_vecIoThreads.begin(); iter
+			!= m_vecIoThreads.end(); iter++)
 	{
 		(*iter)->stop_wait();
 	}
 
-	for (io_thread_vec_t::iterator iter = m_vecIoThreads.begin();
-				iter != m_vecIoThreads.end(); iter++)
-		{
-			(*iter)->stop_wait();
-		}
+	for (io_thread_vec_t::iterator iter = m_vecIoThreads.begin(); iter
+			!= m_vecIoThreads.end(); iter++)
+	{
+		(*iter)->reset_task();
+	}
 
+	m_vecIoThreads.clear();
 
 	return CMNERR_SUC;
 }
