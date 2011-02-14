@@ -25,6 +25,10 @@ namespace nm_framework
 			virtual ~CIoTask();
 
 		public:
+			///
+			int32_t init(int32_t i32IoEvtNotify);
+			int32_t destroy();
+			///
 			void exec();
 			int32_t add_io_obj(io_obj_ptr_t &pIoObj, u_int32_t ui32Evts);
 			int32_t del_io_obj(io_obj_ptr_t &pIoObj);

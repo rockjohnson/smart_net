@@ -10,7 +10,7 @@
 
 #include "sn_io_task.h"
 
-namespace nm_framework
+namespace nm_smartnet
 {
 	/**
 	 * the smart net manager.

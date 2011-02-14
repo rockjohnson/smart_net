@@ -10,6 +10,8 @@
 #ifndef __SMART_NET_H__
 #define __SMART_NET_H__
 
+#include "sn_engine.h"
+
 namespace nm_smartnet
 {
 
@@ -17,14 +19,14 @@ class CSmartNet
 {
 public:
 	CSmartNet();
-	virtual ~CSmartNet();
+	~CSmartNet();
 
 public:
-	template<class C>
-	int32_t add_tcp_listen_service();
-	template<class C>
-	int32_t add_tcp_connect_service();
+	int32_t start(u_int32_t ui32IoThreadCnt);
+	int32_t stop();
 
+private:
+	nm_framework::net_engine_ptr_t m_pNetEngine;
 };
 
 }

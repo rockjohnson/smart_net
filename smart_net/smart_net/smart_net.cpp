@@ -10,13 +10,27 @@
 namespace nm_smartnet
 {
 
-CSmartNet::CSmartNet() {
+using namespace nm_framework;
+
+CSmartNet::CSmartNet()
+{
 	// TODO Auto-generated constructor stub
 
 }
 
-CSmartNet::~CSmartNet() {
+CSmartNet::~CSmartNet()
+{
 	// TODO Auto-generated destructor stub
+}
+
+int32_t CSmartNet::start(u_int32_t ui32IoThreadCnt)
+{
+	m_pNetEngine = new CNetEngine;
+}
+
+int32_t CSmartNet::stop()
+{
+
 }
 
 }

@@ -22,6 +22,40 @@ IIoEvtNotify::~IIoEvtNotify()
 	// TODO Auto-generated destructor stub
 }
 
+io_evt_notify_ptr_t IIoEvtNotify::create_obj(int32_t i32IoEvtNotify)
+{
+	io_evt_notify_ptr_t pIoEvtNotify = NULL;
+
+	if (EIEN_ALL <= i32IoEvtNofify
+			|| EIEN_NONE >= i32IoEvtNofify)
+	{
+		return pIoEvtNotify;
+	}
+
+	switch (i32IoEvtNotify)
+	{
+	case EIEN_SELECT:
+	{
+		pIoEvtNotify = new CSelect;
+		break;
+	}
+#if __PLATFORM__ == __PLATFORM_LINUX__
+	case EIEN_EPOLL:
+	{
+		pIoEvtNotify = new CEpoll;
+		break;
+	}
+#endif
+	default:
+	{
+		break;
+	}
+	}
+
+	return pIoEvtNotify;
+}
+
+
 /*
  * select ..
  * */
@@ -52,16 +86,18 @@ CEpoll::~CEpoll()
 }
 
 #define UNUSED (10000) //Since Linux 2.6.8, the size argument is unused.  (The kernel dynamically sizes the required data structures without needing this initial hint.)
-int32_t CEpoll::init()
+int32_t CEpoll::init(int32_t i32MsTimeout)
 {
 	SYS_ASSERT(-1 == m_i32epfd);
+
+	m_i32MsTimeout = i32MsTimeout;
 
 	return (m_i32epfd = epoll_create(UNUSED)) < 0 ? CMNERR_COMMON_ERR : CMNERR_SUC;
 }
 
-int32_t CEpoll::dispatch_evts(int32_t i32MsTimeout)
+int32_t CEpoll::dispatch_evts()
 {
-	int32_t i32Ret = epoll_wait(m_i32epfd, m_tmpEvts, MAX_EVENTS, i32MsTimeout);
+	int32_t i32Ret = epoll_wait(m_i32epfd, m_tmpEvts, MAX_EVENTS, m_i32MsTimeout);
 	if (-1 == i32Ret)
 	{
 		SYS_ASSERT(false);
@@ -75,14 +111,20 @@ int32_t CEpoll::dispatch_evts(int32_t i32MsTimeout)
 		pIoObj = static_cast<IIoObj*>(m_tmpEvts[i].data.ptr); ///no need add ref, for i have add it outside.
 		ui32Evts = m_tmpEvts[i].events;
 
+		//error
+		if (ui32Evts & EPOLLERR)
+		{
+			pIoObj->handle_error_evt();
+		}
+
 		//input
-		if ((ui32Evts & EPOLLIN) && pIoObj->is_valid())
+		if (ui32Evts & EPOLLIN)
 		{
 			pIoObj->handle_input_evt();
 		}
 
 		//output
-		if ((ui32Evts & EPOLLOUT) && pIoObj->is_valid())
+		if (ui32Evts & EPOLLOUT)
 		{
 			pIoObj->handle_output_evt();
 		}

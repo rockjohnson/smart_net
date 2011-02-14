@@ -7,7 +7,7 @@
 
 #include "sn_engine.h"
 
-namespace nm_framework
+namespace nm_smartnet
 {
 
 	CNetEngine::CNetEngine()
