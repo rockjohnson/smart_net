@@ -17,19 +17,36 @@ namespace nm_framework
 
 	CIoTask::~CIoTask()
 	{
-		// TODO Auto-generated destructor stub
+		destroy();
 	}
 
 	int32_t CIoTask::init(int32_t i32IoEvtNofify)
 	{
 		///create io event notify mechanism obj.
-		m_pIoEvtNotify = IIoEvtNotify::create_obj(i32IoEvtNofify);
-		if (NULL == m_pIoEvtNotify)
+		m_pIoEvtNotifier = IIoEvtNotify::create_obj(i32IoEvtNofify);
+		if (NULL == m_pIoEvtNotifier)
 		{
 			return CMNERR_COMMON_ERR;
 		}
 
-		return m_pIoEvtNotify->init();
+		return m_pIoEvtNotifier->init();
+	}
+
+	int32_t CIoTask::destroy()
+	{
+		if (NULL != m_pIoEvtNotifier)
+		{
+			m_pIoEvtNotifier->destroy();
+		}
+
+		///io obj add cache
+		io_obj_set_t m_setIoObjCache;
+		CSpinLock m_splkIoObjCache;
+		///the current valid io objs
+		io_obj_set_t m_setValidIoObjs;
+		///...
+		io_obj_set_t m_setInvalidIoObjs;
+		CSpinLock m_splkInvalidIoObjs;
 	}
 
 	void CIoTask::exec()
@@ -55,7 +72,7 @@ namespace nm_framework
 
 	void CIoTask::handle_io_evts()
 	{
-		if (0 > m_pIoEvtNotify->dispatch_evts())
+		if (0 > m_pIoEvtNotifier->dispatch_evts())
 		{
 			///do something.
 		}

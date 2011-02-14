@@ -14,11 +14,12 @@
 namespace nm_framework
 {
 	using namespace nm_utils;
+	using namespace nm_thread;
 
 	/**
 	 *
 	 * */
-	class CIoTask : public nm_thread::IThreadTask
+	class CIoTask : public IThreadTask
 	{
 		public:
 			CIoTask();
@@ -26,7 +27,7 @@ namespace nm_framework
 
 		public:
 			///
-			int32_t init(int32_t i32IoEvtNotify);
+			int32_t init(int32_t i32IoEvtNotifier);
 			int32_t destroy();
 			///
 			void exec();
@@ -34,7 +35,7 @@ namespace nm_framework
 			int32_t del_io_obj(io_obj_ptr_t &pIoObj);
 
 		private:
-			io_evt_notify_ptr_t m_pIoEvtNotify; ///the io event notify mechanism obj;
+			io_evt_notify_ptr_t m_pIoEvtNotifier; ///the io event notify mechanism obj;
 			typedef std::set<nm_framework::io_obj_ptr_t> io_obj_set_t;
 			///io obj add cache
 			io_obj_set_t m_setIoObjCache;

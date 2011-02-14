@@ -64,7 +64,7 @@ namespace nm_utils
 	private:
 		/*volatile*/int m_iCnt;
 	};
-#define __SUPPORT_REF_CNT__ : public nm_utils::CRefCnt
+#define __SUPPORT_REF_CNT__ : public nm_utils::CSmartBase
 
 
 	template<typename T>

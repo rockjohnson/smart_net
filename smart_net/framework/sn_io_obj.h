@@ -14,7 +14,7 @@
 namespace nm_framework
 {
 
-class CIotask;
+class CIoTask;
 
 class IIoObj : public nm_utils::CSmartBase
 {
@@ -22,6 +22,10 @@ class IIoObj : public nm_utils::CSmartBase
 public:
 	IIoObj();
 	virtual ~IIoObj();
+
+public:
+	virtual int32_t init() = 0;
+	virtual int32_t destroy() = 0;
 
 protected:
 	virtual void handle_input_evt() = 0;

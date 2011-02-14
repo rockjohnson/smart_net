@@ -41,6 +41,7 @@ public:
 
 public:
 	virtual int32_t init(int32_t i32MsTimeout) = 0;
+	virtual int32_t destroy() = 0;
 	virtual int32_t add_io_obj(io_obj_ptr_t &pIoObj) = 0;
 	virtual int32_t del_io_obj(io_obj_ptr_t &pIoObj) = 0;
 	virtual int32_t dispatch_evts() = 0;
