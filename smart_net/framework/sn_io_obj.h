@@ -9,13 +9,14 @@
 #define _IO_OBJ_H___
 
 #include "../common/sn_common.h"
+#include <utils/smart_ptr.h>
 
 namespace nm_framework
 {
 
 class CIotask;
 
-class IIoObj : public nm_utils::CRefCnt
+class IIoObj : public nm_utils::CSmartBase
 {
 	friend class CIoTask;
 public:
@@ -23,8 +24,8 @@ public:
 	virtual ~IIoObj();
 
 protected:
-	virtual void handle_read_evt() = 0;
-	virtual void handle_write_evt() = 0;
+	virtual void handle_input_evt() = 0;
+	virtual void handle_output_evt() = 0;
 	virtual void handle_error_evt() = 0;
 	virtual int32_t get_fd() = 0;
 };

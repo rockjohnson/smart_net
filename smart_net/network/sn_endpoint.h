@@ -31,8 +31,8 @@ public:
 
 protected:
 	///
-	virtual void handle_read_evt();
-	virtual void handle_write_evt();
+	virtual void handle_input_evt();
+	virtual void handle_output_evt();
 	virtual void handle_error_evt();
 	virtual int32_t get_fd();
 	///

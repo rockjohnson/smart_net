@@ -17,7 +17,7 @@ namespace nm_thread
 	/**
 	 * thread task base
 	 * */
-	class IThreadTask: public nm_utils::CRefCnt
+	class IThreadTask: public nm_utils::CSmartBase
 	{
 		public:
 			IThreadTask();

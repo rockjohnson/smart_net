@@ -10,7 +10,7 @@
 
 #include "../common/sn_common.h"
 #include "../network/net_addr.h"
-#include "../framework/net_engine.h"
+#include "../framework/engine.h"
 
 namespace nm_smartnet
 {

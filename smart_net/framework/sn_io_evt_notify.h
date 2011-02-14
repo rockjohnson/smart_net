@@ -16,7 +16,7 @@ namespace nm_framework
 	/**
 	 * io event notify mechanism base class
 	 * */
-	class IIoEvtNotify : public nm_utils::CRefCnt
+	class IIoEvtNotify : public nm_utils::CSmartBase
 	{
 		public:
 			IIoEvtNotify();

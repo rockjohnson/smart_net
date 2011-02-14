@@ -14,15 +14,15 @@
 
 namespace nm_utils
 {
-	class CRefCnt
+	class CSmartBase
 	{
 	protected:
-		CRefCnt() :
+		CSmartBase() :
 			m_iCnt(0)
 		{
 		}
 
-		virtual ~CRefCnt()
+		virtual ~CSmartBase()
 		{
 			SYS_ASSERT(m_iCnt == 0);
 		}
@@ -53,10 +53,10 @@ namespace nm_utils
 		}
 
 	private:
-		CRefCnt(const CRefCnt &other)
+		CSmartBase(const CSmartBase &other)
 		{
 		}
-		CRefCnt& operator =(const CRefCnt&)
+		CSmartBase& operator =(const CSmartBase&)
 		{
 			return *this;
 		}

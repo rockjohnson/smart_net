@@ -33,8 +33,8 @@ public:
 public:
 	int32_t init(INetAddr &bindAddr, int32_t i32Backlog);
 	int32_t destroy();
-	void handle_read_evt();
-	void handle_write_evt();
+	void handle_input_evt();
+	void handle_output_evt();
 	void handle_error_evt();
 
 	int32_t get_fd();
