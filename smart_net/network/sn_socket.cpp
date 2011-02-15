@@ -43,7 +43,7 @@ CTcpSock::~CTcpSock()
 	// TODO Auto-generated destructor stub
 }
 
-int32_t CTcpSock::init(int32_t i32fd)
+int32_t CTcpSock::create(int32_t i32fd)
 {
 	SYS_ASSERT(!is_valid());
 	if (is_valid())
@@ -63,7 +63,7 @@ int32_t CTcpSock::init(int32_t i32fd)
 	return 0 > m_i32fd ? SNERR_CREAT_SOCK_FAILDED : CMNERR_SUC;
 }
 
-int32_t CTcpSock::destroy()
+int32_t CTcpSock::close()
 {
 	if (INVALID_SOCKET < m_i32fd)
 	{
@@ -103,7 +103,9 @@ int32_t CTcpSock::connect(INetAddr &remoteAddr)
 	destAddr.sin_port = HTONS(remoteAddr.get_port());
 	destAddr.sin_addr.s_addr = HTONL(remoteAddr.get_ip());
 
-	return connect(m_i32fd, static_cast<struct sockaddr*>(&destAddr), sizeof(destAddr));
+	int32_t i32Ret = connect(m_i32fd, static_cast<struct sockaddr*>(&destAddr), sizeof(destAddr));
+
+	return CMNERR_SUC == i32Ret ? CMNERR_SUC : (EINPROGRESS == errno ? SNERR_IN_PROGRESS : CMNERR_COMMON_ERR);
 }
 
 

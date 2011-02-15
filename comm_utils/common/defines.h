@@ -9,6 +9,7 @@
 #define __DEFINES_H__
 
 #include <assert.h>
+#include <unistd.h>
 #include <new>
 
 
@@ -68,6 +69,10 @@
 
 #define SYS_ASSERT(expr) \
 	assert((expr))
+
+#define EXIT_PROCESS(exit_code) \
+	exit(exit_code)
+
 
 #define IF_TRUE_THEN_RETURN_CODE(expr, retcode) \
 	if ((expr)) \

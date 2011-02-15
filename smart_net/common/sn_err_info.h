@@ -13,12 +13,14 @@
 enum
 {
 	SNERR_DEF = SMART_NET_ERR_CODE_BEGINNING,
-	SNERR_CREAT_SOCK_FAILDED
+	SNERR_CREAT_SOCK_FAILDED,
+	SNERR_IN_PROGRESS
 };
 
 const char* arrSnErrInfo[] =
 {
-		"create socket failed!"
+		"create socket failed!",
+		"The socket is nonblocking and the connection cannot be completed immediately"
 };
 
 

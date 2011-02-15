@@ -47,7 +47,7 @@ public:
  * ...
  * tcpServ.stop();
  * */
-template <class CConn>
+template <class CONN>
 class CTcpService : public INetService
 {
 public:
@@ -59,32 +59,40 @@ public:
 	/**
 	 * if localaddr is valid, then it is the listen service, otherwise.
 	 * */
-	int32_t init(INetAddr &localAddr, INetAddr &remoteAddr, int32_t i32MaxInboundConnectionCnt, int32_t i32MinOutboundConnectionCnt);
-	int32_t start();
-	int32_t stop();
+	int32_t init();
+//	int32_t start();
+//	int32_t stop();
+	int32_t destroy();
 	void set_backlog(int32_t i32Backlog);
 
-private:
+public:
 	int32_t start_listen_service();
 	int32_t start_connect_service();
+	int32_t stop();
 
 private:
-	///local and remote address.
-	CIpv4Addr m_localAddr;
-	CIpv4Addr m_remoteAddr;
-	///max connection count, NO_CONNECTIONS_LIMIT means no limit.
-	int32_t m_i32MaxInboundConnCnt;
-	int32_t m_i32MinOutboundConnCnt;
-	///
+
+	///listen service members.
 	tcp_listener_ptr_t m_pTcpListener;
-	///
-	tcp_connecter_ptr_t m_pTcpConnecter;
-	///
+	CIpv4Addr m_localAddr;
+	int32_t m_i32MaxInboundConnCnt;
 	int32_t m_i32Backlog;
-	///
+
+	///connect service members.
+	CTcpConnecter::tcp_connecter_ptr_t m_pTcpConnecter;
+	u_int32_t m_ui32ConnectTimeout;
+	int32_t   m_i32MaxConnectTimes;
+	bool      m_bAutoReconnect;
+	CIpv4Addr m_remoteAddr;
+	int32_t m_i32MinOutboundConnCnt;
+
+	///net engine.
 	net_engine_ptr_t m_pNetEngine;
 };
 
+/**
+ *
+ * */
 class CRudpService : public INetService
 {
 

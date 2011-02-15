@@ -70,10 +70,13 @@ void CTcpService::set_backlog(int32_t i32Backlog)
 	m_i32Backlog = i32Backlog;
 }
 
+template <class CONN>
 int32_t CTcpService::start_listen_service()
 {
 	SYS_ASSERT(NULL == m_pTcpListener);
-	m_pTcpListener = SYS_NOTRW_NEW(CTcpListener);
+
+	///
+	m_pTcpListener = SYS_NOTRW_NEW(CTcpListener<CONN>);
 	int32_t i32Ret = m_pTcpListener->init(m_localAddr, m_i32Backlog);
 	IF_TRUE_THEN_RETURN_CODE(0 > i32Ret, -1);
 
@@ -81,6 +84,15 @@ int32_t CTcpService::start_listen_service()
 	i32Ret = m_netEngine.add_io_obj(m_pTcpListener);
 	IF_TRUE_THEN_RETURN_CODE(0 > i32Ret, -2);
 
+}
+
+template <class CONN>
+int32_t CTcpService<CONN>::start_connect_service()
+{
+	SYS_ASSERT(NULL == m_pTcpConnecter);
+
+	m_pTcpConnecter = SYS_NOTRW_NEW(CONN);
+	int32_t i32Ret = m_pTcpConnecter->init(m_remoteAddr, m_);
 }
 
 

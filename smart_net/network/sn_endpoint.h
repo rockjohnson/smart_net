@@ -10,6 +10,7 @@
 
 #include "../framework/sn_io_obj.h"
 #include "../network/sn_socket.h"
+#include "sn_connecter.h"
 
 namespace nm_network
 {
@@ -60,6 +61,26 @@ protected:
 
 private:
 	tcp_sock_ptr_t m_pSock;
+};
+
+/**
+ * tcp connect endpoint.
+ * */
+class CTcpOutboundEndpoint : public CTcpEndpoint
+{
+public:
+	CTcpOutboundEndpoint();
+	~CTcpOutboundEndpoint();
+
+public:
+	int32_t start();
+	int32_t stop();
+
+protected:
+	void on_closed(int32_t iErrCode);
+
+private:
+	tcp_connecter_ptr_t m_pConnecter;
 };
 
 /**

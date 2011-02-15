@@ -24,8 +24,8 @@ public:
 
 	enum {INVALID_SOCKET = -1};
 public:
-	virtual int32_t init(int32_t i32fd = INVALID_SOCKET) = 0;
-	virtual int32_t destroy() = 0;
+	virtual int32_t create(int32_t i32fd = INVALID_SOCKET) = 0;
+	virtual int32_t close() = 0;
 	virtual int32_t bind(INetAddr &localAddr) = 0;
 	virtual int32_t listen(int32_t i32Backlog) = 0;
 	virtual int32_t connect(INetAddr &remoteAddr) = 0;
@@ -46,8 +46,8 @@ public:
 	virtual ~CTcpSock();
 
 public:
-	int32_t init(int32_t i32fd = INVALID_SOCKET);
-	int32_t destroy();
+	int32_t create(int32_t i32fd = INVALID_SOCKET);
+	int32_t close();
 	int32_t bind(INetAddr &localAddr);
 	int32_t listen(int32_t i32Backlog);
 	int32_t connect(INetAddr &remoteAddr);

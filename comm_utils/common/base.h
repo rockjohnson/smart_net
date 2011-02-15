@@ -57,8 +57,10 @@ public:
 	virtual void dispose_this_obj();
 	inline int get_ref_cnt();
 
+#if 0
 	virtual int32_t init() = 0;
 	virtual int32_t destroy() = 0;
+#endif
 
 private:
 	ICommonBase(const ICommonBase &other);
