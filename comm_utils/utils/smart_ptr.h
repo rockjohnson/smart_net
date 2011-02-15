@@ -14,15 +14,15 @@
 
 namespace nm_utils
 {
-	class CSmartBase
+	class CRefCnt
 	{
 	protected:
-		CSmartBase() :
+		CRefCnt() :
 			m_iCnt(0)
 		{
 		}
 
-		virtual ~CSmartBase()
+		virtual ~CRefCnt()
 		{
 			SYS_ASSERT(m_iCnt == 0);
 		}
@@ -53,10 +53,10 @@ namespace nm_utils
 		}
 
 	private:
-		CSmartBase(const CSmartBase &other)
+		CRefCnt(const CRefCnt &other)
 		{
 		}
-		CSmartBase& operator =(const CSmartBase&)
+		CRefCnt& operator =(const CRefCnt&)
 		{
 			return *this;
 		}
@@ -64,7 +64,7 @@ namespace nm_utils
 	private:
 		/*volatile*/int m_iCnt;
 	};
-#define __SUPPORT_REF_CNT__ : public nm_utils::CSmartBase
+//#define __SUPPORT_REF_CNT__ : public nm_utils::CRefCnt
 
 
 	template<typename T>
@@ -89,8 +89,8 @@ namespace nm_utils
 		operator size_t() const;//for unordered_set
 
 	private:
-		void addRef();
-		void release();
+		inline void addRef();
+		inline void release();
 
 		T *m_pObj;
 
@@ -228,7 +228,7 @@ namespace nm_utils
 	{
 		if (m_pObj != 0)
 		{
-			m_pObj->inc();
+			m_pObj->inc_ref();
 		}
 	}
 
@@ -237,7 +237,7 @@ namespace nm_utils
 	{
 		if (m_pObj != 0)
 		{
-			m_pObj->dec();
+			m_pObj->dec_ref();
 			m_pObj = 0;
 		}
 	}

@@ -21,4 +21,23 @@ IConnecter::~IConnecter()
 	// TODO Auto-generated destructor stub
 }
 
+/**
+ * CTcpConnecter
+ *
+ * */
+CTcpConnecter::CTcpConnecter()
+{
+
+}
+
+CTcpConnecter::~CTcpConnecter()
+{
+
+}
+
+int32_t CTcpConnecter::init()
+{
+
+}
+
 }

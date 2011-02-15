@@ -20,7 +20,7 @@ namespace nm_framework
 /**
  * io event notify mechanism base class
  * */
-class IIoEvtNotify: public nm_utils::CSmartBase
+class IIoEvtNotify: public nm_base::ICommonBase
 {
 public:
 	enum EIoEvtNotify

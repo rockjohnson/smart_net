@@ -135,7 +135,7 @@ bool CThread::is_running()
 	return m_bRunning;
 }
 
-thread_task_ptr_t& get_task()
+thread_task_ptr_t& CThread::get_task()
 {
 	return m_pTask;
 }

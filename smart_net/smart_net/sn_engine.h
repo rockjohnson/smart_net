@@ -8,7 +8,7 @@
 #ifndef __SHARED_OBJ_H__
 #define __SHARED_OBJ_H__
 
-#include "sn_io_task.h"
+#include "../framework/sn_io_task.h"
 #include <vector>
 
 namespace nm_smartnet

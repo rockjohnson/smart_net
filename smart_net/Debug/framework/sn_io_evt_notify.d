@@ -81,7 +81,10 @@ framework/sn_io_evt_notify.d: ../framework/sn_io_evt_notify.cpp \
  ../framework/../common/sn_revision.h \
  /home/rock/workspace/smartnet/comm_utils/utils/smart_ptr.h \
  /home/rock/workspace/smartnet/comm_utils/utils/atomic.h \
- /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h
+ /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h \
+ /usr/include/sys/epoll.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/include/stdint.h \
+ /usr/include/stdint.h
 
 ../framework/sn_io_evt_notify.h:
 
@@ -286,3 +289,9 @@ framework/sn_io_evt_notify.d: ../framework/sn_io_evt_notify.cpp \
 /home/rock/workspace/smartnet/comm_utils/utils/atomic.h:
 
 /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h:
+
+/usr/include/sys/epoll.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/include/stdint.h:
+
+/usr/include/stdint.h:

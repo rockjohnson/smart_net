@@ -10,7 +10,7 @@
 
 #include "../common/sn_common.h"
 #include "../network/sn_net_addr.h"
-#include "../framework/sn_engine.h"
+#include "sn_engine.h"
 
 namespace nm_smartnet
 {
@@ -77,6 +77,8 @@ private:
 	int32_t m_i32MinOutboundConnCnt;
 	///
 	tcp_listener_ptr_t m_pTcpListener;
+	///
+	tcp_connecter_ptr_t m_pTcpConnecter;
 	///
 	int32_t m_i32Backlog;
 	///

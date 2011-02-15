@@ -22,8 +22,22 @@ public:
 
 class CTcpConnecter : public IConnecter
 {
+public:
+	CTcpConnecter();
+	~CTcpConnecter();
 
+public:
+	int32_t init();
+	int32_t destroy();
+
+protected:
+	void handle_input_evt();
+	void handle_output_evt();
+	void handle_error_evt();
+	int32_t get_fd();
 };
+typedef nm_utils::CSmartPtr<nm_network::CTcpConnecter> tcp_connecter_ptr_t;
+
 
 }
 

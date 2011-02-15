@@ -16,7 +16,7 @@ namespace nm_framework
 
 class CIoTask;
 
-class IIoObj : public nm_utils::CSmartBase
+class IIoObj : public nm_base::ICommonBase
 {
 	friend class CIoTask;
 public:
