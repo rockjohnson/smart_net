@@ -10,13 +10,13 @@
 namespace nm_network
 {
 
-INetListener::INetListener()
+IListener::IListener()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-INetListener::~INetListener()
+IListener::~IListener()
 {
 	// TODO Auto-generated destructor stub
 }

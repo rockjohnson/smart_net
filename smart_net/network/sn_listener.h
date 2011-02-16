@@ -17,14 +17,14 @@ namespace nm_network
 /**
  * base net listner
  * */
-class INetListener : public nm_framework::IIoObj
+class IListener : public nm_framework::IIoObj
 {
 public:
-	INetListener();
-	virtual ~INetListener();
+	IListener();
+	virtual ~IListener();
 };
 
-class CTcpListener : public INetListener
+class CTcpListener : public IListener
 {
 public:
 	CTcpListener();

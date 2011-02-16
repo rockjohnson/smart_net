@@ -12,7 +12,7 @@
 #include "../network/sn_socket.h"
 #include "sn_connecter.h"
 
-namespace nm_network
+namespace nm_smartnet
 {
 
 /**
@@ -25,21 +25,13 @@ public:
 	virtual ~IEndpoint();
 
 public:
-	///
-	virtual int32_t init() = 0;
-	virtual int32_t close() = 0;
-	virtual int32_t send_data(mem_ptr_t &pData) = 0;
+	virtual int32_t send_data(mem_ptr_t &pData) = 0; ///thread-safe send func.
+	virtual int32_t close() = 0; ///close this endpoint, close the connection, and will not send or receive data.
 
 protected:
-	///
-	virtual void handle_input_evt();
-	virtual void handle_output_evt();
-	virtual void handle_error_evt();
-	virtual int32_t get_fd();
-	///
 	virtual void on_connected() = 0;
 	virtual void on_recved_data(mem_ptr_t &pData) = 0;
-	virtual void on_closed(int32_t iErrCode) = 0;
+	virtual void on_occurred_err(int32_t iErrCode) = 0;
 };
 
 /**
@@ -52,12 +44,14 @@ public:
 	virtual ~CTcpEndpoint();
 
 public:
-	virtual int send_data(mem_ptr_t &pData);
+	virtual int32_t send_data(mem_ptr_t &pData);
+	virtual int32_t close();
 
 protected:
-	virtual void on_connected();
-	virtual void on_recved_data(mem_ptr_t &pData);
-	virtual void on_closed(int32_t iErrCode);
+	void handle_input_evt(); ///handle input event.
+	void handle_output_evt(); ///handle ouput event.
+	void handle_error_evt(); ///handle error event.
+	int32_t get_fd();
 
 private:
 	tcp_sock_ptr_t m_pSock;

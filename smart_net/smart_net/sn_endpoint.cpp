@@ -7,7 +7,7 @@
 
 #include "sn_endpoint.h"
 
-namespace nm_network
+namespace nm_smartnet
 {
 
 IEndpoint::IEndpoint()
@@ -18,9 +18,12 @@ IEndpoint::IEndpoint()
 
 IEndpoint::~IEndpoint()
 {
-	// TODO Auto-generated destructor stub
+	destroy();
 }
 
+/**
+ * tcp endpoint.
+ * */
 CTcpEndpoint::CTcpEndpoint()
 {
 	// TODO Auto-generated constructor stub
