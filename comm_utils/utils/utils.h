@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <sys/time.h>
+#include <arpa/inet.h>
 #include <sys/resource.h>
 #include <pthread.h>
 #include <vector>
@@ -117,5 +118,27 @@ namespace nm_utils
 	///get or set socket block.
 	int32_t get_block_flag(int32_t i32fd);
 	int32_t set_block_flag(int32_t i32fd, bool bBlockOrNot);
+
+	///convert ip
+	int32_t ip_ston(int32_t i32af, cstr_t pcszSrcIp, pvoid_t pDst);
+	/*
+	 * e.g.
+	 * struct in_addr addr;
+	 * ip_ston(AF_INET, "127.0.0.1", (pvoid_t)&addr);
+	 * struct in6_addr addr;
+	 * ip_ston(AF_INET6, "127.0.0.1", (pvoid_t)&addr);
+	 * */
+	int32_t ip_ntos(int32_t i32af, pvoid_t pSrcIp, char_t *pszDst, const socklen_t cslDstLen);
+	/*
+	 * e.g.
+	 * struct in_addr addr;
+	 * ...
+	 * char_t buf[INET_ADDRSTRLEN] = {0};
+	 * ip_ntos(AF_INET, (pvoid_t)&addr, buf, INET_ADDRSTRLEN);
+	 *
+	 * struct in6_addr addr;
+	 * ...
+	 *
+	 * */
 }
 #endif /* __COMM_H__ */

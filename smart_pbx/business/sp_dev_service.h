@@ -26,17 +26,12 @@ public:
 	~CDevEndpoint();
 
 public:
-	///object init and destroy;
 	int32_t init();
 	int32_t destroy();
-
-	///close the current endpoint, but not destroy this obj.
 	int32_t close();
 
-	///thread-safe func.
-	int32_t send_data(mem_ptr_t &pMem);
+	int32_t send_data(mem_ptr_t &pMem); ///thread-safe func.
 protected:
-	///callback func which invoked by net io thread.
 	void on_connected();
 	void on_recved_data(mem_ptr_t &pMem);
 	void on_net_error();
@@ -67,6 +62,10 @@ class CDevService : public nm_smartnet::CTcpService
 public:
 	CDevService();
 	virtual ~CDevService();
+
+public:
+	int32_t start();
+	int32_t stop();
 };
 
 }

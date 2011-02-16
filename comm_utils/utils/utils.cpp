@@ -18,6 +18,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <assert.h>
+#include <arpa/inet.h>
 
 #if __PLATFORM__ == __PLATFORM_WINDOWS__
 #include <Winsock2.h>
@@ -391,5 +392,37 @@ namespace nm_utils
     			fcntl(i32fd, F_SETFL, i32Flags & (~O_NONBLOCK)) :
     			fcntl(i32fd, F_SETFL, i32Flags | O_NONBLOCK);
     }
+
+    ///
+int32_t ip_ston(int32_t i32af, cstr_t pcszIp, pvoid_t pDst)
+{
+	if (AF_INET != i32af && AF_INET6 != i32af)
+	{
+		return CMNERR_COMMON_ERR;
+	}
+
+	return inet_pton(i32af, pcszIp, pDst) <= 0 ? CMNERR_COMMON_ERR : CMNERR_SUC;
+}
+
+int32_t ip_ntos(int32_t i32af, pvoid_t pSrcIp, char_t *pszDst, const socklen_t cslDstLen)
+{
+	if (AF_INET != i32af && AF_INET6 != i32af)
+	{
+		return CMNERR_COMMON_ERR;
+	}
+
+	if (INET_ADDRSTRLEN > cslDstLen || (AF_INET6 == i32af && INET6_ADDRSTRLEN > cslDstLen))
+	{
+		return CMNERR_COMMON_ERR;
+	}
+
+	if (inet_ntop(i32af, pSrcIp, pszDst, cslDstLen) == NULL)
+	{
+		return CMNERR_COMMON_ERR;
+	}
+
+	return CMNERR_SUC;
+}
+
 }
 
