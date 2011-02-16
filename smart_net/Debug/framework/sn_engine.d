@@ -1,8 +1,7 @@
-network/sn_listener.d: ../network/sn_listener.cpp \
- ../network/sn_listener.h ../network/sn_socket.h \
- ../network/../framework/sn_io_obj.h \
- ../network/../framework/../common/sn_common.h \
- /home/rock/workspace/smartnet/comm_utils/common/common.h \
+framework/sn_engine.d: ../framework/sn_engine.cpp \
+ ../framework/sn_engine.h ../framework/../framework/sn_io_task.h \
+ /home/rock/workspace/smartnet/comm_utils/thread/thread_ex.h \
+ /home/rock/workspace/smartnet/comm_utils/thread/../common/common.h \
  /usr/include/assert.h /usr/include/features.h /usr/include/sys/cdefs.h \
  /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
  /usr/include/gnu/stubs-64.h \
@@ -63,8 +62,8 @@ network/sn_listener.d: ../network/sn_listener.cpp \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/x86_64-redhat-linux/bits/atomic_word.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/initializer_list \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/basic_string.tcc \
- /home/rock/workspace/smartnet/comm_utils/common/defines.h \
- /home/rock/workspace/smartnet/comm_utils/common/containers.h \
+ /home/rock/workspace/smartnet/comm_utils/thread/../common/defines.h \
+ /home/rock/workspace/smartnet/comm_utils/thread/../common/containers.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/map \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_tree.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_map.h \
@@ -72,28 +71,42 @@ network/sn_listener.d: ../network/sn_listener.cpp \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/set \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_set.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_multiset.h \
- /home/rock/workspace/smartnet/comm_utils/common/types.h \
+ /home/rock/workspace/smartnet/comm_utils/thread/../common/types.h \
  /usr/include/sys/types.h /usr/include/sys/select.h \
  /usr/include/bits/select.h /usr/include/bits/sigset.h \
  /usr/include/sys/sysmacros.h \
- /home/rock/workspace/smartnet/comm_utils/common/base.h \
- /home/rock/workspace/smartnet/comm_utils/common/err_info.h \
- ../network/../framework/../common/sn_defines.h \
- ../network/../framework/../common/sn_err_info.h \
- ../network/../framework/../common/sn_revision.h \
+ /home/rock/workspace/smartnet/comm_utils/thread/../common/base.h \
+ /home/rock/workspace/smartnet/comm_utils/thread/../common/err_info.h \
+ /home/rock/workspace/smartnet/comm_utils/thread/../utils/smart_ptr.h \
+ /home/rock/workspace/smartnet/comm_utils/thread/../utils/atomic.h \
+ /home/rock/workspace/smartnet/comm_utils/thread/../utils/../common/common.h \
+ ../framework/../framework/sn_io_evt_notify.h \
+ ../framework/../framework/sn_io_obj.h \
+ ../framework/../framework/../common/sn_common.h \
+ /home/rock/workspace/smartnet/comm_utils/common/common.h \
+ ../framework/../framework/../common/sn_defines.h \
+ ../framework/../framework/../common/sn_err_info.h \
+ ../framework/../framework/../common/sn_revision.h \
  /home/rock/workspace/smartnet/comm_utils/utils/smart_ptr.h \
- /home/rock/workspace/smartnet/comm_utils/utils/atomic.h \
- /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h
+ /usr/include/sys/epoll.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/include/stdint.h \
+ /usr/include/stdint.h \
+ /home/rock/workspace/smartnet/comm_utils/utils/smart_lock.h \
+ /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/vector \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_construct.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_uninitialized.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_vector.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_bvector.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/vector.tcc
 
-../network/sn_listener.h:
+../framework/sn_engine.h:
 
-../network/sn_socket.h:
+../framework/../framework/sn_io_task.h:
 
-../network/../framework/sn_io_obj.h:
+/home/rock/workspace/smartnet/comm_utils/thread/thread_ex.h:
 
-../network/../framework/../common/sn_common.h:
-
-/home/rock/workspace/smartnet/comm_utils/common/common.h:
+/home/rock/workspace/smartnet/comm_utils/thread/../common/common.h:
 
 /usr/include/assert.h:
 
@@ -245,9 +258,9 @@ network/sn_listener.d: ../network/sn_listener.cpp \
 
 /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/basic_string.tcc:
 
-/home/rock/workspace/smartnet/comm_utils/common/defines.h:
+/home/rock/workspace/smartnet/comm_utils/thread/../common/defines.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/containers.h:
+/home/rock/workspace/smartnet/comm_utils/thread/../common/containers.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/map:
 
@@ -263,7 +276,7 @@ network/sn_listener.d: ../network/sn_listener.cpp \
 
 /usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_multiset.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/types.h:
+/home/rock/workspace/smartnet/comm_utils/thread/../common/types.h:
 
 /usr/include/sys/types.h:
 
@@ -275,18 +288,50 @@ network/sn_listener.d: ../network/sn_listener.cpp \
 
 /usr/include/sys/sysmacros.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/base.h:
+/home/rock/workspace/smartnet/comm_utils/thread/../common/base.h:
 
-/home/rock/workspace/smartnet/comm_utils/common/err_info.h:
+/home/rock/workspace/smartnet/comm_utils/thread/../common/err_info.h:
 
-../network/../framework/../common/sn_defines.h:
+/home/rock/workspace/smartnet/comm_utils/thread/../utils/smart_ptr.h:
 
-../network/../framework/../common/sn_err_info.h:
+/home/rock/workspace/smartnet/comm_utils/thread/../utils/atomic.h:
 
-../network/../framework/../common/sn_revision.h:
+/home/rock/workspace/smartnet/comm_utils/thread/../utils/../common/common.h:
+
+../framework/../framework/sn_io_evt_notify.h:
+
+../framework/../framework/sn_io_obj.h:
+
+../framework/../framework/../common/sn_common.h:
+
+/home/rock/workspace/smartnet/comm_utils/common/common.h:
+
+../framework/../framework/../common/sn_defines.h:
+
+../framework/../framework/../common/sn_err_info.h:
+
+../framework/../framework/../common/sn_revision.h:
 
 /home/rock/workspace/smartnet/comm_utils/utils/smart_ptr.h:
 
-/home/rock/workspace/smartnet/comm_utils/utils/atomic.h:
+/usr/include/sys/epoll.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/include/stdint.h:
+
+/usr/include/stdint.h:
+
+/home/rock/workspace/smartnet/comm_utils/utils/smart_lock.h:
 
 /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/vector:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_construct.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_uninitialized.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_vector.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/stl_bvector.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.5.1/../../../../include/c++/4.5.1/bits/vector.tcc:

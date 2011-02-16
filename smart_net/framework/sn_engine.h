@@ -11,12 +11,12 @@
 #include "../framework/sn_io_task.h"
 #include <vector>
 
-namespace nm_smartnet
+namespace nm_framework
 {
 	/**
 	 * the smart net manager.
 	 * */
-	class CNetEngine __SUPPORT_REF_CNT__
+	class CNetEngine : public nm_base::ICommonBase
 	{
 		public:
 			CNetEngine();

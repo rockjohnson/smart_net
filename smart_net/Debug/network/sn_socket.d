@@ -83,7 +83,8 @@ network/sn_socket.d: ../network/sn_socket.cpp ../network/sn_socket.h \
  /home/rock/workspace/smartnet/comm_utils/utils/smart_ptr.h \
  /home/rock/workspace/smartnet/comm_utils/utils/atomic.h \
  /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h \
- /usr/include/sys/socket.h /usr/include/sys/uio.h /usr/include/bits/uio.h \
+ ../network/sn_net_addr.h /usr/include/sys/socket.h \
+ /usr/include/sys/uio.h /usr/include/bits/uio.h \
  /usr/include/bits/socket.h /usr/include/bits/sockaddr.h \
  /usr/include/asm/socket.h /usr/include/asm-generic/socket.h \
  /usr/include/asm/sockios.h /usr/include/asm-generic/sockios.h \
@@ -302,6 +303,8 @@ network/sn_socket.d: ../network/sn_socket.cpp ../network/sn_socket.h \
 /home/rock/workspace/smartnet/comm_utils/utils/atomic.h:
 
 /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h:
+
+../network/sn_net_addr.h:
 
 /usr/include/sys/socket.h:
 

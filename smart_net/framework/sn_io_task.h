@@ -10,6 +10,7 @@
 
 #include <thread/thread_ex.h>
 #include "sn_io_evt_notify.h"
+#include <utils/smart_lock.h>
 
 namespace nm_framework
 {

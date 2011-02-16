@@ -19,7 +19,7 @@
 
 #include "../common/common.h"
 #include "../utils/time_info.h"
-#include "../utils/auto_lock.h"
+#include "../utils/smart_lock.h"
 #include "../utils/file.h"
 
 namespace nm_utils

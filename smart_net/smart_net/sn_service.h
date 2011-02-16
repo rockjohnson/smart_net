@@ -10,7 +10,7 @@
 
 #include "../common/sn_common.h"
 #include "../network/sn_net_addr.h"
-#include "sn_engine.h"
+#include "../framework/sn_engine.h"
 
 namespace nm_smartnet
 {
@@ -79,7 +79,7 @@ private:
 	int32_t m_i32Backlog;
 
 	///connect service members.
-	CTcpConnecter::tcp_connecter_ptr_t m_pTcpConnecter;
+	//CTcpConnecter::tcp_connecter_ptr_t m_pTcpConnecter;
 	u_int32_t m_ui32ConnectTimeout;
 	int32_t   m_i32MaxConnectTimes;
 	bool      m_bAutoReconnect;

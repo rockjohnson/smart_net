@@ -3,6 +3,7 @@
 	<name>smart_pbx</name>
 	<comment></comment>
 	<projects>
+		<project>smart_net</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -7,7 +7,7 @@ thread/thread_ex.d: ../thread/thread_ex.cpp ../thread/thread_ex.h \
  ../thread/../log/smart_log.h ../thread/../log/../common/common.h \
  ../thread/../log/../utils/time_info.h \
  ../thread/../log/../utils/../common/common.h \
- ../thread/../log/../utils/auto_lock.h ../thread/../log/../utils/file.h
+ ../thread/../log/../utils/smart_lock.h ../thread/../log/../utils/file.h
 
 ../thread/thread_ex.h:
 
@@ -39,6 +39,6 @@ thread/thread_ex.d: ../thread/thread_ex.cpp ../thread/thread_ex.h \
 
 ../thread/../log/../utils/../common/common.h:
 
-../thread/../log/../utils/auto_lock.h:
+../thread/../log/../utils/smart_lock.h:
 
 ../thread/../log/../utils/file.h:

@@ -8,10 +8,11 @@
 #ifndef NET_LISTENER_H_
 #define NET_LISTENER_H_
 
-#include "sn_socket.h"
+#include "../network/sn_socket.h"
 #include "../framework/sn_io_obj.h"
+#include "sn_endpoint.h"
 
-namespace nm_network
+namespace nm_smartnet
 {
 
 /**
@@ -36,13 +37,15 @@ public:
 	void handle_input_evt();
 	void handle_output_evt();
 	void handle_error_evt();
-
 	int32_t get_fd();
+
+protected:
+	virtual tcp_endpoint_ptr_t create_endpoint() = 0;
 
 private:
 	CTcpSock m_tcpSock;
 };
-typedef nm_utils::CSmartPtr<nm_network::CTcpListener> tcp_listener_ptr_t;
+typedef nm_utils::CSmartPtr<nm_smartnet::CTcpListener> tcp_listener_ptr_t;
 
 
 }

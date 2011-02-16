@@ -10,10 +10,14 @@
 
 #include "../framework/sn_io_obj.h"
 #include "../network/sn_socket.h"
-#include "sn_connecter.h"
+#include "../network/sn_connecter.h"
+#include <memory/mem.h>
 
 namespace nm_smartnet
 {
+
+using namespace nm_memory;
+using namespace nm_network;
 
 /**
  * base endpoint class
@@ -54,8 +58,9 @@ protected:
 	int32_t get_fd();
 
 private:
-	tcp_sock_ptr_t m_pSock;
+	CTcpSock::tcp_sock_ptr_t m_pSock;
 };
+typedef nm_utils::CSmartPtr<nm_smartnet::CTcpEndpoint> tcp_endpoint_ptr_t;
 
 /**
  * tcp connect endpoint.

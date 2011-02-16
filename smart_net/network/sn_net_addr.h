@@ -18,9 +18,9 @@ public:
 	virtual ~INetAddr();
 
 public:
-	u_int16_t get_port() = 0;
-	u_int32_t get_ip() = 0;
-	bool is_valid() = 0;
+	virtual u_int16_t get_port() = 0;
+	virtual u_int32_t get_ip() = 0;
+	virtual bool is_valid() = 0;
 };
 
 class CIpv4Addr : public INetAddr
@@ -32,6 +32,7 @@ public:
 public:
 	u_int16_t get_port();
 	u_int32_t get_ip();
+	bool is_valid();
 
 private:
 	u_int16_t m_ui16Port;

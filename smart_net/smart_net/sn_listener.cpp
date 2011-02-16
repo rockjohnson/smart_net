@@ -7,7 +7,7 @@
 
 #include "sn_listener.h"
 
-namespace nm_network
+namespace nm_smartnet
 {
 
 IListener::IListener()

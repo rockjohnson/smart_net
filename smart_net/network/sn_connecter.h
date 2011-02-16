@@ -9,6 +9,7 @@
 #define CONNECTOR_H_
 
 #include "../framework/sn_io_obj.h"
+#include "../network/sn_net_addr.h"
 
 namespace nm_network
 {

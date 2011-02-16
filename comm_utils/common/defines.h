@@ -89,4 +89,11 @@
 #define SYS_NOTRW_NEW(cls) \
 		new(std::nothrow) cls
 
+#define SAFE_DELETE_ARR(pArr) \
+	if (NULL != pArr) \
+	{ \
+		delete [] pArr; \
+		pArr = NULL; \
+	}
+
 #endif /* DEFINES_H_ */

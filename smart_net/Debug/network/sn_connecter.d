@@ -82,7 +82,8 @@ network/sn_connecter.d: ../network/sn_connecter.cpp \
  ../network/../framework/../common/sn_revision.h \
  /home/rock/workspace/smartnet/comm_utils/utils/smart_ptr.h \
  /home/rock/workspace/smartnet/comm_utils/utils/atomic.h \
- /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h
+ /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h \
+ ../network/../network/sn_net_addr.h
 
 ../network/sn_connecter.h:
 
@@ -287,3 +288,5 @@ network/sn_connecter.d: ../network/sn_connecter.cpp \
 /home/rock/workspace/smartnet/comm_utils/utils/atomic.h:
 
 /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h:
+
+../network/../network/sn_net_addr.h:

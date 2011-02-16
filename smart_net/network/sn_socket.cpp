@@ -96,6 +96,24 @@ int32_t CTcpSock::listen(int32_t i32Backlog)
 	return listen(m_i32fd, i32Backlog);
 }
 
+CTcpSock::tcp_sock_ptr_t CTcpSock::accept()
+{
+	tcp_sock_ptr_t pTcpSock;
+	struct sockaddr_in remoteAddr;
+	ZERO_MEM(&remoteAddr);
+	socklen_t slSize = sizeof(remoteAddr);
+	int32_t i32NewSockFd = accept(m_i32fd, static_cast<struct sockaddr*>(&remoteAddr), &slSize);
+	if (-1 == i32NewSockFd)
+	{
+		return pTcpSock;
+	}
+	pTcpSock = SYS_NOTRW_NEW(CTcpSock);
+	SYS_ASSERT(NULL != pTcpSock);
+	pTcpSock->create(i32NewSockFd);
+
+	return pTcpSock;
+}
+
 int32_t CTcpSock::connect(INetAddr &remoteAddr)
 {
 	struct sockaddr_in destAddr;

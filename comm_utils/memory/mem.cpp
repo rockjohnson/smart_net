@@ -10,15 +10,23 @@
 namespace nm_memory
 {
 
-IMemBlock::IMemBlock()
+CMemBlock::CMemBlock()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-IMemBlock::~IMemBlock()
+CMemBlock::~CMemBlock()
 {
-	// TODO Auto-generated destructor stub
+	reset();
+}
+
+void CMemBlock::reset()
+{
+	SAFE_DELETE_ARR(m_pBytes);
+	m_ui32Sz = 0;
+	m_ui32Offset = 0;
+	m_ui32Len = 0;
 }
 
 }

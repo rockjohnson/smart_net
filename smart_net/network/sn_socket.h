@@ -9,6 +9,7 @@
 #define SOCKET_H_
 
 #include "../framework/sn_io_obj.h"
+#include "sn_net_addr.h"
 
 namespace nm_network
 {
@@ -42,6 +43,9 @@ typedef nm_utils::CSmartPtr<nm_network::ISocket> sock_ptr_t;
 class CTcpSock: public nm_network::ISocket
 {
 public:
+	typedef nm_utils::CSmartPtr<nm_network::CTcpSock> tcp_sock_ptr_t;
+
+public:
 	CTcpSock();
 	virtual ~CTcpSock();
 
@@ -50,6 +54,7 @@ public:
 	int32_t close();
 	int32_t bind(INetAddr &localAddr);
 	int32_t listen(int32_t i32Backlog);
+	tcp_sock_ptr_t accept();
 	int32_t connect(INetAddr &remoteAddr);
 	int32_t get_fd();
 	bool is_valid();

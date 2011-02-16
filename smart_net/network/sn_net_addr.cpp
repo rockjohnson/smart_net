@@ -21,4 +21,12 @@ CNetAddr::~CNetAddr()
 	// TODO Auto-generated destructor stub
 }
 
+/**
+ * valid
+ * */
+bool CIpv4Addr::is_valid()
+{
+	return m_ui16Port > 0;
+}
+
 }

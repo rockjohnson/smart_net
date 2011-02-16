@@ -88,7 +88,9 @@ framework/sn_io_task.d: ../framework/sn_io_task.cpp \
  /home/rock/workspace/smartnet/comm_utils/utils/smart_ptr.h \
  /usr/include/sys/epoll.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.5.1/include/stdint.h \
- /usr/include/stdint.h
+ /usr/include/stdint.h \
+ /home/rock/workspace/smartnet/comm_utils/utils/smart_lock.h \
+ /home/rock/workspace/smartnet/comm_utils/utils/../common/common.h
 
 ../framework/sn_io_task.h:
 
@@ -307,3 +309,7 @@ framework/sn_io_task.d: ../framework/sn_io_task.cpp \
 /usr/lib/gcc/x86_64-redhat-linux/4.5.1/include/stdint.h:
 
 /usr/include/stdint.h:
+
+/home/rock/workspace/smartnet/comm_utils/utils/smart_lock.h:
+
+/home/rock/workspace/smartnet/comm_utils/utils/../common/common.h:

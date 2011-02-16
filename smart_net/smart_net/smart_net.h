@@ -10,7 +10,7 @@
 #ifndef __SMART_NET_H__
 #define __SMART_NET_H__
 
-#include "sn_engine.h"
+#include "../framework/sn_engine.h"
 
 namespace nm_smartnet
 {
