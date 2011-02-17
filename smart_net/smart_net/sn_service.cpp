@@ -13,7 +13,7 @@ namespace nm_smartnet
 
 using namespace nm_network;
 
-INetService::INetService(net_engine_ptr &pNetEngine)
+INetService::INetService(net_engine_ptr_t &pNetEngine)
 :m_pNetEngine(pNetEngine)
 {
 	// TODO Auto-generated constructor stub
@@ -21,8 +21,24 @@ INetService::INetService(net_engine_ptr &pNetEngine)
 
 INetService::~INetService()
 {
-	destroy();
+	stop();
 }
+
+int32_t INetService::start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t pPeerNetAddr)
+{
+	m_pLocalNetAddr = pLocalNetAddr;
+	m_pPeereNetAddr = pPeerNetAddr;
+
+	return CMNERR_SUC;
+}
+
+//int32_t INetService::start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t &pPeerNetAddr)
+//{
+//	m_pLocalNetAddr = pLocalNetAddr;
+//	m_pPeereNetAddr = pPeerNetAddr;
+//
+//	return CMNERR_SUC;
+//}
 
 
 /**
@@ -37,51 +53,54 @@ CTcpService::~CTcpService()
 {
 }
 
-int32_t CTcpService::init(INetAddr &localAddr, INetAddr &remoteAddr, int32_t i32MaxInboundConnectionCnt, int32_t i32MinOutboundConnectionCnt)
+int32_t CTcpService::start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t &pPeerNetAddr)
 {
-	if (localAddr.is_valid() == remoteAddr.is_valid()
-			|| i32MaxInboundConnectionCnt < NO_CONNECTIONS_LIMIT
-			|| i32MinOutboundConnectionCnt < NO_CONNECTIONS_LIMIT)
+	IF_TRUE_THEN_RETURN_CODE((NULL != pLocalNetAddr && NULL != pPeerNetAddr) || (NULL == pLocalNetAddr && NULL == pPeerNetAddr), CMNERR_COMMON_ERR);
+
+	INetService::start(pLocalNetAddr, pPeerNetAddr);
+
+	if (NULL != pLocalNetAddr)
 	{
-		return CMNER_INVALID_PARAMS;
+		start_listen_service();
 	}
-
-	m_localAddr = localAddr;
-	m_remoteAddr = remoteAddr;
-
-	m_i32MaxInboundConnCnt = i32MaxInboundConnectionCnt;
-	m_i32MinOutboundConnCnt = i32MinOutboundConnectionCnt;
+	else if (NULL != pPeerNetAddr)
+	{
+		start_connect_service();
+	}
+	else
+	{
+		SYS_ASSERT(false);
+	}
 
 	return CMNERR_SUC;
 }
 
-int32_t CTcpService::start()
-{
-	int32_t i32Ret = CMNERR_SUC;
-
-	if (m_localAddr.is_valid())
-	{
-		i32Ret = start_listen_service();
-	}
-	else if (m_remoteAddr.is_valid())
-	{
-		i32Ret = start_connect_service();
-	}
-	else
-	{
-		i32Ret = CMNER_NO_MATCH_ITEM;
-	}
-
-	return i32Ret;
-}
+//int32_t CTcpService::start()
+//{
+//	int32_t i32Ret = CMNERR_SUC;
+//
+//	if (m_localAddr.is_valid())
+//	{
+//		i32Ret = start_listen_service();
+//	}
+//	else if (m_remoteAddr.is_valid())
+//	{
+//		i32Ret = start_connect_service();
+//	}
+//	else
+//	{
+//		i32Ret = CMNER_NO_MATCH_ITEM;
+//	}
+//
+//	return i32Ret;
+//}
 
 void CTcpService::set_backlog(int32_t i32Backlog)
 {
 	m_i32Backlog = i32Backlog;
 }
 
-template<class LISTENER>
-int32_t CTcpService::add_listen_service<LISTENER>(INetAddr &listenAddr, int32_t i32Backlog)
+int32_t CTcpService::start_listen_service()
 {
 	tcp_listener_ptr_t pTcpListener = SYS_NOTRW_NEW(LISTENER);
 	int32_t i32Ret = pTcpListener->init(listenAddr, i32Backlog);
@@ -95,8 +114,7 @@ int32_t CTcpService::add_listen_service<LISTENER>(INetAddr &listenAddr, int32_t 
 	return CMNERR_SUC;
 }
 
-template <class CONN>
-int32_t CTcpService<CONN>::start_connect_service()
+int32_t CTcpService::start_connect_service()
 {
 	SYS_ASSERT(NULL == m_pTcpConnecter);
 

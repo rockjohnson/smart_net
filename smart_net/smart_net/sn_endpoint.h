@@ -29,12 +29,16 @@ public:
 	virtual ~IEndpoint();
 
 public:
+
+public:
+	virtual int32_t init() = 0;
+	virtual int32_t destroy() = 0;
 	virtual int32_t send_data(mem_ptr_t &pData) = 0; ///thread-safe send func.
 	virtual int32_t close() = 0; ///close this endpoint, close the connection, and will not send or receive data.
 
 protected:
-	virtual void on_connected() = 0;
-	virtual void on_recved_data(mem_ptr_t &pData) = 0;
+	virtual void on_connected(INetAddr &remoteAddr) = 0;
+	virtual void on_recved_data(mem_ptr_t &pData, INetAddr &srcAddr) = 0;
 	virtual void on_occurred_err(int32_t iErrCode) = 0;
 };
 
@@ -101,6 +105,8 @@ public:
 	CRmpEndpoint();
 	virtual ~CRmpEndpoint();
 };
+
+
 
 }
 

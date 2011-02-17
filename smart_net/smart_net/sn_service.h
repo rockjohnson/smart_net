@@ -9,7 +9,7 @@
 #define __SERVICE_H__
 
 #include <vector>
-
+#include <utils/obj_factory.h>
 #include "../common/sn_common.h"
 #include "../network/sn_net_addr.h"
 #include "smart_net.h"
@@ -33,15 +33,13 @@ public:
 	virtual ~INetService();
 
 public:
-	virtual int32_t init() = 0;
-	virtual int32_t destroy() = 0;
-
-	virtual int32_t start() = 0;
+	virtual int32_t start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t &pPeerNetAddr);
 	virtual int32_t stop() = 0;
 
-private:
-	///net engine.
-	net_engine_ptr_t m_pNetEngine;
+protected:
+	net_engine_ptr_t m_pNetEngine; ///net engine.
+	net_addr_ptr_t m_pLocalNetAddr;
+	net_addr_ptr_t m_pPeereNetAddr;
 };
 
 /**
@@ -57,6 +55,7 @@ private:
  * ...
  * tcpServ.stop();
  * */
+template <class ENDPOINT, class ENDPOINT_FACTORY = nm_utils::CObjFactory<ENDPOINT> >
 class CTcpService : public INetService
 {
 public:
@@ -65,23 +64,13 @@ public:
 
 public:
 	enum {NO_CONNECTIONS_LIMIT = -1};
-	/**
-	 * if localaddr is valid, then it is the listen service, otherwise.
-	 * */
-	int32_t init();
-//	int32_t start();
-//	int32_t stop();
-	int32_t destroy();
+
 	void set_backlog(int32_t i32Backlog);
 
 public:
-	template <class LISTENER>
-	int32_t add_listen_service(INetAddr &listenAddr, int32_t i32Backlog);
-	int32_t add_connect_service();
-	int32_t stop();
+	virtual int32_t start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t &pPeerNetAddr);
 
 private:
-
 	///listen service members.
 	typedef std::vector<tcp_listener_ptr_t> tcp_listener_vec_t;
 	tcp_listener_vec_t m_vecTcpListener;
@@ -93,6 +82,7 @@ private:
 	bool      m_bAutoReconnect;
 	CIpv4Addr m_remoteAddr;
 	int32_t m_i32MinOutboundConnCnt;
+	ENDPOINT_FACTORY m_EndpointFactory;
 };
 
 /**

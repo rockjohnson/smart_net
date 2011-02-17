@@ -46,10 +46,6 @@ public:
 	CDevListener();
 	~CDevListener();
 
-public:
-	int32_t start();
-	int32_t stop();
-
 protected:
 	tcp_endpoint_ptr_t create_endpoint();
 };
@@ -57,16 +53,13 @@ protected:
 /**
  * device service.
  * */
-class CDevService : public CTcpService
+class CDevService : public CTcpService<CDevEndpoint>
 {
 public:
 	CDevService(CSmartNet &smartnet);
 	virtual ~CDevService();
 
 public:
-	int32_t init();
-	int32_t destroy();
-
 	int32_t start();
 	int32_t stop();
 };

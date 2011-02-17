@@ -9,6 +9,8 @@
 #define NET_ADDR_H_
 
 #include <arpa/inet.h>
+#include <common/common.h>
+#include <utils/smart_ptr.h>
 
 namespace nm_network
 {
@@ -16,7 +18,7 @@ namespace nm_network
 /**
  * net address.
  * */
-class INetAddr
+class INetAddr : public nm_base::ICommonBase
 {
 public:
 	INetAddr();
@@ -35,6 +37,7 @@ public:
 	///
 	virtual bool is_valid() = 0;
 };
+typedef nm_utils::CSmartPtr<nm_network::INetAddr> net_addr_ptr_t;
 
 /**
  * ipv4 address.

@@ -28,7 +28,7 @@ IListener::~IListener()
 int32_t CTcpListener::init(INetAddr &bindAddr, int32_t i32Backlog)
 {
 	///create listen socket.
-	int32_t i32Ret = m_tcpSock.init();
+	int32_t i32Ret = m_tcpSock.create();
 	IF_TRUE_THEN_RETURN_CODE(0 > i32Ret, -1);
 
 	i32Ret = m_tcpSock.bind(bindAddr);

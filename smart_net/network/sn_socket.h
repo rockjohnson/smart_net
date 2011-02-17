@@ -17,7 +17,7 @@ namespace nm_network
 /**
  * base socket class
  * */
-class ISocket
+class ISocket : public nm_base::ICommonBase
 {
 public:
 	ISocket();
