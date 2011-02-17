@@ -19,7 +19,7 @@ using namespace nm_smartnet;
 /**
  * endpoint.
  * */
-class CDevEndpoint : public nm_smartnet::CTcpEndpoint
+class CDevEndpoint : public CTcpEndpoint
 {
 public:
 	CDevEndpoint();
@@ -40,7 +40,7 @@ protected:
 /**
  * listener
  * */
-class CDevListener : public nm_smartnet::CTcpListener
+class CDevListener : public CTcpListener
 {
 public:
 	CDevListener();
@@ -52,18 +52,21 @@ public:
 
 protected:
 	tcp_endpoint_ptr_t create_endpoint();
-}
+};
 
 /**
  * device service.
  * */
-class CDevService : public nm_smartnet::CTcpService
+class CDevService : public CTcpService
 {
 public:
-	CDevService();
+	CDevService(CSmartNet &smartnet);
 	virtual ~CDevService();
 
 public:
+	int32_t init();
+	int32_t destroy();
+
 	int32_t start();
 	int32_t stop();
 };

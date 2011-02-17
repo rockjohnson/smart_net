@@ -25,7 +25,9 @@ namespace nm_framework
 		public:
 			int32_t start(u_int32_t ui32IoThreadCnt);
 			int32_t stop();
-			int32_t add_io_obj();
+
+			int32_t add_io_obj(io_obj_ptr_t &pIoObj);
+			int32_t del_io_obj(io_obj_ptr_t &pIoObj);
 
 		private:
 			typedef std::vector<nm_thread::thread_ptr_t> io_thread_vec_t;

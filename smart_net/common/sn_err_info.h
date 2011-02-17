@@ -17,12 +17,5 @@ enum
 	SNERR_IN_PROGRESS
 };
 
-const char* arrSnErrInfo[] =
-{
-		"create socket failed!",
-		"The socket is nonblocking and the connection cannot be completed immediately"
-};
-
-
 
 #endif /* ERRORS_H_ */

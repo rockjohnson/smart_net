@@ -6,19 +6,21 @@
  */
 
 #include "sn_net_addr.h"
-#include <arpa/inet.h>
+#include <utils/utils.h>
 
 
 namespace nm_network
 {
 
-CNetAddr::CNetAddr()
+using namespace nm_utils;
+
+INetAddr::INetAddr()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-CNetAddr::~CNetAddr()
+INetAddr::~INetAddr()
 {
 	// TODO Auto-generated destructor stub
 }
@@ -28,19 +30,64 @@ CNetAddr::~CNetAddr()
  * */
 bool CIpv4Addr::is_valid()
 {
-	return m_ui16Port > 0;
+	return 0 < m_ui16Port;
 }
 
 int32_t CIpv4Addr::set_ip(cstr_t pcszIp)
 {
-    struct in_addr addr;
+	IF_TRUE_THEN_RETURN_CODE(NULL == pcszIp, CMNERR_COMMON_ERR);
 
-    if (inet_aton(pcszIp, &addr) == 0)
-    {
-        return CMNERR_COMMON_ERR;
-    }
-
-    m_inAddr = addr.s_addr;
+	return ip_ston(AF_INET, pcszIp, static_cast<pvoid_t>(&m_inAddr));
 }
+
+int32_t CIpv4Addr::set_ip_nbo(pvoid_t pIp, u_int32_t ui32Len)
+{
+	IF_TRUE_THEN_RETURN_CODE(NULL == pIp || INET_ADDRSTRLEN != ui32Len, CMNERR_COMMON_ERR);
+
+	memcpy(&m_inAddr, pIp, ui32Len);
+
+	return CMNERR_SUC;
+}
+
+pvoid_t CIpv4Addr::get_ip_nbo()
+{
+	return &m_inAddr;
+}
+
+cstr_t CIpv4Addr::get_ip_str(char_t *pszBuf, u_int32_t ui32Len)
+{
+	IF_TRUE_THEN_RETURN_CODE(NULL == pszBuf, NULL);
+
+	return ip_ntos(AF_INET, static_cast<pvoid_t>(&m_inAddr), pszBuf, ui32Len);
+}
+
+int32_t CIpv4Addr::set_port_nbo(u_int16_t ui16Port /*network byte order*/)
+{
+	IF_TRUE_THEN_RETURN_CODE(0 == ui16Port, CMNERR_COMMON_ERR);
+
+	m_ui16Port = ui16Port;
+
+	return CMNERR_SUC;
+}
+
+int32_t CIpv4Addr::set_port_hbo(u_int16_t ui16Port /*host byte order*/)
+{
+	IF_TRUE_THEN_RETURN_CODE(0 == ui16Port, CMNERR_COMMON_ERR);
+
+	m_ui16Port = htons(ui16Port);
+
+	return CMNERR_SUC;
+}
+
+u_int16_t CIpv4Addr::get_port_hbo()
+{
+	return ntohs(m_ui16Port);
+}
+
+u_int16_t CIpv4Addr::get_port_nbo()
+{
+	return m_ui16Port;
+}
+
 
 }

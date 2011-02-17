@@ -25,10 +25,11 @@ CDevEndpoint::~CDevEndpoint()
 
 
 /**
- *
+ * device service
  *
  * */
-CDevService::CDevService()
+CDevService::CDevService(CSmartNet &smartnet)
+:CTcpService(smartnet)
 {
 	// TODO Auto-generated constructor stub
 

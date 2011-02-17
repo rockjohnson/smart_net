@@ -25,10 +25,7 @@ CSmartNet::~CSmartNet()
 int32_t CSmartNet::start(u_int32_t ui32IoThreadCnt)
 {
 	m_pNetEngine = new CNetEngine;
-	if (NULL == m_pNetEngine)
-	{
-		return CMNERR_COMMON_ERR;
-	}
+	IF_TRUE_THEN_RETURN_CODE(NULL == m_pNetEngine, CMNERR_COMMON_ERR);
 
 	return m_pNetEngine->start(ui32IoThreadCnt);
 }
@@ -39,6 +36,11 @@ int32_t CSmartNet::stop()
 	m_pNetEngine = NULL;
 
 	return i32Ret;
+}
+
+net_engine_ptr_t& CSmartNet::get_net_engine()
+{
+	return m_pNetEngine;
 }
 
 }

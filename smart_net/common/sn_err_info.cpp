@@ -7,6 +7,12 @@
 
 #include "sn_err_info.h"
 
+const char* arrSnErrInfo[] =
+{
+		"create socket failed!",
+		"The socket is nonblocking and the connection cannot be completed immediately"
+};
+
 const char* get_sn_err_info(int32_t i32ErrCode)
 {
 	SYS_ASSERT(SNERR_DEF < i32ErrCode);

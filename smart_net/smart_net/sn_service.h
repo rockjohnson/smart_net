@@ -8,6 +8,8 @@
 #ifndef __SERVICE_H__
 #define __SERVICE_H__
 
+#include <vector>
+
 #include "../common/sn_common.h"
 #include "../network/sn_net_addr.h"
 #include "smart_net.h"
@@ -20,18 +22,26 @@ using namespace nm_framework;
 
 /**
  * the base net service interface
+ *
+ * you should separate your service with endpoint type.
+ *
  * */
 class INetService
 {
 public:
-	INetService();
+	INetService(net_engine_ptr_t &pNetEngine);
 	virtual ~INetService();
 
 public:
 	virtual int32_t init() = 0;
 	virtual int32_t destroy() = 0;
+
 	virtual int32_t start() = 0;
 	virtual int32_t stop() = 0;
+
+private:
+	///net engine.
+	net_engine_ptr_t m_pNetEngine;
 };
 
 /**
@@ -47,11 +57,10 @@ public:
  * ...
  * tcpServ.stop();
  * */
-template <class CONN>
 class CTcpService : public INetService
 {
 public:
-	CTcpService();
+	CTcpService(CSmartNet &smartnet);
 	~CTcpService();
 
 public:
@@ -66,17 +75,16 @@ public:
 	void set_backlog(int32_t i32Backlog);
 
 public:
-	int32_t start_listen_service();
-	int32_t start_connect_service();
+	template <class LISTENER>
+	int32_t add_listen_service(INetAddr &listenAddr, int32_t i32Backlog);
+	int32_t add_connect_service();
 	int32_t stop();
 
 private:
 
 	///listen service members.
-	tcp_listener_ptr_t m_pTcpListener;
-	CIpv4Addr m_localAddr;
-	int32_t m_i32MaxInboundConnCnt;
-	int32_t m_i32Backlog;
+	typedef std::vector<tcp_listener_ptr_t> tcp_listener_vec_t;
+	tcp_listener_vec_t m_vecTcpListener;
 
 	///connect service members.
 	//CTcpConnecter::tcp_connecter_ptr_t m_pTcpConnecter;
@@ -85,9 +93,6 @@ private:
 	bool      m_bAutoReconnect;
 	CIpv4Addr m_remoteAddr;
 	int32_t m_i32MinOutboundConnCnt;
-
-	///net engine.
-	net_engine_ptr_t m_pNetEngine;
 };
 
 /**
