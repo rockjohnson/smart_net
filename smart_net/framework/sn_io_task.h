@@ -32,8 +32,15 @@ namespace nm_framework
 			int32_t destroy();
 			///
 			void exec();
+			///
 			int32_t add_io_obj(io_obj_ptr_t &pIoObj, u_int32_t ui32Evts);
 			int32_t del_io_obj(io_obj_ptr_t &pIoObj);
+
+		private:
+			void update_internal_ioset();
+			void handle_io_evts();
+			void handle_internal_timers();
+			void handle_bad_ioobjs();
 
 		private:
 			io_evt_notify_ptr_t m_pIoEvtNotifier; ///the io event notify mechanism obj;

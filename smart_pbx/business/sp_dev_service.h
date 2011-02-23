@@ -37,6 +37,19 @@ protected:
 	void on_net_error();
 };
 
+/**
+ * factory
+ * */
+class CDevEndpointFactory : public tcp_endpoint_factory_t
+{
+public:
+	CDevEndpointFactory();
+	~CDevEndpointFactory();
+
+public:
+	tcp_endpoint_factory_t::obj_ptr_t& create_obj(int32_t i32Type);
+};
+
 ///**
 // * listener
 // * */
@@ -53,15 +66,15 @@ protected:
 /**
  * device service.
  * */
-class CDevService : public CTcpService<CDevEndpoint>
+class CDevService : public CTcpService
 {
 public:
 	CDevService(CSmartNet &smartnet);
 	virtual ~CDevService();
 
-public:
-	int32_t start();
-	int32_t stop();
+//public:
+//	int32_t start();
+//	int32_t stop();
 };
 
 }

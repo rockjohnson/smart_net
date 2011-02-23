@@ -19,7 +19,8 @@ namespace nm_framework
 
 enum EIoEvtNotify
 {
-	EIEN_NONE = 0, EIEN_SELECT,
+	EIEN_NONE = 0,
+	EIEN_SELECT,
 #if __PLATFORM__ == __PLATFORM_LINUX__
 	EIEN_EPOLL,
 #endif

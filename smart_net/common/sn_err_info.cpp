@@ -6,6 +6,7 @@
  */
 
 #include "sn_err_info.h"
+#include <common/common.h>
 
 const char* arrSnErrInfo[] =
 {

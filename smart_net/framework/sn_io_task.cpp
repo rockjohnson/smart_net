@@ -65,7 +65,7 @@ namespace nm_framework
 		while (!is_stopped())
 		{
 			///update internal io set.
-			update_internal_io_set();
+			update_internal_ioset();
 
 			///handle io events.
 			handle_io_evts();
@@ -74,7 +74,7 @@ namespace nm_framework
 			handle_internal_timers();
 
 			///handle bad io objs.
-			handle_bad_io_objs();
+			handle_bad_ioobjs();
 		}
 	}
 
