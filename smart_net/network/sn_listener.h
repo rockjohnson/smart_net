@@ -10,7 +10,7 @@
 
 #include "../network/sn_socket.h"
 #include "../framework/sn_io_obj.h"
-#include "sn_endpoint.h"
+#include "../smart_net/sn_endpoint.h"
 
 namespace nm_smartnet
 {
@@ -32,18 +32,18 @@ public:
 	virtual ~CTcpListener();
 
 public:
-	int32_t init(INetAddr &bindAddr, int32_t i32Backlog);
-	int32_t destroy();
+	///
+	int32_t start(net_addr_ptr_t &pBindAddr, int32_t i32Backlog);
+	int32_t stop();
+	///
 	void handle_input_evt();
 	void handle_output_evt();
 	void handle_error_evt();
 	int32_t get_fd();
 
-protected:
-	virtual tcp_endpoint_ptr_t create_endpoint() = 0;
-
 private:
 	CTcpSock m_tcpSock;
+	net_addr_ptr_t m_pBindAddr;
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CTcpListener> tcp_listener_ptr_t;
 

@@ -11,6 +11,7 @@
 #include <assert.h>
 #include <unistd.h>
 #include <new>
+#include <string.h>
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,5 +96,8 @@
 		delete [] pArr; \
 		pArr = NULL; \
 	}
+
+#define ZERO_MEM(addr, len) \
+		memset(addr, 0, len)
 
 #endif /* DEFINES_H_ */

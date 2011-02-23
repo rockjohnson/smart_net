@@ -11,8 +11,6 @@
 namespace nm_smartnet
 {
 
-using namespace nm_network;
-
 INetService::INetService(net_engine_ptr_t &pNetEngine)
 :m_pNetEngine(pNetEngine)
 {
@@ -24,7 +22,7 @@ INetService::~INetService()
 	stop();
 }
 
-int32_t INetService::start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t pPeerNetAddr)
+int32_t INetService::start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t &pPeerNetAddr)
 {
 	m_pLocalNetAddr = pLocalNetAddr;
 	m_pPeereNetAddr = pPeerNetAddr;
@@ -44,28 +42,33 @@ int32_t INetService::start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t pPeerNe
 /**
  * CTcpService
  * */
-CTcpService::CTcpService(CSmartNet &smartnet)
+#define TCP_SERV_TEMPLATE_DEFINE(func, ret) \
+	ret CTcpService::func
+
+TCP_SERV_TEMPLATE_DEFINE(CTcpService(CSmartNet &smartnet),)
 :INetService(smartnet.get_net_engine())
 {
 }
 
-CTcpService::~CTcpService()
+TCP_SERV_TEMPLATE_DEFINE(~CTcpService(),)
 {
 }
 
-int32_t CTcpService::start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t &pPeerNetAddr)
+TCP_SERV_TEMPLATE_DEFINE(start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t &pRemoteAddr, endpoint_factory_ptr_t &pEndpointFactory), int32_t)
 {
-	IF_TRUE_THEN_RETURN_CODE((NULL != pLocalNetAddr && NULL != pPeerNetAddr) || (NULL == pLocalNetAddr && NULL == pPeerNetAddr), CMNERR_COMMON_ERR);
+	IF_TRUE_THEN_RETURN_CODE((NULL != pLocalNetAddr && NULL != pRemoteAddr) || (NULL == pLocalNetAddr && NULL == pRemoteAddr) || (NULL == pEndpointFactory), CMNERR_COMMON_ERR);
 
-	INetService::start(pLocalNetAddr, pPeerNetAddr);
+	m_pEndpointFactory = pEndpointFactory;
+
+	INetService::start(pLocalNetAddr, pRemoteAddr);
 
 	if (NULL != pLocalNetAddr)
 	{
-		start_listen_service();
+		start_listen_service(pLocalNetAddr, m_i32Backlog);
 	}
-	else if (NULL != pPeerNetAddr)
+	else if (NULL != pRemoteAddr)
 	{
-		start_connect_service();
+		start_connect_service(pRemoteAddr, m_i32ConnTimeout, m_i32MaxRetries);
 	}
 	else
 	{
@@ -95,31 +98,30 @@ int32_t CTcpService::start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t &pPeerN
 //	return i32Ret;
 //}
 
-void CTcpService::set_backlog(int32_t i32Backlog)
+TCP_SERV_TEMPLATE_DEFINE(set_listen_serv_info(int32_t i32Backlog), void)
 {
 	m_i32Backlog = i32Backlog;
 }
 
-int32_t CTcpService::start_listen_service()
+TCP_SERV_TEMPLATE_DEFINE(start_listen_service(net_addr_ptr_t &pBindAddr, int32_t i32Backlog), int32_t)
 {
-	tcp_listener_ptr_t pTcpListener = SYS_NOTRW_NEW(LISTENER);
-	int32_t i32Ret = pTcpListener->init(listenAddr, i32Backlog);
-	IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32Ret, CMNERR_COMMON_ERR);
 	///
-	i32Ret = m_netEngine.add_io_obj(pTcpListener);
-	IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32Ret, CMNERR_COMMON_ERR);
+	m_pTcpListener = SYS_NOTRW_NEW(CTcpListener);
+	SYS_ASSERT(NULL != m_pTcpListener);
 	///
-	m_vecTcpListener.pushback(pTcpListener);
+	IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > m_pTcpListener->start(pBindAddr, i32Backlog), CMNERR_COMMON_ERR);
+	///
+	IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > m_pNetEngine->add_io_obj(m_pTcpListener), CMNERR_COMMON_ERR);
 
 	return CMNERR_SUC;
 }
 
-int32_t CTcpService::start_connect_service()
+TCP_SERV_TEMPLATE_DEFINE(start_connect_service(net_addr_ptr_t &pRemoteAddr, int32_t i32ConnTimeout, int32_t i32MaxRetries), int32_t)
 {
-	SYS_ASSERT(NULL == m_pTcpConnecter);
+	m_pOutboundEndpoint = dynamic_cast_smartptr<CTcpOutboundEndpoint, CTcpEndpoint>(m_pEndpointFactory->create_obj(CTcpOutboundEndpoint::TCP_OUTBOUND_ENDPOINT));
 
-	m_pTcpConnecter = SYS_NOTRW_NEW(CONN);
-	int32_t i32Ret = m_pTcpConnecter->init(m_remoteAddr, m_);
+//	m_pTcpConnecter = SYS_NOTRW_NEW(CONN);
+//	int32_t i32Ret = m_pTcpConnecter->start(m_remoteAddr, m_);
 }
 
 

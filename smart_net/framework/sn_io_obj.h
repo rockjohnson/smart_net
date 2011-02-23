@@ -14,11 +14,13 @@
 namespace nm_framework
 {
 
-class CIoTask;
+class CSelect;
+class CEpoll;
 
 class IIoObj : public nm_base::ICommonBase
 {
-	friend class CIoTask;
+	friend class CSelect;
+	friend class CEpoll;
 public:
 	IIoObj();
 	virtual ~IIoObj();

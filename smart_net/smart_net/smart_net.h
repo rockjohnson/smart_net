@@ -24,7 +24,7 @@ public:
 	~CSmartNet();
 
 public:
-	int32_t start(u_int32_t ui32IoThreadCnt);
+	int32_t start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 	int32_t stop();
 
 	net_engine_ptr_t& get_net_engine();

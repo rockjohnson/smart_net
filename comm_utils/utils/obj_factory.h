@@ -14,19 +14,25 @@
 namespace nm_utils
 {
 
-template <class CLS>
-class CObjFactory
+template <typename T>
+class CObjFactory : public nm_base::ICommonBase
 {
+public:
+	typedef nm_utils::CSmartPtr<T> obj_ptr_t;
+	typedef nm_utils::CSmartPtr<nm_utils::CObjFactory<T> > obj_factory_ptr_t;
+
 public:
 	CObjFactory();
 	virtual ~CObjFactory();
 
 public:
-	virtual CSmartPtr<CLS> create_obj()
-	{
-		return CSmartPtr<CLS>(SYS_NOTRW_NEW(CLS));
-	}
+	virtual obj_ptr_t& create_obj(int32_t i32Type) = 0;
+//	{
+//		(void)i32Type;
+//		return obj_ptr_t(SYS_NOTRW_NEW(T));
+//	}
 };
+
 
 }
 

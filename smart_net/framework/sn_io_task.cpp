@@ -20,7 +20,7 @@ namespace nm_framework
 		destroy();
 	}
 
-	int32_t CIoTask::init(int32_t i32IoEvtNotifier)
+	int32_t CIoTask::init(int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 	{
 		///create io event notify mechanism obj.
 		m_pIoEvtNotifier = IIoEvtNotify::create_obj(i32IoEvtNotifier);
@@ -33,7 +33,7 @@ namespace nm_framework
 		SYS_ASSERT(m_setValidIoObjs.empty());
 		SYS_ASSERT(m_setInvalidIoObjs.empty());
 
-		return m_pIoEvtNotifier->init();
+		return m_pIoEvtNotifier->init(i32MsTimeout);
 	}
 
 	int32_t CIoTask::destroy()

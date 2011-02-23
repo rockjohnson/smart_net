@@ -52,8 +52,8 @@ protected:
 	virtual ~ICommonBase();
 
 public:
-	inline void inc_ref();
-	inline void dec_ref();
+	void inc_ref();
+	void dec_ref();
 	virtual void dispose_this_obj();
 	inline int get_ref_cnt();
 

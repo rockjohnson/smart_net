@@ -22,12 +22,12 @@ CSmartNet::~CSmartNet()
 	// TODO Auto-generated destructor stub
 }
 
-int32_t CSmartNet::start(u_int32_t ui32IoThreadCnt)
+int32_t CSmartNet::start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 {
 	m_pNetEngine = new CNetEngine;
 	IF_TRUE_THEN_RETURN_CODE(NULL == m_pNetEngine, CMNERR_COMMON_ERR);
 
-	return m_pNetEngine->start(ui32IoThreadCnt);
+	return m_pNetEngine->start(ui32IoThreadCnt, i32IoEvtNotifier, i32MsTimeout);
 }
 
 int32_t CSmartNet::stop()

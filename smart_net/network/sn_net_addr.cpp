@@ -7,6 +7,7 @@
 
 #include "sn_net_addr.h"
 #include <utils/utils.h>
+#include <string.h>
 
 
 namespace nm_network
@@ -58,7 +59,7 @@ cstr_t CIpv4Addr::get_ip_str(char_t *pszBuf, u_int32_t ui32Len)
 {
 	IF_TRUE_THEN_RETURN_CODE(NULL == pszBuf, NULL);
 
-	return ip_ntos(AF_INET, static_cast<pvoid_t>(&m_inAddr), pszBuf, ui32Len);
+	return ip_ntos(AF_INET, static_cast<pvoid_t>(&m_inAddr), pszBuf, ui32Len) == CMNERR_SUC ? pszBuf : NULL;
 }
 
 int32_t CIpv4Addr::set_port_nbo(u_int16_t ui16Port /*network byte order*/)

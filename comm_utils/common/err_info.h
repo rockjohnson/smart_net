@@ -9,6 +9,7 @@
 #define __ERR_INFO_H__
 
 #include "types.h"
+#include <errno.h>
 
 #define COMMON_ERR_CODE_BEGINNING (-10000) //-10000 ~ -1
 

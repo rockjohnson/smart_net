@@ -72,13 +72,18 @@ namespace nm_utils
 	{
 	public:
 		CSmartPtr(T *pObj = 0);
-		CSmartPtr(const CSmartPtr<T> &ptr);
+		template<typename TT>
+		CSmartPtr(const CSmartPtr<TT> &ptr)
+		:m_pObj(ptr.get_ptr())
+		{
+			inc_ref();
+		}
 		~CSmartPtr();
 
 	public:
 		T* operator ->() const;
 		T& operator *();
-		T* GetPtr() const;
+		T* get_ptr() const;
 		bool operator !=(T *pObj);
 		bool operator ==(T *pObj);
 		bool operator !=(const CSmartPtr<T> &ptr);
@@ -89,14 +94,13 @@ namespace nm_utils
 		operator size_t() const;//for unordered_set
 
 	private:
-		inline void addRef();
-		inline void release();
+		inline void inc_ref();
+		inline void dec_ref();
 
 		T *m_pObj;
 
 		template<typename TT>
-		friend bool operator ==(const CSmartPtr<TT> &one,
-				const CSmartPtr<TT> &two);
+		friend bool operator ==(const CSmartPtr<TT> &one, const CSmartPtr<TT> &two);
 		template<typename TT>
 		friend bool operator ==(const CSmartPtr<TT> &one, const void *pVoid);
 		template<typename TT>
@@ -133,20 +137,20 @@ namespace nm_utils
 	CSmartPtr<T>::CSmartPtr(T *pObj) :
 		m_pObj(pObj)
 	{
-		addRef();
+		inc_ref();
 	}
 
-	template<typename T>
-	CSmartPtr<T>::CSmartPtr(const CSmartPtr<T> &ptr) :
-		m_pObj(ptr.m_pObj)
-	{
-		addRef();
-	}
+//	template<typename T>
+//	CSmartPtr<T>::CSmartPtr(const CSmartPtr<T> &ptr) :
+//		m_pObj(ptr.m_pObj)
+//	{
+//		inc_ref();
+//	}
 
 	template<typename T>
 	CSmartPtr<T>::~CSmartPtr()
 	{
-		release();
+		dec_ref();
 	}
 
 	template<typename T>
@@ -162,7 +166,7 @@ namespace nm_utils
 	}
 
 	template<typename T>
-	T* CSmartPtr<T>::GetPtr() const
+	T* CSmartPtr<T>::get_ptr() const
 	{
 		return m_pObj;
 	}
@@ -190,9 +194,9 @@ namespace nm_utils
 	{
 		if (m_pObj != ptr.m_pObj)
 		{
-			release();
+			dec_ref();
 			m_pObj = ptr.m_pObj;
-			addRef();
+			inc_ref();
 		}
 
 		return *this;
@@ -203,9 +207,9 @@ namespace nm_utils
 	{
 		if (m_pObj != pObj)
 		{
-			release();
+			dec_ref();
 			m_pObj = pObj;
-			addRef();
+			inc_ref();
 		}
 
 		return *this;
@@ -224,7 +228,7 @@ namespace nm_utils
 	}
 
 	template<typename T>
-	void CSmartPtr<T>::addRef()
+	void CSmartPtr<T>::inc_ref()
 	{
 		if (m_pObj != 0)
 		{
@@ -233,13 +237,19 @@ namespace nm_utils
 	}
 
 	template<typename T>
-	void CSmartPtr<T>::release()
+	void CSmartPtr<T>::dec_ref()
 	{
 		if (m_pObj != 0)
 		{
 			m_pObj->dec_ref();
 			m_pObj = 0;
 		}
+	}
+
+	template <typename T, typename TT>
+	CSmartPtr<T> dynamic_cast_smartptr(CSmartPtr<TT> &pTT)
+	{
+		return CSmartPtr<T>(dynamic_cast<T*>(pTT.get_ptr()));
 	}
 }
 

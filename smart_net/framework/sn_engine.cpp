@@ -20,7 +20,7 @@ CNetEngine::~CNetEngine()
 	// TODO Auto-generated destructor stub
 }
 
-int32_t CNetEngine::start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier)
+int32_t CNetEngine::start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 {
 	if (0 == ui32IoThreadCnt)
 	{
@@ -38,7 +38,7 @@ int32_t CNetEngine::start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier)
 			i32Ret = CMNERR_COMMON_ERR;
 			break;
 		}
-		i32Ret = pIoTask->init(i32IoEvtNotifier);
+		i32Ret = pIoTask->init(i32IoEvtNotifier, i32MsTimeout);
 		if (CMNERR_SUC != i32Ret)
 		{
 			break;

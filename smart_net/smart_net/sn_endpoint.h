@@ -48,6 +48,7 @@ protected:
 class CTcpEndpoint: public IEndpoint
 {
 public:
+	enum {TCP_ENDPOINT = 0};
 	CTcpEndpoint();
 	virtual ~CTcpEndpoint();
 
@@ -72,6 +73,7 @@ typedef nm_utils::CSmartPtr<nm_smartnet::CTcpEndpoint> tcp_endpoint_ptr_t;
 class CTcpOutboundEndpoint : public CTcpEndpoint
 {
 public:
+	enum {TCP_OUTBOUND_ENDPOINT = 1};
 	CTcpOutboundEndpoint();
 	~CTcpOutboundEndpoint();
 
@@ -83,8 +85,9 @@ protected:
 	void on_closed(int32_t iErrCode);
 
 private:
-	tcp_connecter_ptr_t m_pConnecter;
+	net_addr_ptr_t m_pRemoteAddr;
 };
+typedef nm_utils::CSmartPtr<nm_smartnet::CTcpOutboundEndpoint> tcp_ob_endpoint_ptr_t;
 
 /**
  * udp endpoint

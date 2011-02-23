@@ -140,7 +140,7 @@ thread_task_ptr_t& CThread::get_task()
 	return m_pTask;
 }
 
-int32_t CThread::assign_task(thread_task_ptr_t &pTask)
+int32_t CThread::assign_task(const thread_task_ptr_t &pTask)
 {
 	SYS_ASSERT(NULL == m_pTask);
 	m_pTask = pTask;

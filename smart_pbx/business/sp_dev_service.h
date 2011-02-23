@@ -8,7 +8,7 @@
 #ifndef DEV_SERVICE_H_
 #define DEV_SERVICE_H_
 
-#include <smart_net/sn_listener.h>
+//#include <smart_net/sn_listener.h>
 #include <smart_net/sn_service.h>
 
 namespace nm_business
@@ -37,18 +37,18 @@ protected:
 	void on_net_error();
 };
 
-/**
- * listener
- * */
-class CDevListener : public CTcpListener
-{
-public:
-	CDevListener();
-	~CDevListener();
-
-protected:
-	tcp_endpoint_ptr_t create_endpoint();
-};
+///**
+// * listener
+// * */
+//class CDevListener : public CTcpListener
+//{
+//public:
+//	CDevListener();
+//	~CDevListener();
+//
+//protected:
+//	tcp_endpoint_ptr_t create_endpoint();
+//};
 
 /**
  * device service.

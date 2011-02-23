@@ -58,7 +58,7 @@ public:
 
 public:
 	int32_t init();
-	int32_t assign_task(thread_task_ptr_t &pTask);
+	int32_t assign_task(const thread_task_ptr_t &pTask);
 	int32_t start();
 	int32_t pause(); ///not imp..
 	int32_t stop();

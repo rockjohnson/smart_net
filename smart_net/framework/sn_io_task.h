@@ -28,7 +28,7 @@ namespace nm_framework
 
 		public:
 			///
-			int32_t init(int32_t i32IoEvtNotifier);
+			int32_t init(int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 			int32_t destroy();
 			///
 			void exec();

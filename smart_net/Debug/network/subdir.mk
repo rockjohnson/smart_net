@@ -5,16 +5,19 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../network/sn_connecter.cpp \
+../network/sn_listener.cpp \
 ../network/sn_net_addr.cpp \
 ../network/sn_socket.cpp 
 
 OBJS += \
 ./network/sn_connecter.o \
+./network/sn_listener.o \
 ./network/sn_net_addr.o \
 ./network/sn_socket.o 
 
 CPP_DEPS += \
 ./network/sn_connecter.d \
+./network/sn_listener.d \
 ./network/sn_net_addr.d \
 ./network/sn_socket.d 
 

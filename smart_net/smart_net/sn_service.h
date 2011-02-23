@@ -13,6 +13,7 @@
 #include "../common/sn_common.h"
 #include "../network/sn_net_addr.h"
 #include "smart_net.h"
+#include "../network/sn_listener.h"
 
 namespace nm_smartnet
 {
@@ -55,34 +56,35 @@ protected:
  * ...
  * tcpServ.stop();
  * */
-template <class ENDPOINT, class ENDPOINT_FACTORY = nm_utils::CObjFactory<ENDPOINT> >
+typedef nm_utils::CObjFactory<nm_smartnet::CTcpEndpoint>::obj_factory_ptr_t endpoint_factory_ptr_t;
 class CTcpService : public INetService
 {
 public:
 	CTcpService(CSmartNet &smartnet);
-	~CTcpService();
+	virtual ~CTcpService();
 
 public:
-	enum {NO_CONNECTIONS_LIMIT = -1};
+	///
+	virtual int32_t start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t &pPeerNetAddr, endpoint_factory_ptr_t &pEndpointFactory);
+	virtual int32_t stop();
+	///for listen service
+	void set_listen_serv_info(int32_t i32Backlog);
+	///for connect service
+	void set_connect_serv_info(int32_t i32ConnTimeout, int32_t i32MaxRetries);
 
-	void set_backlog(int32_t i32Backlog);
-
-public:
-	virtual int32_t start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t &pPeerNetAddr);
+protected:
+	int32_t start_listen_service(net_addr_ptr_t &pBindAddr, int32_t i32Backlog);
+	int32_t start_connect_service(net_addr_ptr_t &pRemoteAddr, int32_t i32ConnTimeout, int32_t i32MaxRetries);
 
 private:
+	endpoint_factory_ptr_t m_pEndpointFactory;
 	///listen service members.
-	typedef std::vector<tcp_listener_ptr_t> tcp_listener_vec_t;
-	tcp_listener_vec_t m_vecTcpListener;
-
+	tcp_listener_ptr_t m_pTcpListener;
+	int32_t m_i32Backlog;
 	///connect service members.
-	//CTcpConnecter::tcp_connecter_ptr_t m_pTcpConnecter;
-	u_int32_t m_ui32ConnectTimeout;
-	int32_t   m_i32MaxConnectTimes;
-	bool      m_bAutoReconnect;
-	CIpv4Addr m_remoteAddr;
-	int32_t m_i32MinOutboundConnCnt;
-	ENDPOINT_FACTORY m_EndpointFactory;
+	tcp_ob_endpoint_ptr_t m_pOutboundEndpoint;
+	int32_t m_i32ConnTimeout;
+	int32_t m_i32MaxRetries;
 };
 
 /**

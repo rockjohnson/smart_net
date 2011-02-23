@@ -14,20 +14,19 @@ namespace nm_framework
 IIoEvtNotify::IIoEvtNotify()
 {
 	// TODO Auto-generated constructor stub
-
 }
 
 IIoEvtNotify::~IIoEvtNotify()
 {
-	// TODO Auto-generated destructor stub
+	destroy();
 }
 
 io_evt_notify_ptr_t IIoEvtNotify::create_obj(int32_t i32IoEvtNotifier)
 {
 	io_evt_notify_ptr_t pIoEvtNotify = NULL;
 
-	if (EIEN_ALL <= i32IoEvtNofify
-			|| EIEN_NONE >= i32IoEvtNofify)
+	if (EIEN_ALL <= i32IoEvtNotifier
+			|| EIEN_NONE >= i32IoEvtNotifier)
 	{
 		return pIoEvtNotify;
 	}
@@ -36,13 +35,13 @@ io_evt_notify_ptr_t IIoEvtNotify::create_obj(int32_t i32IoEvtNotifier)
 	{
 	case EIEN_SELECT:
 	{
-		pIoEvtNotify = new CSelect;
+		pIoEvtNotify = SYS_NOTRW_NEW(CSelect);
 		break;
 	}
 #if __PLATFORM__ == __PLATFORM_LINUX__
 	case EIEN_EPOLL:
 	{
-		pIoEvtNotify = new CEpoll;
+		pIoEvtNotify = SYS_NOTRW_NEW(CEpoll);
 		break;
 	}
 #endif
@@ -74,10 +73,9 @@ CSelect::~CSelect()
  * epoll ...
  * */
 CEpoll::CEpoll()
-:m_i32epfd(-1)
+:m_i32epfd(-1), m_i32MsTimeout(0)
 {
-	// TODO Auto-generated constructor stub
-
+	ZERO_MEM(&m_tmpEvts, sizeof(m_tmpEvts));
 }
 
 CEpoll::~CEpoll()
