@@ -11,6 +11,7 @@
 #include "../framework/sn_socket.h"
 #include "../framework/sn_timer.h"
 #include "../framework/sn_io_obj.h"
+#include "../framework/sn_endpoint.h"
 
 namespace nm_protocol
 {
@@ -19,7 +20,7 @@ namespace nm_protocol
  * tcp socket
  *
  * */
-class CTcpSock: public nm_network::ISocket
+class CTcpSock: public nm_framework::ISocket
 {
 
 public:
@@ -56,7 +57,7 @@ enum ETcpEndpointType
 /**
  * tcp endpoint
  * */
-class CTcpEndpoint: public IEndpoint
+class CTcpEndpoint: public nm_framework::IEndpoint
 {
 public:
 	CTcpEndpoint();
@@ -81,6 +82,8 @@ typedef nm_utils::CSmartPtr<nm_smartnet::CTcpEndpoint> tcp_endpoint_ptr_t;
 /**
  * tcp connect endpoint.
  * */
+class CTcpConnecter;
+typedef nm_utils::CSmartPtr<CTcpConnecter> tcp_connecter_ptr_t;
 class CTcpOutboundEndpoint : public CTcpEndpoint
 {
 public:
@@ -96,7 +99,7 @@ protected:
 
 private:
 	net_addr_ptr_t m_pRemoteAddr;
-
+	tcp_connecter_ptr_t m_pConnecter;
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CTcpOutboundEndpoint> tcp_ob_endpoint_ptr_t;
 
@@ -115,7 +118,6 @@ public:
 
 	CIpv4Addr m_remoteAddr;
 };
-typedef nm_utils::CSmartPtr<nm_network::CTcpConnecter> tcp_connecter_ptr_t;
 
 
 /**

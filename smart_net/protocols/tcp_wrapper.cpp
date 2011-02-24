@@ -133,7 +133,7 @@ CTcpOutboundEndpoint::~CTcpOutboundEndpoint()
 
 int32_t CTcpOutboundEndpoint::start(net_addr_ptr_t &pRemoteAddr, int32_t i32ConnTimeout, int32_t i32MaxRetries)
 {
-
+	m_pConnecter = SYS_NOTRW_NEW(CTcpConnecter);
 }
 
 /**

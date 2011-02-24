@@ -13,7 +13,7 @@
 #include "../network/sn_connecter.h"
 #include <memory/mem.h>
 
-namespace nm_smartnet
+namespace nm_framework
 {
 
 using namespace nm_memory;
@@ -41,31 +41,6 @@ protected:
 	virtual void on_recved_data(mem_ptr_t &pData, INetAddr &srcAddr) = 0;
 	virtual void on_occurred_err(int32_t iErrCode) = 0;
 };
-
-
-
-
-/**
- * udp endpoint
- * */
-class CUdpEndpoint: public IEndpoint
-{
-public:
-	CUdpEndpoint();
-	virtual ~CUdpEndpoint();
-};
-
-/**
- * rmp endpoint
- * */
-class CRmpEndpoint: public IEndpoint
-{
-public:
-	CRmpEndpoint();
-	virtual ~CRmpEndpoint();
-};
-
-
 
 }
 
