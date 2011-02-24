@@ -21,8 +21,6 @@ namespace nm_protocol
  * */
 class CTcpSock: public nm_network::ISocket
 {
-public:
-	typedef nm_utils::CSmartPtr<nm_network::CTcpSock> tcp_sock_ptr_t;
 
 public:
 	CTcpSock();
@@ -42,6 +40,7 @@ public:
 private:
 	int32_t m_i32fd;
 };
+typedef nm_utils::CSmartPtr<nm_network::CTcpSock> tcp_sock_ptr_t;
 
 
 /**
