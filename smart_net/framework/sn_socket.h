@@ -11,7 +11,7 @@
 #include "../framework/sn_io_obj.h"
 #include "sn_net_addr.h"
 
-namespace nm_network
+namespace nm_framework
 {
 
 /**
@@ -36,33 +36,7 @@ public:
 };
 typedef nm_utils::CSmartPtr<nm_network::ISocket> sock_ptr_t;
 
-/**
- * tcp socket
- *
- * */
-class CTcpSock: public nm_network::ISocket
-{
-public:
-	typedef nm_utils::CSmartPtr<nm_network::CTcpSock> tcp_sock_ptr_t;
 
-public:
-	CTcpSock();
-	virtual ~CTcpSock();
-
-public:
-	int32_t create(int32_t i32fd = INVALID_SOCKET);
-	int32_t close();
-	int32_t bind(INetAddr &localAddr);
-	int32_t listen(int32_t i32Backlog);
-	tcp_sock_ptr_t accept();
-	int32_t connect(INetAddr &remoteAddr);
-	int32_t get_fd();
-	bool is_valid();
-	int32_t set_nonblock(bool bFlag);
-
-private:
-	int32_t m_i32fd;
-};
 
 
 /**
