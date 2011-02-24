@@ -31,7 +31,6 @@ protected:
 	virtual void handle_error_evt() = 0;
 	virtual int32_t get_fd() = 0;
 };
-
 typedef nm_utils::CSmartPtr<nm_framework::IIoObj> io_obj_ptr_t;
 
 }

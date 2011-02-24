@@ -8,10 +8,10 @@
 #ifndef TCP_WRAPPER_H_
 #define TCP_WRAPPER_H_
 
-#include "../framework/sn_socket.h"
 #include "../framework/sn_timer.h"
 #include "../framework/sn_io_obj.h"
-#include "../framework/sn_endpoint.h"
+#include "../network/sn_socket.h"
+#include "../network/sn_endpoint.h"
 
 namespace nm_protocol
 {
