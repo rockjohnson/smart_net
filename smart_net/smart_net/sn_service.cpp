@@ -109,22 +109,20 @@ TCP_SERV_TEMPLATE_DEFINE(start_listen_service(net_addr_ptr_t &pBindAddr, int32_t
 	m_pTcpListener = SYS_NOTRW_NEW(CTcpListener);
 	SYS_ASSERT(NULL != m_pTcpListener);
 	///
-	IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > m_pTcpListener->start(pBindAddr, i32Backlog), CMNERR_COMMON_ERR);
-	///
-	IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > m_pNetEngine->add_io_obj(m_pTcpListener), CMNERR_COMMON_ERR);
+	IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > m_pTcpListener->start(pBindAddr, i32Backlog, m_pNetEngine), CMNERR_COMMON_ERR);
 
 	return CMNERR_SUC;
 }
 
 TCP_SERV_TEMPLATE_DEFINE(start_connect_service(net_addr_ptr_t &pRemoteAddr, int32_t i32ConnTimeout, int32_t i32MaxRetries), int32_t)
 {
-	m_pOutboundEndpoint = dynamic_cast_smartptr<CTcpOutboundEndpoint, CTcpEndpoint>(m_pEndpointFactory->create_obj(CTcpOutboundEndpoint::TCP_OUTBOUND_ENDPOINT));
+	m_pOutboundEndpoint = dynamic_cast_smartptr<CTcpOutboundEndpoint, CTcpEndpoint>(m_pEndpointFactory->create_obj(E_TCP_OUTBOUND_ENDPOINT));
+	if (NULL == m_pOutboundEndpoint)
+	{
+		return CMNERR_COMMON_ERR;
+	}
 
-//	m_pTcpConnecter = SYS_NOTRW_NEW(CONN);
-//	int32_t i32Ret = m_pTcpConnecter->start(m_remoteAddr, m_);
+	return m_pOutboundEndpoint->start(pRemoteAddr, i32ConnTimeout, i32MaxRetries);
 }
-
-
-
 
 }

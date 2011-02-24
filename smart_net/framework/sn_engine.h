@@ -16,11 +16,11 @@ namespace nm_framework
 	/**
 	 * the smart net manager.
 	 * */
-	class CNetEngine : public nm_base::ICommonBase
+	class CIOEngine : public nm_base::ICommonBase
 	{
 		public:
-			CNetEngine();
-			virtual ~CNetEngine();
+			CIOEngine();
+			virtual ~CIOEngine();
 
 		public:
 			int32_t start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
@@ -34,7 +34,7 @@ namespace nm_framework
 			io_thread_vec_t m_vecIoThreads; ///mainly handle input and business.
 			nm_thread::thread_ptr_t m_pThreadHandleOutput; ///only handle output.
 	};
-	typedef nm_utils::CSmartPtr<nm_framework::CNetEngine> net_engine_ptr_t;
+	typedef nm_utils::CSmartPtr<nm_framework::CIOEngine> net_engine_ptr_t;
 
 }
 

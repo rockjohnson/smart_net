@@ -35,6 +35,21 @@ CTcpEndpoint::~CTcpEndpoint()
 	// TODO Auto-generated destructor stub
 }
 
+/**
+ * outbound
+ * */
+CTcpOutboundEndpoint::CTcpOutboundEndpoint()
+{}
+
+CTcpOutboundEndpoint::~CTcpOutboundEndpoint()
+{}
+
+int32_t CTcpOutboundEndpoint::start(net_addr_ptr_t &pRemoteAddr, int32_t i32ConnTimeout, int32_t i32MaxRetries)
+{
+
+}
+
+
 CUdpEndpoint::CUdpEndpoint()
 {
 	// TODO Auto-generated constructor stub

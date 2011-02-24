@@ -38,12 +38,12 @@ tcp_endpoint_factory_t::obj_ptr_t& CDevEndpointFactory::create_obj(int32_t i32Ty
 
 	switch (i32Type)
 	{
-	case CTcpEndpoint::TCP_ENDPOINT:
+	case E_TCP_INBOUND_ENDPOINT:
 	{
 		pObj = SYS_NOTRW_NEW(CDevEndpoint);
 		break;
 	}
-	case CTcpOutboundEndpoint::TCP_OUTBOUND_ENDPOINT:
+	case E_TCP_OUTBOUND_ENDPOINT:
 	{
 		break;
 	}

@@ -10,17 +10,17 @@
 namespace nm_framework
 {
 
-CNetEngine::CNetEngine()
+CIOEngine::CIOEngine()
 {
 	// TODO Auto-generated constructor stub
 }
 
-CNetEngine::~CNetEngine()
+CIOEngine::~CIOEngine()
 {
 	// TODO Auto-generated destructor stub
 }
 
-int32_t CNetEngine::start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
+int32_t CIOEngine::start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 {
 	if (0 == ui32IoThreadCnt)
 	{
@@ -80,7 +80,7 @@ int32_t CNetEngine::start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, i
 	return i32Ret;
 }
 
-int32_t CNetEngine::stop()
+int32_t CIOEngine::stop()
 {
 	///stop all io thread
 	for (io_thread_vec_t::iterator iter = m_vecIoThreads.begin(); iter

@@ -33,7 +33,7 @@ public:
 
 public:
 	///
-	int32_t start(net_addr_ptr_t &pBindAddr, int32_t i32Backlog);
+	int32_t start(net_addr_ptr_t &pBindAddr, int32_t i32Backlog, net_engine_ptr_t &pNetEngine);
 	int32_t stop();
 	///
 	void handle_input_evt();
@@ -44,6 +44,7 @@ public:
 private:
 	CTcpSock m_tcpSock;
 	net_addr_ptr_t m_pBindAddr;
+	net_engine_ptr_t m_pNetEngine;
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CTcpListener> tcp_listener_ptr_t;
 

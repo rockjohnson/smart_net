@@ -25,7 +25,7 @@ IListener::~IListener()
  * CTcpListener
  * */
 
-int32_t CTcpListener::start(net_addr_ptr_t &pBindAddr, int32_t i32Backlog)
+int32_t CTcpListener::start(net_addr_ptr_t &pBindAddr, int32_t i32Backlog, net_engine_ptr_t &pNetEngine)
 {
 	///create listen socket.
 	int32_t i32Ret = m_tcpSock.create();
@@ -37,7 +37,16 @@ int32_t CTcpListener::start(net_addr_ptr_t &pBindAddr, int32_t i32Backlog)
 	i32Ret = m_tcpSock.listen(i32Backlog);
 	IF_TRUE_THEN_RETURN_CODE(0 > i32Ret, -3);
 
-	return CMNERR_SUC;
+	m_pNetEngine = pNetEngine;
+	IF_TRUE_THEN_RETURN_CODE(NULL == m_pNetEngine, -4);
+
+	i32Ret = m_pNetEngine->add_io_obj(io_obj_ptr_t(this));
+	if (CMNERR_SUC > i32Ret)
+	{
+		stop();
+	}
+
+	return i32Ret;
 }
 
 int32_t CTcpListener::get_fd()

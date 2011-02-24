@@ -42,13 +42,18 @@ protected:
 	virtual void on_occurred_err(int32_t iErrCode) = 0;
 };
 
+enum
+{
+	E_TCP_INBOUND_ENDPOINT = 0,
+	E_TCP_OUTBOUND_ENDPOINT
+};
+
 /**
  * tcp endpoint
  * */
 class CTcpEndpoint: public IEndpoint
 {
 public:
-	enum {TCP_ENDPOINT = 0};
 	CTcpEndpoint();
 	virtual ~CTcpEndpoint();
 
@@ -73,12 +78,11 @@ typedef nm_utils::CSmartPtr<nm_smartnet::CTcpEndpoint> tcp_endpoint_ptr_t;
 class CTcpOutboundEndpoint : public CTcpEndpoint
 {
 public:
-	enum {TCP_OUTBOUND_ENDPOINT = 1};
 	CTcpOutboundEndpoint();
-	~CTcpOutboundEndpoint();
+	virtual ~CTcpOutboundEndpoint();
 
 public:
-	int32_t start();
+	int32_t start(net_addr_ptr_t &pRemoteAddr, int32_t i32ConnTimeout, int32_t i32MaxRetries);
 	int32_t stop();
 
 protected:
@@ -86,6 +90,7 @@ protected:
 
 private:
 	net_addr_ptr_t m_pRemoteAddr;
+
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CTcpOutboundEndpoint> tcp_ob_endpoint_ptr_t;
 
