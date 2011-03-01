@@ -38,7 +38,7 @@ int32_t CSmartNet::stop()
 	return i32Ret;
 }
 
-net_engine_ptr_t& CSmartNet::get_net_engine()
+io_engine_ptr_t& CSmartNet::get_io_engine()
 {
 	return m_pNetEngine;
 }

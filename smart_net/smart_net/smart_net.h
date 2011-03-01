@@ -17,7 +17,7 @@ namespace nm_smartnet
 
 using namespace nm_framework;
 
-class CSmartNet
+class CSmartNet : public nm_base::ICommonBase
 {
 public:
 	CSmartNet();
@@ -27,10 +27,11 @@ public:
 	int32_t start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 	int32_t stop();
 
-	net_engine_ptr_t& get_net_engine();
+	io_engine_ptr_t& get_io_engine();
 private:
-	net_engine_ptr_t m_pNetEngine;
+	io_engine_ptr_t m_pNetEngine;
 };
+typedef nm_utils::CSmartPtr<nm_smartnet::CSmartNet> smart_net_ptr_t;
 
 }
 

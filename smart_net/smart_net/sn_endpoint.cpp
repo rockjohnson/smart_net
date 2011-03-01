@@ -7,10 +7,11 @@
 
 #include "sn_endpoint.h"
 
-namespace nm_framework
+namespace nm_smartnet
 {
 
-IEndpoint::IEndpoint()
+IEndpoint::IEndpoint(io_engine_ptr_t &pIoEngine)
+:m_pIoEngine(pIoEngine)
 {
 	// TODO Auto-generated constructor stub
 
@@ -24,15 +25,26 @@ IEndpoint::~IEndpoint()
 /**
  * tcp endpoint.
  * */
-CTcpEndpoint::CTcpEndpoint()
+CTcpInboundEndpoint::CTcpInboundEndpoint(smart_net_ptr_t &pSmartNet)
+:IEndPoint(pSmartNet->get_io_engine())
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-CTcpEndpoint::~CTcpEndpoint()
+CTcpInboundEndpoint::~CTcpInboundEndpoint()
 {
 	// TODO Auto-generated destructor stub
+}
+
+/**
+ * open this endpoint and put it into the io engine.
+ * */
+int32_t CTcpInboundEndpoint::open(net_addr_ptr_t &pListenAddr, net_addr_ptr_t &pPeerAddr)
+{
+	SYS_ASSERT(NULL != m_pIoEngine);
+
+	return m_pIoEngine->set_inbound_endpoint(pListenAddr, pPeerAddr, tcp_endpoint_ptr_t(this));
 }
 
 /**

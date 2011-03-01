@@ -30,7 +30,7 @@ using namespace nm_framework;
 class INetService
 {
 public:
-	INetService(net_engine_ptr_t &pNetEngine);
+	INetService(io_engine_ptr_t &pNetEngine);
 	virtual ~INetService();
 
 public:
@@ -38,7 +38,7 @@ public:
 	virtual int32_t stop() = 0;
 
 protected:
-	net_engine_ptr_t m_pNetEngine; ///net engine.
+	io_engine_ptr_t m_pNetEngine; ///net engine.
 	net_addr_ptr_t m_pLocalNetAddr;
 	net_addr_ptr_t m_pPeereNetAddr;
 };
@@ -56,8 +56,8 @@ protected:
  * ...
  * tcpServ.stop();
  * */
-typedef nm_utils::CObjFactory<nm_smartnet::CTcpEndpoint>::obj_factory_ptr_t endpoint_factory_ptr_t;
-typedef nm_utils::CObjFactory<nm_smartnet::CTcpEndpoint> tcp_endpoint_factory_t;
+typedef nm_utils::CObjFactory<nm_smartnet::CTcpInboundEndpoint>::obj_factory_ptr_t endpoint_factory_ptr_t;
+typedef nm_utils::CObjFactory<nm_smartnet::CTcpInboundEndpoint> tcp_endpoint_factory_t;
 class CTcpService : public INetService
 {
 public:

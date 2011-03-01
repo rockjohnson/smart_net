@@ -11,9 +11,10 @@
 #include "../framework/sn_io_obj.h"
 #include "../network/sn_socket.h"
 #include "../network/sn_connecter.h"
+#include "smart_net.h"
 #include <memory/mem.h>
 
-namespace nm_framework
+namespace nm_smartnet
 {
 
 using namespace nm_memory;
@@ -25,7 +26,7 @@ using namespace nm_network;
 class IEndpoint : public nm_framework::IIoObj
 {
 public:
-	IEndpoint();
+	IEndpoint(io_engine_ptr_t &pIoEngine);
 	virtual ~IEndpoint();
 
 public:
@@ -40,6 +41,9 @@ protected:
 	virtual void on_connected(INetAddr &remoteAddr) = 0;
 	virtual void on_recved_data(mem_ptr_t &pData, INetAddr &srcAddr) = 0;
 	virtual void on_occurred_err(int32_t iErrCode) = 0;
+
+protected:
+	io_engine_ptr_t m_pIoEngine;
 };
 
 
@@ -55,15 +59,16 @@ enum ETcpEndpointType
 /**
  * tcp endpoint
  * */
-class CTcpEndpoint: public nm_framework::IEndpoint
+class CTcpInboundEndpoint: public IEndpoint
 {
 public:
-	CTcpEndpoint();
-	virtual ~CTcpEndpoint();
+	CTcpInboundEndpoint(smart_net_ptr_t &pSmartNet);
+	virtual ~CTcpInboundEndpoint();
 
 public:
+	virtual int32_t open(net_addr_ptr_t &pListenAddr, net_addr_ptr_t &pPeerAddr); ///open this endpoint.
+	virtual int32_t close(); ///close this endpoint.
 	virtual int32_t send_data(mem_ptr_t &pData);
-	virtual int32_t close();
 
 protected:
 	void handle_input_evt(); ///handle input event.
@@ -74,7 +79,7 @@ protected:
 private:
 	CTcpSock::tcp_sock_ptr_t m_pSock;
 };
-typedef nm_utils::CSmartPtr<nm_smartnet::CTcpEndpoint> tcp_endpoint_ptr_t;
+typedef nm_utils::CSmartPtr<nm_smartnet::CTcpInboundEndpoint> tcp_endpoint_ptr_t;
 
 
 /**
@@ -82,7 +87,7 @@ typedef nm_utils::CSmartPtr<nm_smartnet::CTcpEndpoint> tcp_endpoint_ptr_t;
  * */
 class CTcpConnecter;
 typedef nm_utils::CSmartPtr<CTcpConnecter> tcp_connecter_ptr_t;
-class CTcpOutboundEndpoint : public CTcpEndpoint
+class CTcpOutboundEndpoint : public CTcpInboundEndpoint
 {
 public:
 	CTcpOutboundEndpoint();

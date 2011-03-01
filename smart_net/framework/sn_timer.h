@@ -8,7 +8,7 @@
 #ifndef SN_TIMER_H_
 #define SN_TIMER_H_
 
-#include <common/common.h>
+#include "../common/sn_common.h"
 
 namespace nm_framework
 {
@@ -22,6 +22,7 @@ public:
 public:
 	virtual int32_t check(int32_t i32CurMSTime) = 0;
 };
+typedef nm_utils::CSmartPtr<IInternalTimer> internal_timer_ptr_t;
 
 }
 

@@ -11,6 +11,7 @@
 #include <thread/thread_ex.h>
 #include "sn_io_evt_notify.h"
 #include <utils/smart_lock.h>
+#include "sn_timer.h"
 
 namespace nm_framework
 {
@@ -35,6 +36,9 @@ namespace nm_framework
 			///
 			int32_t add_io_obj(io_obj_ptr_t &pIoObj, u_int32_t ui32Evts);
 			int32_t del_io_obj(io_obj_ptr_t &pIoObj);
+			///
+			int32_t add_internal_timer(internal_timer_ptr_t &pInternalTimer);
+			int32_t del_internal_timer(internal_timer_ptr_t &pInternalTimer);
 
 		private:
 			void update_internal_ioset();
@@ -55,6 +59,12 @@ namespace nm_framework
 			CSpinLock m_splkInvalidIoObjs;
 			///max io wait interval.
 			u_int32_t m_ui32MaxIoEvtWaitInterval;
+			///internal timers
+			typedef std::set<nm_framework::internal_timer_ptr_t> internal_timer_set_t;
+			internal_timer_set_t m_setInternalTimers;
+			///internal timer add cache
+			internal_timer_set_t m_setInternalTimerAddCache;
+			CSpinLock m_splkInternalTimerSetAddCache;
 	};
 
 	typedef nm_utils::CSmartPtr<nm_framework::CIoTask> io_task_ptr_t;

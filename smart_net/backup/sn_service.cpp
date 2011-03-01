@@ -11,7 +11,7 @@
 namespace nm_smartnet
 {
 
-INetService::INetService(net_engine_ptr_t &pNetEngine)
+INetService::INetService(io_engine_ptr_t &pNetEngine)
 :m_pNetEngine(pNetEngine)
 {
 	// TODO Auto-generated constructor stub
@@ -46,7 +46,7 @@ int32_t INetService::start(net_addr_ptr_t &pLocalNetAddr, net_addr_ptr_t &pPeerN
 	ret CTcpService::func
 
 TCP_SERV_TEMPLATE_DEFINE(CTcpService(CSmartNet &smartnet),)
-:INetService(smartnet.get_net_engine())
+:INetService(smartnet.get_io_engine())
 {
 }
 
@@ -116,7 +116,7 @@ TCP_SERV_TEMPLATE_DEFINE(start_listen_service(net_addr_ptr_t &pBindAddr, int32_t
 
 TCP_SERV_TEMPLATE_DEFINE(start_connect_service(net_addr_ptr_t &pRemoteAddr, int32_t i32ConnTimeout, int32_t i32MaxRetries), int32_t)
 {
-	m_pOutboundEndpoint = dynamic_cast_smartptr<CTcpOutboundEndpoint, CTcpEndpoint>(m_pEndpointFactory->create_obj(E_TCP_OUTBOUND_ENDPOINT));
+	m_pOutboundEndpoint = dynamic_cast_smartptr<CTcpOutboundEndpoint, CTcpInboundEndpoint>(m_pEndpointFactory->create_obj(E_TCP_OUTBOUND_ENDPOINT));
 	if (NULL == m_pOutboundEndpoint)
 	{
 		return CMNERR_COMMON_ERR;
