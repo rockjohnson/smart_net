@@ -7,7 +7,7 @@
 
 #include "sn_endpoint.h"
 
-namespace nm_smartnet
+namespace nm_network
 {
 
 IEndpoint::IEndpoint(io_engine_ptr_t &pIoEngine)
@@ -44,7 +44,7 @@ int32_t CTcpInboundEndpoint::open(const net_addr_ptr_t &pListenAddr, const net_a
 {
 	SYS_ASSERT(NULL != m_pIoEngine);
 
-	return m_pIoEngine->add_endpoint(pListenAddr, pPeerAddr, tcp_endpoint_ptr_t(this));
+	return m_pIoEngine->add_endpoint(pListenAddr, pPeerAddr, tcp_ib_endpoint_ptr_t(this));
 }
 
 int32_t CTcpInboundEndpoint::get_type()

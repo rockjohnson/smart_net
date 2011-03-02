@@ -10,12 +10,13 @@
 #ifndef __SMART_NET_H__
 #define __SMART_NET_H__
 
-#include "../framework/sn_engine.h"
+#include "../network/sn_endpoint.h"
 
 namespace nm_smartnet
 {
 
 using namespace nm_framework;
+using namespace nm_network;
 
 class CSmartNet : public nm_base::ICommonBase
 {
@@ -24,9 +25,13 @@ public:
 	~CSmartNet();
 
 public:
+	///
 	int32_t start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 	int32_t stop();
-
+	///
+	int32_t add_endpoint(const endpoint_ptr_t &pEP);
+	int32_t del_endpoint(const endpoint_ptr_t &pEP);
+	///
 	io_engine_ptr_t& get_io_engine();
 private:
 	io_engine_ptr_t m_pNetEngine;

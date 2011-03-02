@@ -28,8 +28,9 @@ public:
 	virtual ~IEndpoint();
 
 public:
-	virtual int32_t open(net_addr_ptr_t &pFirstAddr, net_addr_ptr_t &pSecondAddr) = 0;
-	virtual int32_t close();
+	virtual int32_t open(net_addr_ptr_t &pFirstAddr, net_addr_ptr_t &pSecondAddr) = 0; ///open and join net engine.
+	virtual int32_t close(); ///close and delete from net engine.
+
 	virtual int32_t send_data(mem_ptr_t &pData) = 0; ///thread-safe send func.
 	virtual int32_t close() = 0; ///close this endpoint, close the connection, and will not send or receive data.
 	virtual int32_t get_type() = 0;
@@ -55,7 +56,6 @@ public:
 
 public:
 	virtual int32_t add_endpoint(endpoint_ptr_t &pEP) = 0;
-
 };
 typedef nm_utils::CSmartPtr<nm_framework::IListener> listener_ptr_t;
 
@@ -69,6 +69,26 @@ public:
 	IConnecter();
 	virtual ~IConnecter();
 };
+
+
+/**
+ *
+ * */
+enum EProtocols
+{
+	EP_TCP = 0,
+	EP_RUP,
+	EP_RMP,
+	EP_ALL
+};
+
+class IProtoWrapper : public nm_base::ICommonBase
+{
+public:
+	IProtoWrapper(){}
+	virtual ~IProtoWrapper(){}
+};
+typedef nm_utils::CSmartPtr<nm_framework::IProtoWrapper> proto_wrapper_ptr_t;
 
 }
 

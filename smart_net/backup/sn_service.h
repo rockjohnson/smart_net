@@ -56,8 +56,8 @@ protected:
  * ...
  * tcpServ.stop();
  * */
-typedef nm_utils::CObjFactory<nm_smartnet::CTcpInboundEndpoint>::obj_factory_ptr_t endpoint_factory_ptr_t;
-typedef nm_utils::CObjFactory<nm_smartnet::CTcpInboundEndpoint> tcp_endpoint_factory_t;
+//typedef nm_utils::CObjFactory<nm_smartnet::CTcpInboundEndpoint>::obj_factory_ptr_t endpoint_factory_ptr_t;
+//typedef nm_utils::CObjFactory<nm_smartnet::CTcpInboundEndpoint> tcp_endpoint_factory_t;
 class CTcpService : public INetService
 {
 public:

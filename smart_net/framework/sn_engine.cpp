@@ -14,6 +14,7 @@ namespace nm_framework
 using namespace nm_smartnet;
 
 CNetEngine::CNetEngine()
+:m_vecProtoWrappers(EP_ALL)
 {
 	// TODO Auto-generated constructor stub
 }
@@ -116,31 +117,32 @@ int32_t CNetEngine::add_endpoint(const endpoint_ptr_t &pEP)
 	{
 	case E_TCP_INBOUND_ENDPOINT:
 	{
-		mtx_scopelk_t lk(m_lkTcpListeners);
-		tcp_listener_map_t::iterator iter = m_mapTcpListeners.find(pEP->get_first_addr());
-		if (iter == m_mapTcpListeners.end())
-		{
-			///create tcp listener, and listening.
-			listener_ptr_t pListener = SYS_NOTRW_NEW(CTcpListener);
-			i32Ret = pListener->start(pEP->get_first_addr());
-			if (CMNERR_SUC > i32Ret)
-			{
-				break;
-			}
-			i32Ret = pListener->add_endpoint(pEP);
-			SYS_ASSERT(CMNERR_SUC <= i32Ret);
-			std::pair<tcp_listener_map_t::iterator, bool> ret = m_mapTcpListeners.insert(tcp_listener_map_t::value_type(pEp->get_first_addr(), pEP));
-			SYS_ASSERT(ret.second);
-			i32Ret = add_io_obj(pListener);
-			if (CMNERR_SUC > i32Ret)
-			{
-				break;
-			}
-		}
-		else
-		{
-
-		}
+		i32Ret = m_vecProtoWrappers[EP_TCP]->add_endpoint(pEP);
+//		mtx_scopelk_t lk(m_lkTcpListeners);
+//		tcp_listener_map_t::iterator iter = m_mapTcpListeners.find(pEP->get_first_addr());
+//		if (iter == m_mapTcpListeners.end())
+//		{
+//			///create tcp listener, and listening.
+//			listener_ptr_t pListener = SYS_NOTRW_NEW(CTcpListener);
+//			i32Ret = pListener->start(pEP->get_first_addr());
+//			if (CMNERR_SUC > i32Ret)
+//			{
+//				break;
+//			}
+//			i32Ret = pListener->add_endpoint(pEP);
+//			SYS_ASSERT(CMNERR_SUC <= i32Ret);
+//			std::pair<tcp_listener_map_t::iterator, bool> ret = m_mapTcpListeners.insert(tcp_listener_map_t::value_type(pEp->get_first_addr(), pEP));
+//			SYS_ASSERT(ret.second);
+//			i32Ret = add_io_obj(pListener);
+//			if (CMNERR_SUC > i32Ret)
+//			{
+//				break;
+//			}
+//		}
+//		else
+//		{
+//
+//		}
 
 		break;
 	}

@@ -21,10 +21,10 @@ public:
 	~CTcpConnecter();
 
 public:
-	int32_t init(INetAddr &remoteAddr);
-	int32_t destroy();
+	int32_t open(const net_addr_ptr_t &pDstAddr);
+	int32_t close();
 
-	CIpv4Addr m_remoteAddr;
+	net_addr_ptr_t m_pDstAddr;
 };
 
 }

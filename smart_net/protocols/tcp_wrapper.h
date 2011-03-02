@@ -16,7 +16,7 @@
 namespace nm_protocol
 {
 
-
+class CTcpEngine
 
 
 

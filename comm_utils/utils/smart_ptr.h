@@ -246,10 +246,14 @@ namespace nm_utils
 		}
 	}
 
-	template <typename T, typename TT>
-	CSmartPtr<T> dynamic_cast_smartptr(CSmartPtr<TT> &pTT)
+	template <typename DST, typename SRC>
+	CSmartPtr<DST> dynamic_cast_smartptr(CSmartPtr<SRC> &pSrc)
 	{
-		return CSmartPtr<T>(dynamic_cast<T*>(pTT.get_ptr()));
+#ifdef __CHECK_CAST__
+		return CSmartPtr<DST>(dynamic_cast<DST*>(pSrc.get_ptr()));
+#else
+		return CSmartPtr<DST>(reinterpret_cast<DST*>(pSrc.get_ptr())); //god!help me!!
+#endif
 	}
 }
 

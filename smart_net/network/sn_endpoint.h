@@ -8,9 +8,9 @@
 #ifndef CONN_H_
 #define CONN_H_
 
-#include "../framework/sn_base.h"
+#include "../framework/sn_interface.h"
 
-namespace nm_smartnet
+namespace nm_network
 {
 
 using namespace nm_memory;
@@ -24,6 +24,7 @@ enum ETcpEndpointType
 	E_TCP_INBOUND_ENDPOINT = 0,
 	E_TCP_OUTBOUND_ENDPOINT
 };
+
 
 /**
  * tcp endpoint
@@ -49,7 +50,7 @@ protected:
 private:
 	CTcpSock::tcp_sock_ptr_t m_pSock;
 };
-typedef nm_utils::CSmartPtr<nm_smartnet::CTcpInboundEndpoint> tcp_endpoint_ptr_t;
+typedef nm_utils::CSmartPtr<nm_smartnet::CTcpInboundEndpoint> tcp_ib_endpoint_ptr_t;
 
 
 /**
@@ -75,7 +76,6 @@ private:
 	tcp_connecter_ptr_t m_pConnecter;
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CTcpOutboundEndpoint> tcp_ob_endpoint_ptr_t;
-
 
 
 }

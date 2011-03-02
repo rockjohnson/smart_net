@@ -49,6 +49,22 @@ int32_t CTcpListener::start(net_addr_ptr_t &pBindAddr, int32_t i32Backlog, io_en
 	return i32Ret;
 }
 
+int32_t CTcpListener::add_endpoint(const endpoint_ptr_t &pEP)
+{
+	spin_scopelk_t lk(m_lkTcpEndpoints);
+
+	std::pair<tcp_endpoint_set_t::iterator, bool> ret = m_setTcpEndpoints.insert(dynamic_cast_smartptr<CTcpInboundEndpoint, IEndpoint>(pEP));
+
+	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
+}
+
+int32_t CTcpListener::del_endpoint(const endpoint_ptr_t &pEP)
+{
+	spin_scopelk_t lk(m_lkTcpEndpoints);
+
+	return m_setTcpEndpoints.erase(dynamic_cast_smartptr<CTcpInboundEndpoint, IEndpoint>(pEP)) > 0 ? CMNERR_SUC : CMNERR_COMMON_ERR;
+}
+
 int32_t CTcpListener::get_fd()
 {
 	return m_tcpSock.get_fd();

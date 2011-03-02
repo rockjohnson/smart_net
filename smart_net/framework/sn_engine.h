@@ -11,12 +11,14 @@
 #include "../network/sn_net_addr.h"
 #include "sn_io_task.h"
 #include "sn_base.h"
+#include "sn_io_engine.h"
 #include <vector>
 
 namespace nm_framework
 {
 
 using namespace nm_network;
+
 /**
  * the smart net manager.
  * */
@@ -27,8 +29,7 @@ public:
 	virtual ~CNetEngine();
 
 public:
-	int32_t start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier,
-			int32_t i32MsTimeout);
+	int32_t start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 	int32_t stop();
 
 	int32_t add_io_obj(const io_obj_ptr_t &pIoObj);
@@ -41,22 +42,26 @@ public:
 	//			int32_t del_outbound_endpoint(const io_obj_ptr_t &pIoObj);
 
 private:
-	typedef std::vector<nm_thread::thread_ptr_t> io_thread_vec_t;
-	io_thread_vec_t m_vecIoThreads; ///mainly handle input and business.
-	nm_thread::thread_ptr_t m_pThreadHandleOutput; ///only handle output.
+	///io engines
+	io_engine_ptr_t m_pIoEngine;
 
-	///tcp listeners
-	template<typename _Tp>
-	struct lessForAddr: public binary_function<_Tp, _Tp, bool>
-	{
-		bool operator()(const _Tp& __x, const _Tp& __y) const
-		{
-			return __x->get_ip_hbo() < __y->get_ip_hbo() ? true : __x->get_port_hbo() < __y->get_port_hbo();
-		}
-	};
-	typedef std::map<net_addr_ptr_t, listener_ptr_t, lessForAddr<net_addr_ptr_t> > tcp_listener_map_t;
-	tcp_listener_map_t m_mapTcpListeners;
-	CMutexLock m_lkTcpListeners;
+	///network protocol engines
+	typedef std::vector<proto_wrapper_ptr_t> proto_wrapper_vec_t;
+	proto_wrapper_vec_t m_vecProtoWrappers;
+
+
+//	///tcp listeners
+//	template<typename _Tp>
+//	struct lessForAddr: public binary_function<_Tp, _Tp, bool>
+//	{
+//		bool operator()(const _Tp& __x, const _Tp& __y) const
+//		{
+//			return __x->get_ip_hbo() < __y->get_ip_hbo() ? true : __x->get_port_hbo() < __y->get_port_hbo();
+//		}
+//	};
+//	typedef std::map<net_addr_ptr_t, listener_ptr_t, lessForAddr<net_addr_ptr_t> > tcp_listener_map_t;
+//	tcp_listener_map_t m_mapTcpListeners;
+//	CMutexLock m_lkTcpListeners;
 
 };
 typedef nm_utils::CSmartPtr<nm_framework::CNetEngine> io_engine_ptr_t;
