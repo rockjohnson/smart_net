@@ -142,7 +142,8 @@ namespace nm_utils
 		T &m_lock;
 	};
 
-	typedef CScopeLock<CMutexLock> scope_lock_t;
+	typedef CScopeLock<CMutexLock> mtx_scopelk_t;
+	typedef CScopeLock<CSpinLock> spin_scopelk_t;
 }
 
 #endif /* __AUTO_LOCK_H__ */

@@ -9,18 +9,25 @@
 #include <iostream>
 using namespace std;
 
+#include <smart_net/smart_net.h>
 #include "../business/sp_dev_service.h"
 using namespace nm_business;
+using namespace nm_smartnet;
 
 int main()
 {
 	///1,inherit endpoint
 
 	///2,create network engine object.
-	nm_smartnet::CSmartNet sn;
-	sn.start(10, nm_framework::EIEN_EPOLL, 10);
+	smart_net_ptr_t pSmartNet = SYS_NOTRW_NEW(CSmartNet);
+	pSmartNet->start(10, nm_framework::EIEN_EPOLL, 10);
 
-	///3,bind endpoint with service
+	///3,
+	CTcpInboundEndpoint tcpIBEP(pSmartNet);
+	net_addr_ptr_t pListenAddr = SYS_NOTRW_NEW(CIpv4Addr);
+	pListenAddr->set_ip("127.0.0.1");
+	pListenAddr->set_port_hbo(9999);
+	tcpIBEP.open(pListenAddr, net_addr_ptr_t(NULL));
 
 
 	///4,

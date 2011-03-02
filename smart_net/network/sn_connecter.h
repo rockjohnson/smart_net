@@ -11,14 +11,6 @@
 namespace nm_network
 {
 
-class IConnecter
-{
-public:
-	IConnecter();
-	virtual ~IConnecter();
-};
-
-
 /**
  * tcp connect timer.
  * */

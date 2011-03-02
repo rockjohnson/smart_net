@@ -8,44 +8,13 @@
 #ifndef CONN_H_
 #define CONN_H_
 
-#include "../framework/sn_io_obj.h"
-#include "../network/sn_socket.h"
-#include "../network/sn_connecter.h"
-#include "smart_net.h"
-#include <memory/mem.h>
+#include "../framework/sn_base.h"
 
 namespace nm_smartnet
 {
 
 using namespace nm_memory;
 using namespace nm_network;
-
-/**
- * base endpoint class
- * */
-class IEndpoint : public nm_framework::IIoObj
-{
-public:
-	IEndpoint(io_engine_ptr_t &pIoEngine);
-	virtual ~IEndpoint();
-
-public:
-
-public:
-	virtual int32_t init() = 0;
-	virtual int32_t destroy() = 0;
-	virtual int32_t send_data(mem_ptr_t &pData) = 0; ///thread-safe send func.
-	virtual int32_t close() = 0; ///close this endpoint, close the connection, and will not send or receive data.
-
-protected:
-	virtual void on_connected(INetAddr &remoteAddr) = 0;
-	virtual void on_recved_data(mem_ptr_t &pData, INetAddr &srcAddr) = 0;
-	virtual void on_occurred_err(int32_t iErrCode) = 0;
-
-protected:
-	io_engine_ptr_t m_pIoEngine;
-};
-
 
 /**
  * tcp endpoint enum.
@@ -66,9 +35,10 @@ public:
 	virtual ~CTcpInboundEndpoint();
 
 public:
-	virtual int32_t open(net_addr_ptr_t &pListenAddr, net_addr_ptr_t &pPeerAddr); ///open this endpoint.
+	virtual int32_t open(const net_addr_ptr_t &pListenAddr, const net_addr_ptr_t &pPeerAddr); ///open this endpoint.
 	virtual int32_t close(); ///close this endpoint.
 	virtual int32_t send_data(mem_ptr_t &pData);
+			int32_t get_type();
 
 protected:
 	void handle_input_evt(); ///handle input event.

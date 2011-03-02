@@ -40,11 +40,16 @@ CTcpInboundEndpoint::~CTcpInboundEndpoint()
 /**
  * open this endpoint and put it into the io engine.
  * */
-int32_t CTcpInboundEndpoint::open(net_addr_ptr_t &pListenAddr, net_addr_ptr_t &pPeerAddr)
+int32_t CTcpInboundEndpoint::open(const net_addr_ptr_t &pListenAddr, const net_addr_ptr_t &pPeerAddr)
 {
 	SYS_ASSERT(NULL != m_pIoEngine);
 
-	return m_pIoEngine->set_inbound_endpoint(pListenAddr, pPeerAddr, tcp_endpoint_ptr_t(this));
+	return m_pIoEngine->add_endpoint(pListenAddr, pPeerAddr, tcp_endpoint_ptr_t(this));
+}
+
+int32_t CTcpInboundEndpoint::get_type()
+{
+	return E_TCP_INBOUND_ENDPOINT;
 }
 
 /**

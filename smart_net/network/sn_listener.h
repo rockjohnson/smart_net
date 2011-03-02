@@ -11,12 +11,6 @@
 namespace nm_network
 {
 
-class IListener
-{
-public:
-	IListener();
-	virtual ~IListener();
-};
 
 /**
  * tcp listener
