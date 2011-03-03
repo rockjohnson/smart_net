@@ -30,7 +30,7 @@ using namespace nm_framework;
 class INetService
 {
 public:
-	INetService(io_engine_ptr_t &pNetEngine);
+	INetService(smart_net_mgr_ptr_t &pNetEngine);
 	virtual ~INetService();
 
 public:
@@ -38,7 +38,7 @@ public:
 	virtual int32_t stop() = 0;
 
 protected:
-	io_engine_ptr_t m_pNetEngine; ///net engine.
+	smart_net_mgr_ptr_t m_pNetEngine; ///net engine.
 	net_addr_ptr_t m_pLocalNetAddr;
 	net_addr_ptr_t m_pPeereNetAddr;
 };

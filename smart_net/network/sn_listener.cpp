@@ -25,7 +25,7 @@ IListener::~IListener()
  * CTcpListener
  * */
 
-int32_t CTcpListener::start(net_addr_ptr_t &pBindAddr, int32_t i32Backlog, io_engine_ptr_t &pNetEngine)
+int32_t CTcpListener::start(net_addr_ptr_t &pBindAddr, int32_t i32Backlog, smart_net_mgr_ptr_t &pNetEngine)
 {
 	///create listen socket.
 	int32_t i32Ret = m_tcpSock.create();

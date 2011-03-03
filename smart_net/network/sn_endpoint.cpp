@@ -10,26 +10,13 @@
 namespace nm_network
 {
 
-IEndpoint::IEndpoint(io_engine_ptr_t &pIoEngine)
-:m_pIoEngine(pIoEngine)
-{
-	// TODO Auto-generated constructor stub
-
-}
-
-IEndpoint::~IEndpoint()
-{
-	destroy();
-}
-
 /**
  * tcp endpoint.
  * */
 CTcpInboundEndpoint::CTcpInboundEndpoint(smart_net_ptr_t &pSmartNet)
-:IEndPoint(pSmartNet->get_io_engine())
+:m_pSmartNetMgr(NULL == pSmartNet ? NULL : pSmartNet->get_mgr())
 {
 	// TODO Auto-generated constructor stub
-
 }
 
 CTcpInboundEndpoint::~CTcpInboundEndpoint()
@@ -42,9 +29,11 @@ CTcpInboundEndpoint::~CTcpInboundEndpoint()
  * */
 int32_t CTcpInboundEndpoint::open(const net_addr_ptr_t &pListenAddr, const net_addr_ptr_t &pPeerAddr)
 {
-	SYS_ASSERT(NULL != m_pIoEngine);
+	SYS_ASSERT(NULL != m_pSmartNetMgr);
+	m_pListenAddr = pListenAddr;
+	m_pPeerAddr = pPeerAddr;
 
-	return m_pIoEngine->add_endpoint(pListenAddr, pPeerAddr, tcp_ib_endpoint_ptr_t(this));
+	return m_pSmartNetMgr->add_endpoint(endpoint_ptr_t(this));
 }
 
 int32_t CTcpInboundEndpoint::get_type()

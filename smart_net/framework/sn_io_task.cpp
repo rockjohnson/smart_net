@@ -47,16 +47,23 @@ namespace nm_framework
 		m_splkIoObjCache.lock();
 		m_setIoObjCache.clear();
 		m_splkIoObjCache.unlock();
-
 		///
 		m_setValidIoObjs.clear();
-
 		///...
 		m_splkInvalidIoObjs.lock();
 		m_setInvalidIoObjs.clear();
 		m_splkInvalidIoObjs.unlock();
 
 		return CMNERR_SUC;
+	}
+
+	int32_t CIoTask::add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32Evts)
+	{
+		spin_scopelk_t lk(m_splkIoObjCache);
+
+		std::pair<io_obj_set_t::iterator, bool> ret = m_setIoObjCache.insert(pIoObj);
+
+		return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
 	}
 
 	void CIoTask::exec()

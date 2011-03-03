@@ -9,12 +9,14 @@
 #define CONN_H_
 
 #include "../framework/sn_interface.h"
+#include "../framework/sn_mgr.h"
 
 namespace nm_network
 {
 
 using namespace nm_memory;
 using namespace nm_network;
+using namespace nm_framework;
 
 /**
  * tcp endpoint enum.
@@ -40,6 +42,7 @@ public:
 	virtual int32_t close(); ///close this endpoint.
 	virtual int32_t send_data(mem_ptr_t &pData);
 			int32_t get_type();
+			net_addr_ptr_t& get_listen_addr();
 
 protected:
 	void handle_input_evt(); ///handle input event.
@@ -48,7 +51,10 @@ protected:
 	int32_t get_fd();
 
 private:
+	smart_net_mgr_ptr_t m_pSmartNetMgr;
 	CTcpSock::tcp_sock_ptr_t m_pSock;
+	net_addr_ptr_t m_pListenAddr;
+	net_addr_ptr_t m_pPeerAddr;
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CTcpInboundEndpoint> tcp_ib_endpoint_ptr_t;
 

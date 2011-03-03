@@ -9,6 +9,7 @@
 #define _IO_EVT_NOTIFY_H___
 
 #include "sn_io_obj.h"
+#include <utils/smart_lock.h>
 
 #if __PLATFORM__ == __PLATFORM_LINUX__
 #include <sys/epoll.h>
@@ -16,6 +17,8 @@
 
 namespace nm_framework
 {
+
+using namespace nm_utils;
 
 enum EIoEvtNotify
 {
@@ -81,12 +84,12 @@ public:
 
 public:
 	///
-	virtual int32_t init(int32_t i32MsTimeout);
-	virtual int32_t destroy();
+	int32_t init(int32_t i32MsTimeout);
+	int32_t destroy();
 	///
-	virtual int32_t add_io_obj(const io_obj_ptr_t &pIoObj);
-	virtual int32_t del_io_obj(const io_obj_ptr_t &pIoObj);
-	virtual int32_t dispatch_evts();
+	int32_t add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32Evts);
+	int32_t del_io_obj(const io_obj_ptr_t &pIoObj);
+	int32_t dispatch_evts();
 
 private:
 	///

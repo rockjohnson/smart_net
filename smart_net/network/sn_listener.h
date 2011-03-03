@@ -29,7 +29,7 @@ public:
 
 public:
 	///
-	int32_t open(net_addr_ptr_t &pBindAddr, int32_t i32Backlog, io_engine_ptr_t &pNetEngine);
+	int32_t open(net_addr_ptr_t &pBindAddr, int32_t i32Backlog, smart_net_mgr_ptr_t &pNetEngine);
 	int32_t close();
 	///
 	int32_t add_endpoint(const endpoint_ptr_t &pEP);
@@ -43,7 +43,7 @@ public:
 private:
 	CTcpSock m_tcpSock;
 	net_addr_ptr_t m_pBindAddr;
-	io_engine_ptr_t m_pNetEngine;
+	smart_net_mgr_ptr_t m_pNetEngine;
 	///
 	typedef std::set<tcp_ib_endpoint_ptr_t> tcp_endpoint_set_t;
 	tcp_endpoint_set_t m_setTcpEndpoints;

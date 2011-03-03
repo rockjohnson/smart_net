@@ -93,6 +93,22 @@ int32_t CEpoll::init(int32_t i32MsTimeout)
 	return (m_i32epfd = epoll_create(UNUSED)) < 0 ? CMNERR_COMMON_ERR : CMNERR_SUC;
 }
 
+int32_t CEpoll::add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32Evts)
+{
+	struct epoll_event evt;
+	evt.events = ui32Evts;
+	evt.data.ptr = pIoObj.get_ptr();
+
+	return epoll_ctl(m_i32epfd, EPOLL_CTL_ADD, pIoObj->get_fd(), &evt);
+}
+
+int32_t CEpoll::del_io_obj(const io_obj_ptr_t &pIoObj)
+{
+	struct epoll_event evt;
+
+	return epoll_ctl(m_i32epfd, EPOLL_CTL_DEL, pIoObj->get_fd(), &evt);
+}
+
 int32_t CEpoll::dispatch_evts()
 {
 	int32_t i32Ret = epoll_wait(m_i32epfd, m_tmpEvts, MAX_EVENTS, m_i32MsTimeout);

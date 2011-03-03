@@ -29,12 +29,9 @@ public:
 	int32_t start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 	int32_t stop();
 	///
-	int32_t add_endpoint(const endpoint_ptr_t &pEP);
-	int32_t del_endpoint(const endpoint_ptr_t &pEP);
-	///
-	io_engine_ptr_t& get_io_engine();
+	smart_net_mgr_ptr_t& get_mgr();
 private:
-	io_engine_ptr_t m_pNetEngine;
+	smart_net_mgr_ptr_t m_pSmartNetMgr;
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CSmartNet> smart_net_ptr_t;
 

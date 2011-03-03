@@ -34,6 +34,7 @@ public:
 	virtual int32_t send_data(mem_ptr_t &pData) = 0; ///thread-safe send func.
 	virtual int32_t close() = 0; ///close this endpoint, close the connection, and will not send or receive data.
 	virtual int32_t get_type() = 0;
+	virtual int32_t get_proto() = 0;
 	virtual net_addr_ptr_t& get_first_addr() = 0;
 	virtual net_addr_ptr_t& get_second_addr() = 0;
 

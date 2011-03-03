@@ -24,23 +24,23 @@ CSmartNet::~CSmartNet()
 
 int32_t CSmartNet::start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 {
-	m_pNetEngine = new CNetEngine;
-	IF_TRUE_THEN_RETURN_CODE(NULL == m_pNetEngine, CMNERR_COMMON_ERR);
+	m_pSmartNetMgr = new CSmartNetMgr;
+	IF_TRUE_THEN_RETURN_CODE(NULL == m_pSmartNetMgr, CMNERR_COMMON_ERR);
 
-	return m_pNetEngine->start(ui32IoThreadCnt, i32IoEvtNotifier, i32MsTimeout);
+	return m_pSmartNetMgr->start(ui32IoThreadCnt, i32IoEvtNotifier, i32MsTimeout);
 }
 
 int32_t CSmartNet::stop()
 {
-	int32_t i32Ret = m_pNetEngine->stop();
-	m_pNetEngine = NULL;
+	int32_t i32Ret = m_pSmartNetMgr->stop();
+	m_pSmartNetMgr = NULL;
 
 	return i32Ret;
 }
 
-io_engine_ptr_t& CSmartNet::get_io_engine()
+smart_net_mgr_ptr_t& CSmartNet::get_mgr()
 {
-	return m_pNetEngine;
+	return m_pSmartNetMgr;
 }
 
 }
