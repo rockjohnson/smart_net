@@ -34,8 +34,8 @@ namespace nm_framework
 			///
 			void exec();
 			///
-			int32_t add_io_obj(io_obj_ptr_t &pIoObj, u_int32_t ui32Evts);
-			int32_t del_io_obj(io_obj_ptr_t &pIoObj);
+			int32_t add_io_obj(const io_obj_ptr_t &pIoObj);
+			int32_t del_io_obj(const io_obj_ptr_t &pIoObj);
 			///
 			int32_t add_internal_timer(internal_timer_ptr_t &pInternalTimer);
 			int32_t del_internal_timer(internal_timer_ptr_t &pInternalTimer);

@@ -30,6 +30,8 @@ protected:
 	virtual void handle_output_evt() = 0;
 	virtual void handle_error_evt() = 0;
 	virtual int32_t get_fd() = 0;
+	virtual u_int32_t get_input_evts() = 0;
+	virtual u_int32_t get_output_evts() = 0;
 };
 typedef nm_utils::CSmartPtr<nm_framework::IIoObj> io_obj_ptr_t;
 
