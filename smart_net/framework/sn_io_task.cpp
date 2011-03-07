@@ -61,8 +61,7 @@ int32_t CIoTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 {
 	spin_scopelk_t lk(m_splkIoObjCache);
 
-	std::pair<io_obj_set_t::iterator, bool> ret =
-			m_setIoObjCache.insert(pIoObj);
+	std::pair<io_obj_set_t::iterator, bool> ret = m_setIoObjCache.insert(pIoObj);
 
 	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
 }
@@ -71,8 +70,7 @@ int32_t CIoTask::del_io_obj(const io_obj_ptr_t &pIoObj)
 {
 	spin_scopelk_t lk(m_splkInvalidIoObjs);
 
-	std::pair<io_obj_set_t::iterator, bool> ret = m_setInvalidIoObjs.insert(
-			pIoObj);
+	std::pair<io_obj_set_t::iterator, bool> ret = m_setInvalidIoObjs.insert(pIoObj);
 
 	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
 }

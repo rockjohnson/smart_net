@@ -16,7 +16,9 @@ namespace nm_framework
 
 class CSelect;
 class CEpoll;
-
+/**
+ * base class for io objs.
+ * */
 class IIoObj : public nm_base::ICommonBase
 {
 	friend class CSelect;

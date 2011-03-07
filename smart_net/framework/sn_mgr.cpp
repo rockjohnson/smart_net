@@ -27,83 +27,25 @@ CSmartNetMgr::~CSmartNetMgr()
 
 int32_t CSmartNetMgr::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 {
-	if (0 == ui32IoThreadCnt)
-	{
-		return CMNERR_COMMON_ERR;
-	}
 
-	///create protocol wrapper
-	m_vecProtoWrappers[EP_TCP] = SYS_NOTRW_NEW(CTcpWrapper);
-
-	io_task_ptr_t pIoTask = NULL;
-	thread_ptr_t pThread = NULL;
-	int32_t i32Ret = CMNERR_SUC;
-	while (ui32IoThreadCnt-- > 0)
-	{
-		pIoTask = SYS_NOTRW_NEW(CIoTask);
-		if (NULL == pIoTask)
-		{
-			i32Ret = CMNERR_COMMON_ERR;
-			break;
-		}
-		i32Ret = pIoTask->init(i32IoEvtNotifier, i32MsTimeout);
-		if (CMNERR_SUC != i32Ret)
-		{
-			break;
-		}
-		//m_setIoTasks.push_back(pIoTask);
-
-		pThread = SYS_NOTRW_NEW(CThread);
-		if (NULL == pThread)
-		{
-			i32Ret = CMNERR_COMMON_ERR;
-			break;
-		}
-
-		i32Ret = pThread->init();
-		if (CMNERR_SUC != i32Ret)
-		{
-			break;
-		}
-
-		i32Ret = pThread->assign_task(pIoTask);
-		if (CMNERR_SUC != i32Ret)
-		{
-			break;
-		}
-
-		i32Ret = pThread->start();
-		if (CMNERR_SUC != i32Ret)
-		{
-			break;
-		}
-		m_vecIoThreads.push_back(pThread); ///not judge the return?
-	}
-
-	if (CMNERR_SUC != i32Ret)
-	{
-		stop();
-	}
-
-	return i32Ret;
 }
 
 int32_t CSmartNetMgr::stop()
 {
 	///stop all io thread
-	for (io_thread_vec_t::iterator iter = m_vecIoThreads.begin(); iter
-			!= m_vecIoThreads.end(); iter++)
+	for (io_thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter
+			!= m_vecInputThreads.end(); iter++)
 	{
 		(*iter)->stop_wait();
 	}
 
-	for (io_thread_vec_t::iterator iter = m_vecIoThreads.begin(); iter
-			!= m_vecIoThreads.end(); iter++)
+	for (io_thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter
+			!= m_vecInputThreads.end(); iter++)
 	{
 		(*iter)->reset_task();
 	}
 
-	m_vecIoThreads.clear();
+	m_vecInputThreads.clear();
 
 	return CMNERR_SUC;
 }
