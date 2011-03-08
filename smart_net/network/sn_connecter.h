@@ -14,7 +14,7 @@ namespace nm_network
 /**
  * tcp connect timer.
  * */
-class CTcpConnecter : public nm_framework::IInternalTimer
+class CTcpConnecter : public nm_framework::ITimer
 {
 public:
 	CTcpConnecter();

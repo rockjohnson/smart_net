@@ -1,22 +1,22 @@
 /*
- * sn_timer.cpp
+ * sn_misc_task.cpp
  *
- *  Created on: Feb 23, 2011
+ *  Created on: Mar 8, 2011
  *      Author: rock
  */
 
-#include "sn_timer.h"
+#include "sn_misc_task.h"
 
 namespace nm_framework
 {
 
-ITimer::ITimer()
+CMiscTask::CMiscTask()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-ITimer::~ITimer()
+CMiscTask::~CMiscTask()
 {
 	// TODO Auto-generated destructor stub
 }

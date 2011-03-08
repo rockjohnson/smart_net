@@ -13,16 +13,16 @@
 namespace nm_framework
 {
 
-class IInternalTimer : public nm_base::ICommonBase
+class ITimer: public nm_base::ICommonBase
 {
 public:
-	IInternalTimer();
-	virtual ~IInternalTimer();
+	ITimer();
+	virtual ~ITimer();
 
 public:
 	virtual int32_t check(int32_t i32CurMSTime) = 0;
 };
-typedef nm_utils::CSmartPtr<IInternalTimer> internal_timer_ptr_t;
+typedef nm_utils::CSmartPtr<ITimer> timer_ptr_t;
 
 }
 
