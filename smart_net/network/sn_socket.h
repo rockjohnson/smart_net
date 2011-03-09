@@ -11,7 +11,7 @@
 #include "../framework/sn_io_obj.h"
 #include "sn_net_addr.h"
 
-namespace nm_framework
+namespace nm_network
 {
 
 /**
@@ -25,13 +25,13 @@ public:
 
 	enum {INVALID_SOCKET = -1};
 public:
-	virtual int32_t create(int32_t i32fd = INVALID_SOCKET) = 0;
+	virtual int32_t open(int32_t i32fd = INVALID_SOCKET) = 0;
 	virtual int32_t close() = 0;
-	virtual int32_t bind(INetAddr &localAddr) = 0;
+	virtual int32_t bind(const CIpv4Addr &bindaddr) = 0;
 	virtual int32_t listen(int32_t i32Backlog) = 0;
-	virtual int32_t connect(INetAddr &remoteAddr) = 0;
+	virtual int32_t connect(const CIpv4Addr &remoteAddr) = 0;
 	virtual int32_t get_fd() = 0;
-	virtual bool is_valid() = 0;
+	virtual bool is_opened() = 0;
 	virtual int32_t set_nonblock(bool bFlag) = 0;
 };
 typedef nm_utils::CSmartPtr<nm_network::ISocket> sock_ptr_t;
@@ -48,14 +48,14 @@ public:
 	virtual ~CTcpSock();
 
 public:
-	int32_t create(int32_t i32fd = INVALID_SOCKET);
+	int32_t open(int32_t i32fd = INVALID_SOCKET);
 	int32_t close();
 	int32_t bind(INetAddr &localAddr);
 	int32_t listen(int32_t i32Backlog);
 	tcp_sock_ptr_t accept();
 	int32_t connect(INetAddr &remoteAddr);
 	int32_t get_fd();
-	bool is_valid();
+	bool is_opened();
 	int32_t set_nonblock(bool bFlag);
 
 private:

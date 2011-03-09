@@ -43,10 +43,10 @@ CTcpSock::~CTcpSock()
 	// TODO Auto-generated destructor stub
 }
 
-int32_t CTcpSock::create(int32_t i32fd)
+int32_t CTcpSock::open(int32_t i32fd)
 {
-	SYS_ASSERT(!is_valid());
-	if (is_valid())
+	SYS_ASSERT(!is_opened());
+	if (is_opened())
 	{
 		close();
 	}
@@ -109,7 +109,7 @@ CTcpSock::tcp_sock_ptr_t CTcpSock::accept()
 	}
 	pTcpSock = SYS_NOTRW_NEW(CTcpSock);
 	SYS_ASSERT(NULL != pTcpSock);
-	pTcpSock->create(i32NewSockFd);
+	pTcpSock->open(i32NewSockFd);
 
 	return pTcpSock;
 }

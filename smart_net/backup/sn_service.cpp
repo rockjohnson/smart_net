@@ -12,7 +12,7 @@ namespace nm_smartnet
 {
 
 INetService::INetService(smart_net_mgr_ptr_t &pNetEngine)
-:m_pSmartNetMgr(pNetEngine)
+:m_psmartnetmgr(pNetEngine)
 {
 	// TODO Auto-generated constructor stub
 }

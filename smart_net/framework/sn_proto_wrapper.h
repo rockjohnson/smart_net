@@ -8,16 +8,11 @@
 #ifndef __SN_BASE_H__
 #define __SN_BASE_H__
 
-#include <memory/mem.h>
-#include "../network/sn_net_addr.h"
-#include "sn_io_obj.h"
+#include "../common/sn_common.h"
+#include "sn_endpoint.h"
 
 namespace nm_framework
 {
-
-using namespace nm_utils;
-using namespace nm_network;
-
 
 /**
  *
@@ -35,6 +30,10 @@ class IProtoWrapper : public nm_base::ICommonBase
 public:
 	IProtoWrapper(){}
 	virtual ~IProtoWrapper(){}
+
+public:
+	virtual int32_t add_endpoint(const endpoint_ptr_t &pEP) = 0;
+	virtual int32_t del_endpoint(const endpoint_ptr_t &pEP) = 0;
 };
 typedef nm_utils::CSmartPtr<nm_framework::IProtoWrapper> proto_wrapper_ptr_t;
 

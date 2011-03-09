@@ -6,8 +6,6 @@
  */
 
 #include "sn_mgr.h"
-#include "../network/sn_endpoint.h"
-#include "../protocols/tcp_wrapper.h"
 
 namespace nm_framework
 {
@@ -59,6 +57,14 @@ int32_t CSmartNetMgr::add_endpoint(const endpoint_ptr_t &pEP)
 	IF_TRUE_THEN_RETURN_CODE(NULL == pEP, CMNERR_COMMON_ERR);
 	///
 	return m_vecProtoWrappers[pEP->get_proto()]->add_endpoint(pEP);
+}
+
+int32_t CSmartNetMgr::del_endpoint(const endpoint_ptr_t &pEP)
+{
+	///
+	IF_TRUE_THEN_RETURN_CODE(NULL == pEP, CMNERR_COMMON_ERR);
+	///
+	return m_vecProtoWrappers[pEP->get_proto()]->del_endpoint(pEP);
 }
 
 }

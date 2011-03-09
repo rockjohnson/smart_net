@@ -10,13 +10,10 @@
 #ifndef __SMART_NET_H__
 #define __SMART_NET_H__
 
-#include "../network/sn_endpoint.h"
+#include "../network/sn_endpoint_impl.h"
 
 namespace nm_smartnet
 {
-
-using namespace nm_framework;
-using namespace nm_network;
 
 class CSmartNet : public nm_base::ICommonBase
 {

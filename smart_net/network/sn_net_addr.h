@@ -48,6 +48,9 @@ public:
 	CIpv4Addr();
 	virtual ~CIpv4Addr();
 
+	CIpv4Addr(const CIpv4Addr &other);
+	CIpv4Addr& operator =(const CIpv4Addr &other);
+
 public:
 	virtual int32_t set_ip(cstr_t pcszIp);
 	virtual int32_t set_ip_nbo(pvoid_t pIp, u_int32_t ui32Len);
@@ -62,8 +65,8 @@ public:
 	virtual bool is_valid();
 
 private:
-	u_int16_t m_ui16Port; ///network byte order.
-	struct in_addr m_inAddr; ///network byte order.
+	u_int16_t m_ui16port; ///network byte order.
+	struct in_addr m_ip; ///network byte order.
 };
 
 }

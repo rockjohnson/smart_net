@@ -12,7 +12,7 @@ src/comm_utils_test.d: ../src/comm_utils_test.cpp \
  /home/rock/workspace/smartnet/comm_utils/log/../common/common.h \
  /home/rock/workspace/smartnet/comm_utils/log/../utils/time_info.h \
  /home/rock/workspace/smartnet/comm_utils/log/../utils/../common/common.h \
- /home/rock/workspace/smartnet/comm_utils/log/../utils/auto_lock.h \
+ /home/rock/workspace/smartnet/comm_utils/log/../utils/smart_lock.h \
  /home/rock/workspace/smartnet/comm_utils/log/../utils/file.h \
  ../src/../test/thread_test.h \
  /home/rock/workspace/smartnet/comm_utils/thread/thread_ex.h \
@@ -48,7 +48,7 @@ src/comm_utils_test.d: ../src/comm_utils_test.cpp \
 
 /home/rock/workspace/smartnet/comm_utils/log/../utils/../common/common.h:
 
-/home/rock/workspace/smartnet/comm_utils/log/../utils/auto_lock.h:
+/home/rock/workspace/smartnet/comm_utils/log/../utils/smart_lock.h:
 
 /home/rock/workspace/smartnet/comm_utils/log/../utils/file.h:
 
