@@ -33,7 +33,7 @@ public:
 
 public:
 	///first, you should open this endpoint, but it is async. and if succeed, then on_opened will callback.
-	virtual int32_t open(const net_addr_ptr_t &pListenAddr, const net_addr_ptr_t &pPeerAddr, const nm_framework::smart_net_mgr_ptr_t psmartnetmgr);
+	virtual int32_t open(const CIpv4Addr &listenaddr, const CIpv4Addr &peeraddr, const nm_framework::smart_net_mgr_ptr_t psmartnetmgr);
 	///if you want close this endpoint, please invoke this func, but it is aysnc.
 	virtual int32_t close();
 	///send data, async.
@@ -56,8 +56,8 @@ private:
 	nm_utils::CMutexLock m_lkendpoint;
 	nm_framework::smart_net_mgr_ptr_t m_psmartnetmgr;
 	CTcpSock::tcp_sock_ptr_t m_psock;
-	net_addr_ptr_t m_plistenaddr;
-	net_addr_ptr_t m_ppeeraddr;
+	CIpv4Addr m_listenaddr;
+	CIpv4Addr m_peeraddr;
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CTcpInboundEndpoint> tcp_ib_endpoint_ptr_t;
 

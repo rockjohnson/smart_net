@@ -32,8 +32,8 @@ private:
 	io_thread_vec_t m_vecIoThreads; ///io threads
 	///
 	typedef std::vector<nm_framework::io_task_ptr_t> io_task_vec_t;
-	io_task_vec_t m_vecInputTasks;
-	io_task_ptr_t m_vecOutputTasks;
+	io_task_vec_t m_vecinputtasks;
+	io_task_ptr_t m_vecoutputtasks;
 };
 typedef nm_utils::CSmartPtr<nm_framework::CIoEngine> io_engine_ptr_t;
 

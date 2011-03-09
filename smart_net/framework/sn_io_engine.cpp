@@ -90,17 +90,17 @@ int32_t CIoEngine::add_io_obj(const io_obj_ptr_t &pIoObj)
 	{
 		int32_t iMinIdx = 0;
 		int32_t iMinCnt = 0;
-		for (int32_t i = 0; i < m_vecOutputTasks.size(); i++)
+		for (int32_t i = 0; i < m_vecoutputtasks.size(); i++)
 		{
-			if (m_vecOutputTasks[i]->get_fd_cnt() < iMinCnt)
+			if (m_vecoutputtasks[i]->get_fd_cnt() < iMinCnt)
 			{
 				iMinIdx = i;
-				iMinCnt = m_vecOutputTasks[i]->get_fd_cnt();
+				iMinCnt = m_vecoutputtasks[i]->get_fd_cnt();
 			}
 		}
 
 		pIoObj->set_output_task_id(iMinIdx);
-		i32Ret = m_vecOutputTasks[iMinIdx]->add_io_obj(pIoObj);
+		i32Ret = m_vecoutputtasks[iMinIdx]->add_io_obj(pIoObj);
 		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32Ret, i32Ret);
 	}
 
@@ -108,17 +108,17 @@ int32_t CIoEngine::add_io_obj(const io_obj_ptr_t &pIoObj)
 	{
 		int32_t iMinIdx = 0;
 		int32_t iMinCnt = 0;
-		for (int32_t i = 0; i < m_vecInputTasks.size(); i++)
+		for (int32_t i = 0; i < m_vecinputtasks.size(); i++)
 		{
-			if (m_vecInputTasks[i]->get_fd_cnt() < iMinCnt)
+			if (m_vecinputtasks[i]->get_fd_cnt() < iMinCnt)
 			{
 				iMinIdx = i;
-				iMinCnt = m_vecInputTasks[i]->get_fd_cnt();
+				iMinCnt = m_vecinputtasks[i]->get_fd_cnt();
 			}
 		}
 
 		pIoObj->set_input_task_id(iMinIdx);
-		i32Ret = m_vecInputTasks[iMinIdx]->add_io_obj(pIoObj);
+		i32Ret = m_vecinputtasks[iMinIdx]->add_io_obj(pIoObj);
 		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32Ret, i32Ret);
 	}
 
