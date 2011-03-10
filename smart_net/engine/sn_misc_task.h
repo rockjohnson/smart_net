@@ -19,7 +19,7 @@ public:
 	CMiscTask();
 	virtual ~CMiscTask();
 };
-typedef nm_utils::CSmartPtr<CMiscTask> io_task_ptr_t;
+typedef nm_utils::CSmartPtr<CMiscTask> misc_task_ptr_t;
 
 }
 

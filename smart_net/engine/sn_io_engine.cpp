@@ -11,76 +11,228 @@
 namespace nm_engine
 {
 
+/**
+ *
+ * */
 CEngine::CEngine()
 {
 	// TODO Auto-generated constructor stub
-
 }
 
+/**
+ *
+ * */
 CEngine::~CEngine()
 {
 	// TODO Auto-generated destructor stub
 }
 
-int32_t CEngine::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
+/**
+ *
+ * */
+int32_t CEngine::start(u_int32_t ui32inputthreadcnt,
+		u_int32_t ui32outputthreadcnt, bool bmiscthread, int32_t i32ioevtnotifier,
+		int32_t i32MStimeout)
 {
-	IF_TRUE_THEN_RETURN_CODE(0 == ui32InputThreadCnt
-			|| 0 == ui32OutputThreadCnt , CMNERR_COMMON_ERR);
+	IF_TRUE_THEN_RETURN_CODE(0 == ui32inputthreadcnt
+			|| 0 == ui32outputthreadcnt, CMNERR_COMMON_ERR);
 
-		///create protocol wrapper
-		m_vecProtoWrappers[EP_TCP] = SYS_NOTRW_NEW(CTcpWrapper);
+	IF_TRUE_THEN_RETURN_CODE(EIEN_NONE >= i32ioevtnotifier
+			|| EIEN_ALL <= i32ioevtnotifier, CMNERR_COMMON_ERR);
 
-		io_task_ptr_t pIoTask = NULL;
-		thread_ptr_t pThread = NULL;
-		int32_t i32Ret = CMNERR_SUC;
-		while (ui32IoThreadCnt-- > 0)
+	//	///create protocol wrapper
+	//	m_vecProtoWrappers[EP_TCP] = SYS_NOTRW_NEW(CTcpWrapper);
+
+	io_task_ptr_t piotask = NULL;
+	nm_thread::thread_ptr_t pthread = NULL;
+	int32_t i32ret = CMNERR_SUC;
+	while (ui32inputthreadcnt-- > 0)
+	{
+		piotask = SYS_NOTRW_NEW(CIoTask);
+		if (NULL == piotask)
 		{
-			pIoTask = SYS_NOTRW_NEW(CIoTask);
-			if (NULL == pIoTask)
+			i32ret = CMNERR_COMMON_ERR;
+			break;
+		}
+		i32ret = piotask->init(i32ioevtnotifier, i32MStimeout);
+		if (CMNERR_SUC != i32ret)
+		{
+			break;
+		}
+		//m_setIoTasks.push_back(pIoTask);
+
+		pthread = SYS_NOTRW_NEW(CThread);
+		if (NULL == pthread)
+		{
+			i32ret = CMNERR_COMMON_ERR;
+			break;
+		}
+
+		i32ret = pthread->init();
+		if (CMNERR_SUC != i32ret)
+		{
+			break;
+		}
+
+		i32ret = pthread->assign_task(piotask);
+		if (CMNERR_SUC != i32ret)
+		{
+			break;
+		}
+
+		i32ret = pthread->start();
+		if (CMNERR_SUC != i32ret)
+		{
+			break;
+		}
+		m_vecinputtasks.push_back(piotask); ///not judge the return?
+		m_vecthreads.push_back(pthread);
+	}
+
+	if (CMNERR_SUC != i32ret)
+	{
+		stop();
+
+		return CMNERR_COMMON_ERR;
+	}
+
+	pthread = NULL;
+	piotask = NULL;
+	while (ui32outputthreadcnt-- > 0)
+	{
+		piotask = SYS_NOTRW_NEW(CIoTask);
+		if (NULL == piotask)
+		{
+			i32ret = CMNERR_COMMON_ERR;
+			break;
+		}
+		i32ret = piotask->init(i32ioevtnotifier, i32MStimeout);
+		if (CMNERR_SUC != i32ret)
+		{
+			break;
+		}
+		//m_setIoTasks.push_back(pIoTask);
+
+		pthread = SYS_NOTRW_NEW(CThread);
+		if (NULL == pthread)
+		{
+			i32ret = CMNERR_COMMON_ERR;
+			break;
+		}
+
+		i32ret = pthread->init();
+		if (CMNERR_SUC != i32ret)
+		{
+			break;
+		}
+
+		i32ret = pthread->assign_task(piotask);
+		if (CMNERR_SUC != i32ret)
+		{
+			break;
+		}
+
+		i32ret = pthread->start();
+		if (CMNERR_SUC != i32ret)
+		{
+			break;
+		}
+		m_vecoutputtasks.push_back(piotask); ///not judge the return?
+		m_vecthreads.push_back(pthread);
+	}
+
+	if (CMNERR_SUC != i32ret)
+	{
+		stop();
+
+		return CMNERR_COMMON_ERR;
+	}
+
+	if (bmiscthread)
+	{
+		do
+		{
+			misc_task_ptr_t pmisctask = SYS_NOTRW_NEW(CMiscTask);
+			if (NULL == pmisctask)
 			{
-				i32Ret = CMNERR_COMMON_ERR;
+				i32ret = CMNERR_COMMON_ERR;
 				break;
 			}
-			i32Ret = pIoTask->init(i32IoEvtNotifier, i32MsTimeout);
-			if (CMNERR_SUC != i32Ret)
+
+			i32ret = pmisctask->init(i32ioevtnotifier, i32MStimeout);
+			if (CMNERR_SUC != i32ret)
 			{
 				break;
 			}
 			//m_setIoTasks.push_back(pIoTask);
 
-			pThread = SYS_NOTRW_NEW(CThread);
-			if (NULL == pThread)
+			pthread = SYS_NOTRW_NEW(CThread);
+			if (NULL == pthread)
 			{
-				i32Ret = CMNERR_COMMON_ERR;
+				i32ret = CMNERR_COMMON_ERR;
 				break;
 			}
 
-			i32Ret = pThread->init();
-			if (CMNERR_SUC != i32Ret)
-			{
-				break;
-			}
-
-			i32Ret = pThread->assign_task(pIoTask);
-			if (CMNERR_SUC != i32Ret)
+			i32ret = pthread->init();
+			if (CMNERR_SUC != i32ret)
 			{
 				break;
 			}
 
-			i32Ret = pThread->start();
-			if (CMNERR_SUC != i32Ret)
+			i32ret = pthread->assign_task(pmisctask);
+			if (CMNERR_SUC != i32ret)
 			{
 				break;
 			}
-			m_vecInputThreads.push_back(pThread); ///not judge the return?
-		}
 
-		if (CMNERR_SUC != i32Ret)
+			i32ret = pthread->start();
+			if (CMNERR_SUC != i32ret)
+			{
+				break;
+			}
+		} while (false);
+
+		if (CMNERR_SUC != i32ret)
 		{
 			stop();
-		}
 
-		return i32Ret;
+			return CMNERR_COMMON_ERR;
+		}
+	}
+
+	return i32ret;
+}
+
+/**
+ * stop this engine.
+ * */
+int32_t CEngine::stop()
+{
+	///stop all the threads
+	for (thread_vec_t::iterator iter = m_vecthreads.begin(); iter != m_vecthreads.end(); iter++)
+	{
+		(*iter)->stop_wait();
+	}
+	m_vecthreads.clear();
+
+	///destroy all the tasks
+	if (NULL != m_pmisctasks)
+	{
+		m_pmisctasks->destroy();
+	}
+	for (io_task_vec_t::iterator iter = m_vecinputtasks.begin(); iter != m_vecinputtasks.end(); iter++)
+	{
+		(*iter)->destroy();
+	}
+	for (io_task_vec_t::iterator iter = m_vecoutputtasks.begin(); iter != m_vecoutputtasks.end(); iter++)
+	{
+		(*iter)->destroy();
+	}
+	m_pmisctasks = NULL;
+	m_vecinputtasks.clear();
+	m_vecoutputtasks.clear();
+
+	return CMNERR_SUC;
 }
 
 int32_t CEngine::add_io_obj(const io_obj_ptr_t &pIoObj)

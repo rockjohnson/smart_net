@@ -16,6 +16,10 @@
 namespace nm_engine
 {
 
+/**
+ * the engine....
+ *
+ * */
 class CEngine
 {
 public:
@@ -23,8 +27,8 @@ public:
 	virtual ~CEngine();
 
 public:
-	///
-	int32_t start(u_int32_t ui32inputthreadcnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
+	///not thread safe
+	int32_t start(u_int32_t ui32inputthreadcnt, u_int32_t ui32OutputThreadCnt, bool bmiscthread, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 	int32_t stop();
 	///
 	int32_t add_io_obj(const io_obj_ptr_t &pioobj);
@@ -35,16 +39,15 @@ public:
 
 private:
 	///
-	typedef std::vector<nm_thread::thread_ptr_t> io_thread_vec_t;
-	io_thread_vec_t m_vecIoThreads; ///io threads
+	typedef std::vector<nm_thread::thread_ptr_t> thread_vec_t;
+	thread_vec_t m_vecthreads; ///io threads
 	///
 	typedef std::vector<io_task_ptr_t> io_task_vec_t;
 	io_task_vec_t m_vecinputtasks;
 	io_task_vec_t m_vecoutputtasks;
-
-
+	misc_task_ptr_t m_pmisctasks;
 };
-typedef nm_utils::CSmartPtr<nm_framework::CEngine> io_engine_ptr_t;
+typedef nm_utils::CSmartPtr<CEngine> engine_ptr_t;
 
 }
 

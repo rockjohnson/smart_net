@@ -31,13 +31,13 @@ int32_t CSmartNetMgr::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputTh
 int32_t CSmartNetMgr::stop()
 {
 	///stop all io thread
-	for (io_thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter
+	for (thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter
 			!= m_vecInputThreads.end(); iter++)
 	{
 		(*iter)->stop_wait();
 	}
 
-	for (io_thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter
+	for (thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter
 			!= m_vecInputThreads.end(); iter++)
 	{
 		(*iter)->reset_task();
