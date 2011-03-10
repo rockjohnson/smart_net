@@ -8,21 +8,21 @@
 #include "sn_io_engine.h"
 #include "../common/sn_common.h"
 
-namespace nm_framework
+namespace nm_engine
 {
 
-CIoEngine::CIoEngine()
+CEngine::CEngine()
 {
 	// TODO Auto-generated constructor stub
 
 }
 
-CIoEngine::~CIoEngine()
+CEngine::~CEngine()
 {
 	// TODO Auto-generated destructor stub
 }
 
-int32_t CIoEngine::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
+int32_t CEngine::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 {
 	IF_TRUE_THEN_RETURN_CODE(0 == ui32InputThreadCnt
 			|| 0 == ui32OutputThreadCnt , CMNERR_COMMON_ERR);
@@ -83,7 +83,7 @@ int32_t CIoEngine::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThrea
 		return i32Ret;
 }
 
-int32_t CIoEngine::add_io_obj(const io_obj_ptr_t &pIoObj)
+int32_t CEngine::add_io_obj(const io_obj_ptr_t &pIoObj)
 {
 	int32_t i32Ret = CMNERR_SUC;
 	if (pIoObj->get_output_flg() != 0)

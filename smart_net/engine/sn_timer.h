@@ -12,7 +12,7 @@
 
 #include "../common/sn_common.h"
 
-namespace nm_framework
+namespace nm_engine
 {
 
 class ITimer: public nm_base::ICommonBase

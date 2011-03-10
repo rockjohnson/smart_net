@@ -35,6 +35,7 @@ protected:
 	virtual sock_handle_t get_handle() = 0;
 	virtual u_int32_t get_input_evts() = 0;
 	virtual u_int32_t get_output_evts() = 0;
+	virtual u_int32_t get_misc_evts() = 0;
 };
 typedef nm_utils::CSmartPtr<nm_framework::IIoObj> io_obj_ptr_t;
 

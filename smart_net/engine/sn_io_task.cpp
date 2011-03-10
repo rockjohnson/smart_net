@@ -7,7 +7,7 @@
 
 #include "sn_io_task.h"
 
-namespace nm_framework
+namespace nm_engine
 {
 
 CIoTask::CIoTask()

@@ -13,15 +13,13 @@
 #include <utils/smart_lock.h>
 #include "sn_timer.h"
 
-namespace nm_framework
+namespace nm_engine
 {
-using namespace nm_utils;
-using namespace nm_thread;
 
 /**
  *
  * */
-class CIoTask: public IThreadTask
+class CIoTask: public nm_thread::IThreadTask
 {
 public:
 	CIoTask();

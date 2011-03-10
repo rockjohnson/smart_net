@@ -10,7 +10,7 @@
 
 #include <thread/thread_ex.h>
 
-namespace nm_framework
+namespace nm_engine
 {
 
 class CMiscTask : public nm_thread::IThreadTask
@@ -19,6 +19,7 @@ public:
 	CMiscTask();
 	virtual ~CMiscTask();
 };
+typedef nm_utils::CSmartPtr<CMiscTask> io_task_ptr_t;
 
 }
 

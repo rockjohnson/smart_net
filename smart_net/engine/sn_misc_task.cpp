@@ -7,7 +7,7 @@
 
 #include "sn_misc_task.h"
 
-namespace nm_framework
+namespace nm_engine
 {
 
 CMiscTask::CMiscTask()
