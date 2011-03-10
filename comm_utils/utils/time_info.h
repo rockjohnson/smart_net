@@ -21,6 +21,7 @@ namespace nm_utils
 	public:
 		static time_t get_time_in_seconds();
 		static cstr_t get_day_time(char_t *pwszBuf);
+		static u_int64_t get_current_time_us();
 	};
 }
 

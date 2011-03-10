@@ -43,7 +43,7 @@ private:
 	void handle_io_evts();
 
 private:
-	io_evt_notify_ptr_t m_pIoEvtNotifier; ///the io event notify mechanism obj;
+	io_evt_notifier_ptr_t m_pIoEvtNotifier; ///the io event notify mechanism obj;
 
 	typedef std::set<nm_framework::io_obj_ptr_t> io_obj_set_t;
 	typedef std::pair<io_obj_set_t::iterator, bool> io_obj_set_ret_t;

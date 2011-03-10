@@ -15,20 +15,16 @@
 namespace nm_engine
 {
 
-class CSelect;
-class CEpoll;
 /**
  * base class for io objs.
  * */
 class IIoObj : public nm_base::ICommonBase
 {
-	friend class CSelect;
-	friend class CEpoll;
 public:
 	IIoObj(){}
 	virtual ~IIoObj(){}
 
-protected:
+public:
 	virtual void handle_input_evt() = 0;
 	virtual void handle_output_evt() = 0;
 	virtual void handle_error_evt() = 0;

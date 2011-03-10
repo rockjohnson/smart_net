@@ -21,9 +21,9 @@ IIoEvtNotify::~IIoEvtNotify()
 	destroy();
 }
 
-io_evt_notify_ptr_t IIoEvtNotify::create_obj(int32_t i32IoEvtNotifier)
+io_evt_notifier_ptr_t IIoEvtNotify::create_obj(int32_t i32IoEvtNotifier)
 {
-	io_evt_notify_ptr_t pIoEvtNotify = NULL;
+	io_evt_notifier_ptr_t pIoEvtNotify = NULL;
 
 	if (EIEN_ALL <= i32IoEvtNotifier
 			|| EIEN_NONE >= i32IoEvtNotifier)

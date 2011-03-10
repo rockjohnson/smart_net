@@ -21,4 +21,14 @@ CMiscTask::~CMiscTask()
 	// TODO Auto-generated destructor stub
 }
 
+int32_t CMiscTask::add_io_obj(const io_obj_ptr_t &pioobj)
+{
+
+}
+
+int32_t CMiscTask::del_io_obj(const io_obj_ptr_t &pioobj)
+{
+
+}
+
 }

@@ -22,7 +22,7 @@ public:
 	virtual ~ITimer();
 
 public:
-	virtual int32_t check(int32_t i32CurMSTime) = 0;
+	virtual void check(u_int64_t ui64curtimeus) = 0;
 };
 typedef nm_utils::CSmartPtr<ITimer> timer_ptr_t;
 

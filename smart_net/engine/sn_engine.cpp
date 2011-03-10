@@ -235,10 +235,26 @@ int32_t CEngine::stop()
 	return CMNERR_SUC;
 }
 
+/**
+ *
+ * */
 int32_t CEngine::add_io_obj(const io_obj_ptr_t &pioobj)
 {
-	int32_t i32Ret = CMNERR_SUC;
-	if (pioobj->get_output_flg() != 0)
+	int32_t i32ret = CMNERR_SUC;
+
+	if (pioobj->get_misc_evts() != 0)
+	{
+		SYS_ASSERT(NULL != m_pmisctasks);
+		if (NULL == m_pmisctasks)
+		{
+			return CMNERR_COMMON_ERR;
+		}
+
+		i32ret = m_pmisctasks->add_io_obj(pioobj);
+		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32ret, i32ret);
+	}
+
+	if (pioobj->get_output_evts() != 0)
 	{
 		int32_t iMinIdx = 0;
 		int32_t iMinCnt = 0;
@@ -252,11 +268,11 @@ int32_t CEngine::add_io_obj(const io_obj_ptr_t &pioobj)
 		}
 
 		pioobj->set_output_task_id(iMinIdx);
-		i32Ret = m_vecoutputtasks[iMinIdx]->add_io_obj(pioobj);
-		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32Ret, i32Ret);
+		i32ret = m_vecoutputtasks[iMinIdx]->add_io_obj(pioobj);
+		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32ret, i32ret);
 	}
 
-	if (pioobj->get_input_flg() != 0)
+	if (pioobj->get_input_evts() != 0)
 	{
 		int32_t iMinIdx = 0;
 		int32_t iMinCnt = 0;
@@ -270,13 +286,75 @@ int32_t CEngine::add_io_obj(const io_obj_ptr_t &pioobj)
 		}
 
 		pioobj->set_input_task_id(iMinIdx);
-		i32Ret = m_vecinputtasks[iMinIdx]->add_io_obj(pioobj);
-		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32Ret, i32Ret);
+		i32ret = m_vecinputtasks[iMinIdx]->add_io_obj(pioobj);
+		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32ret, i32ret);
 	}
-
-	if (pioobj->)
 
 	return CMNERR_SUC;
 }
+
+/**
+ *
+ * */
+int32_t CEngine::del_io_obj(const io_obj_ptr_t &pioobj)
+{
+	int32_t i32ret = CMNERR_SUC;
+
+	if (pioobj->get_misc_evts() != 0)
+	{
+		SYS_ASSERT(NULL != m_pmisctasks);
+		if (NULL == m_pmisctasks)
+		{
+			return CMNERR_COMMON_ERR;
+		}
+
+		i32ret = m_pmisctasks->del_io_obj(pioobj);
+		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32ret, i32ret);
+	}
+
+	if (pioobj->get_input_evts() != 0)
+	{
+		i32ret = m_vecinputtasks[pioobj->get_input_task_id()]->del_io_obj(pioobj);
+		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32ret, i32ret);
+	}
+
+	if (pioobj->get_output_evts() != 0)
+	{
+		i32ret = m_vecoutputtasks[pioobj->get_output_task_id()]->del_io_obj(pioobj);
+		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32ret, i32ret);
+	}
+
+	return CMNERR_SUC;
+}
+
+/**
+ *
+ * */
+int32_t CEngine::add_timer(const timer_ptr_t &ptimer)
+{
+	SYS_ASSERT(NULL != m_pmisctasks);
+	if (NULL == m_pmisctasks)
+	{
+		return CMNERR_COMMON_ERR;
+	}
+
+	return m_pmisctasks->add_timer(ptimer);
+}
+
+/**
+ *
+ * */
+int32_t CEngine::del_timer(const timer_ptr_t &ptimer)
+{
+	SYS_ASSERT(NULL != m_pmisctasks);
+	if (NULL == m_pmisctasks)
+	{
+		return CMNERR_COMMON_ERR;
+	}
+
+	return m_pmisctasks->del_timer(ptimer);
+}
+
+
 
 }
