@@ -11,37 +11,37 @@
 namespace nm_engine
 {
 
-IIoEvtNotify::IIoEvtNotify()
+IIoEvtNotifier::IIoEvtNotifier()
 {
 	// TODO Auto-generated constructor stub
 }
 
-IIoEvtNotify::~IIoEvtNotify()
+IIoEvtNotifier::~IIoEvtNotifier()
 {
 	destroy();
 }
 
-io_evt_notifier_ptr_t IIoEvtNotify::create_obj(int32_t i32IoEvtNotifier)
+ioevt_notifier_ptr_t& CIoEvtNotifierFactory::create_obj(int32_t i32ioevtnotifier)
 {
-	io_evt_notifier_ptr_t pIoEvtNotify = NULL;
+	ioevt_notifier_ptr_t pioevtnotifier = NULL;
 
-	if (EIEN_ALL <= i32IoEvtNotifier
-			|| EIEN_NONE >= i32IoEvtNotifier)
+	if (EIEN_ALL <= i32ioevtnotifier
+			|| EIEN_NONE >= i32ioevtnotifier)
 	{
-		return pIoEvtNotify;
+		return pioevtnotifier;
 	}
 
-	switch (i32IoEvtNotifier)
+	switch (i32ioevtnotifier)
 	{
 	case EIEN_SELECT:
 	{
-		pIoEvtNotify = SYS_NOTRW_NEW(CSelect);
+		pioevtnotifier = SYS_NOTRW_NEW(CSelect);
 		break;
 	}
 #if __PLATFORM__ == __PLATFORM_LINUX__
 	case EIEN_EPOLL:
 	{
-		pIoEvtNotify = SYS_NOTRW_NEW(CEpoll);
+		pioevtnotifier = SYS_NOTRW_NEW(CEpoll);
 		break;
 	}
 #endif
@@ -51,7 +51,7 @@ io_evt_notifier_ptr_t IIoEvtNotify::create_obj(int32_t i32IoEvtNotifier)
 	}
 	}
 
-	return pIoEvtNotify;
+	return pioevtnotifier;
 }
 
 
@@ -72,7 +72,7 @@ CSelect::~CSelect()
  * epoll ...
  * */
 CEpoll::CEpoll()
-:m_i32epfd(-1), m_i32MsTimeout(0)
+:m_i32epfd(-1), m_i32MStimeout(0)
 {
 	ZERO_MEM(&m_tmpEvts, sizeof(m_tmpEvts));
 }
@@ -87,12 +87,12 @@ int32_t CEpoll::init(int32_t i32MsTimeout)
 {
 	SYS_ASSERT(-1 == m_i32epfd);
 
-	m_i32MsTimeout = i32MsTimeout;
+	m_i32MStimeout = i32MsTimeout;
 
 	return (m_i32epfd = epoll_create(UNUSED)) < 0 ? CMNERR_COMMON_ERR : CMNERR_SUC;
 }
 
-int32_t CEpoll::add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32Evts)
+int32_t CEpoll::add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32evts)
 {
 	struct epoll_event evt;
 	evt.events = ui32Evts;
@@ -110,7 +110,7 @@ int32_t CEpoll::del_io_obj(const io_obj_ptr_t &pIoObj)
 
 int32_t CEpoll::dispatch_evts()
 {
-	int32_t i32Ret = epoll_wait(m_i32epfd, m_tmpEvts, MAX_EVENTS, m_i32MsTimeout);
+	int32_t i32Ret = epoll_wait(m_i32epfd, m_tmpEvts, MAX_EVENTS, m_i32MStimeout);
 	if (-1 == i32Ret)
 	{
 		SYS_ASSERT(false);

@@ -25,23 +25,23 @@ enum EIoEvtNotify
 /**
  * io event notify mechanism base class
  * */
-class IIoEvtNotify: public nm_base::ICommonBase
+class IIoEvtNotifier: public nm_base::ICommonBase
 {
 
 public:
-	IIoEvtNotify();
-	virtual ~IIoEvtNotify();
+	IIoEvtNotifier();
+	virtual ~IIoEvtNotifier();
 
 public:
 	///
 	virtual int32_t init(int32_t i32MsTimeout) = 0;
 	virtual int32_t destroy() = 0;
 	///
-	virtual int32_t add_io_obj(const io_obj_ptr_t &pIoObj) = 0;
+	virtual int32_t add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32Evts) = 0;
 	virtual int32_t del_io_obj(const io_obj_ptr_t &pIoObj) = 0;
 	virtual int32_t dispatch_evts() = 0;
 };
-typedef nm_utils::CSmartPtr<IIoEvtNotify> io_evt_notifier_ptr_t;
+typedef nm_utils::CSmartPtr<IIoEvtNotifier> ioevt_notifier_ptr_t;
 
 
 }

@@ -23,7 +23,7 @@ CIoTask::~CIoTask()
 int32_t CIoTask::init(int32_t i32IoEvtNotifier, int32_t i32MsTimeout, int32_t i32ID)
 {
 	///create io event notify mechanism obj.
-	m_pIoEvtNotifier = IIoEvtNotify::create_obj(i32IoEvtNotifier);
+	m_pIoEvtNotifier = IIoEvtNotifier::create_obj(i32IoEvtNotifier);
 	if (NULL == m_pIoEvtNotifier)
 	{
 		return CMNERR_COMMON_ERR;

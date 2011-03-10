@@ -13,6 +13,7 @@
 #include "sn_io_obj.h"
 #include "sn_timer.h"
 #include "sn_io_evt_notifier.h"
+#include "sn_time_notifier.h"
 
 namespace nm_engine
 {
@@ -25,15 +26,22 @@ public:
 
 public:
 	///
-	virtual int32_t add_io_obj(const io_obj_ptr_t &pioobj);
-	virtual int32_t del_io_obj(const io_obj_ptr_t &pioobj);
+	int32_t init(int32_t i32ioevtnotifier, int32_t i32MStimeout);
+	int32_t destroy();
 	///
-	virtual int32_t add_timer(const timer_ptr_t &ptimer);
-	virtual int32_t del_timer(const timer_ptr_t &ptimer);
+	int32_t add_io_obj(const io_obj_ptr_t &pioobj);
+	int32_t del_io_obj(const io_obj_ptr_t &pioobj);
+	///
+	int32_t add_timer(const timer_ptr_t &ptimer);
+	int32_t del_timer(const timer_ptr_t &ptimer);
+	///
+	virtual void exec();
 
 private:
-	io_evt_notifier_ptr_t m_pioevtnotifier;
+	ioevt_notifier_ptr_t m_pioevtnotifier;
 
+	///
+	time_notifier_t m_ptimenotifier;
 };
 typedef nm_utils::CSmartPtr<CMiscTask> misc_task_ptr_t;
 
