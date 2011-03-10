@@ -5,10 +5,10 @@
  *      Author: rock
  */
 
-#include "sn_io_evt_notify.h"
+#include "sn_io_evt_notifier_impl.h"
 
 
-namespace nm_framework
+namespace nm_engine
 {
 
 IIoEvtNotify::IIoEvtNotify()
@@ -61,7 +61,6 @@ io_evt_notify_ptr_t IIoEvtNotify::create_obj(int32_t i32IoEvtNotifier)
 CSelect::CSelect()
 {
 	// TODO Auto-generated constructor stub
-
 }
 
 CSelect::~CSelect()

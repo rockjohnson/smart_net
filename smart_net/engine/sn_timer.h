@@ -8,6 +8,8 @@
 #ifndef SN_TIMER_H_
 #define SN_TIMER_H_
 
+#include <utils/smart_ptr.h>
+
 #include "../common/sn_common.h"
 
 namespace nm_framework
