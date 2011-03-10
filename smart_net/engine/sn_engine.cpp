@@ -5,7 +5,7 @@
  *      Author: rock
  */
 
-#include "sn_io_engine.h"
+#include "sn_engine.h"
 #include "../common/sn_common.h"
 
 namespace nm_engine
@@ -235,10 +235,10 @@ int32_t CEngine::stop()
 	return CMNERR_SUC;
 }
 
-int32_t CEngine::add_io_obj(const io_obj_ptr_t &pIoObj)
+int32_t CEngine::add_io_obj(const io_obj_ptr_t &pioobj)
 {
 	int32_t i32Ret = CMNERR_SUC;
-	if (pIoObj->get_output_flg() != 0)
+	if (pioobj->get_output_flg() != 0)
 	{
 		int32_t iMinIdx = 0;
 		int32_t iMinCnt = 0;
@@ -251,12 +251,12 @@ int32_t CEngine::add_io_obj(const io_obj_ptr_t &pIoObj)
 			}
 		}
 
-		pIoObj->set_output_task_id(iMinIdx);
-		i32Ret = m_vecoutputtasks[iMinIdx]->add_io_obj(pIoObj);
+		pioobj->set_output_task_id(iMinIdx);
+		i32Ret = m_vecoutputtasks[iMinIdx]->add_io_obj(pioobj);
 		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32Ret, i32Ret);
 	}
 
-	if (pIoObj->get_input_flg() != 0)
+	if (pioobj->get_input_flg() != 0)
 	{
 		int32_t iMinIdx = 0;
 		int32_t iMinCnt = 0;
@@ -269,10 +269,12 @@ int32_t CEngine::add_io_obj(const io_obj_ptr_t &pIoObj)
 			}
 		}
 
-		pIoObj->set_input_task_id(iMinIdx);
-		i32Ret = m_vecinputtasks[iMinIdx]->add_io_obj(pIoObj);
+		pioobj->set_input_task_id(iMinIdx);
+		i32Ret = m_vecinputtasks[iMinIdx]->add_io_obj(pioobj);
 		IF_TRUE_THEN_RETURN_CODE(CMNERR_SUC > i32Ret, i32Ret);
 	}
+
+	if (pioobj->)
 
 	return CMNERR_SUC;
 }

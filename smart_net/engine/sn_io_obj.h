@@ -37,7 +37,7 @@ protected:
 	virtual u_int32_t get_output_evts() = 0;
 	virtual u_int32_t get_misc_evts() = 0;
 };
-typedef nm_utils::CSmartPtr<nm_framework::IIoObj> io_obj_ptr_t;
+typedef nm_utils::CSmartPtr<IIoObj> io_obj_ptr_t;
 
 }
 
