@@ -28,7 +28,8 @@ public:
 
 public:
 	///not thread safe
-	int32_t start(u_int32_t ui32inputthreadcnt, u_int32_t ui32OutputThreadCnt, bool bmiscthread, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
+	int32_t start(u_int32_t ui32inputthreadcnt, u_int32_t ui32OutputThreadCnt,
+			bool bmiscthread, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 	int32_t stop();
 	///
 	int32_t add_io_obj(const io_obj_ptr_t &pioobj);

@@ -80,16 +80,32 @@ CEpoll::CEpoll()
 CEpoll::~CEpoll()
 {
 	// TODO Auto-generated destructor stub
+	//destroy();
 }
 
 #define UNUSED (10000) //Since Linux 2.6.8, the size argument is unused.  (The kernel dynamically sizes the required data structures without needing this initial hint.)
 int32_t CEpoll::init(int32_t i32MsTimeout)
 {
 	SYS_ASSERT(-1 == m_i32epfd);
+	SYS_ASSERT(m_setioobjaddcache.empty());
+	SYS_ASSERT(m_setioobjdelcache.empty());
+	SYS_ASSERT(m_setioobjs.empty());
 
 	m_i32MStimeout = i32MsTimeout;
 
 	return (m_i32epfd = epoll_create(UNUSED)) < 0 ? CMNERR_COMMON_ERR : CMNERR_SUC;
+}
+
+int32_t CEpoll::destroy()
+{
+	SYS_ASSERT(0 <= m_i32epfd);
+
+	nm_utils::spin_scopelk_t lk(m_lkioobjcache);
+	m_setioobjaddcache.clear();
+	m_setioobjdelcache.clear();
+	m_setioobjs.clear(); ///not thread safe
+
+	return CMNERR_COMMON_ERR;
 }
 
 int32_t CEpoll::add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32evts)
@@ -101,11 +117,18 @@ int32_t CEpoll::add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32evts)
 	return epoll_ctl(m_i32epfd, EPOLL_CTL_ADD, pIoObj->get_fd(), &evt);
 }
 
-int32_t CEpoll::del_io_obj(const io_obj_ptr_t &pIoObj)
+int32_t CEpoll::del_io_obj(const io_obj_ptr_t &pioobj)
 {
-	struct epoll_event evt;
+	if (pioobj->get_handle() >= 0)
+	{
+		struct epoll_event evt;
+		epoll_ctl(m_i32epfd, EPOLL_CTL_DEL, pioobj->get_fd(), &evt);
+	}
 
-	return epoll_ctl(m_i32epfd, EPOLL_CTL_DEL, pIoObj->get_fd(), &evt);
+	{
+		nm_utils::spin_scopelk_t lk(m_lkioobjcache);
+
+	}
 }
 
 int32_t CEpoll::exec()
