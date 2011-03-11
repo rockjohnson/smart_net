@@ -45,7 +45,7 @@ public:
 	///
 	virtual int32_t add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32evts);
 	virtual int32_t del_io_obj(const io_obj_ptr_t &pIoObj);
-	virtual int32_t dispatch_evts();
+	virtual int32_t exec();
 };
 
 /**
@@ -64,7 +64,8 @@ public:
 	///
 	int32_t add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32Evts);
 	int32_t del_io_obj(const io_obj_ptr_t &pIoObj);
-	int32_t dispatch_evts();
+	///
+	int32_t exec();
 
 private:
 	///

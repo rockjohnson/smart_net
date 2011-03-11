@@ -108,7 +108,7 @@ int32_t CEpoll::del_io_obj(const io_obj_ptr_t &pIoObj)
 	return epoll_ctl(m_i32epfd, EPOLL_CTL_DEL, pIoObj->get_fd(), &evt);
 }
 
-int32_t CEpoll::dispatch_evts()
+int32_t CEpoll::exec()
 {
 	int32_t i32Ret = epoll_wait(m_i32epfd, m_tmpEvts, MAX_EVENTS, m_i32MStimeout);
 	if (-1 == i32Ret)

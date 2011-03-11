@@ -36,7 +36,7 @@ public:
     int32_t add_timer(const timer_ptr_t &ptimer);
     int32_t del_timer(const timer_ptr_t &ptimer);
     ///
-    void check();
+    void exec();
 private:
 	typedef std::set<timer_ptr_t> timer_set_t;
 	typedef std::pair<timer_set_t::iterator, bool> timer_set_ret_t;

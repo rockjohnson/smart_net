@@ -10,142 +10,200 @@
 namespace nm_engine
 {
 
-CIoTask::CIoTask()
+CInputHandleTask::CInputHandleTask()
 {
 	// TODO Auto-generated constructor stub
 }
 
-CIoTask::~CIoTask()
+CInputHandleTask::~CInputHandleTask()
 {
 	destroy();
 }
 
-int32_t CIoTask::init(int32_t i32IoEvtNotifier, int32_t i32MsTimeout, int32_t i32ID)
+int32_t CInputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout, int32_t i32id)
 {
+	IF_TRUE_THEN_RETURN_CODE(NULL != m_pioevtnotifier, CMNERR_COMMON_ERR);
+
 	///create io event notify mechanism obj.
-	m_pIoEvtNotifier = IIoEvtNotifier::create_obj(i32IoEvtNotifier);
-	if (NULL == m_pIoEvtNotifier)
+	m_pioevtnotifier = IIoEvtNotifier::create_obj(i32ioevtnotifier);
+	if (NULL == m_pioevtnotifier)
 	{
 		return CMNERR_COMMON_ERR;
 	}
 
-	SYS_ASSERT(m_setIoObjAddCache.empty());
-	SYS_ASSERT(m_setIoObjs.empty());
-	SYS_ASSERT(m_setIoObjDelCache.empty());
+//	SYS_ASSERT(m_setIoObjAddCache.empty());
+//	SYS_ASSERT(m_setIoObjs.empty());
+//	SYS_ASSERT(m_setIoObjDelCache.empty());
 
-	m_i32ID = i32ID;
+	m_i32id = i32id;
 
-	return m_pIoEvtNotifier->init(i32MsTimeout);
+	return m_pioevtnotifier->init(i32MStimeout);
 }
 
-int32_t CIoTask::destroy()
+int32_t CInputHandleTask::destroy()
 {
-	if (NULL != m_pIoEvtNotifier)
-	{
-		m_pIoEvtNotifier->destroy();
-	}
+	IF_TRUE_THEN_RETURN_CODE(NULL == m_pioevtnotifier, CMNERR_COMMON_ERR);
 
-	///io obj add cache
-	m_lkIoObjCache.lock();
-	m_setIoObjAddCache.clear();
-	m_lkIoObjCache.unlock();
-	///
-	m_setIoObjs.clear();
-	///...
-	m_splkInvalidIoObjs.lock();
-	m_setIoObjDelCache.clear();
-	m_splkInvalidIoObjs.unlock();
+	m_pioevtnotifier->destroy();
+	m_pioevtnotifier = NULL;
+	m_i32id = -1;
+
+//	///io obj add cache
+//	m_lkIoObjCache.lock();
+//	m_setIoObjAddCache.clear();
+//	m_lkIoObjCache.unlock();
+//	///
+//	m_setIoObjs.clear();
+//	///...
+//	m_splkInvalidIoObjs.lock();
+//	m_setIoObjDelCache.clear();
+//	m_splkInvalidIoObjs.unlock();
 
 	return CMNERR_SUC;
 }
 
-int32_t CIoTask::add_io_obj(const io_obj_ptr_t &pIoObj)
+int32_t CInputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 {
-	spin_scopelk_t lk(m_lkIoObjCache);
+//	spin_scopelk_t lk(m_lkIoObjCache);
+//
+//	///check del cache
+//	io_obj_set_ret_t ret = m_setIoObjDelCache.find(pIoObj);
+//	SYS_ASSERT(!ret.second);
+//
+//	///check io set
+//	ret = m_setIoObjs.find(pIoObj);
+//	SYS_ASSERT(!ret.second);
+//
+//	ret = m_setIoObjAddCache.insert(pIoObj);
 
-	///check del cache
-	io_obj_set_ret_t ret = m_setIoObjDelCache.find(pIoObj);
-	SYS_ASSERT(!ret.second);
-
-	///check io set
-	ret = m_setIoObjs.find(pIoObj);
-	SYS_ASSERT(!ret.second);
-
-	ret = m_setIoObjAddCache.insert(pIoObj);
-
-	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
+//	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
+	return m_pioevtnotifier->add_io_obj(pIoObj, pIoObj->get_input_evts());
 }
 
 /**
  *
  * */
-int32_t CIoTask::del_io_obj(const io_obj_ptr_t &pIoObj)
+int32_t CInputHandleTask::del_io_obj(const io_obj_ptr_t &pioobj)
 {
-	spin_scopelk_t lk(m_lkIoObjCache);
+//	spin_scopelk_t lk(m_lkIoObjCache);
+//
+//	///check add cache
+//	io_obj_set_ret_t ret = m_setIoObjAddCache.find(pIoObj);
+//	SYS_ASSERT(!ret.second);
+//
+//	///check io set
+//	ret = m_setIoObjs.find(pIoObj);
+//	SYS_ASSERT(ret.second);
+//
+//	ret = m_setIoObjDelCache.insert(pIoObj);
+//
+//	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
 
-	///check add cache
-	io_obj_set_ret_t ret = m_setIoObjAddCache.find(pIoObj);
-	SYS_ASSERT(!ret.second);
-
-	///check io set
-	ret = m_setIoObjs.find(pIoObj);
-	SYS_ASSERT(ret.second);
-
-	ret = m_setIoObjDelCache.insert(pIoObj);
-
-	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
+	return m_pioevtnotifier->del_io_obj(pioobj);
 }
 
-void CIoTask::update_io_set()
+//void CInputHandleTask::update_io_set()
+//{
+//	if (m_setIoObjDelCache.empty() && m_setIoObjAddCache.empty())
+//	{
+//		return;
+//	}
+//
+//	{
+//		io_obj_set_ret_t ret;
+//		spin_scopelk_t lk(m_lkIoObjCache);
+//
+//		///delete first
+//		for (io_obj_set_t::iterator iter = m_setIoObjDelCache.begin(); iter
+//				!= m_setIoObjDelCache.end(); iter++)
+//		{
+//			ret = m_setIoObjs.erase(*iter);
+//			SYS_ASSERT(ret.second);
+//		}
+//		m_setIoObjDelCache.clear();
+//
+//		///then, insert.
+//		for (io_obj_set_t::iterator iter = m_setIoObjAddCache.begin(); iter
+//				!= m_setIoObjAddCache.end(); iter++)
+//		{
+//			ret = m_setIoObjs.insert(*iter);
+//			SYS_ASSERT(ret.second);
+//		}
+//		m_setIoObjAddCache.clear();
+//	}
+//}
+
+void CInputHandleTask::exec()
 {
-	if (m_setIoObjDelCache.empty() && m_setIoObjAddCache.empty())
-	{
-		return;
-	}
+	SYS_ASSERT(NULL != m_pioevtnotifier);
 
-	{
-		io_obj_set_ret_t ret;
-		spin_scopelk_t lk(m_lkIoObjCache);
-
-		///delete first
-		for (io_obj_set_t::iterator iter = m_setIoObjDelCache.begin(); iter
-				!= m_setIoObjDelCache.end(); iter++)
-		{
-			ret = m_setIoObjs.erase(*iter);
-			SYS_ASSERT(ret.second);
-		}
-		m_setIoObjDelCache.clear();
-
-		///then, insert.
-		for (io_obj_set_t::iterator iter = m_setIoObjAddCache.begin(); iter
-				!= m_setIoObjAddCache.end(); iter++)
-		{
-			ret = m_setIoObjs.insert(*iter);
-			SYS_ASSERT(ret.second);
-		}
-		m_setIoObjAddCache.clear();
-	}
-}
-
-void CIoTask::exec()
-{
 	///main logic circle
 	while (!is_stopped())
 	{
-		///update internal io set.
-		update_io_set();
-
-		///handle io events.
-		handle_io_evts();
+		///
+		if (m_pioevtnotifier->exec() < CMNERR_SUC)
+		{
+			break;
+		}
 	}
 }
 
-void CIoTask::handle_io_evts()
+
+/**
+ * output handle
+ * */
+COutputHandleTask::COutputHandleTask()
 {
-	if (0 > m_pIoEvtNotifier->dispatch_evts())
+}
+
+COutputHandleTask::~COutputHandleTask()
+{
+	destroy();
+}
+
+int32_t COutputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout, int32_t i32id)
+{
+	IF_TRUE_THEN_RETURN_CODE(NULL != m_pioevtnotifier, CMNERR_COMMON_ERR);
+
+	///create io event notify mechanism obj.
+	m_pioevtnotifier = IIoEvtNotifier::create_obj(i32ioevtnotifier);
+	IF_TRUE_THEN_RETURN_CODE(NULL == m_pioevtnotifier, CMNERR_COMMON_ERR);
+
+	m_i32id = i32id;
+
+	return m_pioevtnotifier->init(i32MStimeout);
+}
+
+int32_t COutputHandleTask::destroy()
+{
+	IF_TRUE_THEN_RETURN_CODE(NULL == m_pioevtnotifier, CMNERR_COMMON_ERR);
+
+	m_pioevtnotifier->destroy();
+	m_pioevtnotifier = NULL;
+	m_i32id = -1;
+}
+
+int32_t COutputHandleTask::add_io_obj(const io_obj_ptr_t &pioobj)
+{
+	SYS_ASSERT(NULL != m_pioevtnotifier);
+
+	return m_pioevtnotifier->add_io_obj(pioobj, pioobj->get_output_evts());
+}
+
+int32_t COutputHandleTask::del_io_obj(const io_obj_ptr_t &pioobj)
+{
+	SYS_ASSERT(NULL != m_pioevtnotifier);
+
+	return m_pioevtnotifier->del_io_obj(pioobj);
+}
+
+void COutputHandleTask::exec()
+{
+	while(!is_stopped())
 	{
-		///do something.
+		m_pioevtnotifier->exec();
 	}
 }
+
 
 }

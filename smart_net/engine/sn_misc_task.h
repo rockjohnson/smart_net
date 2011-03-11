@@ -18,6 +18,9 @@
 namespace nm_engine
 {
 
+/**
+ * not thread safe
+ * */
 class CMiscTask : public nm_thread::IThreadTask
 {
 public:
@@ -38,8 +41,8 @@ public:
 	virtual void exec();
 
 private:
+	///
 	ioevt_notifier_ptr_t m_pioevtnotifier;
-
 	///
 	time_notifier_t m_ptimenotifier;
 };

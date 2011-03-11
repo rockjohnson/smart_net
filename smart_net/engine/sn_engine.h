@@ -42,9 +42,12 @@ private:
 	typedef std::vector<nm_thread::thread_ptr_t> thread_vec_t;
 	thread_vec_t m_vecthreads; ///io threads
 	///
-	typedef std::vector<io_task_ptr_t> io_task_vec_t;
-	io_task_vec_t m_vecinputtasks;
-	io_task_vec_t m_vecoutputtasks;
+	typedef std::vector<input_handle_task_ptr_t> input_task_vec_t;
+	input_task_vec_t m_vecinputtasks;
+	///
+	typedef std::vector<output_handle_task_ptr_t> output_task_vec_t;
+	output_task_vec_t m_vecoutputtasks;
+	///
 	misc_task_ptr_t m_pmisctasks;
 };
 typedef nm_utils::CSmartPtr<CEngine> engine_ptr_t;

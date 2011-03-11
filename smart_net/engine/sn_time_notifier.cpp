@@ -56,7 +56,7 @@ int32_t CTimeNotifier::del_timer(const timer_ptr_t &ptimer)
 	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
 }
 
-void CTimeNotifier::check()
+void CTimeNotifier::exec()
 {
 	///update set
 	if (!m_settimeraddcache.empty() || !m_settimerdelcache.empty())

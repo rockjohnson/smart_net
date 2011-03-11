@@ -20,11 +20,13 @@ CMiscTask::CMiscTask()
 
 CMiscTask::~CMiscTask()
 {
-	// TODO Auto-generated destructor stub
+	destroy();
 }
 
 int32_t CMiscTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout)
 {
+	IF_TRUE_THEN_RETURN_CODE(NULL != m_pioevtnotifier || NULL != m_ptimenotifier, CMNERR_COMMON_ERR);
+
 	CIoEvtNotifierFactory fac;
 	m_pioevtnotifier = fac.create_obj(i32ioevtnotifier);
 	IF_TRUE_THEN_RETURN_CODE(NULL == m_pioevtnotifier, CMNERR_COMMON_ERR);
@@ -41,11 +43,17 @@ int32_t CMiscTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout)
 
 int32_t CMiscTask::destroy()
 {
-	m_pioevtnotifier->destroy();
-	m_pioevtnotifier = NULL;
+	if (NULL != m_pioevtnotifier)
+	{
+		m_pioevtnotifier->destroy();
+		m_pioevtnotifier = NULL;
+	}
 
-	m_ptimenotifier->destroy();
-	m_pioevtnotifier = NULL;
+	if (NULL != m_ptimenotifier)
+	{
+		m_ptimenotifier->destroy();
+		m_pioevtnotifier = NULL;
+	}
 
 	return CMNERR_SUC;
 }
@@ -55,23 +63,40 @@ int32_t CMiscTask::add_io_obj(const io_obj_ptr_t &pioobj)
 	SYS_ASSERT(pioobj->get_misc_evts() != 0);
 	SYS_ASSERT(NULL != m_pioevtnotifier);
 
-	m_pioevtnotifier->add_io_obj(pioobj, pioobj->get_misc_evts());
+	return m_pioevtnotifier->add_io_obj(pioobj, pioobj->get_misc_evts());
 }
 
 int32_t CMiscTask::del_io_obj(const io_obj_ptr_t &pioobj)
 {
+	SYS_ASSERT(pioobj->get_misc_evts() != 0);
+	SYS_ASSERT(NULL != m_pioevtnotifier);
 
+	return m_pioevtnotifier->del_io_obj(pioobj);
+}
+
+int32_t CMiscTask::add_timer(const timer_ptr_t &ptimer)
+{
+	SYS_ASSERT(NULL != m_ptimenotifier);
+
+	return m_ptimenotifier->add_timer(ptimer);
+}
+
+int32_t CMiscTask::del_timer(const timer_ptr_t &ptimer)
+{
+	SYS_ASSERT(NULL != m_ptimenotifier);
+
+	return m_ptimenotifier->del_timer(ptimer);
 }
 
 void CMiscTask::exec()
 {
 	while (!is_stopped())
 	{
-		///update io set
+		///handle events.
+		m_pioevtnotifier->exec();
 
-
-
-
+		///timers.
+		m_ptimenotifier->exec();
 	}
 }
 

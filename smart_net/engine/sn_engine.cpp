@@ -40,21 +40,19 @@ int32_t CEngine::start(u_int32_t ui32inputthreadcnt,
 	IF_TRUE_THEN_RETURN_CODE(EIEN_NONE >= i32ioevtnotifier
 			|| EIEN_ALL <= i32ioevtnotifier, CMNERR_COMMON_ERR);
 
-	//	///create protocol wrapper
-	//	m_vecProtoWrappers[EP_TCP] = SYS_NOTRW_NEW(CTcpWrapper);
-
-	io_task_ptr_t piotask = NULL;
+	input_handle_task_ptr_t pitask = NULL;
 	nm_thread::thread_ptr_t pthread = NULL;
 	int32_t i32ret = CMNERR_SUC;
+	int32_t i32idx = 0;
 	while (ui32inputthreadcnt-- > 0)
 	{
-		piotask = SYS_NOTRW_NEW(CIoTask);
-		if (NULL == piotask)
+		pitask = SYS_NOTRW_NEW(CInputHandleTask);
+		if (NULL == pitask)
 		{
 			i32ret = CMNERR_COMMON_ERR;
 			break;
 		}
-		i32ret = piotask->init(i32ioevtnotifier, i32MStimeout);
+		i32ret = pitask->init(i32ioevtnotifier, i32MStimeout, i32idx++);
 		if (CMNERR_SUC != i32ret)
 		{
 			break;
@@ -74,7 +72,7 @@ int32_t CEngine::start(u_int32_t ui32inputthreadcnt,
 			break;
 		}
 
-		i32ret = pthread->assign_task(piotask);
+		i32ret = pthread->assign_task(pitask);
 		if (CMNERR_SUC != i32ret)
 		{
 			break;
@@ -85,7 +83,7 @@ int32_t CEngine::start(u_int32_t ui32inputthreadcnt,
 		{
 			break;
 		}
-		m_vecinputtasks.push_back(piotask); ///not judge the return?
+		m_vecinputtasks.push_back(pitask); ///not judge the return?
 		m_vecthreads.push_back(pthread);
 	}
 
@@ -97,16 +95,17 @@ int32_t CEngine::start(u_int32_t ui32inputthreadcnt,
 	}
 
 	pthread = NULL;
-	piotask = NULL;
+	i32idx = 0;
+	output_handle_task_ptr_t potask = NULL;
 	while (ui32outputthreadcnt-- > 0)
 	{
-		piotask = SYS_NOTRW_NEW(CIoTask);
-		if (NULL == piotask)
+		potask = SYS_NOTRW_NEW(COutputHandleTask);
+		if (NULL == potask)
 		{
 			i32ret = CMNERR_COMMON_ERR;
 			break;
 		}
-		i32ret = piotask->init(i32ioevtnotifier, i32MStimeout);
+		i32ret = potask->init(i32ioevtnotifier, i32MStimeout, i32idx++);
 		if (CMNERR_SUC != i32ret)
 		{
 			break;
@@ -126,7 +125,7 @@ int32_t CEngine::start(u_int32_t ui32inputthreadcnt,
 			break;
 		}
 
-		i32ret = pthread->assign_task(piotask);
+		i32ret = pthread->assign_task(potask);
 		if (CMNERR_SUC != i32ret)
 		{
 			break;
@@ -137,7 +136,7 @@ int32_t CEngine::start(u_int32_t ui32inputthreadcnt,
 		{
 			break;
 		}
-		m_vecoutputtasks.push_back(piotask); ///not judge the return?
+		m_vecoutputtasks.push_back(potask); ///not judge the return?
 		m_vecthreads.push_back(pthread);
 	}
 
@@ -220,11 +219,11 @@ int32_t CEngine::stop()
 	{
 		m_pmisctasks->destroy();
 	}
-	for (io_task_vec_t::iterator iter = m_vecinputtasks.begin(); iter != m_vecinputtasks.end(); iter++)
+	for (input_task_vec_t::iterator iter = m_vecinputtasks.begin(); iter != m_vecinputtasks.end(); iter++)
 	{
 		(*iter)->destroy();
 	}
-	for (io_task_vec_t::iterator iter = m_vecoutputtasks.begin(); iter != m_vecoutputtasks.end(); iter++)
+	for (input_task_vec_t::iterator iter = m_vecoutputtasks.begin(); iter != m_vecoutputtasks.end(); iter++)
 	{
 		(*iter)->destroy();
 	}
