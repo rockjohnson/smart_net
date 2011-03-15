@@ -38,6 +38,8 @@ public:
 	int32_t add_timer(const timer_ptr_t &ptimer);
 	int32_t del_timer(const timer_ptr_t &ptimer);
 	///
+//	int32_t add_evt(const );
+//	int32_t del_evt();
 	virtual void exec();
 
 private:

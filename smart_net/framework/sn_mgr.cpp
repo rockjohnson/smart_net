@@ -13,7 +13,7 @@ namespace nm_framework
 using namespace nm_protocol;
 
 CSmartNetMgr::CSmartNetMgr()
-:m_vecProtoWrappers(EP_ALL)
+:m_vec_proto_wrappers(EP_ALL)
 {
 	// TODO Auto-generated constructor stub
 }
@@ -51,20 +51,20 @@ int32_t CSmartNetMgr::stop()
 /**
  * thread safe
  * */
-int32_t CSmartNetMgr::add_endpoint(const endpoint_ptr_t &pEP)
+int32_t CSmartNetMgr::add_endpoint(const endpoint_ptr_t &pendpoint)
 {
 	///
-	IF_TRUE_THEN_RETURN_CODE(NULL == pEP, CMNERR_COMMON_ERR);
+	IF_TRUE_THEN_RETURN_CODE(NULL == pendpoint, CMNERR_COMMON_ERR);
 	///
-	return m_vecProtoWrappers[pEP->get_proto()]->add_endpoint(pEP);
+	return m_vec_proto_wrappers[pendpoint->get_proto_id()]->add_endpoint(pendpoint);
 }
 
-int32_t CSmartNetMgr::del_endpoint(const endpoint_ptr_t &pEP)
+int32_t CSmartNetMgr::del_endpoint(const endpoint_ptr_t &pendpoint)
 {
 	///
-	IF_TRUE_THEN_RETURN_CODE(NULL == pEP, CMNERR_COMMON_ERR);
+	IF_TRUE_THEN_RETURN_CODE(NULL == pendpoint, CMNERR_COMMON_ERR);
 	///
-	return m_vecProtoWrappers[pEP->get_proto()]->del_endpoint(pEP);
+	return m_vec_proto_wrappers[pendpoint->get_proto_id()]->del_endpoint(pendpoint);
 }
 
 }

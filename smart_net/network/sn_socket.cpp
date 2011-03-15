@@ -79,7 +79,7 @@ int32_t CTcpSock::set_nonblock(bool bFlag)
 	return set_block_flag(m_i32fd, !bFlag);
 }
 
-int32_t CTcpSock::bind(INetAddr &localAddr)
+int32_t CTcpSock::bind(CIpv4Addr &localAddr)
 {
 	SYS_ASSERT(INVALID_SOCKET < m_i32fd);
 
@@ -114,7 +114,7 @@ CTcpSock::tcp_sock_ptr_t CTcpSock::accept()
 	return pTcpSock;
 }
 
-int32_t CTcpSock::connect(INetAddr &remoteAddr)
+int32_t CTcpSock::connect(CIpv4Addr &remoteAddr)
 {
 	struct sockaddr_in destAddr;
 	destAddr.sin_family = AF_INET;

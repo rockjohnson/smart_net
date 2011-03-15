@@ -107,4 +107,6 @@
   TypeName(const TypeName&);               \
   void operator=(const TypeName&)
 
+#define __USED_IN_MULTI_THREAD__ (1)
+
 #endif /* DEFINES_H_ */

@@ -10,6 +10,7 @@
 
 #include <thread/thread_ex.h>
 #include <utils/smart_lock.h>
+#include <utils/event_engine.h>
 
 #include "sn_io_evt_notifier.h"
 #include "sn_timer.h"
@@ -59,12 +60,17 @@ public:
 	///
 	void exec();
 	///
+	void add_evt(const nm_utils::evt_ptr_t &pevt);
+
+protected:
+	///
 	int32_t add_io_obj(const io_obj_ptr_t &pioobj);
 	int32_t del_io_obj(const io_obj_ptr_t &pioobj);
 
 private:
 	ioevt_notifier_ptr_t m_pioevtnotifier; ///the io event notify mechanism obj;
 	int32_t m_i32id;
+	nm_utils::CEventHandleEngine m_evtengine; ///serialized the handles.
 };
 typedef nm_utils::CSmartPtr<nm_engine::COutputHandleTask> output_handle_task_ptr_t;
 

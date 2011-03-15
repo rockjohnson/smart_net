@@ -8,7 +8,7 @@
 #ifndef SOCKET_H_
 #define SOCKET_H_
 
-#include "../framework/sn_io_obj.h"
+#include "../common/sn_common.h"
 #include "sn_net_addr.h"
 
 namespace nm_network
@@ -30,7 +30,7 @@ public:
 	virtual int32_t bind(const CIpv4Addr &bindaddr) = 0;
 	virtual int32_t listen(int32_t i32Backlog) = 0;
 	virtual int32_t connect(const CIpv4Addr &remoteAddr) = 0;
-	virtual int32_t get_fd() = 0;
+	virtual sock_handle_t get_fd() = 0;
 	virtual bool is_opened() = 0;
 	virtual int32_t set_nonblock(bool bFlag) = 0;
 };
@@ -40,7 +40,7 @@ typedef nm_utils::CSmartPtr<nm_network::ISocket> sock_ptr_t;
  * tcp socket
  *
  * */
-class CTcpSock: public nm_framework::ISocket
+class CTcpSock: public ISocket
 {
 
 public:
@@ -50,11 +50,11 @@ public:
 public:
 	int32_t open(int32_t i32fd = INVALID_SOCKET);
 	int32_t close();
-	int32_t bind(INetAddr &localAddr);
+	int32_t bind(const CIpv4Addr &localAddr);
 	int32_t listen(int32_t i32Backlog);
-	tcp_sock_ptr_t accept();
-	int32_t connect(INetAddr &remoteAddr);
-	int32_t get_fd();
+	sock_ptr_t accept();
+	int32_t connect(const CIpv4Addr &remoteAddr);
+	sock_handle_t get_fd();
 	bool is_opened();
 	int32_t set_nonblock(bool bFlag);
 

@@ -32,8 +32,8 @@ public:
 	virtual ~IProtoWrapper(){}
 
 public:
-	virtual int32_t add_endpoint(const endpoint_ptr_t &pEP) = 0;
-	virtual int32_t del_endpoint(const endpoint_ptr_t &pEP) = 0;
+	virtual int32_t add_endpoint(const endpoint_ptr_t &pendpoint) = 0;
+	virtual int32_t del_endpoint(const endpoint_ptr_t &pendpoint) = 0;
 };
 typedef nm_utils::CSmartPtr<nm_framework::IProtoWrapper> proto_wrapper_ptr_t;
 

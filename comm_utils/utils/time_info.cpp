@@ -7,10 +7,10 @@
 
 #include "time_info.h"
 
+#include <stdio.h>
 #if __PLATFORM__ == __PLATFORM_LINUX__
-#define _ISOC99_SOURCE
-#define _POSIX_SOURCE
-
+//#define _ISOC99_SOURCE
+//#define _POSIX_SOURCE
 #include <sys/time.h>
 #elif __PLATFORM__ == __PLATFORM_WINDOWS__
 #include <Windows.h>
@@ -51,7 +51,7 @@ const char_t* CTimeInfo::get_day_time(char_t *pszBuf)
 	struct tm t;
 #if defined __MICRO_SECOND__
 	localtime_r(&(tv.tv_sec), &t);
-	sprintf(pszBuf, 36, L"%i-%2.2i-%2.2i_%2.2i:%2.2i:%2.2i.%6.6ld", t.tm_year
+	snprintf(pszBuf, 36, "%i-%2.2i-%2.2i_%2.2i:%2.2i:%2.2i.%6.6ld", t.tm_year
 			+ 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec,
 			tv.tv_usec);
 #else

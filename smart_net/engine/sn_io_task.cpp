@@ -141,6 +141,8 @@ void CInputHandleTask::exec()
 	while (!is_stopped())
 	{
 		///
+		m_evtengine->exec();
+		///
 		if (m_pioevtnotifier->exec() < CMNERR_SUC)
 		{
 			break;
@@ -201,6 +203,9 @@ void COutputHandleTask::exec()
 {
 	while(!is_stopped())
 	{
+		///
+		m_evtengine->exec();
+		///
 		m_pioevtnotifier->exec();
 	}
 }

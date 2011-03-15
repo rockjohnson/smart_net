@@ -13,6 +13,7 @@
 #include "../common/sn_common.h"
 #include "sn_endpoint.h"
 #include "sn_proto_wrapper.h"
+#include "../engine/sn_engine.h"
 
 
 namespace nm_framework
@@ -40,10 +41,10 @@ public:
 private:
 	DISALLOW_COPY_AND_ASSIGN(CSmartNetMgr);
 	///io engines
-	 m_pIoEngine;
+	nm_engine::engine_ptr_t m_pengine;
 	///network protocol wrappers
 	typedef std::vector<proto_wrapper_ptr_t> proto_wrapper_vec_t;
-	proto_wrapper_vec_t m_vecProtoWrappers;
+	proto_wrapper_vec_t m_vec_proto_wrappers;
 };
 typedef nm_utils::CSmartPtr<nm_framework::CSmartNetMgr> smart_net_mgr_ptr_t;
 

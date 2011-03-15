@@ -27,7 +27,9 @@ public:
 
 public:
 	///
-	virtual int32_t open(const CIpv4Addr &listenaddr, int32_t i32backlog, const nm_framework::io_engine_ptr_t &pioengine);
+	virtual int32_t open(const CIpv4Addr &listenaddr,
+			int32_t i32backlog,
+			const nm_framework::io_engine_ptr_t &pioengine);
 	virtual int32_t close();
 	///
 	virtual int32_t add_endpoint(const endpoint_ptr_t &pEP);
@@ -44,7 +46,7 @@ private:
 	int32_t m_i32backlog;
 	nm_framework::io_engine_ptr_t m_pioengine;
 	///
-	typedef std::set<tcp_ib_endpoint_ptr_t> tcp_endpoint_set_t;
+	typedef std::set<sn_engine::endpoint_ptr_t> tcp_endpoint_set_t;
 	tcp_endpoint_set_t m_setTcpEndpoints;
 	CSpinLock m_lktcpendpoints;
 };

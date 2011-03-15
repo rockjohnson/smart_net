@@ -30,9 +30,8 @@ CEngine::~CEngine()
 /**
  *
  * */
-int32_t CEngine::start(u_int32_t ui32inputthreadcnt,
-		u_int32_t ui32outputthreadcnt, bool bmiscthread, int32_t i32ioevtnotifier,
-		int32_t i32MStimeout)
+int32_t CEngine::start(u_int32_t ui32inputthreadcnt, u_int32_t ui32outputthreadcnt,
+		bool bmiscthread, int32_t i32ioevtnotifier, int32_t i32MStimeout)
 {
 	IF_TRUE_THEN_RETURN_CODE(0 == ui32inputthreadcnt
 			|| 0 == ui32outputthreadcnt, CMNERR_COMMON_ERR);
@@ -353,7 +352,5 @@ int32_t CEngine::del_timer(const timer_ptr_t &ptimer)
 
 	return m_pmisctasks->del_timer(ptimer);
 }
-
-
 
 }

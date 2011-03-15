@@ -28,7 +28,7 @@
 	{
 		if (m_evt_handler[iStartState].find(iEvt) != m_evt_handler[iStartState].end())
 		{
-			ASSERT(false);
+			SYS_ASSERT(false);
 			return -1;
 		}
 
@@ -41,7 +41,7 @@
 	int CStateMachine<T>::post_event(int iEvt, pvoid_t pV)
 	{
 #ifdef __USED_IN_MULTI_THREAD__
-		scope_lock_t lk(m_lock);//ǧ��Ҫ���Ű�����������ƣ���Ϊ����Ļ�����ǰ״̬���Ƿ��̻߳���ģ�������߼����⣻
+		mtx_scopelk_t lk(m_lock);//ǧ��Ҫ���Ű�����������ƣ���Ϊ����Ļ�����ǰ״̬���Ƿ��̻߳���ģ�������߼����⣻
 #endif
 		typename evt_h_t::iterator iter2;
 		typename event_handler_t::iterator iter1;

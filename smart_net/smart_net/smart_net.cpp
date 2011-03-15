@@ -5,6 +5,7 @@
  *      Author: rock
  */
 
+#if 0
 #include "smart_net.h"
 
 namespace nm_smartnet
@@ -44,3 +45,5 @@ smart_net_mgr_ptr_t& CSmartNet::get_mgr()
 }
 
 }
+
+#endif

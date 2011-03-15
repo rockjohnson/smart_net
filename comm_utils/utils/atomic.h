@@ -108,26 +108,26 @@ namespace nm_utils
 
 	///////////////////////////////////////////
 	template <typename T>
-	class CAtomicCnt
+	class CAtomicCounter
 	{
 	public:
-		CAtomicCnt(T cnt = 0)
+		CAtomicCounter(T cnt = 0)
 		:m_cnt(cnt)
 		{
 		}
 
-		CAtomicCnt(const CAtomicCnt &other)
+		CAtomicCounter(const CAtomicCounter &other)
 		:m_cnt(other.m_cnt)
 		{
 		}
 
-		CAtomicCnt& operator=(const CAtomicCnt &other)
+		CAtomicCounter& operator=(const CAtomicCounter &other)
 		{
 			m_cnt = other.m_cnt;
 			return *this;
 		}
 
-		bool operator==(const CAtomicCnt &other)
+		bool operator==(const CAtomicCounter &other)
 		{
 			return m_cnt == other.m_cnt;
 		}

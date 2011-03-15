@@ -10,9 +10,12 @@ RM := rm -rf
 -include sources.mk
 -include subdir.mk
 -include smart_net/subdir.mk
+-include protocols/subdir.mk
 -include network/subdir.mk
 -include framework/subdir.mk
+-include engine/subdir.mk
 -include common/subdir.mk
+-include backup/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)

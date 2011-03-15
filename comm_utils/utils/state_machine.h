@@ -11,7 +11,7 @@
 #include "../common/common.h"
 
 #ifdef __USED_IN_MULTI_THREAD__
-#include "../utils/auto_lock.h"
+#include "../utils/smart_lock.h"
 #endif
 
 namespace nm_utils
