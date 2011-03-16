@@ -10,6 +10,12 @@
 namespace nm_utils
 {
 
+IEvent::IEvent()
+{}
+
+IEvent::~IEvent()
+{}
+
 CEventHandleEngine::CEventHandleEngine()
 {
 }
@@ -18,7 +24,7 @@ CEventHandleEngine::~CEventHandleEngine()
 {
 }
 
-void CEventHandleEngine::add_evt(const evt_ptr_t &pevt)
+void CEventHandleEngine::post_event(const event_ptr_t &pevt)
 {
 	spin_scopelk_t lk(m_lkcache);
 	m_dquecache.push_back(pevt);

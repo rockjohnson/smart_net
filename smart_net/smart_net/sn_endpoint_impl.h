@@ -79,7 +79,6 @@ protected:
 
 private:
 	nm_utils::CStateMachine<CTcpInboundEndpoint> m_sm;
-
 	nm_utils::CMutexLock m_lkendpoint;
 	volatile bool m_bopenned;
 	nm_utils::CAtomicCounter<int32_t> m_enginerefcnt;

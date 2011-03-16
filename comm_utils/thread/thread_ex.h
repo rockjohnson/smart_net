@@ -5,8 +5,8 @@
  *      Author: rock
  */
 
-#ifndef _THREAD_EX_H___
-#define _THREAD_EX_H__
+#ifndef __THREAD_EX_H__
+#define __THREAD_EX_H__
 
 #include "../common/common.h"
 #include "../utils/smart_ptr.h"

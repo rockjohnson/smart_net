@@ -73,7 +73,7 @@ private:
 	///
 #define MAX_EVENTS (10000)
 	struct epoll_event m_tmpEvts[MAX_EVENTS];
-	//
+	///
 	int32_t m_i32MStimeout;
 	///
 	std::set<io_obj_ptr_t> m_setioobjs;

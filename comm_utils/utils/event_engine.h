@@ -11,6 +11,7 @@
 #include <deque>
 
 #include "../common/common.h"
+#include "smart_ptr.h"
 #include "smart_lock.h"
 
 namespace nm_utils
@@ -22,13 +23,13 @@ namespace nm_utils
 class IEvent : public nm_base::ICommonBase
 {
 public:
-	IEvent(){}
-	virtual ~IEvent(){}
+	IEvent();
+	virtual ~IEvent();
 
 public:
 	virtual void handle() = 0;
 };
-typedef nm_utils::CSmartPtr<nm_utils::IEvent> evt_ptr_t;
+typedef nm_utils::CSmartPtr<nm_utils::IEvent> event_ptr_t;
 
 /**
  *
@@ -40,13 +41,14 @@ public:
 	~CEventHandleEngine();
 
 public:
+	///
 	void exec();
-
-	int32_t add_evt(const evt_ptr_t &pevt);
+	///
+	void post_event(const event_ptr_t &pevt);
 
 private:
 	CSpinLock m_lkcache;
-	typedef std::deque<evt_ptr_t> evt_deque_t;
+	typedef std::deque<event_ptr_t> evt_deque_t;
 	evt_deque_t m_dquecache;
 	evt_deque_t m_dqueevts;
 };

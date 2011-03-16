@@ -29,7 +29,7 @@ public:
 	///
 	virtual int32_t open(const CIpv4Addr &listenaddr,
 			int32_t i32backlog,
-			const nm_framework::io_engine_ptr_t &pioengine);
+			const nm_engine::engine_ptr_t &pioengine);
 	virtual int32_t close();
 	///
 	virtual int32_t add_endpoint(const endpoint_ptr_t &pEP);

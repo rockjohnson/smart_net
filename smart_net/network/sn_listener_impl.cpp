@@ -14,7 +14,7 @@ namespace nm_network
  * CTcpListener
  * */
 
-int32_t CTcpListener::open(const CIpv4Addr &listenaddr, int32_t i32backlog, const nm_framework::io_engine_ptr_t &pioengine)
+int32_t CTcpListener::open(const CIpv4Addr &listenaddr, int32_t i32backlog, const nm_engine::io_engine_ptr_t &pioengine)
 {
 	IF_TRUE_THEN_RETURN_CODE(NULL != m_pioengine, CMNERR_COMMON_ERR);
 

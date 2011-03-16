@@ -8,6 +8,8 @@
 #ifndef __SN_IO_ENGINE_H__
 #define __SN_IO_ENGINE_H__
 
+#include <vector>
+
 #include "sn_io_obj.h"
 #include "sn_timer.h"
 #include "sn_io_task.h"

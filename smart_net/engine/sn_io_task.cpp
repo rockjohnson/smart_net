@@ -11,8 +11,8 @@ namespace nm_engine
 {
 
 CInputHandleTask::CInputHandleTask()
+:m_i32id(-1)
 {
-	// TODO Auto-generated constructor stub
 }
 
 CInputHandleTask::~CInputHandleTask()
@@ -60,6 +60,11 @@ int32_t CInputHandleTask::destroy()
 //	m_splkInvalidIoObjs.unlock();
 
 	return CMNERR_SUC;
+}
+
+void CInputHandleTask::post_event(const nm_utils::event_ptr_t &pevt)
+{
+	m_evtengine.post_event(pevt);
 }
 
 int32_t CInputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
@@ -161,6 +166,11 @@ COutputHandleTask::COutputHandleTask()
 COutputHandleTask::~COutputHandleTask()
 {
 	destroy();
+}
+
+void COutputHandleTask::pos_evt(const nm_utils::event_ptr_t &pevt)
+{
+	m_evtengine.post_event(pevt);
 }
 
 int32_t COutputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout, int32_t i32id)

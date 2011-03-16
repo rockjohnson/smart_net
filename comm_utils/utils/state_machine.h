@@ -38,19 +38,20 @@ namespace nm_utils
 
 	public:
 
-		void set_cur_state(int iState){m_iCurState = iState;}
+		void set_cur_state(int iState){m_i32curstate = iState;}
 		int reg_evt_state(int iStartState, int iEvt, int iEndState, PFUN_TRANSFORM_STATE fun);
 		int post_event(int iEvt, pvoid_t pV);
 		int get_cur_state()
 		{
-			return m_iCurState;
+			return m_i32curstate;
 		}
 
 	private:
 #ifdef __USED_IN_MULTI_THREAD__
-		CMutexLock m_lock; //may be not needed, if all the state relative function is handled in single thread.
+		CMutexLock m_lkchangestate; //may be not needed, if all the state relative function is handled in single thread.
+		//CSpinLock m_lkcurrentstate;
 #endif
-		int m_iCurState; //current state;
+		int m_i32curstate; //current state;
 		T *m_t;
 		event_handler_t m_evt_handler;
 	};
