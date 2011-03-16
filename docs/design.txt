@@ -1,1 +1,26 @@
-:
+一、设计思路：
+1，用户接口
+    CSmartNet和各种网络协议的Endpoint基类；
+    用户可以启停CSmartNet代表的smart net引擎；
+    对Endpoint实例做以下几件事情：
+    （1），加入到CSmartNet引擎中，退出该引擎，关闭已经建立的底层的网络连接；
+               CSmartNet sn;
+               sn.start();
+               endpoint_ptr_t pep = new myendpoint;
+               sn.add_endpoint(pep);
+
+               sleep(100000);
+               
+               sn.del_endpoint(pep);
+               pep = NULL;
+               sn.stop();
+
+    （2），endpoint接口必须实现以下几个接口：
+               on_opened(); ///网络连接建立成功，可以开始通讯了；
+               close（）；///关闭网络连接，停止通讯；
+               send_data();///调用此接口通过这个endpoint发送数据；
+               on_recv_data(); ///收到数据的回调；
+               on_error(); 
+               
+2，建议由些地方采用序列化操作方式实现，避免极限情况处理。
+3，有些状态能用endpoint是实现控制的，尽量用它来实现吧。
