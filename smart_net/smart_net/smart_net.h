@@ -10,7 +10,7 @@
 #ifndef __SMART_NET_H__
 #define __SMART_NET_H__
 
-#include "../network/sn_endpoint_impl.h"
+#include "../framework/sn_endpoint.h"
 
 namespace nm_smartnet
 {
@@ -26,7 +26,10 @@ public:
 	int32_t start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 	int32_t stop();
 	///
-	smart_net_mgr_ptr_t& get_mgr();
+	int32_t add_endpoint(nm_framework::endpoint_ptr_t&);
+	int32_t del_endpoint(nm_framework::endpoint_ptr_t&);
+
+	//smart_net_mgr_ptr_t& get_mgr();
 private:
 	smart_net_mgr_ptr_t m_pSmartNetMgr;
 };
