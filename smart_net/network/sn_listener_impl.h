@@ -8,10 +8,14 @@
 #ifndef SN_LISTENER_H_
 #define SN_LISTENER_H_
 
+#include <map>
+
 #include <utils/smart_lock.h>
 
 #include "sn_socket.h"
 #include "../framework/sn_listener.h"
+#include "../engine/sn_engine.h"
+#include "../framework/sn_endpoint.h"
 
 namespace nm_network
 {
@@ -44,11 +48,22 @@ private:
 	nm_network::CTcpSock m_tcpsock;
 	nm_network::CIpv4Addr m_listenaddr;
 	int32_t m_i32backlog;
-	nm_framework::io_engine_ptr_t m_pioengine;
+	nm_engine::engine_ptr_t m_pengine;
 	///
-	typedef std::set<sn_engine::endpoint_ptr_t> tcp_endpoint_set_t;
-	tcp_endpoint_set_t m_setTcpEndpoints;
+	template<typename _Tp>
+	struct SLessForAddr: public std::binary_function<_Tp, _Tp, bool>
+	{
+		bool operator()(const _Tp& __x, const _Tp& __y) const
+		{
+			return __x.get_ip_hbo() < __y.get_ip_hbo() ? true
+					: __x.get_port_hbo() < __y.get_port_hbo();
+		}
+	};
+	typedef std::map<nm_network::CIpv4Addr, sn_framework::endpoint_ptr_t, SLessForAddr<nm_network::CIpv4Addr> > tcp_endpoint_map_t;
+	tcp_endpoint_map_t m_maptcpendpoint;
+	typedef std::set<nm_framework::endpoint_ptr_t> tcp_endpoint_set_t;
 	CSpinLock m_lktcpendpoints;
+
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CTcpListener> tcp_listener_ptr_t;
 

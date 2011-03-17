@@ -11,6 +11,7 @@
 #define __SMART_NET_H__
 
 #include "../framework/sn_endpoint.h"
+#include "../framework/sn_mgr.h"
 
 namespace nm_smartnet
 {
@@ -23,15 +24,16 @@ public:
 
 public:
 	///
-	int32_t start(u_int32_t ui32IoThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
+	int32_t start(u_int32_t ui32inputthreadcnt,
+			u_int32_t ui32outputthreadcnt,
+			int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 	int32_t stop();
 	///
-	int32_t add_endpoint(nm_framework::endpoint_ptr_t&);
-	int32_t del_endpoint(nm_framework::endpoint_ptr_t&);
+	int32_t add_endpoint(nm_framework::endpoint_ptr_t &pep);
+	int32_t del_endpoint(nm_framework::endpoint_ptr_t &pep);
 
-	//smart_net_mgr_ptr_t& get_mgr();
 private:
-	smart_net_mgr_ptr_t m_pSmartNetMgr;
+	nm_framework::smart_net_mgr_ptr_t m_pSmartNetMgr;
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CSmartNet> smart_net_ptr_t;
 

@@ -8,6 +8,7 @@
 #include "tcp_wrapper_impl.h"
 
 #include "../smart_net/sn_endpoint_impl.h"
+#include "../network/sn_listener_impl.h"
 
 namespace nm_protocol
 {
