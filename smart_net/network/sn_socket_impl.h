@@ -5,22 +5,22 @@
  *      Author: rock
  */
 
-#ifndef SOCKET_H_
-#define SOCKET_H_
+#ifndef __SN_SOCKET_IMPL_H__
+#define __SN_SOCKET_IMPL_H__
 
 #include "../common/sn_common.h"
 #include "../framework/sn_socket.h"
-#include "sn_net_addr.h"
 
 namespace nm_network
 {
 
-
-
+class CIpv4Addr;
 /**
  * tcp socket
  *
  * */
+class CTcpSock;
+typedef nm_utils::CSmartPtr<nm_network::CTcpSock> tcp_sock_ptr_t;
 class CTcpSock: public nm_framework::ISocket
 {
 
@@ -29,21 +29,23 @@ public:
 	virtual ~CTcpSock();
 
 public:
-	virtual int32_t open(int32_t i32fd = INVALID_SOCKET){}
-	virtual int32_t close(){}
-	virtual int32_t bind(const CIpv4Addr &bindaddr){}
-	virtual int32_t listen(int32_t i32Backlog){}
-	virtual int32_t connect(const CIpv4Addr &remoteAddr){}
-	virtual sock_handle_t get_fd(){}
-	virtual bool is_opened(){}
-	virtual int32_t set_nonblock(bool bFlag){}
-	virtual CIpv4Addr& get_peer_addr(){}
-	virtual CIpv4Addr& get_local_addr(){}
+	virtual int32_t open(sock_handle_t sockhandle);
+	virtual int32_t close();
+	virtual int32_t bind(const CIpv4Addr &bindaddr);
+	virtual int32_t listen(int32_t i32Backlog);
+	virtual tcp_sock_ptr_t accept();
+	virtual int32_t connect(const CIpv4Addr &remoteAddr);
+	virtual sock_handle_t get_fd();
+	virtual bool is_opened();
+	virtual int32_t set_nonblock(bool bFlag);
+	virtual CIpv4Addr& get_peer_addr();
+	virtual CIpv4Addr& get_local_addr();
 
 private:
-	int32_t m_i32fd;
+	CIpv4Addr m_localaddr;
+	CIpv4Addr m_peeraddr;
+	sock_handle_t m_sockhandle;
 };
-typedef nm_utils::CSmartPtr<nm_network::CTcpSock> tcp_sock_ptr_t;
 
 
 ///**

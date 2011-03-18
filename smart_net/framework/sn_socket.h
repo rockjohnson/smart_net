@@ -9,11 +9,11 @@
 #define __SN_SOCKET_H__
 
 #include "../common/sn_common.h"
-#include "../network/sn_net_addr.h"
 
 namespace nm_framework
 {
 
+class nm_network::CIpv4Addr;
 /**
  * base socket class
  * */
@@ -33,7 +33,7 @@ public:
 	};
 
 public:
-	virtual int32_t open(int32_t i32fd = INVALID_SOCKET) = 0;
+	virtual int32_t open(sock_handle_t sockhandle) = 0;
 	virtual int32_t close() = 0;
 	virtual int32_t bind(const nm_network::CIpv4Addr &bindaddr) = 0;
 	virtual int32_t listen(int32_t i32Backlog) = 0;
