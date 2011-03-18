@@ -64,7 +64,8 @@ public:
 	///send data, async.
 	virtual int32_t send_data(nm_memory::mem_ptr_t &pdata);
 			int32_t get_type();
-	nm_network::CIpv4Addr& get_listen_addr();
+	nm_network::ipv4_addr_ptr_t& get_peer_addr() const;
+	nm_network::ipv4_addr_ptr_t& get_local_addr() const;
 
 protected:
 	virtual void handle_input_evt(); ///handle input event.
@@ -85,8 +86,8 @@ private:
 
 	nm_framework::smart_net_mgr_ptr_t m_psmartnetmgr;
 	nm_network::tcp_sock_ptr_t m_psock;
-	nm_network::CIpv4Addr m_listenaddr;
-	nm_network::CIpv4Addr m_peeraddr;
+	nm_network::ipv4_addr_ptr_t m_plistenaddr;
+	nm_network::ipv4_addr_ptr_t m_ppeeraddr;
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CTcpInboundEndpoint> tcp_ib_endpoint_ptr_t;
 

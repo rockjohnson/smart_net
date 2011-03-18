@@ -9,6 +9,7 @@
 #define __SN_MISC_TASK_H__
 
 #include <thread/thread_ex.h>
+#include <utils/event_engine.h>
 
 #include "sn_io_obj.h"
 #include "sn_timer.h"
@@ -38,8 +39,8 @@ public:
 	int32_t add_timer(const timer_ptr_t &ptimer);
 	int32_t del_timer(const timer_ptr_t &ptimer);
 	///
-//	int32_t add_evt(const );
-//	int32_t del_evt();
+	void post_evt(nm_utils::event_ptr_t &pevt);
+	///
 	virtual void exec();
 
 private:
@@ -47,6 +48,8 @@ private:
 	ioevt_notifier_ptr_t m_pioevtnotifier;
 	///
 	time_notifier_t m_ptimenotifier;
+	///
+	nm_utils::CEventHandleEngine m_evtengine;
 };
 typedef nm_utils::CSmartPtr<CMiscTask> misc_task_ptr_t;
 

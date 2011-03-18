@@ -28,13 +28,13 @@ public:
 	virtual ~CTcpSock();
 
 public:
-	virtual int32_t open(sock_handle_t sockhandle);
+	virtual int32_t open(sock_handle_t sockhandle = INVALID_SOCKET);
 	virtual int32_t close();
 	virtual int32_t bind(const CIpv4Addr &bindaddr);
 	virtual int32_t listen(int32_t i32Backlog);
 	virtual tcp_sock_ptr_t accept();
 	virtual int32_t connect(const CIpv4Addr &remoteAddr);
-	virtual sock_handle_t get_fd();
+	virtual sock_handle_t get_handle();
 	virtual bool is_opened();
 	virtual int32_t set_nonblock(bool bFlag);
 	virtual CIpv4Addr& get_peer_addr();

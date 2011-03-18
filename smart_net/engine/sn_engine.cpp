@@ -33,6 +33,8 @@ CEngine::~CEngine()
 int32_t CEngine::start(u_int32_t ui32inputthreadcnt, u_int32_t ui32outputthreadcnt,
 		bool bmiscthread, int32_t i32ioevtnotifier, int32_t i32MStimeout)
 {
+	using namespace nm_thread;
+
 	IF_TRUE_THEN_RETURN_CODE(0 == ui32inputthreadcnt
 			|| 0 == ui32outputthreadcnt, CMNERR_COMMON_ERR);
 
@@ -222,7 +224,7 @@ int32_t CEngine::stop()
 	{
 		(*iter)->destroy();
 	}
-	for (input_task_vec_t::iterator iter = m_vecoutputtasks.begin(); iter != m_vecoutputtasks.end(); iter++)
+	for (output_task_vec_t::iterator iter = m_vecoutputtasks.begin(); iter != m_vecoutputtasks.end(); iter++)
 	{
 		(*iter)->destroy();
 	}
@@ -258,10 +260,10 @@ int32_t CEngine::add_io_obj(const io_obj_ptr_t &pioobj)
 		int32_t iMinCnt = 0;
 		for (int32_t i = 0; i < m_vecoutputtasks.size(); i++)
 		{
-			if (m_vecoutputtasks[i]->get_fd_cnt() < iMinCnt)
+			if (m_vecoutputtasks[i]->get_ioobj_cnt() < iMinCnt)
 			{
 				iMinIdx = i;
-				iMinCnt = m_vecoutputtasks[i]->get_fd_cnt();
+				iMinCnt = m_vecoutputtasks[i]->get_ioobj_cnt();
 			}
 		}
 
@@ -276,10 +278,10 @@ int32_t CEngine::add_io_obj(const io_obj_ptr_t &pioobj)
 		int32_t iMinCnt = 0;
 		for (int32_t i = 0; i < m_vecinputtasks.size(); i++)
 		{
-			if (m_vecinputtasks[i]->get_fd_cnt() < iMinCnt)
+			if (m_vecinputtasks[i]->get_ioobj_cnt() < iMinCnt)
 			{
 				iMinIdx = i;
-				iMinCnt = m_vecinputtasks[i]->get_fd_cnt();
+				iMinCnt = m_vecinputtasks[i]->get_ioobj_cnt();
 			}
 		}
 
@@ -325,32 +327,32 @@ int32_t CEngine::del_io_obj(const io_obj_ptr_t &pioobj)
 	return CMNERR_SUC;
 }
 
-/**
- *
- * */
-int32_t CEngine::add_timer(const timer_ptr_t &ptimer)
-{
-	SYS_ASSERT(NULL != m_pmisctasks);
-	if (NULL == m_pmisctasks)
-	{
-		return CMNERR_COMMON_ERR;
-	}
-
-	return m_pmisctasks->add_timer(ptimer);
-}
-
-/**
- *
- * */
-int32_t CEngine::del_timer(const timer_ptr_t &ptimer)
-{
-	SYS_ASSERT(NULL != m_pmisctasks);
-	if (NULL == m_pmisctasks)
-	{
-		return CMNERR_COMMON_ERR;
-	}
-
-	return m_pmisctasks->del_timer(ptimer);
-}
+///**
+// *
+// * */
+//int32_t CEngine::add_timer(const timer_ptr_t &ptimer)
+//{
+//	SYS_ASSERT(NULL != m_pmisctasks);
+//	if (NULL == m_pmisctasks)
+//	{
+//		return CMNERR_COMMON_ERR;
+//	}
+//
+//	return m_pmisctasks->add_timer(ptimer);
+//}
+//
+///**
+// *
+// * */
+//int32_t CEngine::del_timer(const timer_ptr_t &ptimer)
+//{
+//	SYS_ASSERT(NULL != m_pmisctasks);
+//	if (NULL == m_pmisctasks)
+//	{
+//		return CMNERR_COMMON_ERR;
+//	}
+//
+//	return m_pmisctasks->del_timer(ptimer);
+//}
 
 }

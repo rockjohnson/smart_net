@@ -32,6 +32,8 @@ public:
 	virtual int32_t send_data(nm_memory::mem_ptr_t &pData) = 0; ///thread-safe send func.
 	virtual int32_t get_type() = 0;
 	virtual int32_t get_proto_id() = 0;
+	virtual nm_network::ipv4_addr_ptr_t& get_peer_addr() const = 0;
+	virtual nm_network::ipv4_addr_ptr_t& get_local_addr() const = 0;
 
 protected:
 	virtual void on_opened(nm_network::CIpv4Addr &peeraddr) = 0;

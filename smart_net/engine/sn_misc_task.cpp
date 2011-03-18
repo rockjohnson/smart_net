@@ -88,10 +88,18 @@ int32_t CMiscTask::del_timer(const timer_ptr_t &ptimer)
 	return m_ptimenotifier->del_timer(ptimer);
 }
 
+void CMiscTask::post_evt(nm_utils::event_ptr_t &pevt)
+{
+	return m_evtengine.post_event(pevt);
+}
+
 void CMiscTask::exec()
 {
 	while (!is_stopped())
 	{
+		///handle evt
+		m_evtengine.exec();
+
 		///handle events.
 		m_pioevtnotifier->exec();
 

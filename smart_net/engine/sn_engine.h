@@ -36,9 +36,13 @@ public:
 	///
 	int32_t add_io_obj(const io_obj_ptr_t &pioobj);
 	int32_t del_io_obj(const io_obj_ptr_t &pioobj);
+//	///
+//	int32_t add_timer(const timer_ptr_t &ptimer);
+//	int32_t del_timer(const timer_ptr_t &ptimer);
 	///
-	int32_t add_timer(const timer_ptr_t &ptimer);
-	int32_t del_timer(const timer_ptr_t &ptimer);
+	misc_task_ptr_t& get_misc_task();
+	input_handle_task_ptr_t& get_input_task(int32_t i32idx);
+	output_handle_task_ptr_t& get_output_task(int32_t i32idx);
 
 private:
 	///

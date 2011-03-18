@@ -38,7 +38,7 @@ public:
 	virtual int32_t bind(const nm_network::CIpv4Addr &bindaddr) = 0;
 	virtual int32_t listen(int32_t i32Backlog) = 0;
 	virtual int32_t connect(const nm_network::CIpv4Addr &remoteAddr) = 0;
-	virtual sock_handle_t get_fd() = 0;
+	virtual sock_handle_t get_handle() = 0;
 	virtual bool is_opened() = 0;
 	virtual int32_t set_nonblock(bool bFlag) = 0;
 	virtual nm_network::CIpv4Addr& get_peer_addr() = 0;

@@ -114,7 +114,7 @@ int32_t CEpoll::add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32evts)
 	evt.events = ui32Evts;
 	evt.data.ptr = pIoObj.get_ptr();
 
-	return epoll_ctl(m_i32epfd, EPOLL_CTL_ADD, pIoObj->get_fd(), &evt);
+	return epoll_ctl(m_i32epfd, EPOLL_CTL_ADD, pIoObj->get_handle(), &evt);
 }
 
 int32_t CEpoll::del_io_obj(const io_obj_ptr_t &pioobj)
@@ -122,7 +122,7 @@ int32_t CEpoll::del_io_obj(const io_obj_ptr_t &pioobj)
 	if (pioobj->get_handle() >= 0)
 	{
 		struct epoll_event evt;
-		epoll_ctl(m_i32epfd, EPOLL_CTL_DEL, pioobj->get_fd(), &evt);
+		epoll_ctl(m_i32epfd, EPOLL_CTL_DEL, pioobj->get_handle(), &evt);
 	}
 
 	{

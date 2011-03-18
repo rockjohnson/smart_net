@@ -37,6 +37,8 @@ public:
 	void post_event(const nm_utils::event_ptr_t &pevt);
 	int32_t add_io_obj(const io_obj_ptr_t &pioobj);
 	int32_t del_io_obj(const io_obj_ptr_t &pioobj);
+	///
+	int32_t get_ioobj_cnt();
 
 private:
 	ioevt_notifier_ptr_t m_pioevtnotifier; ///the io event notify mechanism obj;
@@ -65,6 +67,8 @@ public:
 	void pos_evt(const nm_utils::event_ptr_t &pevt);
 	int32_t add_io_obj(const io_obj_ptr_t &pioobj);
 	int32_t del_io_obj(const io_obj_ptr_t &pioobj);
+	///
+	int32_t get_ioobj_cnt();
 
 private:
 	ioevt_notifier_ptr_t m_pioevtnotifier; ///the io event notify mechanism obj;

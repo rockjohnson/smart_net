@@ -68,6 +68,8 @@ private:
 	u_int16_t m_ui16port; ///network byte order.
 	struct in_addr m_ip; ///network byte order.
 };
+typedef nm_utils::CSmartPtr<nm_network::CIpv4Addr> ipv4_addr_ptr_t;
+
 
 }
 

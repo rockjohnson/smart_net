@@ -61,8 +61,8 @@ int32_t CTcpInboundEndpoint::open(const nm_network::CIpv4Addr &listenaddr,
 	m_psmartnetmgr = psmartnetmgr;
 
 	m_psock = SYS_NOTRW_NEW(nm_network::CTcpSock);
-	m_listenaddr = listenaddr;
-	m_peeraddr = peeraddr;
+	m_plistenaddr = listenaddr;
+	m_ppeeraddr = peeraddr;
 
 	return m_psmartnetmgr->add_endpoint(nm_framework::endpoint_ptr_t(this));
 }
