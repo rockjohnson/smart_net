@@ -40,7 +40,7 @@ private:
 	{
 		bool operator()(const _Tp& __x, const _Tp& __y) const
 		{
-			return __x.get_ip_hbo() < __y.get_ip_hbo() ? true
+			return __x.get_ip_nbo() < __y.get_ip_nbo() ? true
 					: __x.get_port_hbo() < __y.get_port_hbo();
 		}
 	};

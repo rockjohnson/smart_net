@@ -7,6 +7,8 @@
 
 #include "tcp_wrapper_impl.h"
 
+#include <utils/smart_ptr.h>
+
 #include "../smart_net/sn_endpoint_impl.h"
 #include "../network/sn_listener_impl.h"
 
@@ -35,6 +37,7 @@ int32_t CTcpWrapper::add_endpoint(const nm_framework::endpoint_ptr_t &pendpoint)
 	using namespace nm_framework;
 	using namespace nm_utils;
 	using namespace nm_smartnet;
+	using namespace nm_network;
 
 	int32_t i32ret = CMNERR_SUC;
 	switch (pendpoint->get_type())

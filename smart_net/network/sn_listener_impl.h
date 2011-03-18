@@ -12,7 +12,7 @@
 
 #include <utils/smart_lock.h>
 
-#include "sn_socket.h"
+#include "sn_socket_impl.h"
 #include "../framework/sn_listener.h"
 #include "../engine/sn_engine.h"
 #include "../framework/sn_endpoint.h"
@@ -36,13 +36,21 @@ public:
 			const nm_engine::engine_ptr_t &pioengine);
 	virtual int32_t close();
 	///
-	virtual int32_t add_endpoint(const endpoint_ptr_t &pEP);
-	virtual int32_t del_endpoint(const endpoint_ptr_t &pEP);
+	virtual int32_t add_endpoint(const nm_framework::endpoint_ptr_t &pEP);
+	virtual int32_t del_endpoint(const nm_framework::endpoint_ptr_t &pEP);
 	///
 	virtual void handle_input_evt();
 	virtual void handle_output_evt();
 	virtual void handle_error_evt();
-	int32_t get_fd();
+
+	virtual sock_handle_t get_handle();
+	virtual u_int32_t get_input_evts();
+	virtual u_int32_t get_output_evts();
+	virtual u_int32_t get_misc_evts();
+	virtual void set_input_task_id(int32_t i32id);
+	virtual int32_t get_input_task_id();
+	virtual void set_output_task_id(int32_t i32id);
+	virtual int32_t get_output_task_id();
 
 private:
 	nm_network::CTcpSock m_tcpsock;
@@ -59,13 +67,13 @@ private:
 					: __x.get_port_hbo() < __y.get_port_hbo();
 		}
 	};
-	typedef std::map<nm_network::CIpv4Addr, sn_framework::endpoint_ptr_t, SLessForAddr<nm_network::CIpv4Addr> > tcp_endpoint_map_t;
+	typedef std::map<nm_network::CIpv4Addr, nm_framework::endpoint_ptr_t, SLessForAddr<nm_network::CIpv4Addr> > tcp_endpoint_map_t;
 	tcp_endpoint_map_t m_maptcpendpoint;
 	typedef std::set<nm_framework::endpoint_ptr_t> tcp_endpoint_set_t;
-	CSpinLock m_lktcpendpoints;
+	nm_utils::CSpinLock m_lktcpendpoints;
 
 };
-typedef nm_utils::CSmartPtr<nm_smartnet::CTcpListener> tcp_listener_ptr_t;
+typedef nm_utils::CSmartPtr<nm_network::CTcpListener> tcp_listener_ptr_t;
 
 }
 

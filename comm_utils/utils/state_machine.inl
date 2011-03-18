@@ -12,7 +12,7 @@
 
 	template <typename T>
 	CStateMachine<T>::CStateMachine(T *t)
-	:m_iCurState(0), m_t(t)//, m_pFun(pFun)
+	:m_i32curstate(0), m_t(t)//, m_pFun(pFun)
 	{
 		// TODO Auto-generated constructor stub
 	}
@@ -41,25 +41,25 @@
 	int CStateMachine<T>::post_event(int iEvt, pvoid_t pV)
 	{
 #ifdef __USED_IN_MULTI_THREAD__
-		mtx_scopelk_t lk(m_lock);//ǧ��Ҫ���Ű�����������ƣ���Ϊ����Ļ�����ǰ״̬���Ƿ��̻߳���ģ�������߼����⣻
+		mtx_scopelk_t lk(m_lkchangestate);
 #endif
 		typename evt_h_t::iterator iter2;
 		typename event_handler_t::iterator iter1;
-		if ((iter1 = m_evt_handler.find(m_iCurState)) == m_evt_handler.end()
+		if ((iter1 = m_evt_handler.find(m_i32curstate)) == m_evt_handler.end()
 				|| (iter2 = iter1->second.find(iEvt)) == iter1->second.end())
 		{
 			//ASSERT(false);
 			return -1;
 		}
 		int iEndState = iter2->second.iState;
-		if (NULL != (iter2->second.fun) && (m_t->*(iter2->second.fun))(m_iCurState, iEvt, iEndState, pV) < 0)
+		if (NULL != (iter2->second.fun) && (m_t->*(iter2->second.fun))(m_i32curstate, iEvt, iEndState, pV) < 0)
 		{
 			//transform state failed!
 			return -2;
 		} 
 		set_cur_state(iEndState);
 
-		//transform_state(iEvt, m_evt_handler[m_iCurState][iEvt].iState, m_evt_handler[m_iCurState][iEvt].fun);
+		//transform_state(iEvt, m_evt_handler[m_i32curstate][iEvt].iState, m_evt_handler[m_i32curstate][iEvt].fun);
 
 		return RET_SUC;
 	}

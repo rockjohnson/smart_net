@@ -247,7 +247,7 @@ namespace nm_utils
 	}
 
 	template <typename DST, typename SRC>
-	CSmartPtr<DST> dynamic_cast_smartptr(CSmartPtr<SRC> &pSrc)
+	CSmartPtr<DST> dynamic_cast_smartptr(const CSmartPtr<SRC> &pSrc)
 	{
 #ifdef __CHECK_CAST__
 		return CSmartPtr<DST>(dynamic_cast<DST*>(pSrc.get_ptr()));

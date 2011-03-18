@@ -13,7 +13,7 @@
 
 #include "../framework/sn_endpoint.h"
 #include "../framework/sn_mgr.h"
-#include "../network/sn_socket.h"
+#include "../network/sn_socket_impl.h"
 
 namespace nm_smartnet
 {

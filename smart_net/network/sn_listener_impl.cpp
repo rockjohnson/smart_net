@@ -6,6 +6,8 @@
  */
 
 #include "sn_listener_impl.h"
+//#include "../smart_net/sn_endpoint_impl.h"
+
 
 namespace nm_network
 {
@@ -75,13 +77,33 @@ void CTcpListener::handle_error_evt()
 
 void CTcpListener::handle_input_evt()
 {
+	using namespace nm_smartnet;
+
 	///
 	nm_network::sock_ptr_t psock = m_tcpsock.accept();
+	if (NULL == psock)
+	{
+		SYS_ASSERT(false);
+		return;
+	}
 
-	std::pair<tcp_endpoint_map_t::iterator, bool> ret = m_maptcpendpoint.find(psock->get_peer_addr());
+	///find it.
+	nm_framework::endpoint_ptr_t pep = NULL;
+	{
+		std::pair<tcp_endpoint_map_t::iterator, bool> ret =
+				m_maptcpendpoint.find(psock->get_peer_addr());
+		if (ret.second)
+		{
+pep		= *(ret.first)
+	}
+}
 
+	{
 
+	}
 
+	pep->set_sock(psock);
+	m_pengine->add_io_obj()
 }
 
 
