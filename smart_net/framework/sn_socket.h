@@ -9,11 +9,11 @@
 #define __SN_SOCKET_H__
 
 #include "../common/sn_common.h"
+#include "../network/sn_net_addr.h"
 
 namespace nm_framework
 {
 
-class nm_network::CIpv4Addr;
 /**
  * base socket class
  * */

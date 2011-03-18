@@ -5,7 +5,6 @@
  *      Author: rock
  */
 
-#include "sn_net_addr.h"
 #include "sn_socket_impl.h"
 
 #if __PLATFORM__ == __PLATFORM_LINUX__

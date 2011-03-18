@@ -14,7 +14,6 @@
 namespace nm_network
 {
 
-class CIpv4Addr;
 /**
  * tcp socket
  *
