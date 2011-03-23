@@ -36,8 +36,8 @@ public:
 	int32_t add_io_obj(const io_obj_ptr_t &pioobj);
 	int32_t del_io_obj(const io_obj_ptr_t &pioobj);
 	///
-	int32_t add_timer(const timer_ptr_t &ptimer);
-	int32_t del_timer(const timer_ptr_t &ptimer);
+	int32_t add_timer(const internal_timer_ptr_t &ptimer);
+	int32_t del_timer(const internal_timer_ptr_t &ptimer);
 	///
 	void post_evt(nm_utils::event_ptr_t &pevt);
 	///

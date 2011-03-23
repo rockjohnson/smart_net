@@ -74,14 +74,14 @@ int32_t CMiscTask::del_io_obj(const io_obj_ptr_t &pioobj)
 	return m_pioevtnotifier->del_io_obj(pioobj);
 }
 
-int32_t CMiscTask::add_timer(const timer_ptr_t &ptimer)
+int32_t CMiscTask::add_timer(const internal_timer_ptr_t &ptimer)
 {
 	SYS_ASSERT(NULL != m_ptimenotifier);
 
 	return m_ptimenotifier->add_timer(ptimer);
 }
 
-int32_t CMiscTask::del_timer(const timer_ptr_t &ptimer)
+int32_t CMiscTask::del_timer(const internal_timer_ptr_t &ptimer)
 {
 	SYS_ASSERT(NULL != m_ptimenotifier);
 
