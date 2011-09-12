@@ -10,6 +10,10 @@
 
 #include <cxxtest/TestSuite.h>
 
+#define __TEST_STD_THREAD__ 1
+
+#if (__TEST_MY_THREAD__)
+
 #include <thread/thread_ex.h>
 #include <utils/utils.h>
 #include <log/smart_log.h>
@@ -30,7 +34,7 @@ public:
 	}
 };
 
-class CThreadTest : public CxxTest::TestSuite
+class CThreadTest
 {
 
 public:
@@ -59,6 +63,21 @@ public:
 //}
 //};
 
+#elif (__TEST_STD_THREAD__)
 
+#include <thread>
+
+class CStdThreadTest : public CxxTest::TestSuite
+{
+
+public:
+
+	void test_thread()
+	{
+		std::thread thrd;
+	}
+};
+
+#endif
 
 #endif /* __THREAD_TEST_H__ */

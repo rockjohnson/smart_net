@@ -14,6 +14,19 @@
 int main() {
  return CxxTest::ErrorPrinter().run();
 }
+#include "../test/test_cpp11.h"
+
+static CCPPTest suite_CCPPTest;
+
+static CxxTest::List Tests_CCPPTest = { 0, 0 };
+CxxTest::StaticSuiteDescription suiteDescription_CCPPTest( "../test/test_cpp11.h", 21, "CCPPTest", suite_CCPPTest, Tests_CCPPTest );
+
+static class TestDescription_CCPPTest_test_pp : public CxxTest::RealTestDescription {
+public:
+ TestDescription_CCPPTest_test_pp() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 25, "test_pp" ) {}
+ void runTest() { suite_CCPPTest.test_pp(); }
+} testDescription_CCPPTest_test_pp;
+
 #include "../test/test_file.h"
 
 static CFileTest suite_CFileTest;
@@ -42,15 +55,15 @@ public:
 
 #include "../test/thread_test.h"
 
-static CThreadTest suite_CThreadTest;
+static CStdThreadTest suite_CStdThreadTest;
 
-static CxxTest::List Tests_CThreadTest = { 0, 0 };
-CxxTest::StaticSuiteDescription suiteDescription_CThreadTest( "../test/thread_test.h", 33, "CThreadTest", suite_CThreadTest, Tests_CThreadTest );
+static CxxTest::List Tests_CStdThreadTest = { 0, 0 };
+CxxTest::StaticSuiteDescription suiteDescription_CStdThreadTest( "../test/thread_test.h", 70, "CStdThreadTest", suite_CStdThreadTest, Tests_CStdThreadTest );
 
-static class TestDescription_CThreadTest_test_thread : public CxxTest::RealTestDescription {
+static class TestDescription_CStdThreadTest_test_thread : public CxxTest::RealTestDescription {
 public:
- TestDescription_CThreadTest_test_thread() : CxxTest::RealTestDescription( Tests_CThreadTest, suiteDescription_CThreadTest, 37, "test_thread" ) {}
- void runTest() { suite_CThreadTest.test_thread(); }
-} testDescription_CThreadTest_test_thread;
+ TestDescription_CStdThreadTest_test_thread() : CxxTest::RealTestDescription( Tests_CStdThreadTest, suiteDescription_CStdThreadTest, 75, "test_thread" ) {}
+ void runTest() { suite_CStdThreadTest.test_thread(); }
+} testDescription_CStdThreadTest_test_thread;
 
 #include <cxxtest/Root.cpp>
