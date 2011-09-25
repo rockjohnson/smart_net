@@ -45,7 +45,7 @@ all: smart_pbx
 smart_pbx: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++  -o"smart_pbx" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"/home/rock/Workspace/smart_net/smart_net/smart_net/Debug" -L"/home/rock/Workspace/smart_net/smart_net/comm_utils/Debug" -o"smart_pbx" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
