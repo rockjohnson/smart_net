@@ -22,7 +22,7 @@ int main()
 	smart_net_ptr_t pSmartNet = SYS_NOTRW_NEW(CSmartNet);
 	pSmartNet->start(10, nm_framework::EIEN_EPOLL, 10);
 
-	///3,
+	///3,create endpoint
 	CTcpInboundEndpoint tcpIBEP(pSmartNet);
 	net_addr_ptr_t pListenAddr = SYS_NOTRW_NEW(CIpv4Addr);
 	pListenAddr->set_ip("127.0.0.1");

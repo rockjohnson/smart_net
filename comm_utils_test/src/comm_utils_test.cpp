@@ -19,37 +19,55 @@ int main() {
 static CCPPTest suite_CCPPTest;
 
 static CxxTest::List Tests_CCPPTest = { 0, 0 };
-CxxTest::StaticSuiteDescription suiteDescription_CCPPTest( "../test/test_cpp11.h", 127, "CCPPTest", suite_CCPPTest, Tests_CCPPTest );
+CxxTest::StaticSuiteDescription suiteDescription_CCPPTest( "../test/test_cpp11.h", 149, "CCPPTest", suite_CCPPTest, Tests_CCPPTest );
 
 static class TestDescription_CCPPTest_test_pp : public CxxTest::RealTestDescription {
 public:
- TestDescription_CCPPTest_test_pp() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 131, "test_pp" ) {}
+ TestDescription_CCPPTest_test_pp() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 153, "test_pp" ) {}
  void runTest() { suite_CCPPTest.test_pp(); }
 } testDescription_CCPPTest_test_pp;
 
 static class TestDescription_CCPPTest_test_atomic : public CxxTest::RealTestDescription {
 public:
- TestDescription_CCPPTest_test_atomic() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 150, "test_atomic" ) {}
+ TestDescription_CCPPTest_test_atomic() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 172, "test_atomic" ) {}
  void runTest() { suite_CCPPTest.test_atomic(); }
 } testDescription_CCPPTest_test_atomic;
 
 static class TestDescription_CCPPTest_test_determine_function_return_val : public CxxTest::RealTestDescription {
 public:
- TestDescription_CCPPTest_test_determine_function_return_val() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 160, "test_determine_function_return_val" ) {}
+ TestDescription_CCPPTest_test_determine_function_return_val() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 182, "test_determine_function_return_val" ) {}
  void runTest() { suite_CCPPTest.test_determine_function_return_val(); }
 } testDescription_CCPPTest_test_determine_function_return_val;
 
 static class TestDescription_CCPPTest_test_type_traits : public CxxTest::RealTestDescription {
 public:
- TestDescription_CCPPTest_test_type_traits() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 166, "test_type_traits" ) {}
+ TestDescription_CCPPTest_test_type_traits() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 188, "test_type_traits" ) {}
  void runTest() { suite_CCPPTest.test_type_traits(); }
 } testDescription_CCPPTest_test_type_traits;
 
 static class TestDescription_CCPPTest_test_function_wrapper : public CxxTest::RealTestDescription {
 public:
- TestDescription_CCPPTest_test_function_wrapper() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 179, "test_function_wrapper" ) {}
+ TestDescription_CCPPTest_test_function_wrapper() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 201, "test_function_wrapper" ) {}
  void runTest() { suite_CCPPTest.test_function_wrapper(); }
 } testDescription_CCPPTest_test_function_wrapper;
+
+static class TestDescription_CCPPTest_test_wrapper_reference : public CxxTest::RealTestDescription {
+public:
+ TestDescription_CCPPTest_test_wrapper_reference() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 238, "test_wrapper_reference" ) {}
+ void runTest() { suite_CCPPTest.test_wrapper_reference(); }
+} testDescription_CCPPTest_test_wrapper_reference;
+
+static class TestDescription_CCPPTest_test_presudorandom : public CxxTest::RealTestDescription {
+public:
+ TestDescription_CCPPTest_test_presudorandom() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 251, "test_presudorandom" ) {}
+ void runTest() { suite_CCPPTest.test_presudorandom(); }
+} testDescription_CCPPTest_test_presudorandom;
+
+static class TestDescription_CCPPTest_test_smart_pointer : public CxxTest::RealTestDescription {
+public:
+ TestDescription_CCPPTest_test_smart_pointer() : CxxTest::RealTestDescription( Tests_CCPPTest, suiteDescription_CCPPTest, 263, "test_smart_pointer" ) {}
+ void runTest() { suite_CCPPTest.test_smart_pointer(); }
+} testDescription_CCPPTest_test_smart_pointer;
 
 #include "../test/test_file.h"
 

@@ -20,7 +20,7 @@ class CSmartNet : public nm_base::ICommonBase
 {
 public:
 	CSmartNet();
-	~CSmartNet();
+	virtual ~CSmartNet();
 
 public:
 	///
