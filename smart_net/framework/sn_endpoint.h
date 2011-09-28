@@ -39,6 +39,7 @@ protected:
 	virtual void on_opened(nm_network::CIpv4Addr &peeraddr) = 0;
 	virtual void on_recv_data(nm_memory::mem_ptr_t &pdata, nm_network::CIpv4Addr &peeraddr) = 0;
 	virtual void on_error(int32_t i32errcode) = 0;
+	virtual void on_closed() = 0;
 };
 typedef nm_utils::CSmartPtr<nm_framework::IEndpoint> endpoint_ptr_t;
 

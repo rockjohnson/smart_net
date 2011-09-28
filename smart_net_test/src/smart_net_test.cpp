@@ -18,11 +18,10 @@ int main()
 {
 	///2,create network engine object.
 	smart_net_ptr_t pSmartNet = SYS_NOTRW_NEW(CSmartNet);
-	pSmartNet->start(10, nm_framework::EIEN_EPOLL, 10);
+	pSmartNet->start(10, 10,nm_framework::EIEN_EPOLL, 10);
 
 	///3,create endpoint
-	tcp_ib_endpoint_ptr_t pTcpIBEP = SYS_NOTRW_NEW(CTcpInboundEndpoint);
-	pTcpIBEP->attach(pSmartNet);
+	tcp_ib_endpoint_ptr_t pTcpIBEP = SYS_NOTRW_NEW(CTcpInboundEndpoint(pSmartNet));
 
 	net_addr_ptr_t pListenAddr = SYS_NOTRW_NEW(CIpv4Addr);
 	pListenAddr->set_ip("127.0.0.1");
@@ -30,9 +29,9 @@ int main()
 
 	pTcpIBEP->open(pListenAddr, net_addr_ptr_t(NULL));
 
-	pTcpIBEP->close();
-	pTcpIBEP->detach(pSmartNet);
+	::sleep(100000);
 
+	pTcpIBEP->close();
 
 	pSmartNet->stop();
 

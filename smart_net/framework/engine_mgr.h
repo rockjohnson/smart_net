@@ -22,11 +22,11 @@ namespace nm_framework
 /**
  * the smart net manager.
  * */
-class CSmartNetMgr: public nm_base::ICommonBase
+class CEngineMgr: public nm_base::ICommonBase
 {
 public:
-	CSmartNetMgr();
-	virtual ~CSmartNetMgr();
+	CEngineMgr();
+	virtual ~CEngineMgr();
 
 public:
 	int32_t start(u_int32_t ui32InputThreadCnt,
@@ -39,14 +39,21 @@ public:
 	int32_t del_endpoint(const endpoint_ptr_t &pEP); ///not thread safe
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(CSmartNetMgr);
-	///io engines
-	nm_engine::engine_ptr_t m_pengine;
-	///network protocol wrappers
-	typedef std::vector<proto_wrapper_ptr_t> proto_wrapper_vec_t;
-	proto_wrapper_vec_t m_vec_proto_wrappers;
+	DISALLOW_COPY_AND_ASSIGN(CEngineMgr);
+
+	///
+	typedef std::vector<nm_thread::thread_ptr_t> thread_vec_t;
+	thread_vec_t m_vecThreads; ///io threads
+	///
+	typedef std::vector<input_handle_task_ptr_t> input_task_vec_t;
+	input_task_vec_t m_vecInputTasks;
+	///
+	typedef std::vector<output_handle_task_ptr_t> output_task_vec_t;
+	output_task_vec_t m_vecOutputTasks;
+	///
+	misc_task_ptr_t m_pMiscTasks;
 };
-typedef nm_utils::CSmartPtr<nm_framework::CSmartNetMgr> smart_net_mgr_ptr_t;
+typedef nm_utils::CSmartPtr<nm_framework::CEngineMgr> smart_net_mgr_ptr_t;
 
 }
 

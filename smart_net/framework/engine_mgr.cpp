@@ -5,30 +5,30 @@
  *      Author: rock
  */
 
-#include "sn_mgr.h"
+#include "shared_obj.h"
 
 namespace nm_framework
 {
 
 using namespace nm_protocol;
 
-CSmartNetMgr::CSmartNetMgr()
+CEngineMgr::CEngineMgr()
 :m_vec_proto_wrappers(EP_ALL)
 {
 	// TODO Auto-generated constructor stub
 }
 
-CSmartNetMgr::~CSmartNetMgr()
+CEngineMgr::~CEngineMgr()
 {
 	// TODO Auto-generated destructor stub
 }
 
-int32_t CSmartNetMgr::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
+int32_t CEngineMgr::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 {
 
 }
 
-int32_t CSmartNetMgr::stop()
+int32_t CEngineMgr::stop()
 {
 	///stop all io thread
 	for (thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter
@@ -51,7 +51,7 @@ int32_t CSmartNetMgr::stop()
 /**
  * thread safe
  * */
-int32_t CSmartNetMgr::add_endpoint(const endpoint_ptr_t &pendpoint)
+int32_t CEngineMgr::add_endpoint(const endpoint_ptr_t &pendpoint)
 {
 	///
 	IF_TRUE_THEN_RETURN_CODE(NULL == pendpoint, CMNERR_COMMON_ERR);
@@ -59,7 +59,7 @@ int32_t CSmartNetMgr::add_endpoint(const endpoint_ptr_t &pendpoint)
 	return m_vec_proto_wrappers[pendpoint->get_proto_id()]->add_endpoint(pendpoint);
 }
 
-int32_t CSmartNetMgr::del_endpoint(const endpoint_ptr_t &pendpoint)
+int32_t CEngineMgr::del_endpoint(const endpoint_ptr_t &pendpoint)
 {
 	///
 	IF_TRUE_THEN_RETURN_CODE(NULL == pendpoint, CMNERR_COMMON_ERR);
