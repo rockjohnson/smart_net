@@ -19,7 +19,7 @@ namespace nm_utils
 	template <typename T>
 	class CStateMachine
 	{
-		typedef int (T::*PFUN_TRANSFORM_STATE)(int,int,int,pvoid_t);
+		typedef int32_t (T::*PFUN_TRANSFORM_STATE)(int32_t, int32_t, int32_t, pvoid_t);
 		struct SElem
 		{
 			SElem(){}
@@ -46,9 +46,24 @@ namespace nm_utils
 			return m_i32curstate;
 		}
 
+		bool begin_lock_state(int32_t i32State)
+		{
+#if (__USED_IN_MULTI_THREAD__)
+			m_lkChangeState.lock();
+#endif
+			return (get_cur_state() == i32State);
+		}
+
+		void end_lock_state()
+		{
+#if (__USED_IN_MULTI_THREAD__)
+			m_lkChangeState.unlock();
+#endif
+		}
+
 	private:
 #ifdef __USED_IN_MULTI_THREAD__
-		CMutexLock m_lkchangestate; //may be not needed, if all the state relative function is handled in single thread.
+		CMutexLock m_lkChangeState; //may be not needed, if all the state relative function is handled in single thread.
 		//CSpinLock m_lkcurrentstate;
 #endif
 		int m_i32curstate; //current state;
