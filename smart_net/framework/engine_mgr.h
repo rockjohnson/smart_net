@@ -11,9 +11,10 @@
 #include <vector>
 
 #include "../common/sn_common.h"
+#include "utils/state_machine.h"
 #include "sn_endpoint.h"
-#include "sn_proto_wrapper.h"
-#include "../engine/sn_engine.h"
+//#include "sn_proto_wrapper.h"
+//#include "../engine/sn_engine.h"
 
 
 namespace nm_framework
@@ -37,13 +38,21 @@ public:
 	///
 	int32_t add_endpoint(const endpoint_ptr_t &pEP); ///not thread safe
 	int32_t del_endpoint(const endpoint_ptr_t &pEP); ///not thread safe
+	int32_t add_timer(const timer_ptr_t &pTimer);
+	int32_t del_timer(const timer_ptr_t &pTimer);
+
+private:
+	int32_t starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid);
+	int32_t stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid);
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(CEngineMgr);
 
-	///
+	///state
+	nm_utils::CStateMachine<CEngineMgr> m_sm;
+	///threads
 	typedef std::vector<nm_thread::thread_ptr_t> thread_vec_t;
-	thread_vec_t m_vecThreads; ///io threads
+	thread_vec_t m_vecThreads;
 	///
 	typedef std::vector<input_handle_task_ptr_t> input_task_vec_t;
 	input_task_vec_t m_vecInputTasks;

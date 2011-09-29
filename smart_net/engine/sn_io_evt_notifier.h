@@ -41,7 +41,7 @@ public:
 	virtual int32_t del_io_obj(const io_obj_ptr_t &pIoObj) = 0;
 	virtual int32_t exec() = 0;
 };
-typedef nm_utils::CSmartPtr<IIoEvtNotifier> ioevt_notifier_ptr_t;
+typedef nm_utils::CSmartPtr<IIoEvtNotifier> io_evt_notifier_ptr_t;
 
 
 }

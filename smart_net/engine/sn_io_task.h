@@ -41,9 +41,9 @@ public:
 	int32_t get_ioobj_cnt();
 
 private:
-	ioevt_notifier_ptr_t m_pioevtnotifier; ///the io event notify mechanism obj;
+	io_evt_notifier_ptr_t m_pIoEvtNotifier; ///the io event notify mechanism obj;
 	int32_t m_i32id;
-	nm_utils::CEventHandleEngine m_evtengine; ///serialized the handles.
+	//nm_utils::CEventHandleEngine m_evtengine; ///serialized the handles.
 };
 typedef nm_utils::CSmartPtr<nm_engine::CInputHandleTask> input_handle_task_ptr_t;
 
@@ -71,7 +71,7 @@ public:
 	int32_t get_ioobj_cnt();
 
 private:
-	ioevt_notifier_ptr_t m_pioevtnotifier; ///the io event notify mechanism obj;
+	io_evt_notifier_ptr_t m_pioevtnotifier; ///the io event notify mechanism obj;
 	int32_t m_i32id;
 	nm_utils::CEventHandleEngine m_evtengine; ///serialized the handles.
 };

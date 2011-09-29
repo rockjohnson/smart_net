@@ -45,7 +45,7 @@ public:
 
 private:
 	///
-	ioevt_notifier_ptr_t m_pioevtnotifier;
+	io_evt_notifier_ptr_t m_pioevtnotifier;
 	///
 	time_notifier_t m_ptimenotifier;
 	///

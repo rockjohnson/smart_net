@@ -22,11 +22,11 @@ CInputHandleTask::~CInputHandleTask()
 
 int32_t CInputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout, int32_t i32id)
 {
-	IF_TRUE_THEN_RETURN_CODE(NULL != m_pioevtnotifier, CMNERR_COMMON_ERR);
+	IF_TRUE_THEN_RETURN_CODE(NULL != m_pIoEvtNotifier, CMNERR_COMMON_ERR);
 
 	///create io event notify mechanism obj.
-	m_pioevtnotifier = IIoEvtNotifier::create_obj(i32ioevtnotifier);
-	if (NULL == m_pioevtnotifier)
+	m_pIoEvtNotifier = IIoEvtNotifier::create_obj(i32ioevtnotifier);
+	if (NULL == m_pIoEvtNotifier)
 	{
 		return CMNERR_COMMON_ERR;
 	}
@@ -37,15 +37,15 @@ int32_t CInputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout, i
 
 	m_i32id = i32id;
 
-	return m_pioevtnotifier->init(i32MStimeout);
+	return m_pIoEvtNotifier->init(i32MStimeout);
 }
 
 int32_t CInputHandleTask::destroy()
 {
-	IF_TRUE_THEN_RETURN_CODE(NULL == m_pioevtnotifier, CMNERR_COMMON_ERR);
+	IF_TRUE_THEN_RETURN_CODE(NULL == m_pIoEvtNotifier, CMNERR_COMMON_ERR);
 
-	m_pioevtnotifier->destroy();
-	m_pioevtnotifier = NULL;
+	m_pIoEvtNotifier->destroy();
+	m_pIoEvtNotifier = NULL;
 	m_i32id = -1;
 
 //	///io obj add cache
@@ -82,7 +82,7 @@ int32_t CInputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 //	ret = m_setIoObjAddCache.insert(pIoObj);
 
 //	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
-	return m_pioevtnotifier->add_io_obj(pIoObj, pIoObj->get_input_evts());
+	return m_pIoEvtNotifier->add_io_obj(pIoObj, pIoObj->get_input_evts());
 }
 
 /**
@@ -104,7 +104,7 @@ int32_t CInputHandleTask::del_io_obj(const io_obj_ptr_t &pioobj)
 //
 //	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
 
-	return m_pioevtnotifier->del_io_obj(pioobj);
+	return m_pIoEvtNotifier->del_io_obj(pioobj);
 }
 
 //void CInputHandleTask::update_io_set()
@@ -140,7 +140,7 @@ int32_t CInputHandleTask::del_io_obj(const io_obj_ptr_t &pioobj)
 
 void CInputHandleTask::exec()
 {
-	SYS_ASSERT(NULL != m_pioevtnotifier);
+	SYS_ASSERT(NULL != m_pIoEvtNotifier);
 
 	///main logic circle
 	while (!is_stopped())
@@ -148,7 +148,7 @@ void CInputHandleTask::exec()
 		///
 		m_evtengine->exec();
 		///
-		if (m_pioevtnotifier->exec() < CMNERR_SUC)
+		if (m_pIoEvtNotifier->exec() < CMNERR_SUC)
 		{
 			break;
 		}

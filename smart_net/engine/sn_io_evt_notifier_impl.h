@@ -26,7 +26,7 @@ class CIoEvtNotifierFactory : public nm_utils::CObjFactory<IIoEvtNotifier>
 {
 
 public:
-	virtual ioevt_notifier_ptr_t& create_obj(int32_t i32Type);
+	virtual io_evt_notifier_ptr_t& create_obj(int32_t i32Type);
 };
 
 /**
@@ -51,11 +51,11 @@ public:
 /**
  * epoll mechanism
  * */
-class CEpollWrapper: public IIoEvtNotifier
+class CEpoll: public IIoEvtNotifier
 {
 public:
-	CEpollWrapper();
-	virtual ~CEpollWrapper();
+	CEpoll();
+	virtual ~CEpoll();
 
 public:
 	///
@@ -72,14 +72,14 @@ private:
 	int32_t m_i32epfd;
 	///
 #define MAX_EVENTS (10000)
-	struct epoll_event m_tmpEvts[MAX_EVENTS];
+	struct epoll_event m_arrEvts[MAX_EVENTS];
 	///
 	int32_t m_i32MSTimeout;
 	///
-	std::set<io_obj_ptr_t> m_setioobjs;
-	nm_utils::CSpinLock m_lkioobjcache;
-	std::set<io_obj_ptr_t> m_setioobjaddcache;
-	std::set<io_obj_ptr_t> m_setioobjdelcache;
+	std::set<io_obj_ptr_t> m_setIoObjs;
+	nm_utils::CSpinLock m_lkIoObjCache;
+	std::set<io_obj_ptr_t> m_setIoObjsAddCache;
+	std::set<io_obj_ptr_t> m_setIoObjsDelCache;
 };
 
 }

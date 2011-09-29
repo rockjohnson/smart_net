@@ -20,10 +20,10 @@ IIoEvtNotifier::~IIoEvtNotifier()
 	destroy();
 }
 
-ioevt_notifier_ptr_t& CIoEvtNotifierFactory::create_obj(
+io_evt_notifier_ptr_t& CIoEvtNotifierFactory::create_obj(
 		int32_t i32ioevtnotifier)
 {
-	ioevt_notifier_ptr_t pioevtnotifier = NULL;
+	io_evt_notifier_ptr_t pioevtnotifier = NULL;
 
 	if (EIEN_ALL <= i32ioevtnotifier || EIEN_NONE >= i32ioevtnotifier)
 	{
@@ -40,7 +40,7 @@ ioevt_notifier_ptr_t& CIoEvtNotifierFactory::create_obj(
 #if __PLATFORM__ == __PLATFORM_LINUX__
 	case EIEN_EPOLL:
 	{
-		pioevtnotifier = SYS_NOTRW_NEW(CEpollWrapper);
+		pioevtnotifier = SYS_NOTRW_NEW(CEpoll);
 		break;
 	}
 #endif
@@ -69,25 +69,25 @@ CSelect::~CSelect()
 /*
  * epoll ...
  * */
-CEpollWrapper::CEpollWrapper() :
+CEpoll::CEpoll() :
 	m_i32epfd(-1), m_i32MSTimeout(0)
 {
-	ZERO_MEM(&m_tmpEvts, sizeof(m_tmpEvts));
+	ZERO_MEM(&m_arrEvts, sizeof(m_arrEvts));
 }
 
-CEpollWrapper::~CEpollWrapper()
+CEpoll::~CEpoll()
 {
 	// TODO Auto-generated destructor stub
 	//destroy();
 }
 
 #define UNUSED (10000) //Since Linux 2.6.8, the size argument is unused.  (The kernel dynamically sizes the required data structures without needing this initial hint.)
-int32_t CEpollWrapper::init(int32_t i32MsTimeout)
+int32_t CEpoll::init(int32_t i32MsTimeout)
 {
 	SYS_ASSERT(-1 == m_i32epfd);
-	SYS_ASSERT(m_setioobjaddcache.empty());
-	SYS_ASSERT(m_setioobjdelcache.empty());
-	SYS_ASSERT(m_setioobjs.empty());
+	SYS_ASSERT(m_setIoObjsAddCache.empty());
+	SYS_ASSERT(m_setIoObjsDelCache.empty());
+	SYS_ASSERT(m_setIoObjs.empty());
 
 	m_i32MSTimeout = i32MsTimeout;
 
@@ -95,19 +95,19 @@ int32_t CEpollWrapper::init(int32_t i32MsTimeout)
 			: CMNERR_SUC;
 }
 
-int32_t CEpollWrapper::destroy()
+int32_t CEpoll::destroy()
 {
 	SYS_ASSERT(0 <= m_i32epfd);
 
-	nm_utils::spin_scopelk_t lk(m_lkioobjcache);
-	m_setioobjaddcache.clear();
-	m_setioobjdelcache.clear();
-	m_setioobjs.clear(); ///not thread safe
+	nm_utils::spin_scopelk_t lk(m_lkIoObjCache);
+	m_setIoObjsAddCache.clear();
+	m_setIoObjsDelCache.clear();
+	m_setIoObjs.clear(); ///not thread safe
 
 	return CMNERR_COMMON_ERR;
 }
 
-int32_t CEpollWrapper::add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32evts)
+int32_t CEpoll::add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32evts)
 {
 	struct epoll_event evt;
 	evt.events = ui32Evts;
@@ -116,7 +116,7 @@ int32_t CEpollWrapper::add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32evts
 	return epoll_ctl(m_i32epfd, EPOLL_CTL_ADD, pIoObj->get_handle(), &evt);
 }
 
-int32_t CEpollWrapper::del_io_obj(const io_obj_ptr_t &pioobj)
+int32_t CEpoll::del_io_obj(const io_obj_ptr_t &pioobj)
 {
 	if (pioobj->get_handle() >= 0)
 	{
@@ -125,15 +125,22 @@ int32_t CEpollWrapper::del_io_obj(const io_obj_ptr_t &pioobj)
 	}
 
 	{
-		nm_utils::spin_scopelk_t lk(m_lkioobjcache);
+		nm_utils::spin_scopelk_t lk(m_lkIoObjCache);
 
 	}
 }
 
-int32_t CEpollWrapper::exec()
+int32_t CEpoll::exec()
 {
+	///del io obj from epoll set, the
+	{
+		CS
+	}
+
+	///add io obj into epoll set
+
 	///wait io event...
-	int32_t i32Ret = epoll_wait(m_i32epfd, m_tmpEvts, MAX_EVENTS, m_i32MSTimeout);
+	int32_t i32Ret = epoll_wait(m_i32epfd, m_arrEvts, MAX_EVENTS, m_i32MSTimeout);
 	if (-1 == i32Ret)
 	{
 		SYS_ASSERT(false);
@@ -145,8 +152,8 @@ int32_t CEpollWrapper::exec()
 	u_int32_t ui32Evts = 0;
 	for (int i = 0; i < i32Ret; i++)
 	{
-		pIoObj = static_cast<IIoObj*> (m_tmpEvts[i].data.ptr); ///no need add ref, for i have add it outside.
-		ui32Evts = m_tmpEvts[i].events;
+		pIoObj = static_cast<IIoObj*> (m_arrEvts[i].data.ptr); ///no need add ref, for i have add it outside.
+		ui32Evts = m_arrEvts[i].events;
 
 		//error
 		if (ui32Evts & EPOLLERR)
@@ -170,10 +177,6 @@ int32_t CEpollWrapper::exec()
 			}
 		}
 	}
-
-	///process bad io obj
-
-	///
 
 	return CMNERR_SUC;
 }
