@@ -11,24 +11,21 @@ namespace nm_framework
 {
 	enum E_ENGINE_STATE
 	{
-		EES_STOPPED = 0,
-		EES_STARTED
+		EES_STOPPED = 0, EES_STARTED
 	};
 
 	enum E_ENGINE_EVT
 	{
-		EEE_START = 0,
-		EEE_STOP
+		EEE_START = 0, EEE_STOP
 	};
 
 	struct SParas
 	{
 		u_int32_t ui32A;
 		u_int32_t ui32B;
-		int32_t   i32C;
-		int32_t   i32D;
+		int32_t i32C;
+		int32_t i32D;
 	};
-
 
 	using namespace nm_protocol;
 
@@ -44,15 +41,14 @@ namespace nm_framework
 		// TODO Auto-generated destructor stub
 	}
 
-	int32_t CEngineMgr::start(u_int32_t ui32InputThreadCnt,
-			u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier,
+	int32_t CEngineMgr::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier,
 			int32_t i32MsTimeout)
 	{
 		SParas *pTmp = SYS_NOTRW_NEW(SParas);
 		pTmp->ui32A = ui32InputThreadCnt;
 		pTmp->ui32B = ui32OutputThreadCnt;
-		pTmp->i32C  = i32IoEvtNotifier;
-		pTmp->i32D  = i32MsTimeout;
+		pTmp->i32C = i32IoEvtNotifier;
+		pTmp->i32D = i32MsTimeout;
 		return m_sm.post_event(EEE_START, pTmp);
 	}
 
@@ -66,7 +62,7 @@ namespace nm_framework
 		using namespace nm_thread;
 
 		///
-		SParas *pTmp = static_cast<SParas*>(pVoid);
+		SParas *pTmp = static_cast<SParas*> (pVoid);
 		u_int32_t ui32InputThreadCnt = pTmp->ui32A;
 		u_int32_t ui32OutputThreadCnt = pTmp->ui32B;
 		int32_t i32IoEvtNotifier = pTmp->i32C;
@@ -74,7 +70,8 @@ namespace nm_framework
 		delete pTmp;
 
 		///checking
-		IF_TRUE_THEN_RETURN_CODE((0 == ui32InputThreadCnt || 0 == ui32OutputThreadCnt || 0 == i32IoEvtNotifier), RET_ERR);
+		IF_TRUE_THEN_RETURN_CODE((0 == ui32InputThreadCnt || 0 == ui32OutputThreadCnt || 0 == i32IoEvtNotifier),
+				RET_ERR);
 		///start thread
 		///output task
 		int32_t i32Ret = 0;
@@ -86,6 +83,7 @@ namespace nm_framework
 			i32Ret = pThread->start();
 			IF_TRUE_THEN_RETURN_CODE((i32Ret < 0), RET_ERR);
 			m_vecOutputTasks.push_back(pOutputTask);
+			pOutputTask->set_indx(m_vecOutputTasks.size() - 1);
 			m_vecThreads.push_back(pThread);
 		}
 		///input task
@@ -97,6 +95,7 @@ namespace nm_framework
 			i32Ret = pThread->start();
 			IF_TRUE_THEN_RETURN_CODE((i32Ret < 0), RET_ERR);
 			m_vecInputTasks.push_back(pInputTask);
+			pInputTask->set_indx(m_vecInputTasks.size() - 1);
 			m_vecThreads.push_back(pThread);
 		}
 
@@ -113,14 +112,12 @@ namespace nm_framework
 	int32_t CEngineMgr::stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
 	{
 		///stop all io thread
-		for (thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter
-				!= m_vecInputThreads.end(); iter++)
+		for (thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter != m_vecInputThreads.end(); iter++)
 		{
 			(*iter)->stop_wait();
 		}
 
-		for (thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter
-				!= m_vecInputThreads.end(); iter++)
+		for (thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter != m_vecInputThreads.end(); iter++)
 		{
 			(*iter)->reset_task();
 		}
@@ -132,7 +129,6 @@ namespace nm_framework
 
 		return CMNERR_SUC;
 	}
-
 
 	int32_t CEngineMgr::stop()
 	{
@@ -192,13 +188,18 @@ namespace nm_framework
 		return CMNERR_SUC;
 	}
 
-	int32_t CEngineMgr::del_endpoint(const endpoint_ptr_t &pendpoint)
+	int32_t CEngineMgr::del_endpoint(const endpoint_ptr_t &pEndpoint)
 	{
 		///
-		IF_TRUE_THEN_RETURN_CODE(NULL == pendpoint, CMNERR_COMMON_ERR);
-		///
-		return m_vec_proto_wrappers[pendpoint->get_proto_id()]->del_endpoint(
-				pendpoint);
+		IF_TRUE_THEN_RETURN_CODE(NULL == pEndpoint, CMNERR_COMMON_ERR);
+		///cool!!
+		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(EES_STARTED), CMNERR_COMMON_ERR);
+
+		///assign input task, thread safe?
+		m_vecInputTasks[pEndpoint->get_input_task_indx()]->del_endpoint(pEndpoint);
+		m_vecOutputTasks[pEndpoint->get_output_task_indx()]->del_endpoint(pEndpoint);
+
+		m_sm.end_lock_state();
 	}
 
 }
