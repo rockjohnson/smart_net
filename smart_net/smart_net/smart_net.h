@@ -33,7 +33,7 @@ public:
 	int32_t del_endpoint(nm_framework::endpoint_ptr_t &pep);
 
 private:
-	nm_framework::smart_net_mgr_ptr_t m_pSmartNetMgr;
+	nm_framework::engine_mgr_ptr_t m_pSmartNetMgr;
 };
 typedef nm_utils::CSmartPtr<nm_smartnet::CSmartNet> smart_net_ptr_t;
 

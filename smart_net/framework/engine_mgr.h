@@ -29,6 +29,16 @@ public:
 	CEngineMgr();
 	virtual ~CEngineMgr();
 
+	enum E_ENGINE_STATE
+	{
+		EES_STOPPED = 0, EES_STARTED
+	};
+
+	enum E_ENGINE_EVT
+	{
+		EEE_START = 0, EEE_STOP
+	};
+
 public:
 	int32_t start(u_int32_t ui32InputThreadCnt,
 			u_int32_t ui32OutputThreadCnt,
@@ -62,7 +72,7 @@ private:
 	///
 	misc_task_ptr_t m_pMiscTasks;
 };
-typedef nm_utils::CSmartPtr<nm_framework::CEngineMgr> smart_net_mgr_ptr_t;
+typedef nm_utils::CSmartPtr<nm_framework::CEngineMgr> engine_mgr_ptr_t;
 
 }
 

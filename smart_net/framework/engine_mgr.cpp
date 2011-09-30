@@ -9,16 +9,6 @@
 
 namespace nm_framework
 {
-	enum E_ENGINE_STATE
-	{
-		EES_STOPPED = 0, EES_STARTED
-	};
-
-	enum E_ENGINE_EVT
-	{
-		EEE_START = 0, EEE_STOP
-	};
-
 	struct SParas
 	{
 		u_int32_t ui32A;
@@ -41,8 +31,7 @@ namespace nm_framework
 		// TODO Auto-generated destructor stub
 	}
 
-	int32_t CEngineMgr::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier,
-			int32_t i32MsTimeout)
+	int32_t CEngineMgr::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 	{
 		SParas *pTmp = SYS_NOTRW_NEW(SParas);
 		pTmp->ui32A = ui32InputThreadCnt;
@@ -201,5 +190,4 @@ namespace nm_framework
 
 		m_sm.end_lock_state();
 	}
-
 }

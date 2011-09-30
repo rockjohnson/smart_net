@@ -12,7 +12,7 @@
 #include <memory/mem.h>
 
 #include "../framework/sn_endpoint.h"
-#include "../framework/sn_mgr.h"
+#include "../framework/engine_mgr.h"
 #include "../network/sn_socket_impl.h"
 
 namespace nm_smartnet
@@ -50,6 +50,40 @@ enum
 	EE_IN_ENGINE_DEL_FROM_RECV_THREAD
 };
 
+class CTcpInboundListener : public nm_framework::IEndpoint
+{
+public:
+	CTcpInboundListener(const engine_mgr_ptr_t&);
+	virtual ~CTcpInboundListener();
+
+	DISALLOW_COPY_AND_ASSIGN(CTcpInboundListener);
+
+	enum
+	{
+		EES_OPENNED = 0,
+		EES_CLOSED
+	};
+
+	enum
+	{
+		EEE_OPEN = 0,
+		EEE_CLOSE
+	};
+
+public:
+	int32_t open(std::string &strIP, u_int16_t ui16Port);
+	int32_t close();
+
+private:
+	int32_t opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid);
+	int32_t closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid);
+
+private:
+	nm_utils::CStateMachine<CTcpInboundListener> m_sm;
+	nm_framework::engine_mgr_ptr_t m_pEngineMgr;
+	nm_network::CTcpSock m_sock;
+};
+
 class CTcpInboundEndpoint: public nm_framework::IEndpoint
 {
 public:
@@ -58,7 +92,7 @@ public:
 
 public:
 	///first, you should open this endpoint, but it is async. and if succeed, then on_opened will callback.
-	virtual int32_t open(const nm_network::CIpv4Addr &listenaddr, const nm_network::CIpv4Addr &peeraddr, const nm_framework::smart_net_mgr_ptr_t psmartnetmgr);
+	virtual int32_t open(const nm_network::CIpv4Addr &listenaddr, const nm_network::CIpv4Addr &peeraddr, const nm_framework::engine_mgr_ptr_t psmartnetmgr);
 	///if you want close this endpoint, please invoke this func, but it is aysnc.
 	virtual int32_t close();
 	///send data, async.
@@ -84,7 +118,7 @@ private:
 	volatile bool m_bopenned;
 	nm_utils::CAtomicCounter<int32_t> m_enginerefcnt;
 
-	nm_framework::smart_net_mgr_ptr_t m_psmartnetmgr;
+	nm_framework::engine_mgr_ptr_t m_psmartnetmgr;
 	nm_network::tcp_sock_ptr_t m_psock;
 	nm_network::ipv4_addr_ptr_t m_plistenaddr;
 	nm_network::ipv4_addr_ptr_t m_ppeeraddr;
