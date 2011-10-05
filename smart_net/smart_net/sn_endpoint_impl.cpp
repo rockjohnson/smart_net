@@ -32,7 +32,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	struct SPara
+	struct SParas
 	{
 		std::string strIP;
 		u_int16_t ui16Port;
@@ -40,7 +40,7 @@ namespace nm_smartnet
 
 	int32_t CTcpInboundListener::open(std::string &strIP, u_int16_t ui16Port)
 	{
-		SPara sp;
+		SParas sp;
 		sp.strIP = strIP;
 		sp.ui16Port = ui16Port;
 		return m_sm.post_event(EEE_OPEN, &sp);
@@ -54,7 +54,7 @@ namespace nm_smartnet
 #define BACKLOG (20)
 	int32_t CTcpInboundListener::opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
 	{
-		SPara *pPara = static_cast<SPara*>(pVoid);
+		SParas *pPara = static_cast<SParas*>(pVoid);
 		SYS_ASSERT(!m_sock.is_opened());
 
 		IF_TRUE_THEN_RETURN_CODE(m_sock.open() < 0, CMNERR_COMMON_ERR);
@@ -70,14 +70,6 @@ namespace nm_smartnet
 		SYS_ASSERT(CMNERR_SUC == m_sock.close());
 
 		return CMNERR_SUC;
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpInboundListener::close()
-	{
-
 	}
 
 	/**

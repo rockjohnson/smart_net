@@ -33,12 +33,12 @@ namespace nm_framework
 
 	int32_t CEngineMgr::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 	{
-		SParas *pTmp = SYS_NOTRW_NEW(SParas);
-		pTmp->ui32A = ui32InputThreadCnt;
-		pTmp->ui32B = ui32OutputThreadCnt;
-		pTmp->i32C = i32IoEvtNotifier;
-		pTmp->i32D = i32MsTimeout;
-		return m_sm.post_event(EEE_START, pTmp);
+		SParas sp;
+		sp.ui32A = ui32InputThreadCnt;
+		sp.ui32B = ui32OutputThreadCnt;
+		sp.i32C = i32IoEvtNotifier;
+		sp.i32D = i32MsTimeout;
+		return m_sm.post_event(EEE_START, &sp);
 	}
 
 	/**
@@ -51,16 +51,14 @@ namespace nm_framework
 		using namespace nm_thread;
 
 		///
-		SParas *pTmp = static_cast<SParas*> (pVoid);
-		u_int32_t ui32InputThreadCnt = pTmp->ui32A;
-		u_int32_t ui32OutputThreadCnt = pTmp->ui32B;
-		int32_t i32IoEvtNotifier = pTmp->i32C;
-		int32_t i32MsTimeout = pTmp->i32D;
-		delete pTmp;
+		SParas &sp = *(static_cast<SParas*> (pVoid));
+		u_int32_t ui32InputThreadCnt = sp.ui32A;
+		u_int32_t ui32OutputThreadCnt = sp.ui32B;
+		int32_t i32IoEvtNotifier = sp.i32C;
+		int32_t i32MsTimeout = sp.i32D;
 
 		///checking
-		IF_TRUE_THEN_RETURN_CODE((0 == ui32InputThreadCnt || 0 == ui32OutputThreadCnt || 0 == i32IoEvtNotifier),
-				RET_ERR);
+		IF_TRUE_THEN_RETURN_CODE((0 == ui32InputThreadCnt || 0 == ui32OutputThreadCnt || 0 == i32IoEvtNotifier), RET_ERR);
 		///start thread
 		///output task
 		int32_t i32Ret = 0;
