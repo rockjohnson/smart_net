@@ -37,6 +37,11 @@ int main()
 	tcp_ob_endpoint_ptr_t pTcpOBEP = SYS_NOTHRW_NEW(CTcpOutboundEndpoint(pTcpOBConnector));
 	pTcpOBEP->open();
 
+	///1,create rmp endpoint
+	rmp_endpoint_ptr_t pRmpEP = SYS_NOTHRW_NEW(CRmpEndpoint(pSmartNet));
+	pRmpEP->open(std::string("224.0.2.99"), std::string("127.0.0.1"), 9999);
+
+
 	::sleep(100000);
 
 	pTcpIBEP->close();
