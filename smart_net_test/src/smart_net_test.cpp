@@ -7,27 +7,35 @@
 //============================================================================
 
 #include <iostream>
+#include <string>
 using namespace std;
 
 #include <smart_net/smart_net.h>
-#include "../business/sp_dev_service.h"
+
 using namespace nm_business;
 using namespace nm_smartnet;
 
 int main()
 {
-	///2,create network engine object.
+	///1,create network engine object.
 	smart_net_ptr_t pSmartNet = SYS_NOTRW_NEW(CSmartNet);
 	pSmartNet->start(10, 10,nm_framework::EIEN_EPOLL, 10);
 
+	///2,create acceptor
+	tcp_ib_acceptor_ptr_t pTcpIBAcceptor = SYS_NOTRW_NEW(CTcpInboundAcceptor(pSmartNet));
+	pTcpIBAcceptor->open(std::string("0.0.0.1"), 9999);
+
 	///3,create endpoint
-	tcp_ib_endpoint_ptr_t pTcpIBEP = SYS_NOTRW_NEW(CTcpInboundEndpoint(pSmartNet));
+	tcp_ib_endpoint_ptr_t pTcpIBEP = SYS_NOTRW_NEW(CTcpInboundEndpoint(pTcpIBAcceptor));
+	pTcpIBEP->open();
 
-	net_addr_ptr_t pListenAddr = SYS_NOTRW_NEW(CIpv4Addr);
-	pListenAddr->set_ip("127.0.0.1");
-	pListenAddr->set_port_hbo(9999);
+	///1,create outbound connector
+	tcp_ob_connector_ptr_t pTcpOBConnector = SYS_NOTHRW_NEW(CTcpOutboundConnector(pSmartNet));
+	pTcpOBConnector->open(std::string("127.0.0.1"), 9999);
 
-	pTcpIBEP->open(pListenAddr, net_addr_ptr_t(NULL));
+	///2,create outbound endpoint
+	tcp_ob_endpoint_ptr_t pTcpOBEP = SYS_NOTHRW_NEW(CTcpOutboundEndpoint(pTcpOBConnector));
+	pTcpOBEP->open();
 
 	::sleep(100000);
 

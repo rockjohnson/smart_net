@@ -50,13 +50,13 @@ enum
 	EE_IN_ENGINE_DEL_FROM_RECV_THREAD
 };
 
-class CTcpInboundListener : public nm_framework::IEndpoint
+class CTcpInboundAcceptor : public nm_framework::IEndpoint
 {
 public:
-	CTcpInboundListener(const engine_mgr_ptr_t&);
-	virtual ~CTcpInboundListener();
+	CTcpInboundAcceptor(const engine_mgr_ptr_t&);
+	virtual ~CTcpInboundAcceptor();
 
-	DISALLOW_COPY_AND_ASSIGN(CTcpInboundListener);
+	DISALLOW_COPY_AND_ASSIGN(CTcpInboundAcceptor);
 
 	enum
 	{
@@ -79,7 +79,7 @@ private:
 	int32_t closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid);
 
 private:
-	nm_utils::CStateMachine<CTcpInboundListener> m_sm;
+	nm_utils::CStateMachine<CTcpInboundAcceptor> m_sm;
 	nm_framework::engine_mgr_ptr_t m_pEngineMgr;
 	nm_network::CTcpSock m_sock;
 };

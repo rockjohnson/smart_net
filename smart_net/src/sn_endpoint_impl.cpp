@@ -14,17 +14,17 @@ namespace nm_smartnet
 	 *
 	 *
 	 * */
-	CTcpInboundListener::CTcpInboundListener(const engine_mgr_ptr_t& pEngineMgr) :
+	CTcpInboundAcceptor::CTcpInboundAcceptor(const engine_mgr_ptr_t& pEngineMgr) :
 		m_pEngineMgr(pEngineMgr)
 	{
-		m_sm.reg_evt_state(EES_CLOSED, EEE_OPEN, EES_OPENNED, &CTcpInboundListener::opening);
-		m_sm.reg_evt_state(EES_OPENNED, EEE_CLOSE, EES_CLOSED, &CTcpInboundListener::closing);
+		m_sm.reg_evt_state(EES_CLOSED, EEE_OPEN, EES_OPENNED, &CTcpInboundAcceptor::opening);
+		m_sm.reg_evt_state(EES_OPENNED, EEE_CLOSE, EES_CLOSED, &CTcpInboundAcceptor::closing);
 	}
 
 	/**
 	 *
 	 * */
-	CTcpInboundListener::~CTcpInboundListener()
+	CTcpInboundAcceptor::~CTcpInboundAcceptor()
 	{
 
 	}
@@ -38,7 +38,7 @@ namespace nm_smartnet
 		u_int16_t ui16Port;
 	};
 
-	int32_t CTcpInboundListener::open(std::string &strIP, u_int16_t ui16Port)
+	int32_t CTcpInboundAcceptor::open(std::string &strIP, u_int16_t ui16Port)
 	{
 		SParas sp;
 		sp.strIP = strIP;
@@ -46,13 +46,13 @@ namespace nm_smartnet
 		return m_sm.post_event(EEE_OPEN, &sp);
 	}
 
-	int32_t CTcpInboundListener::close()
+	int32_t CTcpInboundAcceptor::close()
 	{
 		return m_sm.post_event(EEE_CLOSE, NULL);
 	}
 
 #define BACKLOG (20)
-	int32_t CTcpInboundListener::opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
+	int32_t CTcpInboundAcceptor::opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
 	{
 		SParas *pPara = static_cast<SParas*>(pVoid);
 		SYS_ASSERT(!m_sock.is_opened());
@@ -64,7 +64,7 @@ namespace nm_smartnet
 		return CMNERR_SUC;
 	}
 
-	int32_t CTcpInboundListener::closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
+	int32_t CTcpInboundAcceptor::closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
 	{
 		SYS_ASSERT(m_sock.is_opened());
 		SYS_ASSERT(CMNERR_SUC == m_sock.close());
