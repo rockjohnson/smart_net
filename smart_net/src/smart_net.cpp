@@ -25,7 +25,7 @@ int32_t CSmartNet::start(u_int32_t ui32inputthreadcnt,
 		u_int32_t ui32outputthreadcnt,
 		int32_t i32ioevtnotifier, int32_t i32MStimeout)
 {
-	m_pSmartNetMgr = SYS_NOTRW_NEW(nm_framework::CEngineMgr);
+	m_pSmartNetMgr = SYS_NOTRW_NEW(nm_framework::CNetEngine);
 	IF_TRUE_THEN_RETURN_CODE(NULL == m_pSmartNetMgr, CMNERR_COMMON_ERR);
 
 	return m_pSmartNetMgr->start(ui32inputthreadcnt,

@@ -14,7 +14,7 @@ namespace nm_smartnet
 	 *
 	 *
 	 * */
-	CTcpInboundAcceptor::CTcpInboundAcceptor(const engine_mgr_ptr_t& pEngineMgr) :
+	CTcpInboundAcceptor::CTcpInboundAcceptor(const net_engine_ptr_t& pEngineMgr) :
 		m_pEngineMgr(pEngineMgr)
 	{
 		m_sm.reg_evt_state(EES_CLOSED, EEE_OPEN, EES_OPENNED, &CTcpInboundAcceptor::opening);
@@ -104,7 +104,7 @@ namespace nm_smartnet
 	 * open this endpoint and put it into the io engine.
 	 * */
 	int32_t CTcpInboundEndpoint::open(const nm_network::CIpv4Addr &listenaddr, const nm_network::CIpv4Addr &peeraddr,
-			const nm_framework::engine_mgr_ptr_t psmartnetmgr)
+			const nm_framework::net_engine_ptr_t psmartnetmgr)
 	{
 		IF_TRUE_THEN_RETURN_CODE(m_bopenned, CMNERR_SUC);
 
