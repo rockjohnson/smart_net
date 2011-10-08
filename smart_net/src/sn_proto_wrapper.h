@@ -25,7 +25,7 @@ enum EProtocols
 	EP_ALL
 };
 
-class IProtoWrapper : public nm_base::ICommonBase
+class IProtoWrapper : public nm_comm_base::ICommonBase
 {
 public:
 	IProtoWrapper(){}

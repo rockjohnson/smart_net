@@ -17,7 +17,7 @@ namespace nm_thread
 /**
  * thread task base
  * */
-class IThreadTask: public nm_base::ICommonBase
+class IThreadTask: public nm_comm_base::ICommonBase
 {
 public:
 	IThreadTask();
@@ -38,7 +38,7 @@ typedef nm_utils::CSmartPtr<nm_thread::IThreadTask> thread_task_ptr_t;
 /**
  * common thread
  * */
-class CThread : public nm_base::ICommonBase
+class CThread : public nm_comm_base::ICommonBase
 {
 public:
 	enum EEvt

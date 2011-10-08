@@ -22,13 +22,13 @@ namespace nm_framework
 {
 
 	/**
-	 * the smart net manager.
+	 * the smart net engine.
 	 * */
-	class CNetEngine: public nm_base::ICommonBase
+	class CSNEngine: public nm_comm_base::ICommonBase
 	{
 	public:
-		CNetEngine();
-		virtual ~CNetEngine();
+		CSNEngine();
+		virtual ~CSNEngine();
 
 		enum E_ENGINE_STATE
 		{
@@ -40,7 +40,7 @@ namespace nm_framework
 			EEE_START = 0, EEE_STOP
 		};
 
-		DISALLOW_COPY_AND_ASSIGN( CNetEngine);
+		DISALLOW_COPY_AND_ASSIGN(CSNEngine);
 
 	public:
 		int32_t start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
@@ -56,10 +56,8 @@ namespace nm_framework
 		int32_t stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid);
 
 	private:
-
-
 		///state
-		nm_utils::CStateMachine<CNetEngine> m_sm;
+		nm_utils::CStateMachine<CSNEngine> m_sm;
 		///threads
 		typedef std::vector<nm_thread::thread_ptr_t> thread_vec_t;
 		thread_vec_t m_vecThreads;
@@ -72,7 +70,7 @@ namespace nm_framework
 		///
 		misc_task_ptr_t m_pMiscTasks;
 	};
-	typedef nm_utils::CSmartPtr<nm_framework::CNetEngine> net_engine_ptr_t;
+	typedef nm_utils::CSmartPtr<nm_framework::CSNEngine> net_engine_ptr_t;
 
 }
 

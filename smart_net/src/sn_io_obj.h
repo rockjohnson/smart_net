@@ -23,7 +23,7 @@ namespace nm_engine
 	/**
 	 * base class for io objs.
 	 * */
-	class IIoObj: public nm_base::ICommonBase
+	class IIoObj: public nm_comm_base::ICommonBase
 	{
 	public:
 		IIoObj()

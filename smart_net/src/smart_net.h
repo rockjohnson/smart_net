@@ -16,7 +16,7 @@
 namespace nm_smartnet
 {
 
-class CSmartNet : public nm_base::ICommonBase
+class CSmartNet : public nm_comm_base::ICommonBase
 {
 public:
 	CSmartNet();

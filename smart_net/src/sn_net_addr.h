@@ -18,7 +18,7 @@ namespace nm_network
 /**
  * net address.
  * */
-class INetAddr : public nm_base::ICommonBase
+class INetAddr : public nm_comm_base::ICommonBase
 {
 public:
 	INetAddr();

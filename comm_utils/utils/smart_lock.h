@@ -123,7 +123,7 @@ namespace nm_utils
 	};
 
 	template<typename T>
-	class CScopeLock : public nm_base::CNoncopyable
+	class CScopeLock : public nm_comm_base::CNoncopyable
 	{
 	public:
 		CScopeLock(T &lock)

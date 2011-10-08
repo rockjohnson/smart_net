@@ -15,7 +15,7 @@
 namespace nm_engine
 {
 
-class IInternalTimer: public nm_base::ICommonBase
+class IInternalTimer: public nm_comm_base::ICommonBase
 {
 public:
 	IInternalTimer();

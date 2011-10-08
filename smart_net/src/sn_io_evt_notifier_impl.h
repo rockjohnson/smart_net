@@ -80,8 +80,8 @@ private:
 	///
 	int32_t m_i32MsTimeout;
 	///
-	typedef std::vector<nm_base::io_obj_ptr_t> io_obj_vec_t;
-	typedef std::set<nm_base::io_obj_ptr_t> io_obj_set_t;
+	typedef std::vector<nm_comm_base::io_obj_ptr_t> io_obj_vec_t;
+	typedef std::set<nm_comm_base::io_obj_ptr_t> io_obj_set_t;
 	io_obj_set_t m_setIoObjs;
 	///
 	io_obj_vec_t m_vecIoObjsAddCache;

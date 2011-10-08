@@ -20,7 +20,7 @@ namespace nm_utils
 /**
  *
  * */
-class IEvent : public nm_base::ICommonBase
+class IEvent : public nm_comm_base::ICommonBase
 {
 public:
 	IEvent();

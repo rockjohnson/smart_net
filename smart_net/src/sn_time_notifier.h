@@ -22,7 +22,7 @@ namespace nm_engine
 /**
  * not thread safe
  * */
-class CTimeNotifier : public nm_base::ICommonBase
+class CTimeNotifier : public nm_comm_base::ICommonBase
 {
 public:
 	CTimeNotifier();

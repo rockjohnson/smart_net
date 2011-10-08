@@ -44,7 +44,7 @@ namespace nm_utils
 	/**
 	 * smart log class
 	 * */
-	class CSmartLog : public nm_base::CNoncopyable
+	class CSmartLog : public nm_comm_base::CNoncopyable
 	{
 	public:
 		CSmartLog();

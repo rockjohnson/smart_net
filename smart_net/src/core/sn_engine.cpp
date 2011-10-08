@@ -5,7 +5,7 @@
  *      Author: rock
  */
 
-#include "net_engine.h"
+#include "sn_engine.h"
 
 namespace nm_framework
 {
@@ -19,19 +19,19 @@ namespace nm_framework
 
 	using namespace nm_protocol;
 
-	CNetEngine::CNetEngine() :
+	CSNEngine::CSNEngine() :
 		m_vec_proto_wrappers(EP_ALL)
 	{
-		m_sm.reg_evt_state(EES_STOPPED, EEE_START, EES_STARTED, &CNetEngine::starting);
-		m_sm.reg_evt_state(EES_STARTED, EEE_STOP, EES_STOPPED, &CNetEngine::stopping);
+		m_sm.reg_evt_state(EES_STOPPED, EEE_START, EES_STARTED, &CSNEngine::starting);
+		m_sm.reg_evt_state(EES_STARTED, EEE_STOP, EES_STOPPED, &CSNEngine::stopping);
 	}
 
-	CNetEngine::~CNetEngine()
+	CSNEngine::~CSNEngine()
 	{
 		// TODO Auto-generated destructor stub
 	}
 
-	int32_t CNetEngine::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
+	int32_t CSNEngine::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 	{
 		SParas sp;
 		sp.ui32A = ui32InputThreadCnt;
@@ -45,7 +45,7 @@ namespace nm_framework
 	 *
 	 * if this func return err, you should call stop func :)...
 	 * */
-	int32_t CNetEngine::starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
+	int32_t CSNEngine::starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
 	{
 		using namespace nm_engine;
 		using namespace nm_thread;
@@ -96,7 +96,7 @@ namespace nm_framework
 		return RET_SUC;
 	}
 
-	int32_t CNetEngine::stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
+	int32_t CSNEngine::stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
 	{
 		///stop all io thread
 		for (thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter != m_vecInputThreads.end(); iter++)
@@ -117,7 +117,7 @@ namespace nm_framework
 		return CMNERR_SUC;
 	}
 
-	int32_t CNetEngine::stop()
+	int32_t CSNEngine::stop()
 	{
 		return m_sm.post_event(EEE_STOP, NULL);
 	}
@@ -125,7 +125,7 @@ namespace nm_framework
 	/**
 	 * thread safe
 	 * */
-	int32_t CNetEngine::add_endpoint(const endpoint_ptr_t &pEndpoint)
+	int32_t CSNEngine::add_endpoint(const endpoint_ptr_t &pEndpoint)
 	{
 		///
 		IF_TRUE_THEN_RETURN_CODE(NULL == pEndpoint, CMNERR_COMMON_ERR);
@@ -175,7 +175,7 @@ namespace nm_framework
 		return CMNERR_SUC;
 	}
 
-	int32_t CNetEngine::del_endpoint(const endpoint_ptr_t &pEndpoint)
+	int32_t CSNEngine::del_endpoint(const endpoint_ptr_t &pEndpoint)
 	{
 		///
 		IF_TRUE_THEN_RETURN_CODE(NULL == pEndpoint, CMNERR_COMMON_ERR);

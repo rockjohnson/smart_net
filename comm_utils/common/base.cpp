@@ -8,7 +8,7 @@
 #include "base.h"
 #include "../utils/atomic.h"
 
-namespace nm_base
+namespace nm_comm_base
 {
 
 using namespace nm_utils;
