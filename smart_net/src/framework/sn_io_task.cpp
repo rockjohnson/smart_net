@@ -7,7 +7,7 @@
 
 #include "sn_io_task.h"
 
-namespace nm_engine
+namespace nm_framework
 {
 
 CInputHandleTask::CInputHandleTask()

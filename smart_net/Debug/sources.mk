@@ -23,11 +23,9 @@ C_UPPER_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-smart_net \
-protocols \
-network \
-framework \
-engine \
-common \
-backup \
+src/smart_net \
+src/network \
+src/framework \
+src/event \
+src/common \
 

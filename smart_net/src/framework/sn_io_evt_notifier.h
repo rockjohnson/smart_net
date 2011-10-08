@@ -8,6 +8,8 @@
 #ifndef __SN_IO_EVT_NOTIFIER_H__
 #define __SN_IO_EVT_NOTIFIER_H__
 
+#include "sn_io_obj.h"
+
 namespace nm_framework
 {
 

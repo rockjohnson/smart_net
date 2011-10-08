@@ -9,7 +9,7 @@
 #define __SN_SOCKET_IMPL_H__
 
 #include "../common/sn_common.h"
-#include "../framework/sn_socket.h"
+#include "sn_socket.h"
 
 namespace nm_network
 {
@@ -31,6 +31,7 @@ public:
 	virtual int32_t open(sock_handle_t sockhandle = INVALID_SOCKET);
 	virtual int32_t close();
 	virtual int32_t bind(const CIpv4Addr &bindaddr);
+	virtual int32_t bind(const std::string &strBindIP, u_int16_t ui16BindPort);
 	virtual int32_t listen(int32_t i32Backlog);
 	virtual tcp_sock_ptr_t accept();
 	virtual int32_t connect(const CIpv4Addr &remoteAddr);

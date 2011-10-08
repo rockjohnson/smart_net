@@ -9,7 +9,7 @@
 
 #include "sn_io_evt_notifier_impl.h"
 
-namespace nm_engine
+namespace nm_framework
 {
 
 CMiscTask::CMiscTask()

@@ -16,7 +16,7 @@
 #include "../common/sn_common.h"
 #include "sn_timer.h"
 
-namespace nm_engine
+namespace nm_framework
 {
 
 /**

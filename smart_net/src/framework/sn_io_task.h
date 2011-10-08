@@ -15,7 +15,7 @@
 #include "sn_io_evt_notifier.h"
 #include "sn_timer.h"
 
-namespace nm_engine
+namespace nm_framework
 {
 
 	enum E_IO_TASK_TYPE
@@ -51,7 +51,7 @@ private:
 	int32_t m_i32id;
 	//nm_utils::CEventHandleEngine m_evtengine; ///serialized the handles.
 };
-typedef nm_utils::CSmartPtr<nm_engine::CInputHandleTask> input_handle_task_ptr_t;
+typedef nm_utils::CSmartPtr<nm_framework::CInputHandleTask> input_handle_task_ptr_t;
 
 
 /**
@@ -81,7 +81,7 @@ private:
 	int32_t m_i32id;
 	nm_utils::CEventHandleEngine m_evtengine; ///serialized the handles.
 };
-typedef nm_utils::CSmartPtr<nm_engine::COutputHandleTask> output_handle_task_ptr_t;
+typedef nm_utils::CSmartPtr<nm_framework::COutputHandleTask> output_handle_task_ptr_t;
 
 
 }

@@ -12,7 +12,7 @@
 
 #include "../common/sn_common.h"
 
-namespace nm_engine
+namespace nm_framework
 {
 
 	enum E_IO_TYPE

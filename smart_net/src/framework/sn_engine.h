@@ -11,11 +11,13 @@
 #include <vector>
 
 #include <utils/state_machine.h>
-#include "../common/sn_common.h>
+#include <thread/thread_ex.h>
 
+#include "../common/sn_common.h"
+#include "sn_timer.h"
 #include "sn_endpoint.h"
-//#include "sn_proto_wrapper.h"
-//#include "../engine/sn_engine.h"
+#include "sn_io_task.h"
+#include "sn_misc_task.h"
 
 
 namespace nm_framework
@@ -48,8 +50,8 @@ namespace nm_framework
 		///
 		int32_t add_endpoint(const endpoint_ptr_t &pEP); ///not thread safe
 		int32_t del_endpoint(const endpoint_ptr_t &pEP); ///not thread safe
-		int32_t add_timer(const timer_ptr_t &pTimer);
-		int32_t del_timer(const timer_ptr_t &pTimer);
+		int32_t add_timer(const internal_timer_ptr_t &pTimer);
+		int32_t del_timer(const internal_timer_ptr_t &pTimer);
 
 	private:
 		int32_t starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid);
@@ -70,7 +72,7 @@ namespace nm_framework
 		///
 		misc_task_ptr_t m_pMiscTask;
 	};
-	typedef nm_utils::CSmartPtr<nm_framework::CSNEngine> net_engine_ptr_t;
+	typedef nm_utils::CSmartPtr<nm_framework::CSNEngine> sn_engine_ptr_t;
 
 }
 

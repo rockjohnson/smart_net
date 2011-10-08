@@ -16,7 +16,7 @@
 #include "sn_io_evt_notifier.h"
 #include "sn_time_notifier.h"
 
-namespace nm_engine
+namespace nm_framework
 {
 
 /**

@@ -14,8 +14,8 @@ namespace nm_smartnet
 	 *
 	 *
 	 * */
-	CTcpInboundAcceptor::CTcpInboundAcceptor(const net_engine_ptr_t& pEngineMgr) :
-		m_pEngineMgr(pEngineMgr)
+	CTcpInboundAcceptor::CTcpInboundAcceptor(const nm_framework::sn_engine_ptr_t &pSNEngine) :
+		m_sm(this), m_pSNEngine(pSNEngine)
 	{
 		m_sm.reg_evt_state(EES_CLOSED, EEE_OPEN, EES_OPENNED, &CTcpInboundAcceptor::opening);
 		m_sm.reg_evt_state(EES_OPENNED, EEE_CLOSE, EES_CLOSED, &CTcpInboundAcceptor::closing);
@@ -54,7 +54,7 @@ namespace nm_smartnet
 #define BACKLOG (20)
 	int32_t CTcpInboundAcceptor::opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
 	{
-		SParas *pPara = static_cast<SParas*>(pVoid);
+		SParas *pPara = static_cast<SParas*> (pVoid);
 		SYS_ASSERT(!m_sock.is_opened());
 
 		IF_TRUE_THEN_RETURN_CODE(m_sock.open() < 0, CMNERR_COMMON_ERR);
@@ -83,13 +83,11 @@ namespace nm_smartnet
 
 		///first add into recv thread.
 		m_sm.reg_evt_state(ES_IN_ENGINE, EE_IN_ENGINE_ADD_INTO_RECV_THREAD, ES_IN_ENGINE_AND_IN_RECV_THREAD, NULL);
-		m_sm.reg_evt_state(ES_IN_ENGINE_AND_IN_RECV_THREAD, EE_IN_ENGINE_ADD_INTO_SEND_THREAD, ES_IN_ENGINE_RUNNING,
-				NULL);
+		m_sm.reg_evt_state(ES_IN_ENGINE_AND_IN_RECV_THREAD, EE_IN_ENGINE_ADD_INTO_SEND_THREAD, ES_IN_ENGINE_RUNNING, NULL);
 
 		///first add into send thread.
 		m_sm.reg_evt_state(ES_IN_ENGINE, EE_IN_ENGINE_ADD_INTO_SEND_THREAD, ES_IN_ENGINE_AND_IN_SEND_THREAD, NULL);
-		m_sm.reg_evt_state(ES_IN_ENGINE_AND_IN_SEND_THREAD, EE_IN_ENGINE_ADD_INTO_RECV_THREAD, ES_IN_ENGINE_RUNNING,
-				NULL);
+		m_sm.reg_evt_state(ES_IN_ENGINE_AND_IN_SEND_THREAD, EE_IN_ENGINE_ADD_INTO_RECV_THREAD, ES_IN_ENGINE_RUNNING, NULL);
 
 		///
 
@@ -104,7 +102,7 @@ namespace nm_smartnet
 	 * open this endpoint and put it into the io engine.
 	 * */
 	int32_t CTcpInboundEndpoint::open(const nm_network::CIpv4Addr &listenaddr, const nm_network::CIpv4Addr &peeraddr,
-			const nm_framework::net_engine_ptr_t psmartnetmgr)
+			const nm_framework::sn_engine_ptr_t psmartnetmgr)
 	{
 		IF_TRUE_THEN_RETURN_CODE(m_bopenned, CMNERR_SUC);
 
@@ -120,8 +118,8 @@ namespace nm_smartnet
 		m_psmartnetmgr = psmartnetmgr;
 
 		m_psock = SYS_NOTRW_NEW(nm_network::CTcpSock);
-		m_plistenaddr = listenaddr;
-		m_ppeeraddr = peeraddr;
+//		m_plistenaddr = listenaddr;
+//		m_ppeeraddr = peeraddr;
 
 		return m_psmartnetmgr->add_endpoint(nm_framework::endpoint_ptr_t(this));
 	}

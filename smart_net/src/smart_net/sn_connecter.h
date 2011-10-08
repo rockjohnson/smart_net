@@ -8,23 +8,25 @@
 #ifndef SN_CONNECTER_H_
 #define SN_CONNECTER_H_
 
+#include <string>
+
+#include "../framework/sn_timer.h"
+
 namespace nm_network
 {
 
 /**
  * tcp connect timer.
  * */
-class CTcpConnecter : public nm_framework::ITimer
+class CTcpOutboundConnector : public nm_framework::IInternalTimer
 {
 public:
-	CTcpConnecter();
-	~CTcpConnecter();
+	CTcpOutboundConnector();
+	virtual ~CTcpOutboundConnector();
 
 public:
-	int32_t open(const net_addr_ptr_t &pDstAddr);
+	int32_t open(const std::string &strAcceptorIP, u_int16_t ui16AcceptorPort);
 	int32_t close();
-
-	net_addr_ptr_t m_pDstAddr;
 };
 
 }

@@ -19,7 +19,7 @@ namespace nm_framework
 /**
  * endpoint interface
  * */
-class IEndpoint : public nm_engine::IIoObj
+class IEndpoint : public nm_framework::IIoObj
 {
 public:
 	IEndpoint();

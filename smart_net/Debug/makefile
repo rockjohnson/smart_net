@@ -9,13 +9,11 @@ RM := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir.mk
--include smart_net/subdir.mk
--include protocols/subdir.mk
--include network/subdir.mk
--include framework/subdir.mk
--include engine/subdir.mk
--include common/subdir.mk
--include backup/subdir.mk
+-include src/smart_net/subdir.mk
+-include src/network/subdir.mk
+-include src/framework/subdir.mk
+-include src/event/subdir.mk
+-include src/common/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
