@@ -15,30 +15,39 @@
 namespace nm_engine
 {
 
-/**
- * base class for io objs.
- * */
-class IIoObj : public nm_base::ICommonBase
-{
-public:
-	IIoObj(){}
-	virtual ~IIoObj(){}
+	enum E_IO_TYPE
+	{
+		EIT_INPUT = 1, EIT_OUTPUT
+	};
 
-public:
-	virtual void handle_input_evt() = 0;
-	virtual void handle_output_evt() = 0;
-	virtual void handle_error_evt() = 0;
-	virtual sock_handle_t get_handle() = 0;
+	/**
+	 * base class for io objs.
+	 * */
+	class IIoObj: public nm_base::ICommonBase
+	{
+	public:
+		IIoObj()
+		{
+		}
+		virtual ~IIoObj()
+		{
+		}
 
-	virtual u_int32_t get_input_evts() = 0;
-	virtual u_int32_t get_output_evts() = 0;
-	virtual u_int32_t get_misc_evts() = 0;
-	virtual void set_input_task_id(int32_t i32id) = 0;
-	virtual int32_t get_input_task_id() = 0;
-	virtual void set_output_task_id(int32_t i32id) = 0;
-	virtual int32_t get_output_task_id() = 0;
-};
-typedef nm_utils::CSmartPtr<IIoObj> io_obj_ptr_t;
+	public:
+		virtual void handle_input_evt() = 0;
+		virtual void handle_output_evt() = 0;
+		virtual void handle_error_evt() = 0;
+		virtual sock_handle_t get_handle() = 0;
+
+		virtual u_int32_t get_input_evts() = 0;
+		virtual u_int32_t get_output_evts() = 0;
+		virtual u_int32_t get_misc_evts() = 0;
+		virtual void set_input_task_id(int32_t i32id) = 0;
+		virtual int32_t get_input_task_id() = 0;
+		virtual void set_output_task_id(int32_t i32id) = 0;
+		virtual int32_t get_output_task_id() = 0;
+	};
+	typedef nm_utils::CSmartPtr<IIoObj> io_obj_ptr_t;
 
 }
 

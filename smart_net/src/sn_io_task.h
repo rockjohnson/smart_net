@@ -18,6 +18,12 @@
 namespace nm_engine
 {
 
+	enum E_IO_TASK_TYPE
+	{
+		EITT_HANDLE_INPUT_TASK = 0,
+		EITT_HANDLE_OUTPUT_TASK
+	};
+
 /**
  * input handler
  * */
@@ -71,7 +77,7 @@ public:
 	int32_t get_ioobj_cnt();
 
 private:
-	io_evt_notifier_ptr_t m_pioevtnotifier; ///the io event notify mechanism obj;
+	io_evt_notifier_ptr_t m_pIoEvtNotifier; ///the io event notify mechanism obj;
 	int32_t m_i32id;
 	nm_utils::CEventHandleEngine m_evtengine; ///serialized the handles.
 };

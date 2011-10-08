@@ -20,7 +20,7 @@ CInputHandleTask::~CInputHandleTask()
 	destroy();
 }
 
-int32_t CInputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout, int32_t i32id)
+int32_t CInputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MsTimeout, int32_t i32id)
 {
 	IF_TRUE_THEN_RETURN_CODE(NULL != m_pIoEvtNotifier, CMNERR_COMMON_ERR);
 
@@ -37,7 +37,7 @@ int32_t CInputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout, i
 
 	m_i32id = i32id;
 
-	return m_pIoEvtNotifier->init(i32MStimeout);
+	return m_pIoEvtNotifier->init(EITT_HANDLE_INPUT_TASK, i32MsTimeout);
 }
 
 int32_t CInputHandleTask::destroy()
@@ -175,38 +175,38 @@ void COutputHandleTask::pos_evt(const nm_utils::event_ptr_t &pevt)
 
 int32_t COutputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout, int32_t i32id)
 {
-	IF_TRUE_THEN_RETURN_CODE(NULL != m_pioevtnotifier, CMNERR_COMMON_ERR);
+	IF_TRUE_THEN_RETURN_CODE(NULL != m_pIoEvtNotifier, CMNERR_COMMON_ERR);
 
 	///create io event notify mechanism obj.
-	m_pioevtnotifier = IIoEvtNotifier::create_obj(i32ioevtnotifier);
-	IF_TRUE_THEN_RETURN_CODE(NULL == m_pioevtnotifier, CMNERR_COMMON_ERR);
+	m_pIoEvtNotifier = IIoEvtNotifier::create_obj(i32ioevtnotifier);
+	IF_TRUE_THEN_RETURN_CODE(NULL == m_pIoEvtNotifier, CMNERR_COMMON_ERR);
 
 	m_i32id = i32id;
 
-	return m_pioevtnotifier->init(i32MStimeout);
+	return m_pIoEvtNotifier->init(EITT_HANDLE_OUTPUT_TASK, i32MStimeout);
 }
 
 int32_t COutputHandleTask::destroy()
 {
-	IF_TRUE_THEN_RETURN_CODE(NULL == m_pioevtnotifier, CMNERR_COMMON_ERR);
+	IF_TRUE_THEN_RETURN_CODE(NULL == m_pIoEvtNotifier, CMNERR_COMMON_ERR);
 
-	m_pioevtnotifier->destroy();
-	m_pioevtnotifier = NULL;
+	m_pIoEvtNotifier->destroy();
+	m_pIoEvtNotifier = NULL;
 	m_i32id = -1;
 }
 
-int32_t COutputHandleTask::add_io_obj(const io_obj_ptr_t &pioobj)
+int32_t COutputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 {
-	SYS_ASSERT(NULL != m_pioevtnotifier);
+	SYS_ASSERT(NULL != m_pIoEvtNotifier);
 
-	return m_pioevtnotifier->add_io_obj(pioobj, pioobj->get_output_evts());
+	return m_pIoEvtNotifier->add_io_obj(pIoObj, pIoObj->get_output_evts());
 }
 
 int32_t COutputHandleTask::del_io_obj(const io_obj_ptr_t &pioobj)
 {
-	SYS_ASSERT(NULL != m_pioevtnotifier);
+	SYS_ASSERT(NULL != m_pIoEvtNotifier);
 
-	return m_pioevtnotifier->del_io_obj(pioobj);
+	return m_pIoEvtNotifier->del_io_obj(pioobj);
 }
 
 void COutputHandleTask::exec()
@@ -216,7 +216,7 @@ void COutputHandleTask::exec()
 		///
 		m_evtengine->exec();
 		///
-		m_pioevtnotifier->exec();
+		m_pIoEvtNotifier->exec();
 	}
 }
 

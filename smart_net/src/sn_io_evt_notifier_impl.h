@@ -14,6 +14,7 @@
 #endif
 
 #include <set>
+#include <vector>
 
 #include <utils/obj_factory.h>
 
@@ -57,9 +58,11 @@ public:
 	CEpoll();
 	virtual ~CEpoll();
 
+	DISALLOW_COPY_AND_ASSIGN(CEpoll);
+
 public:
 	///
-	int32_t init(int32_t i32MsTimeout);
+	int32_t init(int32_t i32IoTaskType, int32_t i32MsTimeout);
 	int32_t destroy();
 	///
 	int32_t add_io_obj(const io_obj_ptr_t &pIoObj, u_int32_t ui32Evts);
@@ -71,15 +74,20 @@ private:
 	///
 	int32_t m_i32epfd;
 	///
+	int32_t m_i32IoType;
 #define MAX_EVENTS (10000)
 	struct epoll_event m_arrEvts[MAX_EVENTS];
 	///
-	int32_t m_i32MSTimeout;
+	int32_t m_i32MsTimeout;
 	///
-	std::set<io_obj_ptr_t> m_setIoObjs;
-	nm_utils::CSpinLock m_lkIoObjCache;
-	std::set<io_obj_ptr_t> m_setIoObjsAddCache;
-	std::set<io_obj_ptr_t> m_setIoObjsDelCache;
+	typedef std::vector<nm_base::io_obj_ptr_t> io_obj_vec_t;
+	typedef std::set<nm_base::io_obj_ptr_t> io_obj_set_t;
+	io_obj_set_t m_setIoObjs;
+	///
+	io_obj_vec_t m_vecIoObjsAddCache;
+	nm_utils::CSpinLock m_lkIoObjAddCache;
+	io_obj_vec_t m_vecIoObjsDelCache;
+	nm_utils::CSpinLock m_lkIoObjDelCache;
 };
 
 }
