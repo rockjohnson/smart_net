@@ -10,15 +10,15 @@
 namespace nm_engine
 {
 
-	IIoEvtNotifier::IIoEvtNotifier()
-	{
-		// TODO Auto-generated constructor stub
-	}
-
-	IIoEvtNotifier::~IIoEvtNotifier()
-	{
-		destroy();
-	}
+//	IIoEvtNotifier::IIoEvtNotifier()
+//	{
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	IIoEvtNotifier::~IIoEvtNotifier()
+//	{
+//		destroy();
+//	}
 
 	io_evt_notifier_ptr_t& CIoEvtNotifierFactory::create_obj(int32_t i32ioevtnotifier)
 	{

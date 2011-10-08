@@ -11,7 +11,7 @@
 #include <memory/mem.h>
 
 #include "../network/sn_net_addr.h"
-#include "../engine/sn_io_obj.h"
+#include "sn_io_obj.h"
 
 namespace nm_framework
 {

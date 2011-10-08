@@ -109,7 +109,7 @@ namespace nm_framework
 			(*iter)->reset_task();
 		}
 
-		m_vecInputThreads.clear();
+		m_vecThreads.clear();
 		m_vecInputTasks.clear();
 		m_vecOutputTasks.clear();
 		m_pMiscTask = NULL;

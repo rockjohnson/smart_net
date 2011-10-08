@@ -68,7 +68,7 @@ namespace nm_framework
 		typedef std::vector<output_handle_task_ptr_t> output_task_vec_t;
 		output_task_vec_t m_vecOutputTasks;
 		///
-		misc_task_ptr_t m_pMiscTasks;
+		misc_task_ptr_t m_pMiscTask;
 	};
 	typedef nm_utils::CSmartPtr<nm_framework::CSNEngine> net_engine_ptr_t;
 
