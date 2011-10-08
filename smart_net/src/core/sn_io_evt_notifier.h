@@ -8,7 +8,7 @@
 #ifndef __SN_IO_EVT_NOTIFIER_H__
 #define __SN_IO_EVT_NOTIFIER_H__
 
-namespace nm_engine
+namespace nm_framework
 {
 
 enum EIoEvtNotify

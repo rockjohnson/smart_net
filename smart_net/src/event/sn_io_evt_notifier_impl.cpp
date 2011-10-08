@@ -156,15 +156,15 @@ namespace nm_engine
 			io_obj_set_t::size_type stRet = 0;
 			for (io_obj_vec_t::iterator iter = vecTmp.begin(); iter != vecTmp.end(); ++iter)
 			{
-				stRet = m_setIoObjs.erase(*iter);
-				SYS_ASSERT(1 == stRet);
-				(*iter)->handle_erased_from_ioset(m_i32IoType);
-
 				if ((*iter)->get_fd() >= 0)
 				{
 					struct epoll_event evt;
 					epoll_ctl(m_i32epfd, EPOLL_CTL_DEL, (*iter)->get_fd(), &evt);
 				}
+
+				stRet = m_setIoObjs.erase(*iter);
+				SYS_ASSERT(1 == stRet);
+				(*iter)->handle_erased_from_ioset(m_i32IoType);
 			}
 
 			vecTmp.clear();
