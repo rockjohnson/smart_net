@@ -34,6 +34,8 @@ public:
 	virtual int32_t get_proto_id() = 0;
 	virtual nm_network::ipv4_addr_ptr_t& get_peer_addr() const = 0;
 	virtual nm_network::ipv4_addr_ptr_t& get_local_addr() const = 0;
+	virtual int32_t get_input_task_index() const;
+	virtual int32_t get_output_task_index() const;
 
 protected:
 	virtual void on_opened(nm_network::CIpv4Addr &peeraddr) = 0;

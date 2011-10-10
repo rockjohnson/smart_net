@@ -35,7 +35,7 @@ public:
 public:
 	virtual int32_t open(sock_handle_t sockhandle) = 0;
 	virtual int32_t close() = 0;
-	virtual int32_t bind(const nm_network::CIpv4Addr &bindaddr) = 0;
+	virtual int32_t bind(nm_network::CIpv4Addr &bindaddr) = 0;
 	virtual int32_t bind(const std::string &strBindIP, u_int16_t ui16BindPort) = 0;
 	virtual int32_t listen(int32_t i32Backlog) = 0;
 	virtual int32_t connect(const nm_network::CIpv4Addr &remoteAddr) = 0;

@@ -46,7 +46,7 @@ public:
 	virtual void handle_output_evt();
 	virtual void handle_error_evt();
 
-	virtual sock_handle_t get_handle();
+	virtual sock_handle_t get_fd();
 	virtual u_int32_t get_input_evts();
 	virtual u_int32_t get_output_evts();
 	virtual u_int32_t get_misc_evts();

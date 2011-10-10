@@ -30,7 +30,7 @@ public:
 public:
 	virtual int32_t open(sock_handle_t sockhandle = INVALID_SOCKET);
 	virtual int32_t close();
-	virtual int32_t bind(const CIpv4Addr &bindaddr);
+	virtual int32_t bind(CIpv4Addr &bindaddr);
 	virtual int32_t bind(const std::string &strBindIP, u_int16_t ui16BindPort);
 	virtual int32_t listen(int32_t i32Backlog);
 	virtual tcp_sock_ptr_t accept();

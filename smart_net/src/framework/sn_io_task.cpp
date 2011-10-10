@@ -6,12 +6,13 @@
  */
 
 #include "sn_io_task.h"
+#include "../event/sn_io_evt_notifier_impl.h"
 
 namespace nm_framework
 {
 
 CInputHandleTask::CInputHandleTask()
-:m_i32id(-1)
+:m_i32Indx(-1)
 {
 }
 
@@ -20,12 +21,13 @@ CInputHandleTask::~CInputHandleTask()
 	destroy();
 }
 
-int32_t CInputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MsTimeout, int32_t i32id)
+int32_t CInputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MsTimeout)
 {
 	IF_TRUE_THEN_RETURN_CODE(NULL != m_pIoEvtNotifier, CMNERR_COMMON_ERR);
 
 	///create io event notify mechanism obj.
-	m_pIoEvtNotifier = IIoEvtNotifier::create_obj(i32ioevtnotifier);
+	nm_event::CIoEvtNotifierFactory IoEvtFac;
+	m_pIoEvtNotifier = IoEvtFac.create_obj(i32ioevtnotifier);
 	if (NULL == m_pIoEvtNotifier)
 	{
 		return CMNERR_COMMON_ERR;
@@ -35,9 +37,12 @@ int32_t CInputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MsTimeout, i
 //	SYS_ASSERT(m_setIoObjs.empty());
 //	SYS_ASSERT(m_setIoObjDelCache.empty());
 
-	m_i32id = i32id;
-
 	return m_pIoEvtNotifier->init(EITT_HANDLE_INPUT_TASK, i32MsTimeout);
+}
+
+void CInputHandleTask::set_indx(int32_t i32Indx)
+{
+	m_i32Indx = i32Indx;
 }
 
 int32_t CInputHandleTask::destroy()
@@ -46,7 +51,7 @@ int32_t CInputHandleTask::destroy()
 
 	m_pIoEvtNotifier->destroy();
 	m_pIoEvtNotifier = NULL;
-	m_i32id = -1;
+	m_i32Indx = -1;
 
 //	///io obj add cache
 //	m_lkIoObjCache.lock();
@@ -62,10 +67,10 @@ int32_t CInputHandleTask::destroy()
 	return CMNERR_SUC;
 }
 
-void CInputHandleTask::post_event(const nm_utils::event_ptr_t &pevt)
-{
-	m_evtengine.post_event(pevt);
-}
+//void CInputHandleTask::post_event(const nm_utils::event_ptr_t &pevt)
+//{
+//	m_evtengine.post_event(pevt);
+//}
 
 int32_t CInputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 {
@@ -82,7 +87,7 @@ int32_t CInputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 //	ret = m_setIoObjAddCache.insert(pIoObj);
 
 //	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
-	return m_pIoEvtNotifier->add_io_obj(pIoObj, pIoObj->get_input_evts());
+	return m_pIoEvtNotifier->add_io_obj(pIoObj);
 }
 
 /**
@@ -146,9 +151,7 @@ void CInputHandleTask::exec()
 	while (!is_stopped())
 	{
 		///
-		m_evtengine->exec();
-		///
-		if (m_pIoEvtNotifier->exec() < CMNERR_SUC)
+		if (m_pIoEvtNotifier->exec() < 0)
 		{
 			break;
 		}
@@ -173,15 +176,19 @@ void COutputHandleTask::pos_evt(const nm_utils::event_ptr_t &pevt)
 	m_evtengine.post_event(pevt);
 }
 
-int32_t COutputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout, int32_t i32id)
+void COutputHandleTask::set_indx(int32_t i32Indx)
+{
+	m_i32Indx = i32Indx;
+}
+
+int32_t COutputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout)
 {
 	IF_TRUE_THEN_RETURN_CODE(NULL != m_pIoEvtNotifier, CMNERR_COMMON_ERR);
 
 	///create io event notify mechanism obj.
-	m_pIoEvtNotifier = IIoEvtNotifier::create_obj(i32ioevtnotifier);
+	nm_event::CIoEvtNotifierFactory fac;
+	m_pIoEvtNotifier = fac.create_obj(i32ioevtnotifier);
 	IF_TRUE_THEN_RETURN_CODE(NULL == m_pIoEvtNotifier, CMNERR_COMMON_ERR);
-
-	m_i32id = i32id;
 
 	return m_pIoEvtNotifier->init(EITT_HANDLE_OUTPUT_TASK, i32MStimeout);
 }
@@ -192,14 +199,14 @@ int32_t COutputHandleTask::destroy()
 
 	m_pIoEvtNotifier->destroy();
 	m_pIoEvtNotifier = NULL;
-	m_i32id = -1;
+	m_i32Indx = -1;
 }
 
 int32_t COutputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 {
 	SYS_ASSERT(NULL != m_pIoEvtNotifier);
 
-	return m_pIoEvtNotifier->add_io_obj(pIoObj, pIoObj->get_output_evts());
+	return m_pIoEvtNotifier->add_io_obj(pIoObj);
 }
 
 int32_t COutputHandleTask::del_io_obj(const io_obj_ptr_t &pioobj)
@@ -214,9 +221,10 @@ void COutputHandleTask::exec()
 	while(!is_stopped())
 	{
 		///
-		m_evtengine->exec();
-		///
-		m_pIoEvtNotifier->exec();
+		if (m_pIoEvtNotifier->exec() < 0)
+		{
+			break;
+		}
 	}
 }
 

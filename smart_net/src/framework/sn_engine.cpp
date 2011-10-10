@@ -17,10 +17,8 @@ namespace nm_framework
 		int32_t i32D;
 	};
 
-	using namespace nm_protocol;
-
-	CSNEngine::CSNEngine() :
-		m_vec_proto_wrappers(EP_ALL)
+	CSNEngine::CSNEngine()
+	:m_sm(this)
 	{
 		m_sm.reg_evt_state(EES_STOPPED, EEE_START, EES_STARTED, &CSNEngine::starting);
 		m_sm.reg_evt_state(EES_STARTED, EEE_STOP, EES_STOPPED, &CSNEngine::stopping);
@@ -47,7 +45,6 @@ namespace nm_framework
 	 * */
 	int32_t CSNEngine::starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
 	{
-		using namespace nm_engine;
 		using namespace nm_thread;
 
 		///
@@ -86,7 +83,7 @@ namespace nm_framework
 			m_vecThreads.push_back(pThread);
 		}
 
-		misc_task_ptr_t m_pMiscTask = SYS_NOTRW_NEW(CInputHandleTask);
+		misc_task_ptr_t m_pMiscTask = SYS_NOTRW_NEW(CMiscTask);
 		thread_ptr_t pThread = SYS_NOTRW_NEW(CThread);
 		pThread->assign_task(m_pMiscTask);
 		i32Ret = pThread->start();
@@ -99,12 +96,12 @@ namespace nm_framework
 	int32_t CSNEngine::stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
 	{
 		///stop all io thread
-		for (thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter != m_vecInputThreads.end(); iter++)
+		for (thread_vec_t::iterator iter = m_vecThreads.begin(); iter != m_vecThreads.end(); ++iter)
 		{
 			(*iter)->stop_wait();
 		}
 
-		for (thread_vec_t::iterator iter = m_vecInputThreads.begin(); iter != m_vecInputThreads.end(); iter++)
+		for (thread_vec_t::iterator iter = m_vecThreads.begin(); iter != m_vecThreads.end(); iter++)
 		{
 			(*iter)->reset_task();
 		}
@@ -127,6 +124,7 @@ namespace nm_framework
 	 * */
 	int32_t CSNEngine::add_endpoint(const endpoint_ptr_t &pEndpoint)
 	{
+		using namespace nm_framework;
 		///
 		IF_TRUE_THEN_RETURN_CODE(NULL == pEndpoint, CMNERR_COMMON_ERR);
 		///cool!!
@@ -135,40 +133,40 @@ namespace nm_framework
 		///assign input task, thread safe?
 		int32_t i32MinCnt = 0;
 		int32_t i32Tmp = 0;
-		input_task_ptr_t pInputTask;
+		input_handle_task_ptr_t pInputTask;
 		for (input_task_vec_t::iterator iter = m_vecInputTasks.begin(); iter != m_vecInputTasks.end(); ++iter)
 		{
-			i32Tmp = (*iter)->get_endpoint_cnt();
+			i32Tmp = (*iter)->get_ioobj_cnt();
 			if (0 == i32Tmp)
 			{
 				pInputTask = (*iter);
 				break;
 			}
-			else if (i32MinCnt > iTmp)
+			else if (i32MinCnt > i32Tmp)
 			{
-				i32MinCnt = iTmp;
+				i32MinCnt = i32Tmp;
 				pInputTask = (*iter);
 			}
 		}
-		pInputTask->add_endpoint(pEndpoint);
+		pInputTask->add_io_obj(pEndpoint);
 
 		///output task
-		output_task_ptr_t pOutputTask;
-		for (output_task_ptr_t::iterator iter = m_vecOutputTasks.begin(); iter != m_vecOutputTasks.end(); ++iter)
+		output_handle_task_ptr_t pOutputTask;
+		for (output_task_vec_t::iterator iter = m_vecOutputTasks.begin(); iter != m_vecOutputTasks.end(); ++iter)
 		{
-			i32Tmp = (*iter)->get_endpoint_cnt();
+			i32Tmp = (*iter)->get_ioobj_cnt();
 			if (0 == i32Tmp)
 			{
 				pOutputTask = (*iter);
 				break;
 			}
-			else if (i32MinCnt > iTmp)
+			else if (i32MinCnt > i32Tmp)
 			{
-				i32MinCnt = iTmp;
+				i32MinCnt = i32Tmp;
 				pOutputTask = (*iter);
 			}
 		}
-		pOutputTask->add_endpoint(pEndpoint);
+		pOutputTask->add_io_obj(pEndpoint);
 
 		m_sm.end_lock_state();
 
@@ -183,8 +181,8 @@ namespace nm_framework
 		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(EES_STARTED), CMNERR_COMMON_ERR);
 
 		///assign input task, thread safe?
-		m_vecInputTasks[pEndpoint->get_input_task_indx()]->del_endpoint(pEndpoint);
-		m_vecOutputTasks[pEndpoint->get_output_task_indx()]->del_endpoint(pEndpoint);
+		m_vecInputTasks[pEndpoint->get_input_task_index()]->del_io_obj(pEndpoint);
+		m_vecOutputTasks[pEndpoint->get_output_task_index()]->del_io_obj(pEndpoint);
 
 		m_sm.end_lock_state();
 	}

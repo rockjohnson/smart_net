@@ -9,7 +9,7 @@
 
 #include <utils/time_info.h>
 
-namespace nm_engine
+namespace nm_framework
 {
 
 CTimeNotifier::CTimeNotifier()

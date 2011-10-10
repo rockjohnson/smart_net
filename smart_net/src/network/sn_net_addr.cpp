@@ -64,16 +64,16 @@ int32_t CIpv4Addr::set_ip_nbo(pvoid_t pIp, u_int32_t ui32Len)
 	return CMNERR_SUC;
 }
 
-pvoid_t CIpv4Addr::get_ip_nbo()
+pvoid_t CIpv4Addr::get_ip_nbo() const
 {
-	return &m_ip;
+	return reinterpret_cast<pvoid_t>(const_cast<struct in_addr*>(&m_ip));
 }
 
 cstr_t CIpv4Addr::get_ip_str(char_t *pszBuf, u_int32_t ui32Len)
 {
 	IF_TRUE_THEN_RETURN_CODE(NULL == pszBuf, NULL);
 
-	return ip_ntos(AF_INET, static_cast<pvoid_t>(&m_ip), pszBuf, ui32Len) == CMNERR_SUC ? pszBuf : NULL;
+	return ip_ntos(AF_INET, reinterpret_cast<pvoid_t>(&m_ip), pszBuf, ui32Len) == CMNERR_SUC ? pszBuf : NULL;
 }
 
 int32_t CIpv4Addr::set_port_nbo(u_int16_t ui16Port /*network byte order*/)
@@ -94,12 +94,12 @@ int32_t CIpv4Addr::set_port_hbo(u_int16_t ui16Port /*host byte order*/)
 	return CMNERR_SUC;
 }
 
-u_int16_t CIpv4Addr::get_port_hbo()
+u_int16_t CIpv4Addr::get_port_hbo() const
 {
 	return ntohs(m_ui16port);
 }
 
-u_int16_t CIpv4Addr::get_port_nbo()
+u_int16_t CIpv4Addr::get_port_nbo() const
 {
 	return m_ui16port;
 }

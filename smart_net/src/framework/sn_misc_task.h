@@ -13,7 +13,7 @@
 
 #include "sn_io_obj.h"
 #include "sn_timer.h"
-#include "sn_io_evt_notifier.h"
+//#include "sn_io_evt_notifier.h"
 #include "sn_time_notifier.h"
 
 namespace nm_framework
@@ -30,11 +30,11 @@ public:
 
 public:
 	///
-	int32_t init(int32_t i32ioevtnotifier, int32_t i32MStimeout);
+	int32_t init();
 	int32_t destroy();
-	///
-	int32_t add_io_obj(const io_obj_ptr_t &pioobj);
-	int32_t del_io_obj(const io_obj_ptr_t &pioobj);
+//	///
+//	int32_t add_io_obj(const io_obj_ptr_t &pioobj);
+//	int32_t del_io_obj(const io_obj_ptr_t &pioobj);
 	///
 	int32_t add_timer(const internal_timer_ptr_t &ptimer);
 	int32_t del_timer(const internal_timer_ptr_t &ptimer);
@@ -45,9 +45,9 @@ public:
 
 private:
 	///
-	io_evt_notifier_ptr_t m_pioevtnotifier;
+	//io_evt_notifier_ptr_t m_pIoEvtNotifier;
 	///
-	time_notifier_t m_ptimenotifier;
+	time_notifier_t m_pTimeNotifier;
 	///
 	nm_utils::CEventHandleEngine m_evtengine;
 };

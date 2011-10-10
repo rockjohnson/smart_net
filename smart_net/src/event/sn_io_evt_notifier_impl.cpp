@@ -7,7 +7,7 @@
 
 #include "sn_io_evt_notifier_impl.h"
 
-namespace nm_engine
+namespace nm_event
 {
 
 //	IIoEvtNotifier::IIoEvtNotifier()
@@ -20,26 +20,30 @@ namespace nm_engine
 //		destroy();
 //	}
 
-	io_evt_notifier_ptr_t& CIoEvtNotifierFactory::create_obj(int32_t i32ioevtnotifier)
+	CIoEvtNotifierFactory::obj_ptr_t& CIoEvtNotifierFactory::create_obj(int32_t i32IoEvtNotifier)
 	{
-		io_evt_notifier_ptr_t pioevtnotifier = NULL;
+		using namespace nm_framework;
 
-		if (EIEN_ALL <= i32ioevtnotifier || EIEN_NONE >= i32ioevtnotifier)
+		io_evt_notifier_ptr_t pIoEvtNotifier = NULL;
+
+		if (EIEN_ALL <= i32IoEvtNotifier || EIEN_NONE >= i32IoEvtNotifier)
 		{
-			return pioevtnotifier;
+			return pIoEvtNotifier;
 		}
 
-		switch (i32ioevtnotifier)
+		switch (i32IoEvtNotifier)
 		{
+#if (0)
 			case EIEN_SELECT:
 			{
-				pioevtnotifier = SYS_NOTRW_NEW(CSelect);
+				pIoEvtNotifier = SYS_NOTRW_NEW(CSelect);
 				break;
 			}
+#endif
 #if __PLATFORM__ == __PLATFORM_LINUX__
 			case EIEN_EPOLL:
 			{
-				pioevtnotifier = SYS_NOTRW_NEW(CEpoll);
+				pIoEvtNotifier = SYS_NOTRW_NEW(CEpoll);
 				break;
 			}
 #endif
@@ -49,21 +53,21 @@ namespace nm_engine
 			}
 		}
 
-		return pioevtnotifier;
+		return pIoEvtNotifier;
 	}
 
-	/*
-	 * select ..
-	 * */
-	CSelect::CSelect()
-	{
-		// TODO Auto-generated constructor stub
-	}
-
-	CSelect::~CSelect()
-	{
-		// TODO Auto-generated destructor stub
-	}
+//	/*
+//	 * select ..
+//	 * */
+//	CSelect::CSelect()
+//	{
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	CSelect::~CSelect()
+//	{
+//		// TODO Auto-generated destructor stub
+//	}
 
 	/*
 	 * epoll ...
@@ -114,29 +118,27 @@ namespace nm_engine
 		return CMNERR_COMMON_ERR;
 	}
 
-	int32_t CEpoll::add_io_obj(const io_obj_ptr_t &pIoObj)
+	int32_t CEpoll::add_io_obj(const nm_framework::io_obj_ptr_t &pIoObj)
 	{
 		SYS_ASSERT(pIoObj != NULL);
 		IF_TRUE_THEN_RETURN_CODE(0 == pIoObj->get_io_evt(m_i32IoType), CMNERR_SUC); ///no event
 
 		{
 			nm_utils::spin_scopelk_t lk(m_lkIoObjAddCache);
-			std::pair<io_obj_vec_t::iterator, bool> pairRet = m_vecIoObjsAddCache.insert(pIoObj);
-			SYS_ASSERT(pairRet.second);
+			m_vecIoObjsAddCache.push_back(pIoObj);
 		}
 
 		return CMNERR_SUC;
 	}
 
-	int32_t CEpoll::del_io_obj(const io_obj_ptr_t &pIoObj)
+	int32_t CEpoll::del_io_obj(const nm_framework::io_obj_ptr_t &pIoObj)
 	{
 		SYS_ASSERT(pIoObj != NULL);
 		IF_TRUE_THEN_RETURN_CODE(0 == pIoObj->get_io_evt(m_i32IoType), CMNERR_SUC); ///no event
 
 		{
 			nm_utils::spin_scopelk_t lk(m_lkIoObjDelCache);
-			std::pair<io_obj_vec_t::iterator, bool> pairRet = m_vecIoObjsDelCache.insert(pIoObj);
-			SYS_ASSERT(pairRet.second);
+			m_vecIoObjsDelCache.push_back(pIoObj);
 		}
 
 		return CMNERR_SUC;
@@ -208,11 +210,11 @@ namespace nm_engine
 		}
 
 		///process io evt...
-		IIoObj *pIoObj = NULL;
+		nm_framework::IIoObj *pIoObj = NULL;
 		u_int32_t ui32Evts = 0;
 		for (int i = 0; i < i32Ret; i++)
 		{
-			pIoObj = static_cast<IIoObj*> (m_arrEvts[i].data.ptr); ///no need add ref, for i have add it outside.
+			pIoObj = static_cast<nm_framework::IIoObj*> (m_arrEvts[i].data.ptr); ///no need add ref, for i have add it outside.
 			ui32Evts = m_arrEvts[i].events;
 
 			//error
