@@ -128,7 +128,8 @@ namespace nm_smartnet
 	class CTcpEndpoint: public nm_framework::IIoObj
 	{
 	public:
-		CTcpEndpoint();
+		CTcpEndpoint(const tcp_acceptor_ptr_t&);
+		CTcpEndpoint(const tcp_connector_ptr_t&);
 		virtual ~CTcpEndpoint();
 
 		DISALLOW_COPY_AND_ASSIGN( CTcpEndpoint);

@@ -71,11 +71,28 @@ namespace nm_smartnet
 		return CMNERR_SUC;
 	}
 
-
 	/**
 	 * tcp endpoint.
 	 * */
-	CTcpEndpoint::CTcpEndpoint() :
+	CTcpEndpoint::CTcpEndpoint(const tcp_acceptor_ptr_t &pTcpAcceptor) :
+		m_bopenned(false), m_sm(this)
+	{
+		///add into engine
+		m_sm.reg_evt_state(ES_INIT, EE_ADD_INTO_ENGINE, ES_IN_ENGINE, NULL);
+
+		///first add into recv thread.
+		m_sm.reg_evt_state(ES_IN_ENGINE, EE_IN_ENGINE_ADD_INTO_RECV_THREAD, ES_IN_ENGINE_AND_IN_RECV_THREAD, NULL);
+		m_sm.reg_evt_state(ES_IN_ENGINE_AND_IN_RECV_THREAD, EE_IN_ENGINE_ADD_INTO_SEND_THREAD, ES_IN_ENGINE_RUNNING, NULL);
+
+		///first add into send thread.
+		m_sm.reg_evt_state(ES_IN_ENGINE, EE_IN_ENGINE_ADD_INTO_SEND_THREAD, ES_IN_ENGINE_AND_IN_SEND_THREAD, NULL);
+		m_sm.reg_evt_state(ES_IN_ENGINE_AND_IN_SEND_THREAD, EE_IN_ENGINE_ADD_INTO_RECV_THREAD, ES_IN_ENGINE_RUNNING, NULL);
+
+		///
+
+	}
+
+	CTcpEndpoint::CTcpEndpoint(const tcp_connector_ptr_t &pTcpConnector) :
 		m_bopenned(false), m_sm(this)
 	{
 		///add into engine
@@ -118,8 +135,8 @@ namespace nm_smartnet
 		m_psmartnetmgr = psmartnetmgr;
 
 		m_psock = SYS_NOTRW_NEW(nm_network::CTcpSock);
-//		m_plistenaddr = listenaddr;
-//		m_ppeeraddr = peeraddr;
+		//		m_plistenaddr = listenaddr;
+		//		m_ppeeraddr = peeraddr;
 
 		return m_psmartnetmgr->add_endpoint(nm_framework::io_obj_ptr_t(this));
 	}
