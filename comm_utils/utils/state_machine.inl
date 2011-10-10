@@ -41,7 +41,7 @@
 	int CStateMachine<T>::post_event(int iEvt, pvoid_t pV)
 	{
 #ifdef __USED_IN_MULTI_THREAD__
-		mtx_scopelk_t lk(m_lkchangestate);
+		mtx_scopelk_t lk(m_lkChangeState);
 #endif
 		typename evt_h_t::iterator iter2;
 		typename event_handler_t::iterator iter1;
