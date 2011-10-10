@@ -8,8 +8,8 @@
 #ifndef __SN_LISTENER_H__
 #define __SN_LISTENER_H__
 
-#include "../engine/sn_io_obj.h"
-#include "../engine/sn_engine.h"
+#include "../framework/sn_io_obj.h"
+#include "../framework/sn_engine.h"
 #include "../network/sn_net_addr.h"
 #include "../framework/sn_endpoint.h"
 
@@ -19,7 +19,7 @@ namespace nm_framework
 /**
  * listener interface
  * */
-class IListener : public nm_engine::IIoObj
+class IListener : public nm_framework::IIoObj
 {
 public:
 	IListener(){}

@@ -9,7 +9,7 @@
 #include "../smart_net/sn_endpoint_impl.h"
 #include "sn_listener_impl.h"
 
-#include "../engine/sn_engine.h"
+#include "../framework/sn_engine.h"
 
 namespace nm_network
 {

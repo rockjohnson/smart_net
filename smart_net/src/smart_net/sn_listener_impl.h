@@ -13,7 +13,7 @@
 #include <utils/smart_lock.h>
 #include <utils/event_engine.h>
 
-#include "../framework/sn_listener.h"
+#include "sn_listener.h"
 
 namespace nm_network
 {
