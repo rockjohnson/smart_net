@@ -75,7 +75,7 @@ namespace nm_smartnet
 	 * tcp endpoint.
 	 * */
 	CTcpEndpoint::CTcpEndpoint(const tcp_acceptor_ptr_t &pTcpAcceptor) :
-		m_bopenned(false), m_sm(this)
+		m_sm(this)
 	{
 		///add into engine
 		m_sm.reg_evt_state(ES_INIT, EE_ADD_INTO_ENGINE, ES_IN_ENGINE, NULL);
@@ -93,7 +93,7 @@ namespace nm_smartnet
 	}
 
 	CTcpEndpoint::CTcpEndpoint(const tcp_connector_ptr_t &pTcpConnector) :
-		m_bopenned(false), m_sm(this)
+		m_sm(this)
 	{
 		///add into engine
 		m_sm.reg_evt_state(ES_INIT, EE_ADD_INTO_ENGINE, ES_IN_ENGINE, NULL);
@@ -121,24 +121,24 @@ namespace nm_smartnet
 	int32_t CTcpEndpoint::open(const nm_network::CIpv4Addr &listenaddr, const nm_network::CIpv4Addr &peeraddr,
 			const nm_framework::sn_engine_ptr_t psmartnetmgr)
 	{
-		IF_TRUE_THEN_RETURN_CODE(m_bopenned, CMNERR_SUC);
+//		IF_TRUE_THEN_RETURN_CODE(m_bopenned, CMNERR_SUC);
+//
+//		nm_utils::mtx_scopelk_t lk(m_lkendpoint);
+//
+//		IF_TRUE_THEN_RETURN_CODE(m_bopenned, CMNERR_SUC);
+//		m_bopenned = true;
 
-		nm_utils::mtx_scopelk_t lk(m_lkendpoint);
-
-		IF_TRUE_THEN_RETURN_CODE(m_bopenned, CMNERR_SUC);
-		m_bopenned = true;
-
-		if (NULL != m_psmartnetmgr)
+		if (NULL != m_pSNEngine)
 		{
 			return CMNERR_COMMON_ERR;
 		}
-		m_psmartnetmgr = psmartnetmgr;
+		m_pSNEngine = psmartnetmgr;
 
-		m_psock = SYS_NOTRW_NEW(nm_network::CTcpSock);
+		m_pSock = SYS_NOTRW_NEW(nm_network::CTcpSock);
 		//		m_plistenaddr = listenaddr;
 		//		m_ppeeraddr = peeraddr;
 
-		return m_psmartnetmgr->add_endpoint(nm_framework::io_obj_ptr_t(this));
+		return m_pSNEngine->add_endpoint(nm_framework::io_obj_ptr_t(this));
 	}
 
 	/**
@@ -146,23 +146,23 @@ namespace nm_smartnet
 	 * */
 	int32_t CTcpEndpoint::close()
 	{
-		IF_TRUE_THEN_RETURN_CODE(!m_bopenned, CMNERR_SUC);
-
-		nm_utils::mtx_scopelk_t lk(m_lkendpoint);
-
-		IF_TRUE_THEN_RETURN_CODE(!m_bopenned, CMNERR_SUC);
-		m_bopenned = false;
+		//		IF_TRUE_THEN_RETURN_CODE(!m_bopenned, CMNERR_SUC);
+		//
+		//		nm_utils::mtx_scopelk_t lk(m_lkendpoint);
+		//
+		//		IF_TRUE_THEN_RETURN_CODE(!m_bopenned, CMNERR_SUC);
+		//		m_bopenned = false;
 
 		///first, delete it from engine.
-		SYS_ASSERT(NULL != m_psmartnetmgr);
-		int32_t i32ret = m_psmartnetmgr->del_endpoint(nm_framework::io_obj_ptr_t(this));
+		SYS_ASSERT(NULL != m_pSNEngine);
+		int32_t i32ret = m_pSNEngine->del_endpoint(nm_framework::io_obj_ptr_t(this));
 		SYS_ASSERT(CMNERR_SUC == i32ret);
-		m_psmartnetmgr = NULL;
+		m_pSNEngine = NULL;
 
 		///then, close the socket.
-		SYS_ASSERT(NULL != m_psock);
-		m_psock->close();
-		m_psock = NULL;
+		SYS_ASSERT(NULL != m_pSock);
+		m_pSock->close();
+		m_pSock = NULL;
 
 		return CMNERR_SUC;
 	}

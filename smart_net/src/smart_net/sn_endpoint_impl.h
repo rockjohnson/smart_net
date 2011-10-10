@@ -159,14 +159,13 @@ namespace nm_smartnet
 
 	private:
 		nm_utils::CStateMachine<CTcpEndpoint> m_sm;
-		nm_utils::CMutexLock m_lkendpoint;
-		volatile bool m_bopenned;
-		nm_utils::CAtomicCounter<int32_t> m_enginerefcnt;
+		//nm_utils::CMutexLock m_lkendpoint;
+		//volatile bool m_bopenned;
+		//nm_utils::CAtomicCounter<int32_t> m_enginerefcnt;
 
-		nm_framework::sn_engine_ptr_t m_psmartnetmgr;
-		nm_network::tcp_sock_ptr_t m_psock;
-		nm_network::ipv4_addr_ptr_t m_plistenaddr;
-		nm_network::ipv4_addr_ptr_t m_ppeeraddr;
+		nm_framework::sn_engine_ptr_t m_pSNEngine;
+		nm_network::tcp_sock_ptr_t m_pSock;
+		nm_network::ipv4_addr_ptr_t m_pPeerAddr;
 	};
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpEndpoint> tcp_endpoint_ptr_t;
 
