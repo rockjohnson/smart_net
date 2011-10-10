@@ -19,7 +19,7 @@ using namespace nm_smartnet;
 /**
  * endpoint.
  * */
-class CDevEndpoint : public CTcpInboundEndpoint
+class CDevEndpoint : public CTcpEndpoint
 {
 public:
 	CDevEndpoint();

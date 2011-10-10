@@ -19,7 +19,7 @@ namespace nm_network
 {
 
 class nm_network::CTcpSock;
-class nm_smartnet::CTcpInboundEndpoint;
+class nm_smartnet::CTcpEndpoint;
 /**
  * tcp listener
  * */
@@ -29,7 +29,7 @@ public:
 	CTcpListener();
 	virtual ~CTcpListener();
 
-	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpInboundEndpoint> tcp_ib_endpoint_ptr_t;
+	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpEndpoint> tcp_ib_endpoint_ptr_t;
 public:
 	///
 	virtual int32_t open(const CIpv4Addr &listenaddr,

@@ -44,7 +44,7 @@ int32_t CTcpWrapper::add_endpoint(const nm_framework::endpoint_ptr_t &pendpoint)
 	{
 	case E_TCP_INBOUND_ENDPOINT:
 	{
-		tcp_ib_endpoint_ptr_t pIBEP = dynamic_cast_smartptr<CTcpInboundEndpoint, IEndpoint> (pendpoint);
+		tcp_endpoint_ptr_t pIBEP = dynamic_cast_smartptr<CTcpEndpoint, IEndpoint> (pendpoint);
 		SYS_ASSERT(NULL == pIBEP);
 
 		{

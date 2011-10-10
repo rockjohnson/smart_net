@@ -27,7 +27,7 @@ enum EIoEvtNotify
 /**
  * io event notify mechanism base class
  * */
-class IIoEvtNotifier: public nm_comm_base::ICommonBase
+class IIoEvtNotifier: public nm_cmn_base::ICommonBase
 {
 
 public:

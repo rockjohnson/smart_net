@@ -15,7 +15,7 @@
 
 #include "../common/sn_common.h"
 #include "sn_timer.h"
-#include "sn_endpoint.h"
+#include "sn_io_obj.h"
 #include "sn_io_task.h"
 #include "sn_misc_task.h"
 
@@ -26,7 +26,7 @@ namespace nm_framework
 	/**
 	 * the smart net engine.
 	 * */
-	class CSNEngine: public nm_comm_base::ICommonBase
+	class CSNEngine: public nm_cmn_base::ICommonBase
 	{
 	public:
 		CSNEngine();
@@ -48,10 +48,10 @@ namespace nm_framework
 		int32_t start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 		int32_t stop();
 		///
-		int32_t add_endpoint(const endpoint_ptr_t &pEP); ///not thread safe
-		int32_t del_endpoint(const endpoint_ptr_t &pEP); ///not thread safe
-		int32_t add_timer(const internal_timer_ptr_t &pTimer);
-		int32_t del_timer(const internal_timer_ptr_t &pTimer);
+		int32_t add_endpoint(const io_obj_ptr_t &pEP); ///not thread safe
+		int32_t del_endpoint(const io_obj_ptr_t &pEP); ///not thread safe
+		int32_t add_timer(const timer_obj_ptr_t &pTimer);
+		int32_t del_timer(const timer_obj_ptr_t &pTimer);
 
 	private:
 		int32_t starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid);

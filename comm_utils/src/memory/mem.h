@@ -14,7 +14,7 @@
 namespace nm_memory
 {
 
-class CMemBlock : public nm_comm_base::ICommonBase
+class CMemBlock : public nm_cmn_base::ICommonBase
 {
 public:
 	CMemBlock();

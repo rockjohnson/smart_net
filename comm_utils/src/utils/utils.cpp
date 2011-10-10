@@ -325,16 +325,16 @@ namespace nm_utils
 		return 0;
 	}
 
-	int32_t split_file_name(const string_t &strFullName, string_t &strDir, string_t &strFile)
+	int32_t split_file_name(const cmn_string_t &strFullName, cmn_string_t &strDir, cmn_string_t &strFile)
 	{
 	  size_t sztFound  = strFullName.find_last_of("/\\");
-	  if (string_t::npos == sztFound)
+	  if (cmn_string_t::npos == sztFound)
 	  {
 		  return RET_ERR;
 	  }
 
 	  strDir = strFullName.substr(0, sztFound);
-	  strFile = strFullName.substr(sztFound + 1, string_t::npos);
+	  strFile = strFullName.substr(sztFound + 1, cmn_string_t::npos);
 
 	  return RET_SUC;
 	}

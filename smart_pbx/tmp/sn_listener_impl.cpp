@@ -66,9 +66,9 @@ namespace nm_network
 
 	int32_t CTcpListener::add_endpoint_ex(const nm_framework::endpoint_ptr_t &pep)
 	{
-		tcp_ib_endpoint_ptr_t pibep = nm_utils::dynamic_cast_smartptr<nm_smartnet::CTcpInboundEndpoint, nm_framework::IEndpoint>(pep);
+		tcp_ib_endpoint_ptr_t pibep = nm_utils::dynamic_cast_smartptr<nm_smartnet::CTcpEndpoint, nm_framework::IEndpoint>(pep);
 
-		if (pibep->get_peer_addr() == static_cast<nm_smartnet::CTcpInboundEndpoint*> (NULL))
+		if (pibep->get_peer_addr() == static_cast<nm_smartnet::CTcpEndpoint*> (NULL))
 		{
 			nm_utils::spin_scopelk_t lk(m_lktcpendpoints);
 			std::pair<tcp_ib_endpoint_set_t::iterator, bool> ret = m_settcpibendpoint.insert(pep);
@@ -77,7 +77,7 @@ namespace nm_network
 			return CMNERR_SUC;
 		}
 
-		std::pair<tcp_ib_endpoint_map_t::iterator, bool> ret = m_maptcpibendpoint.insert(dynamic_cast_smartptr<CTcpInboundEndpoint, IEndpoint> (pEP));
+		std::pair<tcp_ib_endpoint_map_t::iterator, bool> ret = m_maptcpibendpoint.insert(dynamic_cast_smartptr<CTcpEndpoint, IEndpoint> (pEP));
 
 		return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
 	}
@@ -86,7 +86,7 @@ namespace nm_network
 	{
 		spin_scopelk_t lk(m_lktcpendpoints);
 
-		return m_maptcpibendpoint.erase(dynamic_cast_smartptr<CTcpInboundEndpoint, IEndpoint> (pEP)) > 0 ? CMNERR_SUC : CMNERR_COMMON_ERR;
+		return m_maptcpibendpoint.erase(dynamic_cast_smartptr<CTcpEndpoint, IEndpoint> (pEP)) > 0 ? CMNERR_SUC : CMNERR_COMMON_ERR;
 	}
 
 	int32_t CTcpListener::get_fd()

@@ -38,7 +38,7 @@ namespace nm_utils
 	}
 
 #define CREATE_MODE (0777)
-	int32_t CLiteFile::create(const string_t &strFullName)
+	int32_t CLiteFile::create(const cmn_string_t &strFullName)
 	{
 		SYS_ASSERT(0 > m_i32FileDesc);
 		///int open (const char *FILENAME, int FLAGS[, mode_t MODE])
@@ -50,7 +50,7 @@ namespace nm_utils
 			return RET_ERR;
 		}
 
-		string_t strDir, strFile;
+		cmn_string_t strDir, strFile;
 		int iRet = nm_utils::split_file_name(strFullName, strDir, strFile);
 		if (0 <= iRet)
 		{
@@ -60,7 +60,7 @@ namespace nm_utils
 		return (m_i32FileDesc = ::open(strFullName.c_str(), O_CREAT|O_RDWR|O_TRUNC|O_EXCL), S_IRWXU) < 0 ? -1 : RET_SUC;
 	}
 
-	int32_t CLiteFile::open(const string_t &strFullName, int32_t i32Mode)
+	int32_t CLiteFile::open(const cmn_string_t &strFullName, int32_t i32Mode)
 	{
 		SYS_ASSERT(0 > m_i32FileDesc);
 

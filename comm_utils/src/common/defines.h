@@ -88,7 +88,7 @@
 	}
 
 #define SYS_NOTRW_NEW(cls) \
-		new(std::nothrow) (cls)
+		(new(std::nothrow) cls)
 
 #define SAFE_DELETE_ARR(pArr) \
 	if (NULL != pArr) \

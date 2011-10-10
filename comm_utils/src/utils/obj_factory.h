@@ -15,7 +15,7 @@ namespace nm_utils
 {
 
 template <typename T>
-class CObjFactory : public nm_comm_base::ICommonBase
+class CObjFactory : public nm_cmn_base::ICommonBase
 {
 public:
 	typedef nm_utils::CSmartPtr<T> obj_ptr_t;

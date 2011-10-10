@@ -22,7 +22,7 @@ CTimeNotifier::~CTimeNotifier()
 	// TODO Auto-generated destructor stub
 }
 
-int32_t CTimeNotifier::add_timer(const internal_timer_ptr_t &ptimer)
+int32_t CTimeNotifier::add_timer(const timer_obj_ptr_t &ptimer)
 {
 	nm_utils::spin_scopelk_t lk(m_lktimercache);
 
@@ -39,7 +39,7 @@ int32_t CTimeNotifier::add_timer(const internal_timer_ptr_t &ptimer)
 	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
 }
 
-int32_t CTimeNotifier::del_timer(const internal_timer_ptr_t &ptimer)
+int32_t CTimeNotifier::del_timer(const timer_obj_ptr_t &ptimer)
 {
 	nm_utils::spin_scopelk_t lk(m_lktimercache);
 

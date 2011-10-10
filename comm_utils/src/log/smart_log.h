@@ -44,7 +44,7 @@ namespace nm_utils
 	/**
 	 * smart log class
 	 * */
-	class CSmartLog : public nm_comm_base::CNoncopyable
+	class CSmartLog : public nm_cmn_base::CNoncopyable
 	{
 	public:
 		CSmartLog();
@@ -70,8 +70,8 @@ namespace nm_utils
 		CLiteFile m_LogFile;
 		CLiteFile m_LastLogFile; //for avoding multithreading race condition.
 		int32_t m_i32TraceLevel; //the log level.
-		string_t m_strLogDir;
-		string_t m_strLogFilePrefix;
+		cmn_string_t m_strLogDir;
+		cmn_string_t m_strLogFilePrefix;
 
 #if __PLATFORM__ == __PLATFORM_LINUX__
 		time_t m_tmLogFileStart; //when the log file is started

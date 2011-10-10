@@ -106,21 +106,21 @@ namespace nm_utils
 					+ 1, pTm->tm_mday);
 #endif
 
-			string_t strLogDir;
+			cmn_string_t strLogDir;
 			if ("" == m_strLogDir)
 			{
 				char buf[4096] = { 0 };
 				get_cur_exe_path(buf, 4096);
 				strLogDir = buf;
-				string_t strExe;
-				split_file_name(string_t(buf), strLogDir, strExe);
+				cmn_string_t strExe;
+				split_file_name(cmn_string_t(buf), strLogDir, strExe);
 			}
 			else
 			{
 				strLogDir = m_strLogDir;
 			}
 #if __PLATFORM__ == __PLATFORM_WINDOWS__
-			string_t strTemp = strLogDir.substr(0, strLogDir.rfind("\\"));
+			cmn_string_t strTemp = strLogDir.substr(0, strLogDir.rfind("\\"));
 			strTemp.append("\\logs").append(strLogDir.substr(strLogDir.rfind("\\"))).append("\\").append(szBufA);
 #elif __PLATFORM__ == __PLATFORM_LINUX__
 			strLogDir.append("/").append(szBufA);
@@ -142,7 +142,7 @@ namespace nm_utils
 #endif
 
 			//const string_t strTmp(szLogFileName);
-			i32Ret = m_LogFile.create(string_t(szLogFileName));
+			i32Ret = m_LogFile.create(cmn_string_t(szLogFileName));
 			if (ZERO > i32Ret)
 			{
 				SYS_ASSERT(false);

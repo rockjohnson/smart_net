@@ -9,22 +9,21 @@
 
 namespace nm_smartnet
 {
-
 	/**
 	 *
 	 *
 	 * */
-	CTcpInboundAcceptor::CTcpInboundAcceptor(const nm_framework::sn_engine_ptr_t &pSNEngine) :
-		m_sm(this), m_pSNEngine(pSNEngine)
+	CTcpAcceptor::CTcpAcceptor(const nm_framework::sn_engine_ptr_t &pSNEngine) :
+		m_sm(this), m_pSNEngine(pSNEngine), m_i32InputTaskId(0), m_i32OutputTaskId(0)
 	{
-		m_sm.reg_evt_state(EES_CLOSED, EEE_OPEN, EES_OPENNED, &CTcpInboundAcceptor::opening);
-		m_sm.reg_evt_state(EES_OPENNED, EEE_CLOSE, EES_CLOSED, &CTcpInboundAcceptor::closing);
+		m_sm.reg_evt_state(EES_CLOSED, EEE_OPEN, EES_OPENNED, &CTcpAcceptor::opening);
+		m_sm.reg_evt_state(EES_OPENNED, EEE_CLOSE, EES_CLOSED, &CTcpAcceptor::closing);
 	}
 
 	/**
 	 *
 	 * */
-	CTcpInboundAcceptor::~CTcpInboundAcceptor()
+	CTcpAcceptor::~CTcpAcceptor()
 	{
 
 	}
@@ -38,7 +37,7 @@ namespace nm_smartnet
 		u_int16_t ui16Port;
 	};
 
-	int32_t CTcpInboundAcceptor::open(std::string &strIP, u_int16_t ui16Port)
+	int32_t CTcpAcceptor::open(const cmn_string_t &strIP, u_int16_t ui16Port)
 	{
 		SParas sp;
 		sp.strIP = strIP;
@@ -46,13 +45,13 @@ namespace nm_smartnet
 		return m_sm.post_event(EEE_OPEN, &sp);
 	}
 
-	int32_t CTcpInboundAcceptor::close()
+	int32_t CTcpAcceptor::close()
 	{
 		return m_sm.post_event(EEE_CLOSE, NULL);
 	}
 
 #define BACKLOG (20)
-	int32_t CTcpInboundAcceptor::opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
+	int32_t CTcpAcceptor::opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
 	{
 		SParas *pPara = static_cast<SParas*> (pVoid);
 		SYS_ASSERT(!m_sock.is_opened());
@@ -64,7 +63,7 @@ namespace nm_smartnet
 		return CMNERR_SUC;
 	}
 
-	int32_t CTcpInboundAcceptor::closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
+	int32_t CTcpAcceptor::closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
 	{
 		SYS_ASSERT(m_sock.is_opened());
 		SYS_ASSERT(CMNERR_SUC == m_sock.close());
@@ -72,10 +71,11 @@ namespace nm_smartnet
 		return CMNERR_SUC;
 	}
 
+
 	/**
 	 * tcp endpoint.
 	 * */
-	CTcpInboundEndpoint::CTcpInboundEndpoint() :
+	CTcpEndpoint::CTcpEndpoint() :
 		m_bopenned(false), m_sm(this)
 	{
 		///add into engine
@@ -93,7 +93,7 @@ namespace nm_smartnet
 
 	}
 
-	CTcpInboundEndpoint::~CTcpInboundEndpoint()
+	CTcpEndpoint::~CTcpEndpoint()
 	{
 		// TODO Auto-generated destructor stub
 	}
@@ -101,7 +101,7 @@ namespace nm_smartnet
 	/**
 	 * open this endpoint and put it into the io engine.
 	 * */
-	int32_t CTcpInboundEndpoint::open(const nm_network::CIpv4Addr &listenaddr, const nm_network::CIpv4Addr &peeraddr,
+	int32_t CTcpEndpoint::open(const nm_network::CIpv4Addr &listenaddr, const nm_network::CIpv4Addr &peeraddr,
 			const nm_framework::sn_engine_ptr_t psmartnetmgr)
 	{
 		IF_TRUE_THEN_RETURN_CODE(m_bopenned, CMNERR_SUC);
@@ -121,13 +121,13 @@ namespace nm_smartnet
 //		m_plistenaddr = listenaddr;
 //		m_ppeeraddr = peeraddr;
 
-		return m_psmartnetmgr->add_endpoint(nm_framework::endpoint_ptr_t(this));
+		return m_psmartnetmgr->add_endpoint(nm_framework::io_obj_ptr_t(this));
 	}
 
 	/**
 	 * close this endpoint.
 	 * */
-	int32_t CTcpInboundEndpoint::close()
+	int32_t CTcpEndpoint::close()
 	{
 		IF_TRUE_THEN_RETURN_CODE(!m_bopenned, CMNERR_SUC);
 
@@ -138,7 +138,7 @@ namespace nm_smartnet
 
 		///first, delete it from engine.
 		SYS_ASSERT(NULL != m_psmartnetmgr);
-		int32_t i32ret = m_psmartnetmgr->del_endpoint(nm_framework::endpoint_ptr_t(this));
+		int32_t i32ret = m_psmartnetmgr->del_endpoint(nm_framework::io_obj_ptr_t(this));
 		SYS_ASSERT(CMNERR_SUC == i32ret);
 		m_psmartnetmgr = NULL;
 
@@ -150,7 +150,7 @@ namespace nm_smartnet
 		return CMNERR_SUC;
 	}
 
-	int32_t CTcpInboundEndpoint::get_type()
+	int32_t CTcpEndpoint::get_type()
 	{
 		return E_TCP_INBOUND_ENDPOINT;
 	}

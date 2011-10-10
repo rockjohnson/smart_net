@@ -14,7 +14,7 @@
 typedef void* pvoid_t;
 typedef char char_t;
 typedef const char* cstr_t;
-typedef std::string string_t;
+typedef std::string cmn_string_t;
 typedef unsigned char byte_t;
 
 

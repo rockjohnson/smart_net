@@ -10,7 +10,7 @@
 
 #include "types.h"
 
-namespace nm_comm_base
+namespace nm_cmn_base
 {
 class CNoncopyable
 {

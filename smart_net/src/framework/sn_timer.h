@@ -15,16 +15,16 @@
 namespace nm_framework
 {
 
-class IInternalTimer: public nm_comm_base::ICommonBase
+class ITimerObj: public virtual nm_cmn_base::ICommonBase
 {
 public:
-	IInternalTimer();
-	virtual ~IInternalTimer();
+	ITimerObj();
+	virtual ~ITimerObj();
 
 public:
 	virtual void check(u_int64_t ui64curtimeus) = 0;
 };
-typedef nm_utils::CSmartPtr<IInternalTimer> internal_timer_ptr_t;
+typedef nm_utils::CSmartPtr<ITimerObj> timer_obj_ptr_t;
 
 }
 

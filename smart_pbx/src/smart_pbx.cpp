@@ -23,7 +23,7 @@ int main()
 	pSmartNet->start(10, nm_framework::EIEN_EPOLL, 10);
 
 	///3,create endpoint
-	CTcpInboundEndpoint tcpIBEP(pSmartNet);
+	CTcpEndpoint tcpIBEP(pSmartNet);
 	net_addr_ptr_t pListenAddr = SYS_NOTRW_NEW(CIpv4Addr);
 	pListenAddr->set_ip("127.0.0.1");
 	pListenAddr->set_port_hbo(9999);

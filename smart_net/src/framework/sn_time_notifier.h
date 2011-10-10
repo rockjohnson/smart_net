@@ -22,7 +22,7 @@ namespace nm_framework
 /**
  * not thread safe
  * */
-class CTimeNotifier : public nm_comm_base::ICommonBase
+class CTimeNotifier : public nm_cmn_base::ICommonBase
 {
 public:
 	CTimeNotifier();
@@ -33,17 +33,17 @@ public:
 	int32_t init(){return CMNERR_SUC;}
 	int32_t destroy(){return CMNERR_SUC;}
 	///
-    int32_t add_timer(const internal_timer_ptr_t &ptimer);
-    int32_t del_timer(const internal_timer_ptr_t &ptimer);
+    int32_t add_timer(const timer_obj_ptr_t &ptimer);
+    int32_t del_timer(const timer_obj_ptr_t &ptimer);
     ///
     void exec();
 private:
-	typedef std::set<internal_timer_ptr_t> timer_set_t;
+	typedef std::set<timer_obj_ptr_t> timer_set_t;
 	typedef std::pair<timer_set_t::iterator, bool> timer_set_ret_t;
 	timer_set_t m_settimers;
 	nm_utils::CSpinLock m_lktimercache;
-	std::set<internal_timer_ptr_t> m_settimeraddcache;
-	std::set<internal_timer_ptr_t> m_settimerdelcache;
+	std::set<timer_obj_ptr_t> m_settimeraddcache;
+	std::set<timer_obj_ptr_t> m_settimerdelcache;
 };
 typedef nm_utils::CSmartPtr<CTimeNotifier> time_notifier_t;
 

@@ -18,7 +18,7 @@ class CFileTest: public CxxTest::TestSuite
 		{
 			nm_utils::CLiteFile f;
 
-			TS_ASSERT(RET_SUC == f.create(string_t("test/test.log")));
+			TS_ASSERT(RET_SUC == f.create(cmn_string_t("test/test.log")));
 		}
 };
 

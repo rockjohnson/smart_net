@@ -22,8 +22,8 @@ namespace nm_utils
 			virtual ~CFile();
 
 		public:
-			virtual int32_t create(const string_t &strFullName) = 0;
-			virtual int32_t open(const string_t &strFullName, int32_t i32Mode = 0) = 0;
+			virtual int32_t create(const cmn_string_t &strFullName) = 0;
+			virtual int32_t open(const cmn_string_t &strFullName, int32_t i32Mode = 0) = 0;
 			virtual int32_t close() = 0;
 			virtual int32_t set(byte_t *pBytes, u_int32_t ui32Len) = 0;
 			virtual int32_t get(byte_t *pBuf, u_int32_t ui32Size) = 0;
@@ -41,8 +41,8 @@ namespace nm_utils
 			virtual ~CLiteFile();
 
 		public:
-			int32_t create(const string_t &strFullName);
-			int32_t open(const string_t &strFullName, int32_t i32Mode = 0);
+			int32_t create(const cmn_string_t &strFullName);
+			int32_t open(const cmn_string_t &strFullName, int32_t i32Mode = 0);
 			int32_t close();
 			int32_t set(byte_t *pBytes, u_int32_t ui32Len);
 			int32_t get(byte_t *pBuf, u_int32_t ui32Size);

@@ -16,6 +16,7 @@
 namespace nm_framework
 {
 
+#if (0)
 /**
  * endpoint interface
  * */
@@ -26,7 +27,6 @@ public:
 	virtual ~IEndpoint();
 
 public:
-	//virtual int32_t open(nm_network::net_addr_ptr_t &pFirstAddr, nm_network::net_addr_ptr_t &pSecondAddr) = 0; ///open and join net engine.
 	virtual bool is_openned() = 0;
 	virtual int32_t close() = 0; ///close and delete from net engine.
 	virtual int32_t send_data(nm_memory::mem_ptr_t &pData) = 0; ///thread-safe send func.
@@ -45,6 +45,9 @@ protected:
 };
 typedef nm_utils::CSmartPtr<nm_framework::IEndpoint> endpoint_ptr_t;
 
+#endif
 }
+
+
 
 #endif /* __SN_ENDPOINT_H__ */

@@ -122,11 +122,11 @@ namespace nm_framework
 	/**
 	 * thread safe
 	 * */
-	int32_t CSNEngine::add_endpoint(const endpoint_ptr_t &pEndpoint)
+	int32_t CSNEngine::add_endpoint(const io_obj_ptr_t &pIoObj)
 	{
 		using namespace nm_framework;
 		///
-		IF_TRUE_THEN_RETURN_CODE(NULL == pEndpoint, CMNERR_COMMON_ERR);
+		IF_TRUE_THEN_RETURN_CODE(NULL == pIoObj, CMNERR_COMMON_ERR);
 		///cool!!
 		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(EES_STARTED), CMNERR_COMMON_ERR);
 
@@ -148,7 +148,7 @@ namespace nm_framework
 				pInputTask = (*iter);
 			}
 		}
-		pInputTask->add_io_obj(pEndpoint);
+		pInputTask->add_io_obj(pIoObj);
 
 		///output task
 		output_handle_task_ptr_t pOutputTask;
@@ -166,23 +166,23 @@ namespace nm_framework
 				pOutputTask = (*iter);
 			}
 		}
-		pOutputTask->add_io_obj(pEndpoint);
+		pOutputTask->add_io_obj(pIoObj);
 
 		m_sm.end_lock_state();
 
 		return CMNERR_SUC;
 	}
 
-	int32_t CSNEngine::del_endpoint(const endpoint_ptr_t &pEndpoint)
+	int32_t CSNEngine::del_endpoint(const io_obj_ptr_t &pIoObj)
 	{
 		///
-		IF_TRUE_THEN_RETURN_CODE(NULL == pEndpoint, CMNERR_COMMON_ERR);
+		IF_TRUE_THEN_RETURN_CODE(NULL == pIoObj, CMNERR_COMMON_ERR);
 		///cool!!
 		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(EES_STARTED), CMNERR_COMMON_ERR);
 
 		///assign input task, thread safe?
-		m_vecInputTasks[pEndpoint->get_input_task_index()]->del_io_obj(pEndpoint);
-		m_vecOutputTasks[pEndpoint->get_output_task_index()]->del_io_obj(pEndpoint);
+		m_vecInputTasks[pIoObj->get_input_task_id()]->del_io_obj(pIoObj);
+		m_vecOutputTasks[pIoObj->get_output_task_id()]->del_io_obj(pIoObj);
 
 		m_sm.end_lock_state();
 	}
