@@ -10,7 +10,7 @@
 #include <string>
 using namespace std;
 
-#include <smart_net/smart_net.h>
+#include <src/smart_net/smart_net.h>
 
 using namespace nm_business;
 using namespace nm_smartnet;
