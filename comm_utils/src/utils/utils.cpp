@@ -394,7 +394,7 @@ namespace nm_utils
     }
 
     ///
-int32_t ip_ston(int32_t i32af, cstr_t pcszIp, pvoid_t pDst)
+int32_t ip_ston(int32_t i32af, cmn_cstr_t pcszIp, cmn_pvoid_t pDst)
 {
 	if (AF_INET != i32af && AF_INET6 != i32af)
 	{
@@ -404,7 +404,7 @@ int32_t ip_ston(int32_t i32af, cstr_t pcszIp, pvoid_t pDst)
 	return inet_pton(i32af, pcszIp, pDst) <= 0 ? CMNERR_COMMON_ERR : CMNERR_SUC;
 }
 
-int32_t ip_ntos(int32_t i32af, pvoid_t pSrcIp, char_t *pszDst, const socklen_t cslDstLen)
+int32_t ip_ntos(int32_t i32af, cmn_pvoid_t pSrcIp, cmn_char_t *pszDst, const socklen_t cslDstLen)
 {
 	if (AF_INET != i32af && AF_INET6 != i32af)
 	{

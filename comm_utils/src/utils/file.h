@@ -25,8 +25,8 @@ namespace nm_utils
 			virtual int32_t create(const cmn_string_t &strFullName) = 0;
 			virtual int32_t open(const cmn_string_t &strFullName, int32_t i32Mode = 0) = 0;
 			virtual int32_t close() = 0;
-			virtual int32_t set(byte_t *pBytes, u_int32_t ui32Len) = 0;
-			virtual int32_t get(byte_t *pBuf, u_int32_t ui32Size) = 0;
+			virtual int32_t set(cmn_byte_t *pBytes, u_int32_t ui32Len) = 0;
+			virtual int32_t get(cmn_byte_t *pBuf, u_int32_t ui32Size) = 0;
 			virtual int32_t flush() = 0;
 			virtual bool is_open() = 0;
 	};
@@ -44,8 +44,8 @@ namespace nm_utils
 			int32_t create(const cmn_string_t &strFullName);
 			int32_t open(const cmn_string_t &strFullName, int32_t i32Mode = 0);
 			int32_t close();
-			int32_t set(byte_t *pBytes, u_int32_t ui32Len);
-			int32_t get(byte_t *pBuf, u_int32_t ui32Size);
+			int32_t set(cmn_byte_t *pBytes, u_int32_t ui32Len);
+			int32_t get(cmn_byte_t *pBuf, u_int32_t ui32Size);
 			int32_t flush();
 			bool is_open();
 

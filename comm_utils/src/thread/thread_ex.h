@@ -70,12 +70,12 @@ public:
 	thread_task_ptr_t& get_task();
 
 private:
-	pvoid_t exec();
+	cmn_pvoid_t exec();
 	bool is_stopped();
 	void enter_run();
 	void leave_run();
 
-	static pvoid_t thread_main(pvoid_t pArg);
+	static cmn_pvoid_t thread_main(cmn_pvoid_t pArg);
 
 private:
 	thread_task_ptr_t m_pTask;

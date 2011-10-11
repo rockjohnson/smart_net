@@ -18,6 +18,7 @@ namespace nm_smartnet
 	{
 		m_sm.reg_evt_state(EES_CLOSED, EEE_OPEN, EES_OPENNED, &CTcpAcceptor::opening);
 		m_sm.reg_evt_state(EES_OPENNED, EEE_CLOSE, EES_CLOSED, &CTcpAcceptor::closing);
+		m_log.init("./", "tcp_acceptor_", ELL_DEBUG, 300);
 	}
 
 	/**
@@ -25,7 +26,6 @@ namespace nm_smartnet
 	 * */
 	CTcpAcceptor::~CTcpAcceptor()
 	{
-
 	}
 
 	/**
@@ -51,63 +51,107 @@ namespace nm_smartnet
 	}
 
 #define BACKLOG (20)
-	int32_t CTcpAcceptor::opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
+	int32_t CTcpAcceptor::opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		SParas *pPara = static_cast<SParas*> (pVoid);
-		SYS_ASSERT(!m_sock.is_opened());
+		SYS_ASSERT(NULL == m_pTcpSock);
+		m_pTcpSock = SYS_NOTRW_NEW(nm_network::CTcpSock);
 
-		IF_TRUE_THEN_RETURN_CODE(m_sock.open() < 0, CMNERR_COMMON_ERR);
-		IF_TRUE_THEN_RETURN_CODE(m_sock.bind(pPara->strIP, pPara->ui16Port) < 0, CMNERR_COMMON_ERR);
-		IF_TRUE_THEN_RETURN_CODE(m_sock.listen(BACKLOG) < 0, CMNERR_COMMON_ERR);
+		IF_TRUE_THEN_RETURN_CODE(m_pTcpSock->open() < 0, CMNERR_COMMON_ERR);
+		IF_TRUE_THEN_RETURN_CODE(m_pTcpSock->bind(pPara->strIP, pPara->ui16Port) < 0, CMNERR_COMMON_ERR);
+		IF_TRUE_THEN_RETURN_CODE(m_pTcpSock->listen(BACKLOG) < 0, CMNERR_COMMON_ERR);
 
 		return CMNERR_SUC;
 	}
 
-	int32_t CTcpAcceptor::closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
+	int32_t CTcpAcceptor::closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
-		SYS_ASSERT(m_sock.is_opened());
-		SYS_ASSERT(CMNERR_SUC == m_sock.close());
+		SYS_ASSERT(m_pTcpSock->is_opened());
+		SYS_ASSERT(CMNERR_SUC == m_pTcpSock->close());
 
 		return CMNERR_SUC;
 	}
+
+	void CTcpAcceptor::handle_inserted_to_ioset(int32_t i32IoType, int32_t i32ReturnCode)
+	{
+		cmn_char_t szTmpBuf[256] = {0};
+		TRACE_LOG(m_log, ELL_DEBUG, "acceptor (sock: %d, bind addr: %s, %hu) is inserted to ioset ,return: %d\n",
+				get_fd(), m_bindAddr.get_ip_str(szTmpBuf, 255), m_bindAddr.get_port_hbo(), i32ReturnCode);
+
+		SYS_ASSERT(i32ReturnCode >= 0 && EIT_INPUT_TYPE == i32IoType);
+	}
+
+	void CTcpAcceptor::handle_erased_from_ioset(int32_t i32IoType)
+	{
+		cmn_char_t szTmpBuf[256] = {0};
+		TRACE_LOG(m_log, ELL_DEBUG, "acceptor (sock: %d, bind addr: %s, %hu) is erased from ioset\n",
+				get_fd(), m_bindAddr.get_ip_str(szTmpBuf, 255), m_bindAddr.get_port_hbo());
+
+		SYS_ASSERT(EIT_INPUT_TYPE == i32IoType);
+	}
+
+	void CTcpAcceptor::handle_input_evt()
+	{
+		///there is a new connection
+		nm_network::tcp_sock_ptr_t pNewSock = m_pTcpSock->accept();
+		SYS_ASSERT(NULL != pNewSock); ///for test
+
+	}
+
+	void CTcpAcceptor::handle_output_evt()
+	{
+		SYS_ASSERT(false);
+	}
+
+	void CTcpAcceptor::handle_error_evt()
+	{
+		SYS_ASSERT(false);
+	}
+
 
 	/**
 	 * tcp endpoint.
 	 * */
 	CTcpEndpoint::CTcpEndpoint(const tcp_acceptor_ptr_t &pTcpAcceptor) :
-		m_sm(this)
+		m_sm(this), m_pTcpAcceptor(pTcpAcceptor), m_i32SMErrCode(-1)
 	{
-		///add into engine
-		m_sm.reg_evt_state(ES_INIT, EE_ADD_INTO_ENGINE, ES_IN_ENGINE, NULL);
+		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_OPENING, &CTcpEndpoint::handle_opening);
 
-		///first add into recv thread.
-		m_sm.reg_evt_state(ES_IN_ENGINE, EE_IN_ENGINE_ADD_INTO_RECV_THREAD, ES_IN_ENGINE_AND_IN_RECV_THREAD, NULL);
-		m_sm.reg_evt_state(ES_IN_ENGINE_AND_IN_RECV_THREAD, EE_IN_ENGINE_ADD_INTO_SEND_THREAD, ES_IN_ENGINE_RUNNING, NULL);
+		m_sm.reg_evt_state(ES_OPENING, EE_INTERNAL_ERR, ES_OPENED_READY, &CTcpEndpoint::handle_internal_error);
+		m_sm.reg_evt_state(ES_OPENING, EE_OPENED, ES_OPENED_READY, NULL);
 
-		///first add into send thread.
-		m_sm.reg_evt_state(ES_IN_ENGINE, EE_IN_ENGINE_ADD_INTO_SEND_THREAD, ES_IN_ENGINE_AND_IN_SEND_THREAD, NULL);
-		m_sm.reg_evt_state(ES_IN_ENGINE_AND_IN_SEND_THREAD, EE_IN_ENGINE_ADD_INTO_RECV_THREAD, ES_IN_ENGINE_RUNNING, NULL);
+		m_sm.reg_evt_state(ES_OPENED_READY, EE_INTERNAL_ERR, ES_OPENED, &CTcpEndpoint::handle_internal_error);
+		m_sm.reg_evt_state(ES_OPENED_READY, EE_OPENED, ES_OPENED, &CTcpEndpoint::handle_opened);
 
-		///
+		m_sm.reg_evt_state(ES_OPENED, EE_INTERNAL_ERR, ES_CLOSING, &CTcpEndpoint::handle_closing);
+		m_sm.reg_evt_state(ES_OPENED, EE_CLOSE, ES_CLOSING, &CTcpEndpoint::handle_closing);
 
+		///not handling internal err, when in the next two state.
+		m_sm.reg_evt_state(ES_CLOSING, EE_CLOSED, ES_CLOSED_READY, NULL);
+		m_sm.reg_evt_state(ES_CLOSED_READY, EE_CLOSED, ES_CLOSED, &CTcpEndpoint::handle_closed);
+
+		m_sm.set_cur_state(ES_CLOSED);
 	}
 
 	CTcpEndpoint::CTcpEndpoint(const tcp_connector_ptr_t &pTcpConnector) :
-		m_sm(this)
+		m_sm(this), m_pTcpConnector(pTcpConnector), m_i32SMErrCode(-1)
 	{
-		///add into engine
-		m_sm.reg_evt_state(ES_INIT, EE_ADD_INTO_ENGINE, ES_IN_ENGINE, NULL);
+		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_OPENING, &CTcpEndpoint::handle_opening);
 
-		///first add into recv thread.
-		m_sm.reg_evt_state(ES_IN_ENGINE, EE_IN_ENGINE_ADD_INTO_RECV_THREAD, ES_IN_ENGINE_AND_IN_RECV_THREAD, NULL);
-		m_sm.reg_evt_state(ES_IN_ENGINE_AND_IN_RECV_THREAD, EE_IN_ENGINE_ADD_INTO_SEND_THREAD, ES_IN_ENGINE_RUNNING, NULL);
+		m_sm.reg_evt_state(ES_OPENING, EE_INTERNAL_ERR, ES_OPENED_READY, &CTcpEndpoint::handle_internal_error);
+		m_sm.reg_evt_state(ES_OPENING, EE_OPENED, ES_OPENED_READY, NULL);
 
-		///first add into send thread.
-		m_sm.reg_evt_state(ES_IN_ENGINE, EE_IN_ENGINE_ADD_INTO_SEND_THREAD, ES_IN_ENGINE_AND_IN_SEND_THREAD, NULL);
-		m_sm.reg_evt_state(ES_IN_ENGINE_AND_IN_SEND_THREAD, EE_IN_ENGINE_ADD_INTO_RECV_THREAD, ES_IN_ENGINE_RUNNING, NULL);
+		m_sm.reg_evt_state(ES_OPENED_READY, EE_INTERNAL_ERR, ES_OPENED, &CTcpEndpoint::handle_internal_error);
+		m_sm.reg_evt_state(ES_OPENED_READY, EE_OPENED, ES_OPENED, &CTcpEndpoint::handle_opened);
 
-		///
+		m_sm.reg_evt_state(ES_OPENED, EE_INTERNAL_ERR, ES_CLOSING, &CTcpEndpoint::handle_closing);
+		m_sm.reg_evt_state(ES_OPENED, EE_CLOSE, ES_CLOSING, &CTcpEndpoint::handle_closing);
 
+		///not handling internal err, when in the next two state.
+		m_sm.reg_evt_state(ES_CLOSING, EE_CLOSED, ES_CLOSED_READY, NULL);
+		m_sm.reg_evt_state(ES_CLOSED_READY, EE_CLOSED, ES_CLOSED, &CTcpEndpoint::handle_closed);
+
+		m_sm.set_cur_state(ES_CLOSED);
 	}
 
 	CTcpEndpoint::~CTcpEndpoint()
@@ -118,34 +162,127 @@ namespace nm_smartnet
 	/**
 	 * open this endpoint and put it into the io engine.
 	 * */
-	int32_t CTcpEndpoint::open(const nm_network::CIpv4Addr &listenaddr, const nm_network::CIpv4Addr &peeraddr,
-			const nm_framework::sn_engine_ptr_t psmartnetmgr)
+	int32_t CTcpEndpoint::open()
 	{
-//		IF_TRUE_THEN_RETURN_CODE(m_bopenned, CMNERR_SUC);
-//
-//		nm_utils::mtx_scopelk_t lk(m_lkendpoint);
-//
-//		IF_TRUE_THEN_RETURN_CODE(m_bopenned, CMNERR_SUC);
-//		m_bopenned = true;
+		m_log.init("./", "tcp_endpoint_", ELL_DEBUG, 60);
 
-		if (NULL != m_pSNEngine)
-		{
-			return CMNERR_COMMON_ERR;
-		}
-		m_pSNEngine = psmartnetmgr;
-
-		m_pSock = SYS_NOTRW_NEW(nm_network::CTcpSock);
-		//		m_plistenaddr = listenaddr;
-		//		m_ppeeraddr = peeraddr;
-
-		return m_pSNEngine->add_endpoint(nm_framework::io_obj_ptr_t(this));
+		return m_sm.post_event(EE_OPEN, NULL);
 	}
+
+	int32_t CTcpEndpoint::handle_opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		///init sm err code to zero, when opening.
+		m_i32SMErrCode = CMNERR_SUC;
+
+		int32_t i32Ret = 0;
+		if (NULL != m_pTcpAcceptor)
+		{
+			SYS_ASSERT(NULL == m_pTcpConnector);
+			i32Ret = m_pTcpAcceptor->add_endpoint(tcp_endpoint_ptr_t(this));
+		}
+		else
+		{
+			SYS_ASSERT(NULL != m_pTcpConnector);
+			i32Ret = m_pTcpConnector->add_endpoint(tcp_endpoint_ptr_t(this));
+		}
+
+		return i32Ret;
+	}
+
+	int32_t CTcpEndpoint::handle_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		///达到稳态了，可以处理在这个过程中出现的错误了
+		if (CMNERR_SUC != m_i32SMErrCode)
+		{
+			TRACE_LOG(m_log, ELL_ERR, "errors occurred in the opening progress: %d\n", m_i32SMErrCode);
+			close();
+		}
+		else
+		{
+
+		}
+
+		TRACE_LOG(m_log, ELL_DEBUG, "openned!\n");
+
+		on_openned();
+
+
+	}
+
+	int32_t CTcpEndpoint::handle_closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		SYS_ASSERT(NULL != m_pTcpSock);
+		m_pTcpSock->close();
+
+		if (NULL != m_pTcpAcceptor)
+		{
+			m_pTcpAcceptor->del_endpoint(tcp_endpoint_ptr_t(this));
+		}
+		else
+		{
+			m_pTcpConnector->del_endpoint(tcp_endpoint_ptr_t(this));
+		}
+
+		return CMNERR_SUC;
+	}
+
+	int32_t CTcpEndpoint::handle_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		///
+	}
+
+	void CTcpEndpoint::handle_inserted_to_ioset(int32_t i32IoType, int32_t i32ReturnCode)
+	{
+		SYS_ASSERT(CMNERR_SUC == i32ReturnCode);
+		m_sm.post_event(EE_OPENED);
+	}
+
+	void CTcpEndpoint::handle_io_error(int32_t i32ErrCode)
+	{
+		m_sm.post_event(EE_IOERR, &i32ErrCode);
+	}
+
+	void CTcpEndpoint::handle_input_evt()
+	{
+		if (ES_OPENED == m_sm.get_cur_state()) ///有可能INPUT 处理线程先设置完毕，并开始接受数据，但是发送线程还在设置过程中，所以epoll要用level triger
+		{
+			on_receiving_data();
+		}
+	}
+
+	void CTcpEndpoint::handle_output_evt()
+	{
+		if (ES_OPENED == m_sm.get_cur_state()) ///如果发生了错误，导致状态不是OPENNED时，就不用处理IO了。
+		{
+			on_sending_data();
+		}
+	}
+
+	int32_t CTcpEndpoint::handling_io_err(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_pTcpSock->close();
+
+		return NULL != m_pTcpAcceptor ? m_pTcpAcceptor->del_endpoint(tcp_endpoint_ptr_t(this))
+				: m_pTcpConnector->del_endpoint(tcp_endpoint_ptr_t(this));
+	}
+
+	int32_t CTcpEndpoint::handle_internal_error(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_i32SMErrCode = *(reinterpret_cast<int32_t*>(pvoid_t));
+
+		return CMNERR_SUC;
+	}
+
+
 
 	/**
 	 * close this endpoint.
 	 * */
 	int32_t CTcpEndpoint::close()
 	{
+		return m_sm.post_event(EE_CLOSE);
+
+
 		//		IF_TRUE_THEN_RETURN_CODE(!m_bopenned, CMNERR_SUC);
 		//
 		//		nm_utils::mtx_scopelk_t lk(m_lkendpoint);
@@ -153,18 +290,18 @@ namespace nm_smartnet
 		//		IF_TRUE_THEN_RETURN_CODE(!m_bopenned, CMNERR_SUC);
 		//		m_bopenned = false;
 
-		///first, delete it from engine.
-		SYS_ASSERT(NULL != m_pSNEngine);
-		int32_t i32ret = m_pSNEngine->del_endpoint(nm_framework::io_obj_ptr_t(this));
-		SYS_ASSERT(CMNERR_SUC == i32ret);
-		m_pSNEngine = NULL;
-
-		///then, close the socket.
-		SYS_ASSERT(NULL != m_pSock);
-		m_pSock->close();
-		m_pSock = NULL;
-
-		return CMNERR_SUC;
+//		///first, delete it from engine.
+//		SYS_ASSERT(NULL != m_pSNEngine);
+//		int32_t i32ret = m_pSNEngine->del_endpoint(nm_framework::io_obj_ptr_t(this));
+//		SYS_ASSERT(CMNERR_SUC == i32ret);
+//		m_pSNEngine = NULL;
+//
+//		///then, close the socket.
+//		SYS_ASSERT(NULL != m_pSock);
+//		m_pSock->close();
+//		m_pSock = NULL;
+//
+//		return CMNERR_SUC;
 	}
 
 	int32_t CTcpEndpoint::get_type()

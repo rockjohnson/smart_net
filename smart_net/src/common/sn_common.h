@@ -15,4 +15,9 @@
 #include "sn_err_info.h"
 #include "sn_revision.h"
 
+enum E_IO_TYPE
+{
+	EIT_INPUT_TYPE = 0, EIT_OUTPUT_TYPE
+};
+
 #endif /* SMART_COMMON_H_ */

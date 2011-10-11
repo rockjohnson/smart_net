@@ -19,18 +19,18 @@ namespace nm_utils
 	template <typename T>
 	class CStateMachine
 	{
-		typedef int32_t (T::*PFUN_TRANSFORM_STATE)(int32_t, int32_t, int32_t, pvoid_t);
+		typedef int32_t (T::*PFUN_TRANSFORM_STATE)(int32_t, int32_t, int32_t, cmn_pvoid_t);
 		struct SElem
 		{
 			SElem(){}
-			SElem(int iS, PFUN_TRANSFORM_STATE f)
+			SElem(int32_t iS, PFUN_TRANSFORM_STATE f)
 			:iState(iS), fun(f){}
 
-			int iState;
+			int32_t iState;
 			PFUN_TRANSFORM_STATE fun;
 		};
-		typedef STD_MAP<int/*event*/, SElem/*end state and fun*/> evt_h_t;
-		typedef STD_MAP<int/*start state*/, evt_h_t> event_handler_t;
+		typedef STD_MAP<int32_t/*event*/, SElem/*end state and fun*/> evt_h_t;
+		typedef STD_MAP<int32_t/*start state*/, evt_h_t> event_handler_t;
 
 	public:
 		CStateMachine(T *t);
@@ -38,10 +38,10 @@ namespace nm_utils
 
 	public:
 
-		void set_cur_state(int iState){m_i32curstate = iState;}
-		int reg_evt_state(int iStartState, int iEvt, int iEndState, PFUN_TRANSFORM_STATE fun);
-		int post_event(int iEvt, pvoid_t pV);
-		int get_cur_state()
+		void set_cur_state(int32_t iState){m_i32curstate = iState;}
+		int32_t reg_evt_state(int32_t iStartState, int32_t iEvt, int32_t iEndState, PFUN_TRANSFORM_STATE fun);
+		int32_t post_event(int32_t iEvt, cmn_pvoid_t pV);
+		inline int32_t get_cur_state()
 		{
 			return m_i32curstate;
 		}
@@ -66,7 +66,7 @@ namespace nm_utils
 		CMutexLock m_lkChangeState; //may be not needed, if all the state relative function is handled in single thread.
 		//CSpinLock m_lkcurrentstate;
 #endif
-		int m_i32curstate; //current state;
+		volatile int32_t m_i32curstate; //current state;
 		T *m_t;
 		event_handler_t m_evt_handler;
 	};

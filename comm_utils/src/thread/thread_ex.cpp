@@ -40,7 +40,7 @@ bool IThreadTask::is_stopped()
 /**
  * CThread
  * */
-pvoid_t CThread::thread_main(pvoid_t pArg)
+cmn_pvoid_t CThread::thread_main(cmn_pvoid_t pArg)
 {
 	if (NULL == pArg)
 	{
@@ -171,7 +171,7 @@ bool CThread::is_stopped()
 	return m_bStop;
 }
 
-pvoid_t CThread::exec()
+cmn_pvoid_t CThread::exec()
 {
 	enter_run();
 

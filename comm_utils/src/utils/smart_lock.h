@@ -69,10 +69,13 @@ namespace nm_utils
 	class CMutexLock
 	{
 	public:
-		inline CMutexLock()
+		inline CMutexLock(int32_t i32MtxType = PTHREAD_MUTEX_NORMAL)
 		{
 #if __PLATFORM__ == __PLATFORM_LINUX__
-			pthread_mutex_init(&m_mtx, NULL);
+			pthread_mutexattr_t attr;
+			pthread_mutexattr_init(&attr);
+			pthread_mutexattr_settype(&attr, i32MtxType);
+			pthread_mutex_init(&m_mtx, &attr);
 #elif __PLATFORM__ == __PLATFORM_WINDOWS__
 			::InitializeCriticalSection(&m_cs);
 #endif

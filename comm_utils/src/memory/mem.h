@@ -21,13 +21,13 @@ public:
 	~CMemBlock();
 
 public:
-	byte_t* get_mem();
-	byte_t* get_data();
+	cmn_byte_t* get_mem();
+	cmn_byte_t* get_data();
 
 	void reset();
 
 private:
-	byte_t *m_pBytes;
+	cmn_byte_t *m_pBytes;
 	u_int32_t m_ui32Sz;
 	u_int32_t m_ui32Offset;
 	u_int32_t m_ui32Len;

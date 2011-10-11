@@ -36,7 +36,7 @@ namespace nm_framework
 	public:
 		virtual void handle_input_evt() = 0;
 		virtual void handle_output_evt() = 0;
-		virtual void handle_error_evt() = 0;
+		virtual void handle_io_error(int32_t i32ErrCode) = 0;
 		virtual void handle_inserted_to_ioset(int32_t i32IoType, int32_t i32ReturnCode) = 0;
 		virtual void handle_erased_from_ioset(int32_t i32IoType) = 0;
 		virtual int32_t get_fd() = 0;

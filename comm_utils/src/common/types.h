@@ -11,11 +11,11 @@
 #include <sys/types.h>
 #include <string>
 
-typedef void* pvoid_t;
-typedef char char_t;
-typedef const char* cstr_t;
+typedef void* cmn_pvoid_t;
+typedef char cmn_char_t;
+typedef const char* cmn_cstr_t;
 typedef std::string cmn_string_t;
-typedef unsigned char byte_t;
+typedef unsigned char cmn_byte_t;
 
 
 #endif /* TYPES_H_ */

@@ -33,12 +33,12 @@ namespace nm_utils
 {
 	namespace
 	{
-		const char_t *g_arrLevInfo[ELL_ALL] =
+		const cmn_char_t *g_arrLevInfo[ELL_ALL] =
 		{	"DEFAULT" , "DEBUG  ", "INFOR  ", "WARNING", "ERROR  "};
 	}
 
 	CSmartLog::CSmartLog()
-	: m_i32TraceLevel(ELL_ERR), m_tmLogFileStart(0), m_i32Interval(60)
+	: m_i32TraceLevel(ELL_ERR), m_tmLogFileStart(0), m_i32IntervalInSeconds(60)
 	{
 	}
 
@@ -47,14 +47,14 @@ namespace nm_utils
 		close(true);
 	}
 
-	int32_t CSmartLog::init(cstr_t pcszLogDir, cstr_t pcszLogFilePrefix, int32_t i32LogLevel, int32_t i32Interval)
+	int32_t CSmartLog::init(cmn_cstr_t pcszLogDir, cmn_cstr_t pcszLogFilePrefix, int32_t i32LogLevel, int32_t i32IntervalInSeconds)
 	{
 		SYS_ASSERT(!m_LogFile.is_open() && 0 == m_tmLogFileStart);
 
 		m_strLogDir = pcszLogDir;
 		m_strLogFilePrefix = pcszLogFilePrefix;
 		m_i32TraceLevel = i32LogLevel;
-		m_i32Interval = i32Interval;
+		m_i32IntervalInSeconds = i32IntervalInSeconds;
 
 		return RET_SUC;
 	}
@@ -74,7 +74,7 @@ namespace nm_utils
 
 	int32_t CSmartLog::check_log_file()
 	{
-		if ((m_LogFile.is_open()) && ((ZERO >= m_i32Interval) || (time(NULL) < (m_tmLogFileStart + m_i32Interval))))
+		if ((m_LogFile.is_open()) && ((ZERO >= m_i32IntervalInSeconds) || (time(NULL) < (m_tmLogFileStart + m_i32IntervalInSeconds))))
 		{
 			return RET_SUC;
 		}
@@ -82,7 +82,7 @@ namespace nm_utils
 		{
 			CScopeLock<CMutexLock> lock(m_lock);
 
-			if ((m_LogFile.is_open()) && ((ZERO >= m_i32Interval) || (time(NULL) < (m_tmLogFileStart + m_i32Interval))))
+			if ((m_LogFile.is_open()) && ((ZERO >= m_i32IntervalInSeconds) || (time(NULL) < (m_tmLogFileStart + m_i32IntervalInSeconds))))
 			{
 				return RET_SUC;
 			}
@@ -155,7 +155,7 @@ namespace nm_utils
 
 
 #define LOCAL_FMT_BUF_SIZE (4196)
-	int CSmartLog::trace_log(cstr_t pcszFmt, ...)
+	int CSmartLog::trace_log(cmn_cstr_t pcszFmt, ...)
 	{
         va_list ap;
         char szBuf[LOCAL_FMT_BUF_SIZE] = {0};
@@ -185,8 +185,8 @@ namespace nm_utils
 	/**
 	 * trace log to target...
 	 * */
-	void CSmartLog::trace_log(const int32_t i32LogLevel, cstr_t pcszFileName,
-			cstr_t pcszFunc, int32_t i32LineNo, cstr_t pcszLog, int32_t i32Target)
+	void CSmartLog::trace_log(const int32_t i32LogLevel, cmn_cstr_t pcszFileName,
+			cmn_cstr_t pcszFunc, int32_t i32LineNo, cmn_cstr_t pcszLog, int32_t i32Target)
 	{
 		SYS_ASSERT(i32LogLevel >= ELL_DEF && i32LogLevel < ELL_ALL && ZERO != i32Target);
 		if (i32LogLevel < m_i32TraceLevel || ZERO == i32Target)
@@ -194,36 +194,36 @@ namespace nm_utils
 			return;
 		}
 
-		char_t buff[256] = {0};
-		char_t buf[LOG_TEMP_BUF_LEN] = {0};
+		cmn_char_t buff[256] = {0};
+		cmn_char_t buf[LOG_TEMP_BUF_LEN] = {0};
 #if __PLATFORM__ == __PLATFORM_LINUX__
 #if defined(__USING_SIMPLE_LOG__)
-		int32_t iRet = snprintf(buf, sizeof(buf) / sizeof(char_t),"%s: %6.6u@%s|%s() => %s" ,
+		int32_t iRet = snprintf(buf, sizeof(buf) / sizeof(cmn_char_t),"%s: %6.6u@%s|%s() => %s" ,
 				g_arrLevInfo[i32LogLevel], get_sys_thread_id(), CTimeInfo::get_day_time(buff), pcszFunc, pcszLog);
 		SYS_ASSERT(-1 < iRet);
 #else
-		int iRet = snprintf(buf, sizeof(buf) / sizeof(char_t), "%s: %6.6u@%s|%s:%4.4i:%s() => %s" ,
+		int iRet = snprintf(buf, sizeof(buf) / sizeof(cmn_char_t), "%s: %6.6u@%s|%s:%4.4i:%s() => %s" ,
 			g_arrLevInfo[i32LogLevel], get_sys_thread_id(), CTimeInfo::get_day_time(buff), pcszFileName, i32LineNo, pcszFunc, pcszLog);
 		SYS_ASSERT(-1 < iRet);
 #endif
 #elif __PLATFORM__ == __PLATFORM_WINDOWS__
 #if defined(__USING_SIMPLE_LOG__)
-		swprintf(buf, sizeof(buf) / sizeof(char_t),L"%s: %6.6u@%s|%S() => %s" ,
+		swprintf(buf, sizeof(buf) / sizeof(cmn_char_t),L"%s: %6.6u@%s|%S() => %s" ,
 			g_arrLevInfo[i32LogLevel], get_sys_thread_id(), CTimeInfo::get_day_time(buff), pcszFunc, pcszLog);
 #else
-		swprintf(buf, sizeof(buf) / sizeof(char_t),L"%s: %6.6u@%s|%s:%4.4i:%S() => %s" ,
+		swprintf(buf, sizeof(buf) / sizeof(cmn_char_t),L"%s: %6.6u@%s|%s:%4.4i:%S() => %s" ,
 				g_arrLevInfo[i32LogLevel], get_sys_thread_id(), CTimeInfo::get_day_time(buff), pcszFileName, i32LineNo, pcszFunc, pcszLog);
 #endif
 #endif
 
 		if ((ET_FILE & i32Target) && (RET_SUC == check_log_file()))
 		{
-			m_LogFile.set((byte_t*)buf, iRet < 0 ? LOG_TEMP_BUF_LEN : iRet);
+			m_LogFile.set((cmn_byte_t*)buf, iRet < 0 ? LOG_TEMP_BUF_LEN : iRet);
 		}
 
 		if (ET_CONSOLE & i32Target)
 		{
-			fwrite((byte_t*)buf, iRet < 0 ? LOG_TEMP_BUF_LEN : iRet, 1, stdout);
+			fwrite((cmn_byte_t*)buf, iRet < 0 ? LOG_TEMP_BUF_LEN : iRet, 1, stdout);
 		}
 
 //#if defined(__OUTPUT_TO_DEBUG__) && __PLATEFORM__ == __PLATFORM_WINDOWS__

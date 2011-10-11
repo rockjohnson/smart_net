@@ -84,7 +84,7 @@ namespace nm_utils
 		return iRet;
 	}
 
-	int32_t CLiteFile::set(byte_t *pBytes, u_int32_t ui32Len)
+	int32_t CLiteFile::set(cmn_byte_t *pBytes, u_int32_t ui32Len)
 	{
 		SYS_ASSERT(0 <= m_i32FileDesc);
 
@@ -98,7 +98,7 @@ namespace nm_utils
 		return fsync(m_i32FileDesc);
 	}
 
-	int32_t CLiteFile::get(byte_t *pBuf, u_int32_t ui32Size)
+	int32_t CLiteFile::get(cmn_byte_t *pBuf, u_int32_t ui32Size)
 	{
 		SYS_ASSERT(0 <= m_i32FileDesc /*&& SSIZE_MAX >= ui32Size*/);
 

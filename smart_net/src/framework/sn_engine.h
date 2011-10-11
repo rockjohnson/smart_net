@@ -48,14 +48,14 @@ namespace nm_framework
 		int32_t start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout);
 		int32_t stop();
 		///
-		int32_t add_endpoint(const io_obj_ptr_t &pEP); ///not thread safe
+		int32_t add_endpoint(const io_obj_ptr_t &pEP, int32_t i32IoType); ///not thread safe
 		int32_t del_endpoint(const io_obj_ptr_t &pEP); ///not thread safe
 		int32_t add_timer(const timer_obj_ptr_t &pTimer);
 		int32_t del_timer(const timer_obj_ptr_t &pTimer);
 
 	private:
-		int32_t starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid);
-		int32_t stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid);
+		int32_t starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
 		///state

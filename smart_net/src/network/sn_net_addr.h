@@ -25,10 +25,10 @@ public:
 	virtual ~INetAddr();
 
 public:
-	virtual int32_t set_ip(cstr_t pcszIp) = 0;
-	virtual int32_t set_ip_nbo(pvoid_t pIp, u_int32_t ui32Len) = 0;
-	virtual pvoid_t get_ip_nbo() const = 0;
-	virtual cstr_t get_ip_str(char_t *pszBuf, u_int32_t ui32Len) = 0;
+	virtual int32_t set_ip(cmn_cstr_t pcszIp) = 0;
+	virtual int32_t set_ip_nbo(cmn_pvoid_t pIp, u_int32_t ui32Len) = 0;
+	virtual cmn_pvoid_t get_ip_nbo() const = 0;
+	virtual cmn_cstr_t get_ip_str(cmn_char_t *pszBuf, u_int32_t ui32Len) = 0;
 	///
 	virtual int32_t set_port_nbo(u_int16_t ui16Port /*network byte order*/) = 0;
 	virtual int32_t set_port_hbo(u_int16_t ui16Port /*host byte order*/) = 0;
@@ -52,10 +52,10 @@ public:
 	CIpv4Addr& operator =(const CIpv4Addr &other);
 
 public:
-	virtual int32_t set_ip(cstr_t pcszIp);
-	virtual int32_t set_ip_nbo(pvoid_t pIp, u_int32_t ui32Len);
-	virtual pvoid_t get_ip_nbo() const;
-	virtual cstr_t get_ip_str(char_t *pszBuf, u_int32_t ui32Len);
+	virtual int32_t set_ip(cmn_cstr_t pcszIp);
+	virtual int32_t set_ip_nbo(cmn_pvoid_t pIp, u_int32_t ui32Len);
+	virtual cmn_pvoid_t get_ip_nbo() const;
+	virtual cmn_cstr_t get_ip_str(cmn_char_t *pszBuf, u_int32_t ui32Len);
 	///
 	virtual int32_t set_port_nbo(u_int16_t ui16Port /*network byte order*/);
 	virtual int32_t set_port_hbo(u_int16_t ui16Port /*host byte order*/);

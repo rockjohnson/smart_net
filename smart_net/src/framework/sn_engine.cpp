@@ -17,8 +17,8 @@ namespace nm_framework
 		int32_t i32D;
 	};
 
-	CSNEngine::CSNEngine()
-	:m_sm(this)
+	CSNEngine::CSNEngine() :
+		m_sm(this)
 	{
 		m_sm.reg_evt_state(EES_STOPPED, EEE_START, EES_STARTED, &CSNEngine::starting);
 		m_sm.reg_evt_state(EES_STARTED, EEE_STOP, EES_STOPPED, &CSNEngine::stopping);
@@ -43,7 +43,7 @@ namespace nm_framework
 	 *
 	 * if this func return err, you should call stop func :)...
 	 * */
-	int32_t CSNEngine::starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
+	int32_t CSNEngine::starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		using namespace nm_thread;
 
@@ -79,7 +79,7 @@ namespace nm_framework
 			i32Ret = pThread->start();
 			IF_TRUE_THEN_RETURN_CODE((i32Ret < 0), RET_ERR);
 			m_vecInputTasks.push_back(pInputTask);
-			pInputTask->set_indx(m_vecInputTasks.size() - 1);
+			pInputTask->set_id(m_vecInputTasks.size() - 1);
 			m_vecThreads.push_back(pThread);
 		}
 
@@ -93,7 +93,7 @@ namespace nm_framework
 		return RET_SUC;
 	}
 
-	int32_t CSNEngine::stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, pvoid_t pVoid)
+	int32_t CSNEngine::stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		///stop all io thread
 		for (thread_vec_t::iterator iter = m_vecThreads.begin(); iter != m_vecThreads.end(); ++iter)
@@ -122,7 +122,7 @@ namespace nm_framework
 	/**
 	 * thread safe
 	 * */
-	int32_t CSNEngine::add_endpoint(const io_obj_ptr_t &pIoObj)
+	int32_t CSNEngine::add_endpoint(const io_obj_ptr_t &pIoObj, int32_t i32IoType)
 	{
 		using namespace nm_framework;
 		///
@@ -130,43 +130,49 @@ namespace nm_framework
 		///cool!!
 		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(EES_STARTED), CMNERR_COMMON_ERR);
 
-		///assign input task, thread safe?
-		int32_t i32MinCnt = 0;
-		int32_t i32Tmp = 0;
-		input_handle_task_ptr_t pInputTask;
-		for (input_task_vec_t::iterator iter = m_vecInputTasks.begin(); iter != m_vecInputTasks.end(); ++iter)
+		if (EIT_INPUT_TYPE == i32IoType)
 		{
-			i32Tmp = (*iter)->get_ioobj_cnt();
-			if (0 == i32Tmp)
+			///assign input task, thread safe?
+			int32_t i32MinCnt = 0;
+			int32_t i32Tmp = 0;
+			input_handle_task_ptr_t pInputTask;
+			for (input_task_vec_t::iterator iter = m_vecInputTasks.begin(); iter != m_vecInputTasks.end(); ++iter)
 			{
-				pInputTask = (*iter);
-				break;
+				i32Tmp = (*iter)->get_ioobj_cnt();
+				if (0 == i32Tmp)
+				{
+					pInputTask = (*iter);
+					break;
+				}
+				else if (i32MinCnt > i32Tmp)
+				{
+					i32MinCnt = i32Tmp;
+					pInputTask = (*iter);
+				}
 			}
-			else if (i32MinCnt > i32Tmp)
-			{
-				i32MinCnt = i32Tmp;
-				pInputTask = (*iter);
-			}
+			pInputTask->add_io_obj(pIoObj);
 		}
-		pInputTask->add_io_obj(pIoObj);
 
-		///output task
-		output_handle_task_ptr_t pOutputTask;
-		for (output_task_vec_t::iterator iter = m_vecOutputTasks.begin(); iter != m_vecOutputTasks.end(); ++iter)
+		if (EIT_OUTPUT_TYPE == i32IoType)
 		{
-			i32Tmp = (*iter)->get_ioobj_cnt();
-			if (0 == i32Tmp)
+			///output task
+			output_handle_task_ptr_t pOutputTask;
+			for (output_task_vec_t::iterator iter = m_vecOutputTasks.begin(); iter != m_vecOutputTasks.end(); ++iter)
 			{
-				pOutputTask = (*iter);
-				break;
+				i32Tmp = (*iter)->get_ioobj_cnt();
+				if (0 == i32Tmp)
+				{
+					pOutputTask = (*iter);
+					break;
+				}
+				else if (i32MinCnt > i32Tmp)
+				{
+					i32MinCnt = i32Tmp;
+					pOutputTask = (*iter);
+				}
 			}
-			else if (i32MinCnt > i32Tmp)
-			{
-				i32MinCnt = i32Tmp;
-				pOutputTask = (*iter);
-			}
+			pOutputTask->add_io_obj(pIoObj);
 		}
-		pOutputTask->add_io_obj(pIoObj);
 
 		m_sm.end_lock_state();
 
@@ -181,8 +187,15 @@ namespace nm_framework
 		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(EES_STARTED), CMNERR_COMMON_ERR);
 
 		///assign input task, thread safe?
-		m_vecInputTasks[pIoObj->get_input_task_id()]->del_io_obj(pIoObj);
-		m_vecOutputTasks[pIoObj->get_output_task_id()]->del_io_obj(pIoObj);
+		if (pIoObj->get_input_task_id() >= 0)
+		{
+			m_vecInputTasks[pIoObj->get_input_task_id()]->del_io_obj(pIoObj);
+		}
+
+		if (pIoObj->get_output_task_id() >= 0)
+		{
+			m_vecOutputTasks[pIoObj->get_output_task_id()]->del_io_obj(pIoObj);
+		}
 
 		m_sm.end_lock_state();
 	}

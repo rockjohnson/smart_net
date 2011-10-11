@@ -38,7 +38,7 @@ time_t CTimeInfo::get_time_in_seconds()
 }
 
 #define __MICRO_SECOND__
-const char_t* CTimeInfo::get_day_time(char_t *pszBuf)
+const cmn_char_t* CTimeInfo::get_day_time(cmn_char_t *pszBuf)
 {
 #if __PLATFORM__ == __PLATFORM_LINUX__
 #ifdef __MICRO_SECOND__

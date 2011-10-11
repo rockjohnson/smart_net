@@ -12,7 +12,7 @@
 
 	template <typename T>
 	CStateMachine<T>::CStateMachine(T *t)
-	:m_i32curstate(0), m_t(t)//, m_pFun(pFun)
+	:m_i32curstate(0), m_t(t), m_lkChangeState(PTHREAD_MUTEX_RECURSIVE)
 	{
 		// TODO Auto-generated constructor stub
 	}
@@ -24,7 +24,7 @@
 	}
 
 	template <typename T>
-	int CStateMachine<T>::reg_evt_state(int iStartState, int iEvt, int iEndState, PFUN_TRANSFORM_STATE fun)
+	int32_t CStateMachine<T>::reg_evt_state(int32_t iStartState, int32_t iEvt, int32_t iEndState, PFUN_TRANSFORM_STATE fun)
 	{
 		if (m_evt_handler[iStartState].find(iEvt) != m_evt_handler[iStartState].end())
 		{
@@ -38,7 +38,7 @@
 	}
 
 	template <typename T>
-	int CStateMachine<T>::post_event(int iEvt, pvoid_t pV)
+	int32_t CStateMachine<T>::post_event(int32_t iEvt, cmn_pvoid_t pV)
 	{
 #ifdef __USED_IN_MULTI_THREAD__
 		mtx_scopelk_t lk(m_lkChangeState);
@@ -51,7 +51,7 @@
 			//ASSERT(false);
 			return -1;
 		}
-		int iEndState = iter2->second.iState;
+		int32_t iEndState = iter2->second.iState;
 		if (NULL != (iter2->second.fun) && (m_t->*(iter2->second.fun))(m_i32curstate, iEvt, iEndState, pV) < 0)
 		{
 			//transform state failed!

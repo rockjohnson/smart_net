@@ -120,7 +120,7 @@ namespace nm_utils
 	int32_t set_block_flag(int32_t i32fd, bool bBlockOrNot);
 
 	///convert ip
-	int32_t ip_ston(int32_t i32af, cstr_t pcszSrcIp, pvoid_t pDst);
+	int32_t ip_ston(int32_t i32af, cmn_cstr_t pcszSrcIp, cmn_pvoid_t pDst);
 	/*
 	 * e.g.
 	 * struct in_addr addr;
@@ -128,7 +128,7 @@ namespace nm_utils
 	 * struct in6_addr addr;
 	 * ip_ston(AF_INET6, "127.0.0.1", (pvoid_t)&addr);
 	 * */
-	int32_t ip_ntos(int32_t i32af, pvoid_t pSrcIp, char_t *pszDst, const socklen_t cslDstLen);
+	int32_t ip_ntos(int32_t i32af, cmn_pvoid_t pSrcIp, cmn_char_t *pszDst, const socklen_t cslDstLen);
 	/*
 	 * e.g.
 	 * struct in_addr addr;

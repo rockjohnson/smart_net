@@ -221,7 +221,7 @@ namespace nm_event
 			if (ui32Evts & EPOLLERR)
 			{
 				SYS_ASSERT(false); ///check how this happened
-				pIoObj->handle_error_evt();
+				pIoObj->handle_io_error();
 			}
 			else
 			{

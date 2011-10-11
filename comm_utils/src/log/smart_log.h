@@ -22,29 +22,23 @@
 #include "../utils/smart_lock.h"
 #include "../utils/file.h"
 
+enum ELogLevel
+{
+	ELL_DEF = 0, ELL_DEBUG, ELL_INFO, ELL_WARNING, ELL_ERR, ELL_ALL
+};
+
+enum ELogTarget
+{
+	ET_FILE = 0x01, ET_CONSOLE = 0x02
+//		ET_DB = 0x04
+};
+
 namespace nm_utils
 {
-	enum ELogLevel
-	{
-		ELL_DEF = 0,
-		ELL_DEBUG,
-		ELL_INFO,
-		ELL_WARNING,
-		ELL_ERR,
-		ELL_ALL
-	};
-
-	enum ELogTarget
-	{
-		ET_FILE = 0x01,
-		ET_CONSOLE = 0x02
-//		ET_DB = 0x04
-	};
-
 	/**
 	 * smart log class
 	 * */
-	class CSmartLog : public nm_cmn_base::CNoncopyable
+	class CSmartLog: public nm_cmn_base::CNoncopyable
 	{
 	public:
 		CSmartLog();
@@ -52,11 +46,11 @@ namespace nm_utils
 
 	public:
 		///you should call this func after you construct a smart log obj firtly!
-		int32_t init(cstr_t pcszLogDir, cstr_t pcszLogFilePrefix, int32_t i32LogLevel, int32_t i32Interval);
+		int32_t init(cmn_cstr_t pcszLogDir, cmn_cstr_t pcszLogFilePrefix, int32_t i32LogLevel, int32_t i32IntervalInSeconds);
 		///the trace log func
-		void trace_log(const int32_t iLogLev, cstr_t pcszFileName, cstr_t pcszFunc, int32_t i32LineNo, cstr_t pcszLog, int32_t i32Target);
+		void trace_log(const int32_t iLogLev, cmn_cstr_t pcszFileName, cmn_cstr_t pcszFunc, int32_t i32LineNo, cmn_cstr_t pcszLog, int32_t i32Target);
 		///...
-		int32_t trace_log(cstr_t pcszFmt, ...);
+		int32_t trace_log(cmn_cstr_t pcszFmt, ...);
 		///you should close the log after your using.
 		int32_t close(bool bClose = false);
 		///
@@ -78,10 +72,9 @@ namespace nm_utils
 #elif __PLATFORM__ == __PLATFORM_WINDOWS__
 		time_t m_tmLogFileStart;
 #endif
-		u_int32_t m_i32Interval; //the log file interval
+		u_int32_t m_i32IntervalInSeconds; //the log file interval
 		CMutexLock m_lock;
 	};
-
 
 #if __PLATFORM__ == __PLATFORM_LINUX__
 #define TRACE_EX(log_obj, log_level, contents) \
@@ -92,9 +85,9 @@ namespace nm_utils
 		{ \
 	if (log_level >= log_obj.get_trace_lev()) \
 	{ \
-		char_t __tmp_buf__[LOCAL_LOG_TMP_BUF_SZ] = {0}; \
+		cmn_char_t __tmp_buf__[LOCAL_LOG_TMP_BUF_SZ] = {0}; \
 		snprintf(__tmp_buf__, LOCAL_LOG_TMP_BUF_SZ, __VA_ARGS__); \
-		log_obj.trace_log(log_level, __FILE__, __func__, __LINE__, __tmp_buf__, nm_utils::ET_FILE | nm_utils::ET_CONSOLE); \
+		log_obj.trace_log(log_level, __FILE__, __func__, __LINE__, __tmp_buf__, ET_FILE | ET_CONSOLE); \
 		} \
 		}
 
@@ -104,7 +97,6 @@ namespace nm_utils
 			char_t szBuf[1024] = {0}; \
 			TRACE_LOG(log_obj, ELL_ERR, "%s: %s(%d)\n", #expr, get_sys_err_msg(iErrCode, szBuf, sizeof(szBuf)), iErrCode); \
 		}
-
 
 #elif __PLATFORM__ == __PLATFORM_WINDOWS__
 #define TRACE_EX(log_file, log_level, contents) \
@@ -118,7 +110,7 @@ namespace nm_utils
 	if (!(expr)) \
 	{ \
 		TRACE_LOG(ELL_ASSERT, "assert failed: %s\n", #expr);
-	}
+}
 #endif
 
 }

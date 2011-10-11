@@ -48,14 +48,14 @@ bool CIpv4Addr::is_valid()
 	return 0 < m_ui16port;
 }
 
-int32_t CIpv4Addr::set_ip(cstr_t pcszIp)
+int32_t CIpv4Addr::set_ip(cmn_cstr_t pcszIp)
 {
 	IF_TRUE_THEN_RETURN_CODE(NULL == pcszIp, CMNERR_COMMON_ERR);
 
-	return ip_ston(AF_INET, pcszIp, static_cast<pvoid_t>(&m_ip));
+	return ip_ston(AF_INET, pcszIp, static_cast<cmn_pvoid_t>(&m_ip));
 }
 
-int32_t CIpv4Addr::set_ip_nbo(pvoid_t pIp, u_int32_t ui32Len)
+int32_t CIpv4Addr::set_ip_nbo(cmn_pvoid_t pIp, u_int32_t ui32Len)
 {
 	IF_TRUE_THEN_RETURN_CODE(NULL == pIp || INET_ADDRSTRLEN != ui32Len, CMNERR_COMMON_ERR);
 
@@ -64,16 +64,16 @@ int32_t CIpv4Addr::set_ip_nbo(pvoid_t pIp, u_int32_t ui32Len)
 	return CMNERR_SUC;
 }
 
-pvoid_t CIpv4Addr::get_ip_nbo() const
+cmn_pvoid_t CIpv4Addr::get_ip_nbo() const
 {
-	return reinterpret_cast<pvoid_t>(const_cast<struct in_addr*>(&m_ip));
+	return reinterpret_cast<cmn_pvoid_t>(const_cast<struct in_addr*>(&m_ip));
 }
 
-cstr_t CIpv4Addr::get_ip_str(char_t *pszBuf, u_int32_t ui32Len)
+cmn_cstr_t CIpv4Addr::get_ip_str(cmn_char_t *pszBuf, u_int32_t ui32Len)
 {
 	IF_TRUE_THEN_RETURN_CODE(NULL == pszBuf, NULL);
 
-	return ip_ntos(AF_INET, reinterpret_cast<pvoid_t>(&m_ip), pszBuf, ui32Len) == CMNERR_SUC ? pszBuf : NULL;
+	return ip_ntos(AF_INET, reinterpret_cast<cmn_pvoid_t>(&m_ip), pszBuf, ui32Len) == CMNERR_SUC ? pszBuf : NULL;
 }
 
 int32_t CIpv4Addr::set_port_nbo(u_int16_t ui16Port /*network byte order*/)
