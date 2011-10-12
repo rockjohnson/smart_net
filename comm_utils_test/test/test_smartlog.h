@@ -24,9 +24,9 @@ class CTestSmartLog : public CxxTest::TestSuite
 		void test_log()
 		{
 			nm_utils::CSmartLog log;
-			log.init("./test_smartlog/haha/", "smartlog_", nm_utils::ELL_DEBUG, 30);
+			log.init("./test_smartlog/haha/", "smartlog_", ELL_DEBUG, 30);
 
-			TRACE_LOG(log, nm_utils::ELL_ERR, "this is a error test!\n");
+			TRACE_LOG(log, ELL_ERR, "this is a error test!\n");
 
 			IF_TRUE_THEN_RETURN(1);
 		}

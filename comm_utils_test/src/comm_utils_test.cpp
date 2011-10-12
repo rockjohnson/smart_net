@@ -82,6 +82,19 @@ public:
  void runTest() { suite_CFileTest.test_create(); }
 } testDescription_CFileTest_test_create;
 
+#include "../test/test_malloc.h"
+
+static CMallocTest suite_CMallocTest;
+
+static CxxTest::List Tests_CMallocTest = { 0, 0 };
+CxxTest::StaticSuiteDescription suiteDescription_CMallocTest( "../test/test_malloc.h", 15, "CMallocTest", suite_CMallocTest, Tests_CMallocTest );
+
+static class TestDescription_CMallocTest_test_malloc_one : public CxxTest::RealTestDescription {
+public:
+ TestDescription_CMallocTest_test_malloc_one() : CxxTest::RealTestDescription( Tests_CMallocTest, suiteDescription_CMallocTest, 20, "test_malloc_one" ) {}
+ void runTest() { suite_CMallocTest.test_malloc_one(); }
+} testDescription_CMallocTest_test_malloc_one;
+
 #include "../test/test_smartlog.h"
 
 static CTestSmartLog suite_CTestSmartLog;

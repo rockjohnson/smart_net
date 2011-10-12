@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lcomm_utils -lpthread
+LIBS := -lcomm_utils -lpthread -ljemalloc -ltcmalloc
 
