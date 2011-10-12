@@ -15,10 +15,10 @@
 namespace nm_framework
 {
 
-	enum E_IO_TYPE
-	{
-		EIT_INPUT = 1, EIT_OUTPUT
-	};
+//	enum E_IO_TYPE
+//	{
+//		EIT_INPUT = 1, EIT_OUTPUT
+//	};
 
 	/**
 	 * base class for io objs.

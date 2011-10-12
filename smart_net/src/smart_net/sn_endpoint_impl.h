@@ -8,6 +8,8 @@
 #ifndef __CONN_H__
 #define __CONN_H__
 
+#include <queue>
+
 #include <utils/state_machine.h>
 #include <memory/mem.h>
 #include <log/smart_log.h>
@@ -56,12 +58,12 @@ namespace nm_smartnet
 
 		enum
 		{
-			EES_OPENNED = 0, EES_CLOSED
+			ES_OPENNED = 0, ES_CLOSED
 		};
 
 		enum
 		{
-			EEE_OPEN = 0, EEE_CLOSE
+			EE_OPEN = 0, EE_CLOSE
 		};
 
 	public:
@@ -98,7 +100,8 @@ namespace nm_smartnet
 		nm_network::CIpv4Addr m_bindAddr;
 
 		nm_utils::CSpinLock m_lkIdleEPs;
-		std::set<nm_smartnet::tcp_endpoint_ptr_t> m_setIdleEPs;
+		typedef std::queue<nm_smartnet::tcp_endpoint_ptr_t> tcp_endpoint_queue_t;
+		tcp_endpoint_queue_t m_queIdleEPs;
 	};
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpAcceptor> tcp_acceptor_ptr_t;
 
@@ -145,12 +148,12 @@ namespace nm_smartnet
 	{
 		enum
 		{
-			ES_OPENING = 0, ES_OPENED_READY, ES_OPENED, ES_CLOSING, ES_CLOSED_READY, ES_CLOSED
+			ES_ADDED = 0, ES_OPENED_READY, ES_OPENED, ES_CLOSING, ES_CLOSED_READY, ES_CLOSED
 		};
 
 		enum
 		{
-			EE_OPEN = 0, EE_OPENED, EE_CLOSE, EE_CLOSED, EE_IOERR, EE_INTERNAL_ERR
+			EE_ADD = 0, EE_OPENED, EE_CLOSE, EE_CLOSED, EE_IOERR, EE_INTERNAL_ERR, EE_CONNECTED
 		};
 
 	public:
@@ -175,6 +178,8 @@ namespace nm_smartnet
 		virtual void set_output_task_id(int32_t i32id);
 		virtual int32_t get_output_task_id();
 
+		void handle_connected(nm_network::tcp_sock_ptr_t&);
+
 	public:
 		///first, you should open this endpoint, but it is async. and if succeed, then on_opened will callback.
 		virtual int32_t open();
@@ -193,7 +198,7 @@ namespace nm_smartnet
 		virtual void on_io_error(int32_t i32ErrCode) = 0;
 
 	private:
-		int32_t handle_opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handle_adding(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handle_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handle_closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_io_err(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);

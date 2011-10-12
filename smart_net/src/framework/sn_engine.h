@@ -49,7 +49,7 @@ namespace nm_framework
 		int32_t stop();
 		///
 		int32_t add_endpoint(const io_obj_ptr_t &pEP, int32_t i32IoType); ///not thread safe
-		int32_t del_endpoint(const io_obj_ptr_t &pEP); ///not thread safe
+		int32_t del_endpoint(const io_obj_ptr_t &pEP, int32_t i32IoType); ///not thread safe
 		int32_t add_timer(const timer_obj_ptr_t &pTimer);
 		int32_t del_timer(const timer_obj_ptr_t &pTimer);
 

@@ -179,7 +179,7 @@ namespace nm_framework
 		return CMNERR_SUC;
 	}
 
-	int32_t CSNEngine::del_endpoint(const io_obj_ptr_t &pIoObj)
+	int32_t CSNEngine::del_endpoint(const io_obj_ptr_t &pIoObj, int32_t i32IoType)
 	{
 		///
 		IF_TRUE_THEN_RETURN_CODE(NULL == pIoObj, CMNERR_COMMON_ERR);
@@ -187,14 +187,20 @@ namespace nm_framework
 		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(EES_STARTED), CMNERR_COMMON_ERR);
 
 		///assign input task, thread safe?
-		if (pIoObj->get_input_task_id() >= 0)
+		if (EIT_INPUT_TYPE == i32IoType)
 		{
-			m_vecInputTasks[pIoObj->get_input_task_id()]->del_io_obj(pIoObj);
+			if (pIoObj->get_input_task_id() >= 0)
+			{
+				m_vecInputTasks[pIoObj->get_input_task_id()]->del_io_obj(pIoObj);
+			}
 		}
 
-		if (pIoObj->get_output_task_id() >= 0)
+		if (EIT_OUTPUT_TYPE == i32IoType)
 		{
-			m_vecOutputTasks[pIoObj->get_output_task_id()]->del_io_obj(pIoObj);
+			if (pIoObj->get_output_task_id() >= 0)
+			{
+				m_vecOutputTasks[pIoObj->get_output_task_id()]->del_io_obj(pIoObj);
+			}
 		}
 
 		m_sm.end_lock_state();
