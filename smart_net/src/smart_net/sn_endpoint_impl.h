@@ -99,9 +99,9 @@ namespace nm_smartnet
 		nm_utils::CSmartLog m_log;
 		nm_network::CIpv4Addr m_bindAddr;
 
-		nm_utils::CSpinLock m_lkIdleEPs;
+		nm_utils::CSpinLock m_lkIdleEps;
 		typedef std::queue<nm_smartnet::tcp_endpoint_ptr_t> tcp_endpoint_queue_t;
-		tcp_endpoint_queue_t m_queIdleEPs;
+		tcp_endpoint_queue_t m_queIdleEps;
 	};
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpAcceptor> tcp_acceptor_ptr_t;
 
@@ -178,7 +178,7 @@ namespace nm_smartnet
 		virtual void set_output_task_id(int32_t i32id);
 		virtual int32_t get_output_task_id();
 
-		void handle_connected(nm_network::tcp_sock_ptr_t&);
+		int32_t handle_connected(nm_network::tcp_sock_ptr_t&);
 
 	public:
 		///first, you should open this endpoint, but it is async. and if succeed, then on_opened will callback.
@@ -202,6 +202,8 @@ namespace nm_smartnet
 		int32_t handle_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handle_closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_io_err(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handle_close_after_add(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_connected(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
 		nm_utils::CStateMachine<CTcpEndpoint> m_sm; ///state machine make the obj state thread-safe

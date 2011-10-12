@@ -76,8 +76,8 @@ namespace nm_smartnet
 	{
 		if (ES_OPENNED == m_sm.get_cur_state()) ///weak check...
 		{
-			nm_utils::spin_scopelk_t lk(m_lkIdleEPs);
-			std::pair<tcp_endpoint_queue_t::iterator, bool> ret = m_queIdleEPs.insert(pTcpEP);
+			nm_utils::spin_scopelk_t lk(m_lkIdleEps);
+			std::pair<tcp_endpoint_queue_t::iterator, bool> ret = m_queIdleEps.insert(pTcpEP);
 			SYS_ASSERT(ret.second);
 		}
 
@@ -109,19 +109,19 @@ namespace nm_smartnet
 		SYS_ASSERT(NULL != pNewSock); ///for test
 
 		///
-		tcp_endpoint_ptr_t pTcpEP;
+		tcp_endpoint_ptr_t pTcpEP = NULL;
 		for (;;)
 		{
 			pTcpEP = NULL;
 
 			{
-				nm_utils::spin_scopelk_t lk(m_lkIdleEPs);
-				if (m_queIdleEPs.empty())
+				nm_utils::spin_scopelk_t lk(m_lkIdleEps);
+				if (m_queIdleEps.empty())
 				{
 					break;
 				}
-				pTcpEP = m_queIdleEPs.front();
-				m_queIdleEPs.pop();
+				pTcpEP = m_queIdleEps.front();
+				m_queIdleEps.pop();
 			}
 
 			if (CMNERR_SUC == pTcpEP->handle_connected(pNewSock))
@@ -156,7 +156,7 @@ namespace nm_smartnet
 		m_sm.reg_evt_state(ES_CLOSED, EE_ADD, ES_ADDED, &CTcpEndpoint::handle_adding);
 
 		m_sm.reg_evt_state(ES_ADDED, EE_CLOSE, ES_CLOSED, &CTcpEndpoint::handle_close_after_add);
-		m_sm.reg_evt_state(ES_ADDED, EE_CONNECTED, ES_ADDING_OUTPUT_TASK, NULL);
+		m_sm.reg_evt_state(ES_ADDED, EE_CONNECTED, ES_ADDING_OUTPUT_TASK, &CTcpEndpoint::handling_connected);
 
 		m_sm.reg_evt_state(ES_OPENED_READY, EE_INTERNAL_ERR, ES_OPENED, &CTcpEndpoint::handle_internal_error);
 		m_sm.reg_evt_state(ES_OPENED_READY, EE_OPENED, ES_OPENED, &CTcpEndpoint::handle_opened);
@@ -309,6 +309,18 @@ namespace nm_smartnet
 
 		return NULL != m_pTcpAcceptor ? m_pTcpAcceptor->del_endpoint(tcp_endpoint_ptr_t(this)) : m_pTcpConnector->del_endpoint(
 				tcp_endpoint_ptr_t(this));
+	}
+
+	///因为所有的对endpoint的状态进行修改的操作都是串行化的，所以这个时候EP一定是在其中的，删除一定是成功的。
+	int32_t CTcpEndpoint::handle_close_after_add(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		return (NULL != m_pTcpAcceptor) ? m_pTcpAcceptor->del_endpoint(tcp_endpoint_ptr_t(this))
+				: m_pTcpConnector->del_endpoint(tcp_endpoint_ptr_t(this));
+	}
+
+	int32_t CTcpEndpoint::handling_connected(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		return (NULL != m_pTcpAcceptor) ? m_pTcpAcceptor->add_endpoint()
 	}
 
 	int32_t CTcpEndpoint::handle_internal_error(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
