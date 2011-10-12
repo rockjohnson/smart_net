@@ -20,6 +20,7 @@ public:
 	void test_malloc_one()
 	{
 		void *pV = malloc(1024); ///经过测试发现，链接程序的时候jemalloc和tcmalloc哪个放在前面，malloc的实现体就是那个版本
+		char *psz = new char[1024];
 	}
 };
 

@@ -43,8 +43,8 @@
 								<option id="gnu.cpp.link.option.libs.1666899429" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="comm_utils"/>
 									<listOptionValue builtIn="false" value="pthread"/>
-									<listOptionValue builtIn="false" value="jemalloc"/>
 									<listOptionValue builtIn="false" value="tcmalloc"/>
+									<listOptionValue builtIn="false" value="jemalloc"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.335266800" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/comm_utils/Debug}&quot;"/>
