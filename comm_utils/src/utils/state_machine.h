@@ -38,7 +38,11 @@ namespace nm_utils
 
 	public:
 
-		void set_cur_state(int32_t iState){m_i32curstate = iState;}
+		void set_cur_state(int32_t iState)
+		{
+			nm_utils::mtx_scopelk_t lk(m_lkChangeState);
+			m_i32curstate = iState;
+		}
 		int32_t reg_evt_state(int32_t iStartState, int32_t iEvt, int32_t iEndState, PFUN_TRANSFORM_STATE fun);
 		int32_t post_event(int32_t iEvt, cmn_pvoid_t pV);
 		inline int32_t get_cur_state()

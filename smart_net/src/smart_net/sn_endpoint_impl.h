@@ -140,7 +140,6 @@ namespace nm_smartnet
 	};
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpConnector> tcp_connector_ptr_t;
 
-
 	/**
 	 * tcp endpoint
 	 * */
@@ -148,12 +147,13 @@ namespace nm_smartnet
 	{
 		enum
 		{
-			ES_ADDED = 0, ES_OPENED_READY, ES_OPENED, ES_CLOSING, ES_CLOSED_READY, ES_CLOSED
+			ES_ADDED_INTO_HELPER = 0,
+			ES_OPENED_READY, ES_OPENED, ES_CLOSING, ES_CLOSED_READY, ES_CLOSED, ES_ADDING_INTO_OUTPUT_TASK, ES_ADDING_INTO_INPUT_TASK
 		};
 
 		enum
 		{
-			EE_ADD = 0, EE_OPENED, EE_CLOSE, EE_CLOSED, EE_IOERR, EE_INTERNAL_ERR, EE_CONNECTED
+			EE_NONE = 0, EE_OPEN, EE_OPENED, EE_CLOSE, EE_CLOSED, EE_IOERR, EE_INTERNAL_ERR, EE_CONNECTED, EE_ADDED_INTO_OUTPUT_TASK, EE_ADDED_INTO_INPUT_TASK
 		};
 
 	public:
@@ -161,7 +161,7 @@ namespace nm_smartnet
 		CTcpEndpoint(const tcp_connector_ptr_t&);
 		virtual ~CTcpEndpoint();
 
-		DISALLOW_COPY_AND_ASSIGN(CTcpEndpoint);
+		DISALLOW_COPY_AND_ASSIGN( CTcpEndpoint);
 
 	protected:
 		virtual void handle_input_evt();
@@ -204,10 +204,11 @@ namespace nm_smartnet
 		int32_t handling_io_err(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handle_close_after_add(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_connected(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handle_added_output_task(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
 		nm_utils::CStateMachine<CTcpEndpoint> m_sm; ///state machine make the obj state thread-safe
-		int32_t m_i32SMErrCode; ///为了简化设计，在状态达到OPENNED之前，发生的IO ERROR或 INTERNAL ERROR，并不直接处理，而是在达到这个状态时才处理。
+		int32_t m_i32SMPendingEvt; ///为了简化设计，在状态达到OPENNED之前，发生的IO ERROR或 INTERNAL ERROR，并不直接处理，而是在达到这个状态时才处理。
 
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
 		nm_network::tcp_sock_ptr_t m_pTcpSock;
@@ -216,7 +217,6 @@ namespace nm_smartnet
 		tcp_acceptor_ptr_t m_pTcpAcceptor;
 		nm_utils::CSmartLog m_log;
 	};
-
 
 	/**
 	 * tcp connect endpoint.
