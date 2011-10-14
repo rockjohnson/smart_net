@@ -11,7 +11,6 @@ namespace nm_smartnet
 {
 	/**
 	 *
-	 *
 	 * */
 	CTcpAcceptor::CTcpAcceptor(const nm_framework::sn_engine_ptr_t &pSNEngine) :
 		m_sm(this), m_pSNEngine(pSNEngine), m_i32InputTaskId(0), m_i32OutputTaskId(0)
@@ -166,11 +165,14 @@ namespace nm_smartnet
 		///这个时候发生关闭or internal err事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_INPUT_TASK
 		m_sm.reg_evt_state(ES_ADDING_INTO_INPUT_TASK, EE_INTERNAL_ERR, ES_ADDING_INTO_INPUT_TASK, &CTcpEndpoint::handle_internal_err_while_adding_input_task);
 		m_sm.reg_evt_state(ES_ADDING_INTO_INPUT_TASK, EE_CLOSE, ES_ADDING_INTO_INPUT_TASK, &CTcpEndpoint::handle_closing);
-		m_sm.reg_evt_state(ES_ADDING_INTO_INPUT_TASK, EE_ADDED_INTO_INPUT_TASK, ES_CLOSING, &CTcpEndpoint::handle_closing);
+		m_sm.reg_evt_state(ES_ADDING_INTO_INPUT_TASK, EE_ADDED_INTO_INPUT_TASK, ES_OPENED, &CTcpEndpoint::handle_closing);
 
 		///not handling internal err, when in the next two state.
-		m_sm.reg_evt_state(ES_CLOSING, EE_CLOSED, ES_CLOSED_READY, NULL);
-		m_sm.reg_evt_state(ES_CLOSED_READY, EE_CLOSED, ES_CLOSED, &CTcpEndpoint::handle_closed);
+		m_sm.reg_evt_state(ES_OPENED, EE_INTERNAL_ERR, ES_DELING_FROM_INPUT_TASK, NULL);
+		m_sm.reg_evt_state(ES_OPENED, EE_CLOSE, ES_DELING_FROM_INPUT_TASK, NULL);
+
+		m_sm.reg_evt_state(ES_DELING_FROM_INPUT_TASK, EE_DELED_FROM_INPUT_TASK, ES_DELING_FROM_OUTPUT_TASK, NULL);
+		m_sm.reg_evt_state(ES_DELING_FROM_OUTPUT_TASK, EE_DELED_FROM_OUTPUT_TASK, ES_CLOSED, NULL);
 
 		m_sm.set_cur_state(ES_CLOSED);
 	}
