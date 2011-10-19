@@ -45,7 +45,7 @@ all: smart_net_test
 smart_net_test: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++  -o"smart_net_test" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"/home/rock/Workspace/smart_net/smart_net/smart_net/Debug" -o"smart_net_test" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
