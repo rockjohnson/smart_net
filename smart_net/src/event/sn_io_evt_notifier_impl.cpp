@@ -166,7 +166,7 @@ namespace nm_event
 
 				stRet = m_setIoObjs.erase(*iter);
 				CMN_ASSERT(1 == stRet);
-				(*iter)->handle_erased_from_ioset(m_i32IoType);
+				(*iter)->handle_del_from_io_task(m_i32IoType);
 			}
 
 			vecTmp.clear();
@@ -195,7 +195,7 @@ namespace nm_event
 					pairRet = m_setIoObjs.insert(*iter);
 					CMN_ASSERT(pairRet.second);
 				}
-				(*iter)->handle_inserted_to_ioset(m_i32IoType, i32Ret);
+				(*iter)->handle_add_into_io_task(m_i32IoType, i32Ret);
 			}
 
 			vecTmp.clear();

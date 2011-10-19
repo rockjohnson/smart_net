@@ -94,7 +94,7 @@ namespace nm_smartnet
 	private:
 		nm_utils::CStateMachine<CTcpAcceptor> m_sm;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
-		nm_network::tcp_sock_ptr_t m_pTcpListenerSock;
+		nm_network::tcp_sock_ptr_t m_pTcpSockListener;
 		int32_t m_i32InputTaskId;
 		int32_t m_i32OutputTaskId;
 		nm_utils::CSmartLog m_log;
@@ -153,7 +153,7 @@ namespace nm_smartnet
 		{
 			ES_ADDED_INTO_HELPER = 0,
 			ES_OPENED_READY, ES_OPENED, ES_CLOSING, ES_CLOSED_READY, ES_CLOSED, ES_ADDING_INTO_OUTPUT_TASK, ES_ADDING_INTO_INPUT_TASK,
-			ES_DELED_FROM_INPUT_TASK, ES_DELING_FROM_INPUT_TASK, ES_DELING_FROM_OUTPUT_TASK
+			ES_DELED_FROM_INPUT_TASK, ES_DELING_FROM_IT, ES_DELING_FROM_OT
 		};
 
 		enum
@@ -207,8 +207,10 @@ namespace nm_smartnet
 		int32_t handling_added_into_helper_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handle_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handle_closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_added_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_io_err(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handle_close_after_add(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_connected(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
