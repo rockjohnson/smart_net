@@ -69,7 +69,7 @@ namespace nm_smartnet
 	public:
 		virtual void handle_input_evt();
 		virtual void handle_output_evt();
-		virtual void handle_io_error();
+		virtual void handle_io_error(int32_t i32ErrCode);
 		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
 		virtual void handle_del_from_io_task(int32_t i32IoType);
 		virtual int32_t get_fd();
@@ -118,9 +118,9 @@ namespace nm_smartnet
 	public:
 		virtual void handle_input_evt();
 		virtual void handle_output_evt();
-		virtual void handle_error_evt();
-		virtual void handle_inserted_to_ioset(int32_t i32IoType, int32_t i32ReturnCode);
-		virtual void handle_erased_from_ioset(int32_t i32IoType);
+		virtual void handle_io_error(int32_t i32ErrCode);
+		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
+		virtual void handle_del_from_io_task(int32_t i32IoType);
 		virtual int32_t get_fd();
 
 		virtual u_int32_t get_io_evt(int32_t i32IoType);

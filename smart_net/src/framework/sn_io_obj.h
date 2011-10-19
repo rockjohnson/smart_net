@@ -36,7 +36,6 @@ namespace nm_framework
 		virtual int32_t get_fd() = 0;
 
 		virtual u_int32_t get_io_evt(int32_t i32IoType) = 0;
-//		virtual u_int32_t get_misc_evts() = 0;
 		virtual void set_input_task_id(int32_t i32id) = 0;
 		virtual int32_t get_input_task_id() = 0;
 		virtual void set_output_task_id(int32_t i32id) = 0;

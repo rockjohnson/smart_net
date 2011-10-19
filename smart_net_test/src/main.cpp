@@ -15,15 +15,15 @@ int main()
 	nm_framework::sn_engine_ptr_t pSNEngine = SYS_NOTRW_NEW(nm_framework::CSNEngine);
 	IF_TRUE_THEN_RETURN_CODE(pSNEngine->start(1, 1, nm_framework::EIEN_EPOLL, 100) < 0, -1);
 
-#if 0
+#if 1
 	nm_smartnet::tcp_acceptor_ptr_t pTcpAcceptor = SYS_NOTRW_NEW(nm_smartnet::CTcpAcceptor(pSNEngine));
 	IF_TRUE_THEN_RETURN_CODE(pTcpAcceptor->open(cmn_string_t("0.0.0.0"), 9999) < 0, -1);
 
 	nm_smartnet::tcp_connector_ptr_t pTcpConnector = SYS_NOTRW_NEW(nm_smartnet::CTcpConnector(pSNEngine));
 	IF_TRUE_THEN_RETURN_CODE(pTcpConnector->open(cmn_string_t("127.0.0.1"), 9999) < 0, -1);
 
-	nm_busi::tcp_ep_tester_ptr_t pA = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
-	nm_busi::tcp_ep_tester_ptr_t pB = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpConnector));
+//	nm_busi::tcp_ep_tester_ptr_t pA = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
+//	nm_busi::tcp_ep_tester_ptr_t pB = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpConnector));
 #endif
 
 	//	pA->open();
