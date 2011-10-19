@@ -32,7 +32,7 @@ namespace nm_network
 
 	int32_t CTcpSock::open(sock_handle_t sockhandle)
 	{
-		SYS_ASSERT(!is_opened());
+		CMN_ASSERT(!is_opened());
 		if (is_opened())
 		{
 			close();
@@ -68,7 +68,7 @@ namespace nm_network
 
 	int32_t CTcpSock::bind(CIpv4Addr &localAddr)
 	{
-		SYS_ASSERT(INVALID_SOCKET < m_sockhandle);
+		CMN_ASSERT(INVALID_SOCKET < m_sockhandle);
 
 		struct sockaddr_in bindAddr;
 		bindAddr.sin_family = AF_INET;
@@ -93,12 +93,12 @@ namespace nm_network
 		sock_handle_t sockhandle = ::accept(m_sockhandle, reinterpret_cast<struct sockaddr*> (&remoteAddr), &slSize);
 		if (INVALID_SOCKET >= sockhandle)
 		{
-			SYS_ASSERT(false);
+			CMN_ASSERT(false);
 			return ptcpsock;
 		}
 
 		ptcpsock = SYS_NOTRW_NEW(CTcpSock);
-		SYS_ASSERT(NULL != ptcpsock);
+		CMN_ASSERT(NULL != ptcpsock);
 		ptcpsock->open(sockhandle);
 
 		return ptcpsock;

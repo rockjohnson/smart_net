@@ -25,12 +25,12 @@ namespace nm_utils
 		public:
 			CSpinLock(bool bProcessShared = false)
 			{
-				SYS_ASSERT(RET_SUC == init(bProcessShared));
+				CMN_ASSERT(RET_SUC == init(bProcessShared));
 			}
 
 			~CSpinLock()
 			{
-				SYS_ASSERT(RET_SUC == destroy());
+				CMN_ASSERT(RET_SUC == destroy());
 			}
 
 			int lock()

@@ -8,7 +8,7 @@
 #ifndef __CONN_H__
 #define __CONN_H__
 
-#include <queue>
+#include <deque>
 
 #include <utils/state_machine.h>
 #include <memory/mem.h>
@@ -85,6 +85,7 @@ namespace nm_smartnet
 		int32_t close();
 		int32_t add_endpoint(const tcp_endpoint_ptr_t &pTcpEP);
 		int32_t del_endpoint(const tcp_endpoint_ptr_t &pTcpEP);
+		nm_framework::sn_engine_ptr_t& get_engine(){return m_pSNEngine;}
 
 	private:
 		int32_t opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
@@ -93,15 +94,15 @@ namespace nm_smartnet
 	private:
 		nm_utils::CStateMachine<CTcpAcceptor> m_sm;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
-		nm_network::tcp_sock_ptr_t m_pTcpSock;
+		nm_network::tcp_sock_ptr_t m_pTcpListenerSock;
 		int32_t m_i32InputTaskId;
 		int32_t m_i32OutputTaskId;
 		nm_utils::CSmartLog m_log;
 		nm_network::CIpv4Addr m_bindAddr;
 
 		nm_utils::CSpinLock m_lkIdleEps;
-		typedef std::queue<nm_smartnet::tcp_endpoint_ptr_t> tcp_endpoint_queue_t;
-		tcp_endpoint_queue_t m_queIdleEps;
+		typedef std::deque<nm_smartnet::tcp_endpoint_ptr_t> tcp_endpoint_deque_t;
+		tcp_endpoint_deque_t m_dequeIdleEps;
 	};
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpAcceptor> tcp_acceptor_ptr_t;
 
@@ -136,7 +137,10 @@ namespace nm_smartnet
 		int32_t close();
 		int32_t add_endpoint(const tcp_endpoint_ptr_t&);
 		int32_t del_endpoint(const tcp_endpoint_ptr_t&);
+		nm_framework::sn_engine_ptr_t& get_engine(){return m_pSNEngine;}
 
+	private:
+		nm_framework::sn_engine_ptr_t m_pSNEngine;
 	};
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpConnector> tcp_connector_ptr_t;
 
@@ -169,7 +173,7 @@ namespace nm_smartnet
 		virtual void handle_input_evt();
 		virtual void handle_output_evt();
 		virtual void handle_io_error(int32_t i32ErrCode);
-		virtual void handle_inserted_to_ioset(int32_t i32IoType, int32_t i32ReturnCode);
+		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
 		virtual void handle_erased_from_ioset(int32_t i32IoType);
 		virtual int32_t get_fd();
 
@@ -179,8 +183,6 @@ namespace nm_smartnet
 		virtual int32_t get_input_task_id();
 		virtual void set_output_task_id(int32_t i32id);
 		virtual int32_t get_output_task_id();
-
-		int32_t handle_connected(nm_network::tcp_sock_ptr_t&);
 
 	public:
 		///first, you should open this endpoint, but it is async. and if succeed, then on_opened will callback.
@@ -192,6 +194,7 @@ namespace nm_smartnet
 		//int32_t get_type();
 		nm_network::ipv4_addr_ptr_t& get_peer_addr() const;
 		nm_network::ipv4_addr_ptr_t& get_local_addr() const;
+		int32_t handle_connected(nm_network::tcp_sock_ptr_t&);
 
 	protected:
 		///
@@ -200,13 +203,17 @@ namespace nm_smartnet
 		virtual void on_io_error(int32_t i32ErrCode) = 0;
 
 	private:
-		int32_t handle_adding(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_closed_to_added_into_helper(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_added_into_helper_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handle_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handle_closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_io_err(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handle_close_after_add(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_connected(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handle_added_output_task(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_added_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_added_into_helper_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
 		nm_utils::CStateMachine<CTcpEndpoint> m_sm; ///state machine make the obj state thread-safe
@@ -214,6 +221,7 @@ namespace nm_smartnet
 
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
 		nm_network::tcp_sock_ptr_t m_pTcpSock;
+		nm_network::tcp_sock_ptr_t m_pTcpSockTmp;
 		nm_network::ipv4_addr_ptr_t m_pPeerAddr;
 		tcp_connector_ptr_t m_pTcpConnector;
 		tcp_acceptor_ptr_t m_pTcpAcceptor;

@@ -16,6 +16,6 @@ const char* arrSnErrInfo[] =
 
 const char* get_sn_err_info(int32_t i32ErrCode)
 {
-	SYS_ASSERT(SNERR_DEF < i32ErrCode);
+	CMN_ASSERT(SNERR_DEF < i32ErrCode);
 	return arrSnErrInfo[i32ErrCode - SNERR_DEF - 1];
 }

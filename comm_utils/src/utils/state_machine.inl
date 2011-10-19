@@ -28,7 +28,7 @@
 	{
 		if (m_evt_handler[iStartState].find(iEvt) != m_evt_handler[iStartState].end())
 		{
-			SYS_ASSERT(false);
+			CMN_ASSERT(false);
 			return -1;
 		}
 
@@ -38,7 +38,7 @@
 	}
 
 	template <typename T>
-	int32_t CStateMachine<T>::post_event(int32_t iEvt, cmn_pvoid_t pV)
+	int32_t CStateMachine<T>::post_evt(int32_t iEvt, cmn_pvoid_t pV)
 	{
 #ifdef __USED_IN_MULTI_THREAD__
 		mtx_scopelk_t lk(m_lkChangeState);

@@ -20,7 +20,7 @@ ICommonBase::ICommonBase() :
 
 ICommonBase::~ICommonBase()
 {
-	SYS_ASSERT(m_iCnt == 0);
+	CMN_ASSERT(m_iCnt == 0);
 }
 
 void ICommonBase::inc_ref()
@@ -30,7 +30,7 @@ void ICommonBase::inc_ref()
 
 void ICommonBase::dec_ref()
 {
-	SYS_ASSERT(m_iCnt> 0);
+	CMN_ASSERT(m_iCnt> 0);
 	if (atomic_exchange_and_add(&m_iCnt, -1) == 1)
 	{
 		dispose_this_obj();

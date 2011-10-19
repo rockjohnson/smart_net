@@ -44,7 +44,7 @@ namespace nm_utils
 			m_i32curstate = iState;
 		}
 		int32_t reg_evt_state(int32_t iStartState, int32_t iEvt, int32_t iEndState, PFUN_TRANSFORM_STATE fun);
-		int32_t post_event(int32_t iEvt, cmn_pvoid_t pV);
+		int32_t post_evt(int32_t iEvt, cmn_pvoid_t pV);
 		inline int32_t get_cur_state()
 		{
 			return m_i32curstate;

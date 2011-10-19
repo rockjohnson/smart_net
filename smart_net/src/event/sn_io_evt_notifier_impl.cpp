@@ -87,10 +87,10 @@ namespace nm_event
 #define UNUSED (10000) //Since Linux 2.6.8, the size argument is unused.  (The kernel dynamically sizes the required data structures without needing this initial hint.)
 	int32_t CEpoll::init(int32_t i32IoTaskType, int32_t i32MsTimeout)
 	{
-		SYS_ASSERT(-1 == m_i32epfd);
-		SYS_ASSERT(m_vecIoObjsAddCache.empty());
-		SYS_ASSERT(m_vecIoObjsDelCache.empty());
-		SYS_ASSERT(m_setIoObjs.empty());
+		CMN_ASSERT(-1 == m_i32epfd);
+		CMN_ASSERT(m_vecIoObjsAddCache.empty());
+		CMN_ASSERT(m_vecIoObjsDelCache.empty());
+		CMN_ASSERT(m_setIoObjs.empty());
 
 		m_i32IoType = i32IoTaskType;
 		m_i32MsTimeout = i32MsTimeout;
@@ -101,7 +101,7 @@ namespace nm_event
 	///not thread safe
 	int32_t CEpoll::destroy()
 	{
-		SYS_ASSERT(0 <= m_i32epfd);
+		CMN_ASSERT(0 <= m_i32epfd);
 
 		{
 			nm_utils::spin_scopelk_t lk(m_lkIoObjAddCache);
@@ -120,7 +120,7 @@ namespace nm_event
 
 	int32_t CEpoll::add_io_obj(const nm_framework::io_obj_ptr_t &pIoObj)
 	{
-		SYS_ASSERT(pIoObj != NULL);
+		CMN_ASSERT(pIoObj != NULL);
 		IF_TRUE_THEN_RETURN_CODE(0 == pIoObj->get_io_evt(m_i32IoType), CMNERR_SUC); ///no event
 
 		{
@@ -133,7 +133,7 @@ namespace nm_event
 
 	int32_t CEpoll::del_io_obj(const nm_framework::io_obj_ptr_t &pIoObj)
 	{
-		SYS_ASSERT(pIoObj != NULL);
+		CMN_ASSERT(pIoObj != NULL);
 		IF_TRUE_THEN_RETURN_CODE(0 == pIoObj->get_io_evt(m_i32IoType), CMNERR_SUC); ///no event
 
 		{
@@ -165,7 +165,7 @@ namespace nm_event
 				}
 
 				stRet = m_setIoObjs.erase(*iter);
-				SYS_ASSERT(1 == stRet);
+				CMN_ASSERT(1 == stRet);
 				(*iter)->handle_erased_from_ioset(m_i32IoType);
 			}
 
@@ -193,7 +193,7 @@ namespace nm_event
 				if (0 == i32Ret)
 				{
 					pairRet = m_setIoObjs.insert(*iter);
-					SYS_ASSERT(pairRet.second);
+					CMN_ASSERT(pairRet.second);
 				}
 				(*iter)->handle_inserted_to_ioset(m_i32IoType, i32Ret);
 			}
@@ -205,7 +205,7 @@ namespace nm_event
 		int32_t i32Ret = epoll_wait(m_i32epfd, m_arrEvts, MAX_EVENTS, m_i32MsTimeout);
 		if (-1 == i32Ret)
 		{
-			SYS_ASSERT(false);
+			CMN_ASSERT(false);
 			return CMNERR_FATAL_ERR;
 		}
 
@@ -220,7 +220,7 @@ namespace nm_event
 			//error
 			if (ui32Evts & EPOLLERR)
 			{
-				SYS_ASSERT(false); ///check how this happened
+				CMN_ASSERT(false); ///check how this happened
 				pIoObj->handle_io_error();
 			}
 			else
@@ -235,7 +235,7 @@ namespace nm_event
 				}
 				else
 				{
-					SYS_ASSERT(false);
+					CMN_ASSERT(false);
 				}
 			}
 		}

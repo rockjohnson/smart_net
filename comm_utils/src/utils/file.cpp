@@ -40,7 +40,7 @@ namespace nm_utils
 #define CREATE_MODE (0777)
 	int32_t CLiteFile::create(const cmn_string_t &strFullName)
 	{
-		SYS_ASSERT(0 > m_i32FileDesc);
+		CMN_ASSERT(0 > m_i32FileDesc);
 		///int open (const char *FILENAME, int FLAGS[, mode_t MODE])
 		///argument MODE is used only when a file is created, but it doesn't
 		///hurt to supply the argument in any case.
@@ -62,7 +62,7 @@ namespace nm_utils
 
 	int32_t CLiteFile::open(const cmn_string_t &strFullName, int32_t i32Mode)
 	{
-		SYS_ASSERT(0 > m_i32FileDesc);
+		CMN_ASSERT(0 > m_i32FileDesc);
 
 		if ("" == strFullName)
 		{
@@ -86,21 +86,21 @@ namespace nm_utils
 
 	int32_t CLiteFile::set(cmn_byte_t *pBytes, u_int32_t ui32Len)
 	{
-		SYS_ASSERT(0 <= m_i32FileDesc);
+		CMN_ASSERT(0 <= m_i32FileDesc);
 
 		return write(m_i32FileDesc, static_cast<void*>(pBytes), ui32Len);
 	}
 
 	int32_t CLiteFile::flush()
 	{
-		SYS_ASSERT(0 <= m_i32FileDesc);
+		CMN_ASSERT(0 <= m_i32FileDesc);
 
 		return fsync(m_i32FileDesc);
 	}
 
 	int32_t CLiteFile::get(cmn_byte_t *pBuf, u_int32_t ui32Size)
 	{
-		SYS_ASSERT(0 <= m_i32FileDesc /*&& SSIZE_MAX >= ui32Size*/);
+		CMN_ASSERT(0 <= m_i32FileDesc /*&& SSIZE_MAX >= ui32Size*/);
 
 		///On  success,  the  number  of bytes read is returned (zero indicates end of file), and the file position is advanced by this number.  It is not an
 	    ///error if this number is smaller than the number of bytes requested; this may happen for example because fewer bytes are actually  available  right

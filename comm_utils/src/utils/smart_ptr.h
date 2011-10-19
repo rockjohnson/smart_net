@@ -24,7 +24,7 @@ namespace nm_utils
 
 		virtual ~CRefCnt()
 		{
-			SYS_ASSERT(m_iCnt == 0);
+			CMN_ASSERT(m_iCnt == 0);
 		}
 
 	public:
@@ -35,7 +35,7 @@ namespace nm_utils
 
 		void dec()
 		{
-			SYS_ASSERT(m_iCnt> 0);
+			CMN_ASSERT(m_iCnt> 0);
 			if (atomic_exchange_and_add(&m_iCnt, -1) == 1)
 			{
 				dispose_this_obj();

@@ -146,7 +146,7 @@ int32_t CInputHandleTask::del_io_obj(const io_obj_ptr_t &pioobj)
 
 void CInputHandleTask::exec()
 {
-	SYS_ASSERT(NULL != m_pIoEvtNotifier);
+	CMN_ASSERT(NULL != m_pIoEvtNotifier);
 
 	///main logic circle
 	while (!is_stopped())
@@ -205,7 +205,7 @@ int32_t COutputHandleTask::destroy()
 
 int32_t COutputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 {
-	SYS_ASSERT(NULL != m_pIoEvtNotifier);
+	CMN_ASSERT(NULL != m_pIoEvtNotifier);
 
 	pIoObj->set_output_task_id(m_i32Id);
 	return m_pIoEvtNotifier->add_io_obj(pIoObj);
@@ -213,7 +213,7 @@ int32_t COutputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 
 int32_t COutputHandleTask::del_io_obj(const io_obj_ptr_t &pioobj)
 {
-	SYS_ASSERT(NULL != m_pIoEvtNotifier);
+	CMN_ASSERT(NULL != m_pIoEvtNotifier);
 
 	return m_pIoEvtNotifier->del_io_obj(pioobj);
 }

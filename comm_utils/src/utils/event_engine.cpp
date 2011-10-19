@@ -38,7 +38,7 @@ void CEventHandleEngine::exec()
 	}
 
 	{
-		SYS_ASSERT(m_dqueevts.empty());
+		CMN_ASSERT(m_dqueevts.empty());
 		spin_scopelk_t lk(m_lkcache);
 		m_dqueevts.swap(m_dquecache);
 	}

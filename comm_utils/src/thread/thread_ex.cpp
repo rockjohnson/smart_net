@@ -65,7 +65,7 @@ CThread::~CThread()
 
 int32_t CThread::init()
 {
-	SYS_ASSERT(NULL == m_pTask);
+	CMN_ASSERT(NULL == m_pTask);
 #if 0
 	m_pTask = NULL;
 #endif
@@ -81,8 +81,8 @@ int32_t CThread::init()
 
 int32_t CThread::destroy()
 {
-	SYS_ASSERT(m_bStop);
-	SYS_ASSERT(!m_bRunning);
+	CMN_ASSERT(m_bStop);
+	CMN_ASSERT(!m_bRunning);
 	m_pTask = NULL;
 #if __PLATFORM__ == __PLATFORM_LINUX__
 #if 0
@@ -142,7 +142,7 @@ thread_task_ptr_t& CThread::get_task()
 
 int32_t CThread::assign_task(const thread_task_ptr_t &pTask)
 {
-	SYS_ASSERT(NULL == m_pTask);
+	CMN_ASSERT(NULL == m_pTask);
 	m_pTask = pTask;
 
 	return RET_SUC;
@@ -150,7 +150,7 @@ int32_t CThread::assign_task(const thread_task_ptr_t &pTask)
 
 int32_t CThread::reset_task()
 {
-	SYS_ASSERT(NULL != m_pTask);
+	CMN_ASSERT(NULL != m_pTask);
 	m_pTask = NULL;
 
 	return RET_SUC;

@@ -49,7 +49,7 @@ namespace nm_utils
 
 	int32_t CSmartLog::init(cmn_cstr_t pcszLogDir, cmn_cstr_t pcszLogFilePrefix, int32_t i32LogLevel, int32_t i32IntervalInSeconds)
 	{
-		SYS_ASSERT(!m_LogFile.is_open() && 0 == m_tmLogFileStart);
+		CMN_ASSERT(!m_LogFile.is_open() && 0 == m_tmLogFileStart);
 
 		m_strLogDir = pcszLogDir;
 		m_strLogFilePrefix = pcszLogFilePrefix;
@@ -128,7 +128,7 @@ namespace nm_utils
 			int32_t i32Ret = nm_utils::create_recursive_dir_ex(strLogDir.c_str(), 0777);
 			if (ZERO > i32Ret)
 			{
-				SYS_ASSERT(false);
+				CMN_ASSERT(false);
 				return -1;
 			}
 
@@ -145,7 +145,7 @@ namespace nm_utils
 			i32Ret = m_LogFile.create(cmn_string_t(szLogFileName));
 			if (ZERO > i32Ret)
 			{
-				SYS_ASSERT(false);
+				CMN_ASSERT(false);
 				return -2;
 			}
 		}
@@ -188,7 +188,7 @@ namespace nm_utils
 	void CSmartLog::trace_log(const int32_t i32LogLevel, cmn_cstr_t pcszFileName,
 			cmn_cstr_t pcszFunc, int32_t i32LineNo, cmn_cstr_t pcszLog, int32_t i32Target)
 	{
-		SYS_ASSERT(i32LogLevel >= ELL_DEF && i32LogLevel < ELL_ALL && ZERO != i32Target);
+		CMN_ASSERT(i32LogLevel >= ELL_DEF && i32LogLevel < ELL_ALL && ZERO != i32Target);
 		if (i32LogLevel < m_i32TraceLevel || ZERO == i32Target)
 		{
 			return;
@@ -200,11 +200,11 @@ namespace nm_utils
 #if defined(__USING_SIMPLE_LOG__)
 		int32_t iRet = snprintf(buf, sizeof(buf) / sizeof(cmn_char_t),"%s: %6.6u@%s|%s() => %s" ,
 				g_arrLevInfo[i32LogLevel], get_sys_thread_id(), CTimeInfo::get_day_time(buff), pcszFunc, pcszLog);
-		SYS_ASSERT(-1 < iRet);
+		CMN_ASSERT(-1 < iRet);
 #else
 		int iRet = snprintf(buf, sizeof(buf) / sizeof(cmn_char_t), "%s: %6.6u@%s|%s:%4.4i:%s() => %s" ,
 			g_arrLevInfo[i32LogLevel], get_sys_thread_id(), CTimeInfo::get_day_time(buff), pcszFileName, i32LineNo, pcszFunc, pcszLog);
-		SYS_ASSERT(-1 < iRet);
+		CMN_ASSERT(-1 < iRet);
 #endif
 #elif __PLATFORM__ == __PLATFORM_WINDOWS__
 #if defined(__USING_SIMPLE_LOG__)

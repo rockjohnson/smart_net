@@ -76,14 +76,14 @@ int32_t CMiscTask::destroy()
 
 int32_t CMiscTask::add_timer(const timer_obj_ptr_t &ptimer)
 {
-	SYS_ASSERT(NULL != m_pTimeNotifier);
+	CMN_ASSERT(NULL != m_pTimeNotifier);
 
 	return m_pTimeNotifier->add_timer(ptimer);
 }
 
 int32_t CMiscTask::del_timer(const timer_obj_ptr_t &ptimer)
 {
-	SYS_ASSERT(NULL != m_pTimeNotifier);
+	CMN_ASSERT(NULL != m_pTimeNotifier);
 
 	return m_pTimeNotifier->del_timer(ptimer);
 }

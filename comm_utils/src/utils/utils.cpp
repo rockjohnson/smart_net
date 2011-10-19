@@ -200,7 +200,7 @@ namespace nm_utils
 
 	int if_file_or_dir_exist(const char *pcszName)
 	{
-		SYS_ASSERT(NULL != pcszName);
+		CMN_ASSERT(NULL != pcszName);
 #if __PLATFORM__ == __PLATFORM_WINDOWS__
 		return ::PathFileExistsA(pcszName) ? 0 : -1;
 #elif __PLATFORM__ == __PLATFORM_LINUX__
@@ -211,7 +211,7 @@ namespace nm_utils
 #define RETURN_IF_FAIL(FUN, RET) \
 	if ((FUN) < 0) \
 	{\
-		SYS_ASSERT(0 == chdir(szCwd)); \
+		CMN_ASSERT(0 == chdir(szCwd)); \
 		return (RET); \
 	}
 #define RETURN_IF_FAIL_EX(FUN, RET) \
@@ -225,7 +225,7 @@ namespace nm_utils
 	int create_recursive_dir(const char *pszName, u_int32_t md)
 	{
 		//split string
-		SYS_ASSERT(NULL != pszName);
+		CMN_ASSERT(NULL != pszName);
 		//record current working directory
 		char szCwd[1024] =
 		{ 0 };
@@ -269,14 +269,14 @@ namespace nm_utils
 			RETURN_IF_FAIL(chdir(pszToken), -7)
 		}
 		//reset current working directory
-		SYS_ASSERT(0 == chdir(szCwd));
+		CMN_ASSERT(0 == chdir(szCwd));
 		return 0;
 	}
 #endif
 
 	int create_recursive_dir_ex(const char *pcszDir, u_int32_t md)
 	{
-		SYS_ASSERT(NULL != pcszDir);
+		CMN_ASSERT(NULL != pcszDir);
 
 #if __PLATFORM__ == __PLATEFORM_WINDOWS__
 		if (ERROR_SUCCESS != ::SHCreateDirectoryExA(0, pcszDir, 0))
@@ -375,13 +375,13 @@ namespace nm_utils
 
     int32_t get_block_flag(int32_t i32fd)
     {
-    	SYS_ASSERT(-1 < i32fd);
+    	CMN_ASSERT(-1 < i32fd);
     	return fcntl(i32fd, F_GETFL, 0);
     }
 
     int32_t set_block_flag(int32_t i32fd, bool bBlockOrNot)
     {
-    	SYS_ASSERT(-1 < i32fd);
+    	CMN_ASSERT(-1 < i32fd);
     	int32_t i32Flags = get_block_flag(i32fd);
     	if (0 > i32Flags)
     	{
