@@ -22,7 +22,7 @@ namespace nm_network
 	 * */
 
 	CTcpSock::CTcpSock() :
-		m_sockhandle(INVALID_SOCKET)
+		m_handle(INVALID_SOCKET)
 	{
 	}
 
@@ -30,7 +30,7 @@ namespace nm_network
 	{
 	}
 
-	int32_t CTcpSock::open(sock_handle_t sockhandle)
+	int32_t CTcpSock::open(sock_handle_t hSock)
 	{
 		CMN_ASSERT(!is_opened());
 		if (is_opened())
@@ -38,24 +38,24 @@ namespace nm_network
 			close();
 		}
 
-		if (INVALID_SOCKET < sockhandle)
+		if (INVALID_SOCKET < hSock)
 		{
-			m_sockhandle = sockhandle;
+			m_handle = hSock;
 		}
 		else
 		{
-			m_sockhandle = socket(AF_INET, SOCK_STREAM, 0);
+			m_handle = socket(AF_INET, SOCK_STREAM, 0);
 		}
 
-		return INVALID_SOCKET < m_sockhandle ? CMNERR_SUC : SNERR_CREAT_SOCK_FAILDED;
+		return (INVALID_SOCKET < m_handle) ? CMNERR_SUC : SNERR_CREAT_SOCK_FAILDED;
 	}
 
 	int32_t CTcpSock::close()
 	{
-		if (INVALID_SOCKET < m_sockhandle)
+		if (INVALID_SOCKET < m_handle)
 		{
-			::close(m_sockhandle);
-			m_sockhandle = INVALID_SOCKET;
+			::close(m_handle);
+			m_handle = INVALID_SOCKET;
 		}
 
 		return CMNERR_SUC;
@@ -63,45 +63,57 @@ namespace nm_network
 
 	int32_t CTcpSock::set_nonblock(bool bFlag)
 	{
-		return nm_utils::set_block_flag(m_sockhandle, !bFlag);
+		return nm_utils::set_block_flag(m_handle, !bFlag);
 	}
 
 	int32_t CTcpSock::bind(CIpv4Addr &localAddr)
 	{
-		CMN_ASSERT(INVALID_SOCKET < m_sockhandle);
+		CMN_ASSERT(INVALID_SOCKET < m_handle);
 
 		struct sockaddr_in bindAddr;
 		bindAddr.sin_family = AF_INET;
 		bindAddr.sin_port = localAddr.get_port_nbo();
 		bindAddr.sin_addr = *(static_cast<struct in_addr*> (localAddr.get_ip_nbo()));
 
-		return ::bind(m_sockhandle, (struct sockaddr*) &bindAddr, sizeof(bindAddr));
+		return ::bind(m_handle, (struct sockaddr*) &bindAddr, sizeof(bindAddr));
+	}
+
+	int32_t CTcpSock::bind(const std::string &strBindIP, u_int16_t ui16BindPort)
+	{
+		CMN_ASSERT(INVALID_SOCKET < m_handle);
+
+		struct sockaddr_in bindAddr;
+		bindAddr.sin_family = AF_INET;
+		bindAddr.sin_port = ::htons(ui16BindPort);
+		bindAddr.sin_addr.s_addr = ::inet_addr(strBindIP.c_str());
+
+		return ::bind(m_handle, (struct sockaddr*) &bindAddr, sizeof(bindAddr));
 	}
 
 	int32_t CTcpSock::listen(int32_t i32Backlog)
 	{
-		return ::listen(m_sockhandle, i32Backlog);
+		return ::listen(m_handle, i32Backlog);
 	}
 
 	tcp_sock_ptr_t CTcpSock::accept()
 	{
-		tcp_sock_ptr_t ptcpsock = NULL;
+		tcp_sock_ptr_t pTcpSock = NULL;
 
 		struct sockaddr_in remoteAddr;
 		ZERO_MEM(&remoteAddr, sizeof(remoteAddr));
 		socklen_t slSize = sizeof(remoteAddr);
-		sock_handle_t sockhandle = ::accept(m_sockhandle, reinterpret_cast<struct sockaddr*> (&remoteAddr), &slSize);
+		sock_handle_t sockhandle = ::accept(m_handle, reinterpret_cast<struct sockaddr*> (&remoteAddr), &slSize);
 		if (INVALID_SOCKET >= sockhandle)
 		{
 			CMN_ASSERT(false);
-			return ptcpsock;
+			return pTcpSock;
 		}
 
-		ptcpsock = SYS_NOTRW_NEW(CTcpSock);
-		CMN_ASSERT(NULL != ptcpsock);
-		ptcpsock->open(sockhandle);
+		pTcpSock = SYS_NOTRW_NEW(CTcpSock);
+		CMN_ASSERT(NULL != pTcpSock);
+		pTcpSock->open(sockhandle);
 
-		return ptcpsock;
+		return pTcpSock;
 	}
 
 	int32_t CTcpSock::connect(const CIpv4Addr &remoteAddr)
@@ -111,34 +123,8 @@ namespace nm_network
 		destAddr.sin_port = remoteAddr.get_port_nbo();
 		destAddr.sin_addr = *static_cast<struct in_addr*> (remoteAddr.get_ip_nbo());
 
-		int32_t i32ret = ::connect(m_sockhandle, reinterpret_cast<struct sockaddr*> (&destAddr), sizeof(destAddr));
+		int32_t i32ret = ::connect(m_handle, reinterpret_cast<struct sockaddr*> (&destAddr), sizeof(destAddr));
 
 		return CMNERR_SUC == i32ret ? CMNERR_SUC : (EINPROGRESS == errno ? SNERR_IN_PROGRESS : CMNERR_COMMON_ERR);
 	}
-
-///**
-// * udp ..
-// * */
-//CUdpSock::CUdpSock()
-//{
-//	// TODO Auto-generated constructor stub
-//
-//}
-//
-//CUdpSock::~CUdpSock()
-//{
-//	// TODO Auto-generated destructor stub
-//}
-//
-//CRmpSock::CRmpSock()
-//{
-//	// TODO Auto-generated constructor stub
-//
-//}
-//
-//CRmpSock::~CRmpSock()
-//{
-//	// TODO Auto-generated destructor stub
-//}
-
 }

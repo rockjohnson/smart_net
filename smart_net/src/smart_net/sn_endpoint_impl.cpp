@@ -17,8 +17,15 @@ namespace nm_smartnet
 	CTcpAcceptor::CTcpAcceptor(const nm_framework::sn_engine_ptr_t &pSNEngine) :
 		m_sm(this), m_pSNEngine(pSNEngine), m_i32InputTaskId(0), m_i32OutputTaskId(0)
 	{
-		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_OPENNED, &CTcpAcceptor::opening);
-		m_sm.reg_evt_state(ES_OPENNED, EE_CLOSE, ES_CLOSED, &CTcpAcceptor::closing);
+		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDING_INTO_IT, &CTcpAcceptor::handling_closed_to_adding_into_it);
+
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_CLOSE, ES_ADDING_INTO_IT, &CTcpAcceptor::handling_close_while_adding_into_it);
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT, &CTcpAcceptor::handling_internal_err_while_adding_into_it);
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_ADDED_INTO_IT, ES_OPENED, &CTcpAcceptor::handling_adding_into_it_to_opened);
+
+		m_sm.reg_evt_state(ES_OPENED, EE_CLOSE, ES_DELING_FROM_IT, &CTcpAcceptor::handling_opened_to_deling_from_it);
+		m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_CLOSED, &CTcpAcceptor::handling_deling_from_it_to_closed);
+
 		m_log.init("./", "tcp_acceptor_", ELL_DEBUG, 300);
 	}
 
@@ -52,8 +59,9 @@ namespace nm_smartnet
 	}
 
 #define BACKLOG (20)
-	int32_t CTcpAcceptor::opening(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CTcpAcceptor::handling_closed_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
+		m_i32PendingEvt = EE_NONE;
 		SParas *pPara = static_cast<SParas*> (pVoid);
 		CMN_ASSERT(NULL == m_pTcpSockListener);
 		m_pTcpSockListener = SYS_NOTRW_NEW(nm_network::CTcpSock);
@@ -62,13 +70,53 @@ namespace nm_smartnet
 		IF_TRUE_THEN_RETURN_CODE(m_pTcpSockListener->bind(pPara->strIP, pPara->ui16Port) < 0, CMNERR_COMMON_ERR);
 		IF_TRUE_THEN_RETURN_CODE(m_pTcpSockListener->listen(BACKLOG) < 0, CMNERR_COMMON_ERR);
 
+		return m_pSNEngine->add_endpoint(tcp_acceptor_ptr_t(this), EIT_INPUT_TYPE);
+	}
+
+	int32_t CTcpAcceptor::handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_i32PendingEvt = EE_CLOSE;
+
 		return CMNERR_SUC;
 	}
 
-	int32_t CTcpAcceptor::closing(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CTcpAcceptor::handling_opened_to_deling_from_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		CMN_ASSERT(m_pTcpSockListener->is_opened());
-		CMN_ASSERT(CMNERR_SUC == m_pTcpSockListener->close());
+		m_pTcpSockListener->close();
+
+		return m_pSNEngine->del_endpoint(tcp_acceptor_ptr_t(this), EIT_INPUT_TYPE);
+	}
+
+	int32_t CTcpAcceptor::handling_deling_from_it_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		on_closed();
+
+		return CMNERR_SUC;
+	}
+
+	int32_t CTcpAcceptor::handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_i32PendingEvt = EE_INTERNAL_ERR;
+
+		return CMNERR_SUC;
+	}
+
+	int32_t CTcpAcceptor::handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		if (EE_NONE != m_i32PendingEvt)
+		{
+			m_pTcpSockListener->close();
+			m_pSNEngine->del_endpoint(tcp_acceptor_ptr_t(this), EIT_INPUT_TYPE);
+
+			m_sm.set_cur_state(ES_DELING_FROM_IT);
+
+			return CMNERR_COMMON_ERR;
+		}
+
+		CMN_ASSERT(m_pTcpSockListener->is_opened());
+
+		(void)on_opened(CMNERR_SUC);
 
 		return CMNERR_SUC;
 	}
@@ -77,7 +125,7 @@ namespace nm_smartnet
 	{
 		int32_t i32Ret = CMNERR_SUC;
 
-		if (ES_OPENNED == m_sm.get_cur_state()) ///weak check...
+		if (ES_OPENED == m_sm.get_cur_state()) ///weak check...
 		{
 			nm_utils::spin_scopelk_t lk(m_lkIdleEps);
 			m_dequeIdleEps.push_back(pTcpEp);
@@ -90,13 +138,21 @@ namespace nm_smartnet
 		return i32Ret;
 	}
 
-	void CTcpAcceptor::handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode)
+	void CTcpAcceptor::handle_add_into_io_task(int32_t i32IoType, int32_t i32RetCode)
 	{
+		CMN_ASSERT(EIT_INPUT_TYPE == i32IoType);
+
 		cmn_char_t szTmpBuf[256] = { 0 };
 		TRACE_LOG(m_log, ELL_DEBUG, "acceptor (sock: %d, bind addr: %s, %hu) is inserted to ioset ,return: %d\n", get_fd(),
-				m_bindAddr.get_ip_str(szTmpBuf, 255), m_bindAddr.get_port_hbo(), i32ReturnCode);
+				m_bindAddr.get_ip_str(szTmpBuf, 255), m_bindAddr.get_port_hbo(), i32RetCode);
 
-		CMN_ASSERT(i32ReturnCode >= 0 && EIT_INPUT_TYPE == i32IoType);
+		if (i32RetCode < CMNERR_SUC)
+		{
+			m_sm.post_evt(EE_INTERNAL_ERR, NULL);
+		}
+
+		m_sm.post_evt(EE_ADDED_INTO_IT, &i32RetCode);
+
 	}
 
 	void CTcpAcceptor::handle_del_from_io_task(int32_t i32IoType)
@@ -106,6 +162,8 @@ namespace nm_smartnet
 				m_bindAddr.get_port_hbo());
 
 		CMN_ASSERT(EIT_INPUT_TYPE == i32IoType);
+
+		CMN_ASSERT(CMNERR_SUC == m_sm.post_evt(EE_DELED_FROM_IT, NULL));
 	}
 
 	void CTcpAcceptor::handle_input_evt()

@@ -44,7 +44,7 @@ public:
 private:
 	CIpv4Addr m_localaddr;
 	CIpv4Addr m_peeraddr;
-	sock_handle_t m_sockhandle;
+	sock_handle_t m_handle;
 };
 
 
