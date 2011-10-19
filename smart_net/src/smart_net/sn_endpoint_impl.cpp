@@ -154,9 +154,14 @@ namespace nm_smartnet
 		CMN_ASSERT(false);
 	}
 
-	void CTcpAcceptor::handle_error_evt()
+	void CTcpAcceptor::handle_io_error()
 	{
 		CMN_ASSERT(false);
+	}
+
+	int32_t CTcpAcceptor::get_fd()
+	{
+		return m_pTcpSockListener->get_handle();
 	}
 
 	/**

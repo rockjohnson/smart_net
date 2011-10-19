@@ -10,15 +10,15 @@
 namespace nm_busi
 {
 
-	CTcpEndpointTester::CTcpEndpointTester()
-	{
-		// TODO Auto-generated constructor stub
-
-	}
-
-	CTcpEndpointTester::~CTcpEndpointTester()
-	{
-		// TODO Auto-generated destructor stub
-	}
+//	CTcpEndpointTester::CTcpEndpointTester()
+//	{
+//		// TODO Auto-generated constructor stub
+//
+//	}
+//
+//	CTcpEndpointTester::~CTcpEndpointTester()
+//	{
+//		// TODO Auto-generated destructor stub
+//	}
 
 }

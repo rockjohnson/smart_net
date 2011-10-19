@@ -10,16 +10,6 @@
 namespace nm_event
 {
 
-//	IIoEvtNotifier::IIoEvtNotifier()
-//	{
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	IIoEvtNotifier::~IIoEvtNotifier()
-//	{
-//		destroy();
-//	}
-
 	CIoEvtNotifierFactory::obj_ptr_t& CIoEvtNotifierFactory::create_obj(int32_t i32IoEvtNotifier)
 	{
 		using namespace nm_framework;
@@ -221,7 +211,7 @@ namespace nm_event
 			if (ui32Evts & EPOLLERR)
 			{
 				CMN_ASSERT(false); ///check how this happened
-				pIoObj->handle_io_error();
+				pIoObj->handle_io_error(CMNERR_IO_ERR);
 			}
 			else
 			{

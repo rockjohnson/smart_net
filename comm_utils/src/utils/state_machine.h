@@ -70,7 +70,7 @@ namespace nm_utils
 		CMutexLock m_lkChangeState; //may be not needed, if all the state relative function is handled in single thread.
 		//CSpinLock m_lkcurrentstate;
 #endif
-		volatile int32_t m_i32curstate; //current state;
+		int32_t m_i32curstate; //current state;
 		T *m_t;
 		event_handler_t m_evt_handler;
 	};

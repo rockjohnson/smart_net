@@ -36,7 +36,7 @@ namespace nm_framework
 		sp.ui32B = ui32OutputThreadCnt;
 		sp.i32C = i32IoEvtNotifier;
 		sp.i32D = i32MsTimeout;
-		return m_sm.post_event(EEE_START, &sp);
+		return m_sm.post_evt(EEE_START, &sp);
 	}
 
 	/**
@@ -116,7 +116,7 @@ namespace nm_framework
 
 	int32_t CSNEngine::stop()
 	{
-		return m_sm.post_event(EEE_STOP, NULL);
+		return m_sm.post_evt(EEE_STOP, NULL);
 	}
 
 	/**
@@ -130,11 +130,11 @@ namespace nm_framework
 		///cool!!
 		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(EES_STARTED), CMNERR_COMMON_ERR);
 
+		int32_t i32Tmp = 0;
+		int32_t i32MinCnt = 0;
 		if (EIT_INPUT_TYPE == i32IoType)
 		{
 			///assign input task, thread safe?
-			int32_t i32MinCnt = 0;
-			int32_t i32Tmp = 0;
 			input_handle_task_ptr_t pInputTask;
 			for (input_task_vec_t::iterator iter = m_vecInputTasks.begin(); iter != m_vecInputTasks.end(); ++iter)
 			{
@@ -156,6 +156,8 @@ namespace nm_framework
 		if (EIT_OUTPUT_TYPE == i32IoType)
 		{
 			///output task
+			i32MinCnt = 0;
+			i32Tmp = 0;
 			output_handle_task_ptr_t pOutputTask;
 			for (output_task_vec_t::iterator iter = m_vecOutputTasks.begin(); iter != m_vecOutputTasks.end(); ++iter)
 			{

@@ -33,11 +33,7 @@ int32_t CInputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MsTimeout)
 		return CMNERR_COMMON_ERR;
 	}
 
-//	SYS_ASSERT(m_setIoObjAddCache.empty());
-//	SYS_ASSERT(m_setIoObjs.empty());
-//	SYS_ASSERT(m_setIoObjDelCache.empty());
-
-	return m_pIoEvtNotifier->init(EITT_HANDLE_INPUT_TASK, i32MsTimeout);
+	return m_pIoEvtNotifier->init(EIT_INPUT_TYPE, i32MsTimeout);
 }
 
 void CInputHandleTask::set_id(int32_t i32Indx)

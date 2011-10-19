@@ -21,7 +21,8 @@ enum
 	CMNERR_NO_MATCH_ITEM, ///no matched item.
 	CMNERR_CALL_SYS_FUN_FAILED,
 	CMNERR_COMMON_ERR,
-	CMNERR_FATAL_ERR
+	CMNERR_FATAL_ERR,
+	CMNERR_IO_ERR
 };
 
 const char* get_cmn_err_info(int32_t i32ErrCode);

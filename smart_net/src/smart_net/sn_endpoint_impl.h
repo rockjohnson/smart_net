@@ -69,7 +69,7 @@ namespace nm_smartnet
 	public:
 		virtual void handle_input_evt();
 		virtual void handle_output_evt();
-		virtual void handle_error_evt();
+		virtual void handle_io_error();
 		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
 		virtual void handle_del_from_io_task(int32_t i32IoType);
 		virtual int32_t get_fd();
