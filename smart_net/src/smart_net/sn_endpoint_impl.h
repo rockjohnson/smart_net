@@ -70,8 +70,8 @@ namespace nm_smartnet
 		virtual void handle_input_evt();
 		virtual void handle_output_evt();
 		virtual void handle_error_evt();
-		virtual void handle_inserted_to_ioset(int32_t i32IoType, int32_t i32ReturnCode);
-		virtual void handle_erased_from_ioset(int32_t i32IoType);
+		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
+		virtual void handle_del_from_io_task(int32_t i32IoType);
 		virtual int32_t get_fd();
 
 		virtual u_int32_t get_io_evt(int32_t i32IoType);
@@ -153,13 +153,13 @@ namespace nm_smartnet
 		{
 			ES_ADDED_INTO_HELPER = 0,
 			ES_OPENED_READY, ES_OPENED, ES_CLOSING, ES_CLOSED_READY, ES_CLOSED, ES_ADDING_INTO_OUTPUT_TASK, ES_ADDING_INTO_INPUT_TASK,
-			ES_DELED_FROM_INPUT_TASK, ES_DELING_FROM_IT, ES_DELING_FROM_OT
+			ES_DELED_FROM_IT, ES_DELING_FROM_IT, ES_DELING_FROM_OT
 		};
 
 		enum
 		{
 			EE_NONE = 0, EE_OPEN, EE_OPENED, EE_CLOSE, EE_CLOSED, EE_IOERR, EE_INTERNAL_ERR, EE_CONNECTED, EE_ADDED_INTO_OUTPUT_TASK, EE_ADDED_INTO_INPUT_TASK,
-			EE_DELED_FROM_INPUT_TASK, EE_DELED_FROM_OUTPUT_TASK
+			EE_DELED_FROM_IT, EE_DELED_FROM_OT
 		};
 
 	public:
@@ -198,7 +198,8 @@ namespace nm_smartnet
 
 	protected:
 		///
-		virtual void on_opened() = 0;
+		virtual void on_opened(int32_t i32ErrCode) = 0;
+		virtual void on_closed() = 0;
 		virtual void on_recved_data(nm_memory::mem_ptr_t &pData) = 0;
 		virtual void on_io_error(int32_t i32ErrCode) = 0;
 
@@ -209,13 +210,22 @@ namespace nm_smartnet
 		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handle_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_added_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_io_err(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handle_close_after_add(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_connected(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_ot_to_deling_from_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_it_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_added_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_added_into_helper_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		//int32_t handling_io_err(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+
+//		int32_t handle_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+//		int32_t handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+//		int32_t handling_io_err(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+//		int32_t handle_close_after_add(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+//		int32_t handling_connected(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+//		int32_t handling_added_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+//		int32_t handling_added_into_helper_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
 		nm_utils::CStateMachine<CTcpEndpoint> m_sm; ///state machine make the obj state thread-safe
