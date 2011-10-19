@@ -12,78 +12,82 @@
 namespace nm_framework
 {
 
-CTimeNotifier::CTimeNotifier()
-{
-	// TODO Auto-generated constructor stub
-}
-
-CTimeNotifier::~CTimeNotifier()
-{
-	// TODO Auto-generated destructor stub
-}
-
-int32_t CTimeNotifier::add_timer(const timer_obj_ptr_t &ptimer)
-{
-	nm_utils::spin_scopelk_t lk(m_lktimercache);
-
-	///delete cache
-	timer_set_t::iterator iter = m_settimerdelcache.find(ptimer);
-	IF_TRUE_THEN_RETURN_CODE(iter != m_settimerdelcache.end(), CMNERR_COMMON_ERR);
-
-	///timer set
-	iter = m_settimers.find(ptimer);
-	IF_TRUE_THEN_RETURN_CODE(iter != m_settimers.end(), CMNERR_COMMON_ERR);
-
-	timer_set_ret_t ret = m_settimeraddcache.insert(ptimer);
-
-	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
-}
-
-int32_t CTimeNotifier::del_timer(const timer_obj_ptr_t &ptimer)
-{
-	nm_utils::spin_scopelk_t lk(m_lktimercache);
-
-	///add cache
-	timer_set_t::iterator iter = m_settimeraddcache.find(ptimer);
-	IF_TRUE_THEN_RETURN_CODE(iter != m_settimeraddcache.end(), CMNERR_COMMON_ERR);
-
-	///timer set
-	iter = m_settimers.find(ptimer);
-	IF_TRUE_THEN_RETURN_CODE(iter == m_settimers.end(), CMNERR_COMMON_ERR);
-
-	timer_set_ret_t ret = m_settimerdelcache.insert(ptimer);
-
-	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
-}
-
-void CTimeNotifier::exec()
-{
-	///update set
-	if (!m_settimeraddcache.empty() || !m_settimerdelcache.empty())
+	CTimeNotifier::CTimeNotifier()
 	{
-		nm_utils::spin_scopelk_t lk(m_lktimercache);
-
-		///delete cache
-		for (timer_set_t::iterator iter = m_settimerdelcache.begin(); iter != m_settimerdelcache.end(); iter++)
-		{
-			m_settimers.erase(*iter);
-		}
-		m_settimerdelcache.clear();
-
-		///add cache.
-		for (timer_set_t::iterator iter = m_settimeraddcache.begin(); iter != m_settimeraddcache.end(); iter++)
-		{
-			m_settimers.insert(*iter);
-		}
-		m_settimeraddcache.clear();
+		// TODO Auto-generated constructor stub
 	}
 
-	///
-	u_int64_t ui64curtime = nm_utils::CTimeInfo::get_current_time_us();
-	for (timer_set_t::iterator iter = m_settimers.begin(); iter != m_settimers.end(); iter++)
+	CTimeNotifier::~CTimeNotifier()
 	{
-		(*iter)->check(ui64curtime);
+		// TODO Auto-generated destructor stub
 	}
-}
+
+	int32_t CTimeNotifier::add_timer(const timer_obj_ptr_t &pTimer)
+	{
+		nm_utils::spin_scopelk_t lk(m_lkTimerAddCache);
+
+		m_vecTimerAddCache.push_back(pTimer);
+
+		return CMNERR_SUC;
+	}
+
+	int32_t CTimeNotifier::del_timer(const timer_obj_ptr_t &pTimer)
+	{
+		nm_utils::spin_scopelk_t lk(m_lkTimerDelCache);
+
+		m_vecTimerDelCache.push_back(pTimer);
+
+		return CMNERR_SUC;
+	}
+
+#define MORE (10)
+	void CTimeNotifier::exec()
+	{
+		///delete first
+		if (!m_vecTimerDelCache.empty())
+		{
+			timer_vec_t vecTmp(m_vecTimerDelCache.size() + MORE);
+			{
+				nm_utils::spin_scopelk_t lk(m_lkTimerDelCache);
+				vecTmp.swap(m_vecTimerDelCache);
+				CMN_ASSERT(m_vecTimerDelCache.empty());
+			}
+
+			///delete cache
+			for (timer_vec_t::iterator iter = m_vecTimerDelCache.begin(); iter != m_vecTimerDelCache.end(); ++iter)
+			{
+				timer_set_t::size_type ret = m_setTimers.erase(*iter);
+				CMN_ASSERT(1 == ret);
+				(*iter)->handle_del_from_timer_task();
+			}
+		}
+
+		///add
+		if (!m_vecTimerAddCache.empty())
+		{
+			timer_vec_t vecTmp(m_vecTimerAddCache.size() + MORE);
+
+			{
+				nm_utils::spin_scopelk_t lk(m_lkTimerAddCache);
+				vecTmp.swap(m_vecTimerAddCache);
+				CMN_ASSERT(m_vecTimerAddCache.empty());
+			}
+
+			///add cache.
+			for (timer_vec_t::iterator iter = m_vecTimerAddCache.begin(); iter != m_vecTimerAddCache.end(); iter++)
+			{
+				timer_set_ret_t ret = m_setTimers.insert(*iter);
+				CMN_ASSERT(ret.second);
+				(*iter)->handle_add_into_timer_task();
+			}
+		}
+
+		///
+		u_int64_t ui64curtime = nm_utils::CTimeInfo::get_current_time_us();
+		for (timer_set_t::iterator iter = m_setTimers.begin(); iter != m_setTimers.end(); iter++)
+		{
+			(*iter)->check(ui64curtime);
+		}
+	}
 
 }

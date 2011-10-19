@@ -34,12 +34,12 @@ namespace nm_framework
 
 		enum E_ENGINE_STATE
 		{
-			EES_STOPPED = 0, EES_STARTED
+			ES_STOPPED = 0, ES_STARTED
 		};
 
 		enum E_ENGINE_EVT
 		{
-			EEE_START = 0, EEE_STOP
+			EE_START = 0, EE_STOP
 		};
 
 		DISALLOW_COPY_AND_ASSIGN(CSNEngine);

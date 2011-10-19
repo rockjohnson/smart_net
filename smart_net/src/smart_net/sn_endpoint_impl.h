@@ -19,35 +19,38 @@
 
 namespace nm_smartnet
 {
-	/**
-	 * tcp endpoint enum.
-	 * */
-	enum ETcpEndpointType
-	{
-		E_TCP_INBOUND_ENDPOINT = 0, E_TCP_OUTBOUND_ENDPOINT
-	};
-
-	/**
-	 * tcp endpoint
-	 * */
-	enum
-	{
-		ES_INIT = 0, ES_IN_ENGINE, ES_IN_ENGINE_AND_IN_RECV_THREAD, ES_IN_ENGINE_AND_IN_SEND_THREAD, ES_IN_ENGINE_RUNNING, ES_IN_ENGINE_STOP_RUNNING
-	};
-
-	enum
-	{
-		EE_ADD_INTO_ENGINE = 0,
-		EE_DEL_FROM_ENGINE,
-		EE_IN_ENGINE_ADD_INTO_SEND_THREAD,
-		EE_IN_ENGINE_DEL_FROM_SEND_THREAD,
-		EE_IN_ENGINE_ADD_INTO_RECV_THREAD,
-		EE_IN_ENGINE_DEL_FROM_RECV_THREAD
-	};
+	//	/**
+	//	 * tcp endpoint enum.
+	//	 * */
+	//	enum ETcpEndpointType
+	//	{
+	//		E_TCP_INBOUND_ENDPOINT = 0, E_TCP_OUTBOUND_ENDPOINT
+	//	};
+	//
+	//	/**
+	//	 * tcp endpoint
+	//	 * */
+	//	enum
+	//	{
+	//		ES_INIT = 0, ES_IN_ENGINE, ES_IN_ENGINE_AND_IN_RECV_THREAD, ES_IN_ENGINE_AND_IN_SEND_THREAD, ES_IN_ENGINE_RUNNING, ES_IN_ENGINE_STOP_RUNNING
+	//	};
+	//
+	//	enum
+	//	{
+	//		EE_ADD_INTO_ENGINE = 0,
+	//		EE_DEL_FROM_ENGINE,
+	//		EE_IN_ENGINE_ADD_INTO_SEND_THREAD,
+	//		EE_IN_ENGINE_DEL_FROM_SEND_THREAD,
+	//		EE_IN_ENGINE_ADD_INTO_RECV_THREAD,
+	//		EE_IN_ENGINE_DEL_FROM_RECV_THREAD
+	//	};
 
 	class CTcpEndpoint;
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpEndpoint> tcp_endpoint_ptr_t;
 
+	/**
+	 *
+	 * */
 	class CTcpAcceptor: public nm_framework::IIoObj
 	{
 	public:
@@ -87,7 +90,10 @@ namespace nm_smartnet
 		virtual void on_closed();
 		int32_t add_endpoint(const tcp_endpoint_ptr_t &pTcpEP);
 		int32_t del_endpoint(const tcp_endpoint_ptr_t &pTcpEP);
-		nm_framework::sn_engine_ptr_t& get_engine(){return m_pSNEngine;}
+		nm_framework::sn_engine_ptr_t& get_engine()
+		{
+			return m_pSNEngine;
+		}
 
 	private:
 		int32_t handling_closed_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
@@ -114,31 +120,25 @@ namespace nm_smartnet
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpAcceptor> tcp_acceptor_ptr_t;
 
 	/**
-	 * tcp connect.
+	 * tcp connecter.
 	 * */
 	class CTcpConnector: public nm_framework::ITimerObj, public nm_framework::IIoObj
 	{
+		enum
+		{
+			ES_OPENED = 0, ES_CLOSED, ES_CHECK_TIMER, ES_ADDING_INTO_OT, ES_DELING_FROM_OT, ES_ADDING_INTO_TT, ES_DELING_FROM_TT, ES_CONNECTING
+		};
+
+		enum
+		{
+			EE_NONE, EE_OPEN = 0, EE_CONNECT, EE_CLOSE, EE_ADDED_INTO_OT, EE_DELED_FROM_OT, EE_INTERNAL_ERR, EE_ADDED_INTO_TT, EE_CONNECTED, EE_DELED_FROM_TT
+		};
+
 	public:
 		CTcpConnector(const nm_framework::sn_engine_ptr_t&);
 		virtual ~CTcpConnector();
 
-	public:
-		virtual void handle_input_evt();
-		virtual void handle_output_evt();
-		virtual void handle_io_error(int32_t i32ErrCode);
-		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
-		virtual void handle_del_from_io_task(int32_t i32IoType);
-		virtual int32_t get_fd();
-
-		virtual u_int32_t get_io_evt(int32_t i32IoType);
-		virtual void set_input_task_id(int32_t i32id);
-		virtual int32_t get_input_task_id();
-		virtual void set_output_task_id(int32_t i32id);
-		virtual int32_t get_output_task_id();
-
-	public:
-		virtual void check(u_int64_t ui64curtimeus);
-
+		DISALLOW_COPY_AND_ASSIGN( CTcpConnector);
 	public:
 		int32_t open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort);
 		int32_t close();
@@ -149,8 +149,41 @@ namespace nm_smartnet
 			return m_pSNEngine;
 		}
 
+	protected:
+		virtual void handle_input_evt();
+		virtual void handle_output_evt();
+		virtual void handle_io_error(int32_t i32ErrCode);
+		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
+		virtual void handle_del_from_io_task(int32_t i32IoType);
+		virtual int32_t get_fd();
+
+		virtual void handle_add_into_timer_task();
+		virtual void handle_del_from_timer_task();
+
+		virtual u_int32_t get_io_evt(int32_t i32IoType);
+		virtual void set_input_task_id(int32_t i32id);
+		virtual int32_t get_input_task_id();
+		virtual void set_output_task_id(int32_t i32id);
+		virtual int32_t get_output_task_id();
+
 	private:
+		int32_t handling_closed_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_adding_into_ot_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_opened_to_deling_from_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_ot_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+
+	protected:
+		virtual void check(u_int64_t ui64curtimeus);
+
+	private:
+		nm_network::tcp_sock_ptr_t m_pTcpSock;
+		cmn_string_t m_strAcceptorIp;
+		u_int16_t m_ui16AcceptorPort;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
+		int32_t m_i32PendingEvt;
+		nm_utils::CStateMachine<CTcpConnector> m_sm;
 	};
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpConnector> tcp_connector_ptr_t;
 
@@ -245,15 +278,6 @@ namespace nm_smartnet
 		int32_t handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_added_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_added_into_helper_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		//int32_t handling_io_err(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-
-		//		int32_t handle_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		//		int32_t handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		//		int32_t handling_io_err(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		//		int32_t handle_close_after_add(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		//		int32_t handling_connected(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		//		int32_t handling_added_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		//		int32_t handling_added_into_helper_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
 		nm_utils::CStateMachine<CTcpEndpoint> m_sm; ///state machine make the obj state thread-safe
@@ -269,29 +293,8 @@ namespace nm_smartnet
 	};
 
 	/**
-	 * tcp connect endpoint.
+	 *
 	 * */
-	//class CTcpConnecter;
-	//typedef nm_utils::CSmartPtr<CTcpConnecter> tcp_connecter_ptr_t;
-	//class CTcpOutboundEndpoint : public CTcpInboundEndpoint
-	//{
-	//public:
-	//	CTcpOutboundEndpoint();
-	//	virtual ~CTcpOutboundEndpoint();
-	//
-	//public:
-	//	int32_t start(net_addr_ptr_t &pRemoteAddr, int32_t i32ConnTimeout, int32_t i32MaxRetries);
-	//	int32_t stop();
-	//
-	//protected:
-	//	void on_closed(int32_t iErrCode);
-	//
-	//private:
-	//	net_addr_ptr_t m_pRemoteAddr;
-	//	tcp_connecter_ptr_t m_pConnecter;
-	//};
-	//typedef nm_utils::CSmartPtr<nm_smartnet::CTcpOutboundEndpoint> tcp_ob_endpoint_ptr_t;
-
 	class CRmpEndpoint: public nm_framework::IIoObj
 	{
 	public:
@@ -315,7 +318,6 @@ namespace nm_smartnet
 		virtual void on_error() = 0;
 		virtual void on_recved_data(nm_memory::mem_ptr_t &pData) = 0;
 	};
-
 }
 
 #endif /* CONN_H_ */

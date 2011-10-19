@@ -9,6 +9,7 @@
 #define __SN_TIME_NOTIFIER_H__
 
 #include <set>
+#include <vector>
 
 #include <utils/smart_ptr.h>
 #include <utils/smart_lock.h>
@@ -40,10 +41,12 @@ public:
 private:
 	typedef std::set<timer_obj_ptr_t> timer_set_t;
 	typedef std::pair<timer_set_t::iterator, bool> timer_set_ret_t;
-	timer_set_t m_settimers;
-	nm_utils::CSpinLock m_lktimercache;
-	std::set<timer_obj_ptr_t> m_settimeraddcache;
-	std::set<timer_obj_ptr_t> m_settimerdelcache;
+	timer_set_t m_setTimers;
+	typedef std::vector<timer_obj_ptr_t> timer_vec_t;
+	timer_vec_t m_vecTimerAddCache;
+	nm_utils::CSpinLock m_lkTimerAddCache;
+	timer_vec_t m_vecTimerDelCache;
+	nm_utils::CSpinLock m_lkTimerDelCache;
 };
 typedef nm_utils::CSmartPtr<CTimeNotifier> time_notifier_t;
 

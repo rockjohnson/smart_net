@@ -20,8 +20,8 @@ namespace nm_framework
 	CSNEngine::CSNEngine() :
 		m_sm(this)
 	{
-		m_sm.reg_evt_state(EES_STOPPED, EEE_START, EES_STARTED, &CSNEngine::starting);
-		m_sm.reg_evt_state(EES_STARTED, EEE_STOP, EES_STOPPED, &CSNEngine::stopping);
+		m_sm.reg_evt_state(ES_STOPPED, EE_START, ES_STARTED, &CSNEngine::starting);
+		m_sm.reg_evt_state(ES_STARTED, EE_STOP, ES_STOPPED, &CSNEngine::stopping);
 	}
 
 	CSNEngine::~CSNEngine()
@@ -36,7 +36,7 @@ namespace nm_framework
 		sp.ui32B = ui32OutputThreadCnt;
 		sp.i32C = i32IoEvtNotifier;
 		sp.i32D = i32MsTimeout;
-		return m_sm.post_evt(EEE_START, &sp);
+		return m_sm.post_evt(EE_START, &sp);
 	}
 
 	/**
@@ -83,7 +83,7 @@ namespace nm_framework
 			m_vecThreads.push_back(pThread);
 		}
 
-		misc_task_ptr_t m_pMiscTask = SYS_NOTRW_NEW(CMiscTask);
+		m_pMiscTask = SYS_NOTRW_NEW(CMiscTask);
 		thread_ptr_t pThread = SYS_NOTRW_NEW(CThread);
 		pThread->assign_task(m_pMiscTask);
 		i32Ret = pThread->start();
@@ -116,7 +116,7 @@ namespace nm_framework
 
 	int32_t CSNEngine::stop()
 	{
-		return m_sm.post_evt(EEE_STOP, NULL);
+		return m_sm.post_evt(EE_STOP, NULL);
 	}
 
 	/**
@@ -128,7 +128,7 @@ namespace nm_framework
 		///
 		IF_TRUE_THEN_RETURN_CODE(NULL == pIoObj, CMNERR_COMMON_ERR);
 		///cool!!
-		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(EES_STARTED), CMNERR_COMMON_ERR);
+		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED), CMNERR_COMMON_ERR);
 
 		int32_t i32Tmp = 0;
 		int32_t i32MinCnt = 0;
@@ -181,12 +181,15 @@ namespace nm_framework
 		return CMNERR_SUC;
 	}
 
+	/**
+	 *
+	 * */
 	int32_t CSNEngine::del_endpoint(const io_obj_ptr_t &pIoObj, int32_t i32IoType)
 	{
 		///
 		IF_TRUE_THEN_RETURN_CODE(NULL == pIoObj, CMNERR_COMMON_ERR);
 		///cool!!
-		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(EES_STARTED), CMNERR_COMMON_ERR);
+		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED), CMNERR_COMMON_ERR);
 
 		///assign input task, thread safe?
 		if (EIT_INPUT_TYPE == i32IoType)
@@ -204,6 +207,19 @@ namespace nm_framework
 				m_vecOutputTasks[pIoObj->get_output_task_id()]->del_io_obj(pIoObj);
 			}
 		}
+
+		m_sm.end_lock_state();
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CSNEngine::add_timer(const timer_obj_ptr_t &pTimerObj)
+	{
+		CMN_ASSERT(NULL != pTimerObj);
+		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED), CMNERR_COMMON_ERR);
+
+		m_pMiscTask->add_timer(pTimerObj);
 
 		m_sm.end_lock_state();
 	}

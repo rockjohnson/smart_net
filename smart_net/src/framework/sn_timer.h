@@ -22,7 +22,9 @@ public:
 	virtual ~ITimerObj();
 
 public:
-	virtual void check(u_int64_t ui64curtimeus) = 0;
+	virtual void handle_add_into_timer_task() = 0;
+	virtual void handle_del_from_timer_task() = 0;
+	virtual void check(u_int64_t ui64CurTimeInUs) = 0;
 };
 typedef nm_utils::CSmartPtr<ITimerObj> timer_obj_ptr_t;
 
