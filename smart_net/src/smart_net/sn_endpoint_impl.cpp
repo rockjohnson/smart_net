@@ -50,6 +50,7 @@ namespace nm_smartnet
 	{
 		std::string strIP;
 		u_int16_t ui16Port;
+		u_int64_t ui64Val;
 	};
 
 	int32_t CTcpAcceptor::open(const cmn_string_t &strIP, u_int16_t ui16Port)
@@ -586,7 +587,7 @@ namespace nm_smartnet
 	 *
 	 * */
 	CTcpConnector::CTcpConnector(const nm_framework::sn_engine_ptr_t &pSNEngine) :
-		m_pSNEngine(pSNEngine), m_i32PendingEvt(EE_NONE), m_sm(this)
+		m_pSNEngine(pSNEngine), m_i32PendingEvt(EE_NONE), m_sm(this), m_ui64Interval(0)
 	{
 		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDING_INTO_TT,
 				&CTcpConnector::handling_closed_to_adding_into_tt);
@@ -632,11 +633,13 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CTcpConnector::open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort)
+	int32_t CTcpConnector::open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort,
+			u_int64_t ui64Interval)
 	{
 		SParas sp;
 		sp.strIP = strAcceptorIP;
 		sp.ui16Port = ui16AcceptorPort;
+		sp.ui64Val = ui64Interval;
 		return m_sm.post_evt(EE_OPEN, &sp);
 	}
 
@@ -662,10 +665,25 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CTcpConnector::del_endpoint(const tcp_endpoint_ptr_t&)
+	int32_t CTcpConnector::del_endpoint(const tcp_endpoint_ptr_t &pTcpEp)
 	{
-		nm_utils::spin_scopelk_t lk(m_lkTcpEpsVec);
-		m_vecTcpEndpoints.push_back(pTcpEp);
+		nm_utils::spin_scopelk_t lk(m_lkIdleEps);
+
+		bool bFlag = false;
+		for (tcp_endpoint_deque_t::iterator iter = m_dequeIdleEps.begin(); iter
+				!= m_dequeIdleEps.end(); ++iter)
+		{
+			if ((*iter) == pTcpEp)
+			{
+				bFlag = true;
+				m_dequeIdleEps.erase(iter);
+				break;
+			}
+		}
+
+		CMN_ASSERT(bFlag);
+
+		return CMNERR_SUC;
 	}
 
 	/**
@@ -679,6 +697,11 @@ namespace nm_smartnet
 		SParas *pSp = static_cast<SParas*> (pVoid);
 		m_strAcceptorIp = pSp->strIP;
 		m_ui16AcceptorPort = pSp->ui16Port;
+		m_ui64Interval = pSp->ui64Val;
+
+		CMN_ASSERT(m_ui64Interval > 0);
+
+		set_interval(m_ui64Interval);
 
 		///add into timer
 		return m_pSNEngine->add_timer(tcp_connector_ptr_t(this));
@@ -882,6 +905,23 @@ namespace nm_smartnet
 			m_pTcpSock->close();
 			m_pTcpSock = NULL;
 		}
+	}
+
+	int32_t CTcpConnector::handling_deling_from_tt_to_closed(int32_t i32CurState, int32_t i32Evt,
+			int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		on_close();
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+
+	void CTcpConnector::on_timer()
+	{
+
 	}
 
 }

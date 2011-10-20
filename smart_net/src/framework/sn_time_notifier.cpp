@@ -83,10 +83,10 @@ namespace nm_framework
 		}
 
 		///
-		u_int64_t ui64curtime = nm_utils::CTimeInfo::get_current_time_us();
-		for (timer_set_t::iterator iter = m_setTimers.begin(); iter != m_setTimers.end(); iter++)
+		u_int64_t ui64CurTime = nm_utils::CTimeInfo::get_current_time_us();
+		for (timer_set_t::iterator iter = m_setTimers.begin(); iter != m_setTimers.end(); ++iter)
 		{
-			(*iter)->check(ui64curtime);
+			(*iter)->check(ui64CurTime);
 		}
 	}
 

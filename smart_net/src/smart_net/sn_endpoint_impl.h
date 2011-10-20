@@ -163,7 +163,7 @@ namespace nm_smartnet
 
 		DISALLOW_COPY_AND_ASSIGN( CTcpConnector);
 	public:
-		int32_t open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort);
+		int32_t open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort, u_int64_t ui64IntervalInUs);
 		int32_t close();
 		int32_t add_endpoint(const tcp_endpoint_ptr_t&);
 		int32_t del_endpoint(const tcp_endpoint_ptr_t&);
@@ -222,14 +222,19 @@ namespace nm_smartnet
 				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_deling_from_ot_normal_to_checking_timer(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_tt_to_closed(int32_t i32CurState, int32_t i32Evt,
+				int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	protected:
-		virtual void check(u_int64_t ui64curtimeus);
+		virtual void on_timer();
+		virtual void on_open();
+		virtual void on_close();
 
 	private:
 		nm_network::tcp_sock_ptr_t m_pTcpSock;
 		cmn_string_t m_strAcceptorIp;
 		u_int16_t m_ui16AcceptorPort;
+		u_int64_t m_ui64Interval;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
 		int32_t m_i32PendingEvt;
 		nm_utils::CStateMachine<CTcpConnector> m_sm;

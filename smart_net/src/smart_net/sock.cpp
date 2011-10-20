@@ -4,7 +4,7 @@
  *  Created on: Apr 5, 2009
  *      Author: rock
  */
-#include "plateform.h"
+//#include "plateform.h"
 
 #if defined(__PLATEFORM_LINUX__)
 #include <unistd.h>
@@ -873,7 +873,7 @@ namespace nm_network
 				else
 				{
 #ifdef __PLATEFORM_WINDOWS__
-					///½â¾öwindowsÆ½Ì¨ÉÏÁ½¸öudp»¥Ïà·¢ËÍÊý¾ÝÊ±£¬ÆäÖÐÒ»¸ö¹Ø±Õ£¬ÁíÒ»¸ö»á»ñµÃ10054µÄ´íÎó£¡
+					///ï¿½ï¿½ï¿½windowsÆ½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½udpï¿½ï¿½ï¿½à·¢ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ø±Õ£ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½10054ï¿½Ä´ï¿½ï¿½ï¿½
 					if (10054 == ::GetLastError())
 					{
 						continue;
