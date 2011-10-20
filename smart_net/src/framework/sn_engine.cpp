@@ -194,17 +194,17 @@ namespace nm_framework
 		///assign input task, thread safe?
 		if (EIT_INPUT_TYPE == i32IoType)
 		{
-			if (pIoObj->get_input_task_id() >= 0)
+			if (pIoObj->get_task_id(EIT_INPUT_TYPE) >= 0)
 			{
-				m_vecInputTasks[pIoObj->get_input_task_id()]->del_io_obj(pIoObj);
+				m_vecInputTasks[pIoObj->get_task_id(EIT_INPUT_TYPE)]->del_io_obj(pIoObj);
 			}
 		}
 
 		if (EIT_OUTPUT_TYPE == i32IoType)
 		{
-			if (pIoObj->get_output_task_id() >= 0)
+			if (pIoObj->get_task_id(EIT_OUTPUT_TYPE) >= 0)
 			{
-				m_vecOutputTasks[pIoObj->get_output_task_id()]->del_io_obj(pIoObj);
+				m_vecOutputTasks[pIoObj->get_task_id(EIT_OUTPUT_TYPE)]->del_io_obj(pIoObj);
 			}
 		}
 

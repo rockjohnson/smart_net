@@ -49,7 +49,7 @@ public:
 
 private:
 	io_evt_notifier_ptr_t m_pIoEvtNotifier; ///the io event notify mechanism obj;
-	int32_t m_i32Id;
+	int32_t m_i32TaskId;
 
 	//nm_utils::CEventHandleEngine m_evtengine; ///serialized the handles.
 };
@@ -81,7 +81,7 @@ public:
 
 private:
 	io_evt_notifier_ptr_t m_pIoEvtNotifier; ///the io event notify mechanism obj;
-	int32_t m_i32Id;
+	int32_t m_i32TaskId;
 	nm_utils::CEventHandleEngine m_evtengine; ///serialized the handles.
 };
 typedef nm_utils::CSmartPtr<nm_framework::COutputHandleTask> output_handle_task_ptr_t;

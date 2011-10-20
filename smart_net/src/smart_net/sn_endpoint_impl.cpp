@@ -16,7 +16,7 @@ namespace nm_smartnet
 	 *
 	 * */
 	CTcpAcceptor::CTcpAcceptor(const nm_framework::sn_engine_ptr_t &pSNEngine) :
-		m_sm(this), m_pSNEngine(pSNEngine), m_i32InputTaskId(0), m_i32OutputTaskId(0)
+		m_sm(this), m_pSNEngine(pSNEngine)
 	{
 		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDING_INTO_IT,
 				&CTcpAcceptor::handling_closed_to_adding_into_it);
@@ -33,7 +33,10 @@ namespace nm_smartnet
 		m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_CLOSED,
 				&CTcpAcceptor::handling_deling_from_it_to_closed);
 
+		///
 		m_log.init("./", "tcp_acceptor_", ELL_DEBUG, 300);
+		///
+		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
 	}
 
 	/**
@@ -181,7 +184,7 @@ namespace nm_smartnet
 		cmn_char_t szTmpBuf[256] = { 0 };
 		TRACE_LOG(m_log, ELL_DEBUG,
 				"acceptor (sock: %d, bind addr: %s, %hu) is inserted to ioset ,return: %d\n",
-				get_fd(), m_bindAddr.get_ip_str(szTmpBuf, 255), m_bindAddr.get_port_hbo(),
+				get_ioobj_handle(), m_bindAddr.get_ip_str(szTmpBuf, 255), m_bindAddr.get_port_hbo(),
 				i32RetCode);
 
 		if (i32RetCode < CMNERR_SUC)
@@ -197,7 +200,7 @@ namespace nm_smartnet
 	{
 		cmn_char_t szTmpBuf[256] = { 0 };
 		TRACE_LOG(m_log, ELL_DEBUG,
-				"acceptor (sock: %d, bind addr: %s, %hu) is erased from ioset\n", get_fd(),
+				"acceptor (sock: %d, bind addr: %s, %hu) is erased from ioset\n", get_ioobj_handle(),
 				m_bindAddr.get_ip_str(szTmpBuf, 255), m_bindAddr.get_port_hbo());
 
 		CMN_ASSERT(EIT_INPUT_TYPE == i32IoType);
@@ -256,7 +259,7 @@ namespace nm_smartnet
 		CMN_ASSERT(false);
 	}
 
-	int32_t CTcpAcceptor::get_fd()
+	int32_t CTcpAcceptor::get_ioobj_handle()
 	{
 		return m_pTcpSockListener->get_handle();
 	}
@@ -347,6 +350,10 @@ namespace nm_smartnet
 				&CTcpEndpoint::handling_deling_from_it_to_closed);
 
 		m_sm.set_cur_state(ES_CLOSED);
+
+		///
+		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
+		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT | EPOLLET);
 	}
 
 	CTcpEndpoint::~CTcpEndpoint()
@@ -494,12 +501,12 @@ namespace nm_smartnet
 		return CMNERR_SUC;
 	}
 
-	u_int32_t CTcpEndpoint::get_io_evt(int32_t i32IoType)
-	{
-		CMN_ASSERT(EIT_INPUT_TYPE == i32IoType || EIT_OUTPUT_TYPE == i32IoType);
-
-		return (EIT_INPUT_TYPE == i32IoType) ? EPOLLIN : EPOLLOUT;
-	}
+//	u_int32_t CTcpEndpoint::get_io_evt(int32_t i32IoType)
+//	{
+//		CMN_ASSERT(EIT_INPUT_TYPE == i32IoType || EIT_OUTPUT_TYPE == i32IoType);
+//
+//		return (EIT_INPUT_TYPE == i32IoType) ? EPOLLIN : EPOLLOUT;
+//	}
 
 	int32_t CTcpEndpoint::handling_added_into_helper_to_adding_into_ot(int32_t i32CurState,
 			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
@@ -628,6 +635,22 @@ namespace nm_smartnet
 				&CTcpConnector::handling_deling_from_tt_to_closed);
 
 		m_sm.set_cur_state(ES_CLOSED);
+
+		///
+		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT);
+	}
+
+	/**
+	 *
+	 * */
+	CTcpConnector::~CTcpConnector()
+	{
+		{
+			nm_utils::spin_scopelk_t lk(m_lkIdleEps);
+			m_dequeIdleEps.clear();
+		}
+
+		m_pTcpSock = NULL;
 	}
 
 	/**
@@ -647,6 +670,53 @@ namespace nm_smartnet
 	 *
 	 * */
 	int32_t CTcpConnector::close()
+	{
+		return m_sm.post_evt(EE_CLOSE, NULL);
+	}
+
+	/**
+	 *
+	 * */
+	void CTcpConnector::handle_input_evt()
+	{
+		CMN_ASSERT(false);
+	}
+
+	/**
+	 *
+	 * */
+
+	void CTcpConnector::handle_output_evt()
+	{
+
+	}
+
+	void CTcpConnector::handle_io_error(int32_t i32ErrCode)
+	{
+
+	}
+
+	void CTcpConnector::handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode)
+	{
+
+	}
+
+	void CTcpConnector::handle_del_from_io_task(int32_t i32IoType)
+	{
+
+	}
+
+	int32_t CTcpConnector::get_ioobj_handle()
+	{
+
+	}
+
+	void CTcpConnector::handle_add_into_timer_task()
+	{
+
+	}
+
+	void CTcpConnector::handle_del_from_timer_task()
 	{
 
 	}
@@ -736,6 +806,11 @@ namespace nm_smartnet
 	int32_t CTcpConnector::handling_checking_timer_to_adding_into_ot(int32_t i32CurState,
 			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
+		CMN_ASSERT(NULL == m_pTcpSock);
+		m_pTcpSock = SYS_NOTRW_NEW(nm_network::CTcpSock);
+		m_pTcpSock->set_nonblock(true);
+		m_pTcpSock->connect(m_strAcceptorIp, m_ui16AcceptorPort);
+
 		return m_pSNEngine->add_endpoint(tcp_connector_ptr_t(this), EIT_OUTPUT_TYPE);
 	}
 
@@ -918,10 +993,12 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-
 	void CTcpConnector::on_timer()
 	{
-
+		if (!m_dequeIdleEps.empty())
+		{
+			m_sm.post_evt(EE_CONNECT, NULL);
+		}
 	}
 
 }

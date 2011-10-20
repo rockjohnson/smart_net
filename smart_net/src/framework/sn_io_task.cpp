@@ -12,7 +12,7 @@ namespace nm_framework
 {
 
 CInputHandleTask::CInputHandleTask()
-:m_i32Id(-1)
+:m_i32TaskId(-1)
 {
 }
 
@@ -38,7 +38,7 @@ int32_t CInputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MsTimeout)
 
 void CInputHandleTask::set_id(int32_t i32Indx)
 {
-	m_i32Id = i32Indx;
+	m_i32TaskId = i32Indx;
 }
 
 int32_t CInputHandleTask::destroy()
@@ -47,7 +47,7 @@ int32_t CInputHandleTask::destroy()
 
 	m_pIoEvtNotifier->destroy();
 	m_pIoEvtNotifier = NULL;
-	m_i32Id = -1;
+	m_i32TaskId = -1;
 
 //	///io obj add cache
 //	m_lkIoObjCache.lock();
@@ -83,7 +83,7 @@ int32_t CInputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 //	ret = m_setIoObjAddCache.insert(pIoObj);
 
 //	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
-	pIoObj->set_input_task_id(m_i32Id);
+	pIoObj->set_task_id(EIT_INPUT_TYPE, m_i32TaskId);
 	return m_pIoEvtNotifier->add_io_obj(pIoObj);
 }
 
@@ -175,7 +175,7 @@ void COutputHandleTask::pos_evt(const nm_utils::event_ptr_t &pevt)
 
 void COutputHandleTask::set_indx(int32_t i32Indx)
 {
-	m_i32Id = i32Indx;
+	m_i32TaskId = i32Indx;
 }
 
 int32_t COutputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout)
@@ -196,14 +196,14 @@ int32_t COutputHandleTask::destroy()
 
 	m_pIoEvtNotifier->destroy();
 	m_pIoEvtNotifier = NULL;
-	m_i32Id = -1;
+	m_i32TaskId = -1;
 }
 
 int32_t COutputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 {
 	CMN_ASSERT(NULL != m_pIoEvtNotifier);
 
-	pIoObj->set_output_task_id(m_i32Id);
+	pIoObj->set_task_id(EIT_OUTPUT_TYPE, m_i32TaskId);
 	return m_pIoEvtNotifier->add_io_obj(pIoObj);
 }
 

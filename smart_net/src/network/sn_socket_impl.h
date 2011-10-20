@@ -35,6 +35,7 @@ public:
 	virtual int32_t listen(int32_t i32Backlog);
 	virtual tcp_sock_ptr_t accept();
 	virtual int32_t connect(const CIpv4Addr &remoteAddr);
+	virtual int32_t connect(const cmn_string_t &strAcceptorIp, u_int64_t ui16AcceptorPort);
 	virtual sock_handle_t get_handle();
 	virtual bool is_opened();
 	virtual int32_t set_nonblock(bool bFlag);

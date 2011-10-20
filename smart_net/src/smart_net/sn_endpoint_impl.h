@@ -75,13 +75,13 @@ namespace nm_smartnet
 		virtual void handle_io_error(int32_t i32ErrCode);
 		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
 		virtual void handle_del_from_io_task(int32_t i32IoType);
-		virtual int32_t get_fd();
+		virtual int32_t get_ioobj_handle();
 
-		virtual u_int32_t get_io_evt(int32_t i32IoType);
-		virtual void set_input_task_id(int32_t i32id);
-		virtual int32_t get_input_task_id();
-		virtual void set_output_task_id(int32_t i32id);
-		virtual int32_t get_output_task_id();
+//		virtual u_int32_t get_io_evt(int32_t i32IoType);
+//		virtual void set_input_task_id(int32_t i32id);
+//		virtual int32_t get_input_task_id();
+//		virtual void set_output_task_id(int32_t i32id);
+//		virtual int32_t get_output_task_id();
 
 	public:
 		int32_t open(const cmn_string_t &strIP, u_int16_t ui16Port);
@@ -113,8 +113,6 @@ namespace nm_smartnet
 		nm_utils::CStateMachine<CTcpAcceptor> m_sm;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
 		nm_network::tcp_sock_ptr_t m_pTcpSockListener;
-		int32_t m_i32InputTaskId;
-		int32_t m_i32OutputTaskId;
 		int32_t m_i32PendingEvt;
 		nm_utils::CSmartLog m_log;
 		nm_network::CIpv4Addr m_bindAddr;
@@ -130,6 +128,8 @@ namespace nm_smartnet
 	 * */
 	class CTcpConnector: public nm_framework::ITimerObj, public nm_framework::IIoObj
 	{
+		friend class CTcpEndpoint;
+
 		enum
 		{
 			ES_OPENED = 0,
@@ -165,12 +165,6 @@ namespace nm_smartnet
 	public:
 		int32_t open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort, u_int64_t ui64IntervalInUs);
 		int32_t close();
-		int32_t add_endpoint(const tcp_endpoint_ptr_t&);
-		int32_t del_endpoint(const tcp_endpoint_ptr_t&);
-		nm_framework::sn_engine_ptr_t& get_engine()
-		{
-			return m_pSNEngine;
-		}
 
 	protected:
 		virtual void handle_input_evt();
@@ -178,18 +172,25 @@ namespace nm_smartnet
 		virtual void handle_io_error(int32_t i32ErrCode);
 		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
 		virtual void handle_del_from_io_task(int32_t i32IoType);
-		virtual int32_t get_fd();
+		virtual int32_t get_ioobj_handle();
 
 		virtual void handle_add_into_timer_task();
 		virtual void handle_del_from_timer_task();
 
-		virtual u_int32_t get_io_evt(int32_t i32IoType);
-		virtual void set_input_task_id(int32_t i32id);
-		virtual int32_t get_input_task_id();
-		virtual void set_output_task_id(int32_t i32id);
-		virtual int32_t get_output_task_id();
+//		virtual u_int32_t get_io_evt(int32_t i32IoType);
+//		virtual void set_input_task_id(int32_t i32id);
+//		virtual int32_t get_input_task_id();
+//		virtual void set_output_task_id(int32_t i32id);
+//		virtual int32_t get_output_task_id();
 
 	private:
+		int32_t add_endpoint(const tcp_endpoint_ptr_t&);
+		int32_t del_endpoint(const tcp_endpoint_ptr_t&);
+		nm_framework::sn_engine_ptr_t& get_engine()
+		{
+			return m_pSNEngine;
+		}
+
 		int32_t handling_closed_to_adding_into_tt(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_close_while_adding_into_tt(int32_t i32CurState, int32_t i32Evt,
@@ -293,14 +294,13 @@ namespace nm_smartnet
 		virtual void handle_io_error(int32_t i32ErrCode);
 		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
 		virtual void handle_erased_from_ioset(int32_t i32IoType);
-		virtual int32_t get_fd();
+		virtual int32_t get_ioobj_handle();
 
-		virtual u_int32_t get_io_evt(int32_t i32IoType);
-
-		virtual void set_input_task_id(int32_t i32id);
-		virtual int32_t get_input_task_id();
-		virtual void set_output_task_id(int32_t i32id);
-		virtual int32_t get_output_task_id();
+//		virtual u_int32_t get_io_evt(int32_t i32IoType);
+//		virtual void set_input_task_id(int32_t i32id);
+//		virtual int32_t get_input_task_id();
+//		virtual void set_output_task_id(int32_t i32id);
+//		virtual int32_t get_output_task_id();
 
 	public:
 		///first, you should open this endpoint, but it is async. and if succeed, then on_opened will callback.

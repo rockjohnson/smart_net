@@ -148,10 +148,10 @@ namespace nm_event
 			io_obj_set_t::size_type stRet = 0;
 			for (io_obj_vec_t::iterator iter = vecTmp.begin(); iter != vecTmp.end(); ++iter)
 			{
-				if ((*iter)->get_fd() >= 0)
+				if ((*iter)->get_ioobj_handle() >= 0)
 				{
 					struct epoll_event evt;
-					epoll_ctl(m_i32epfd, EPOLL_CTL_DEL, (*iter)->get_fd(), &evt);
+					epoll_ctl(m_i32epfd, EPOLL_CTL_DEL, (*iter)->get_ioobj_handle(), &evt);
 				}
 
 				stRet = m_setIoObjs.erase(*iter);
@@ -179,7 +179,7 @@ namespace nm_event
 				evt.events = (*iter)->get_io_evt(m_i32IoType);
 				evt.data.ptr = (*iter).get_ptr();
 
-				i32Ret = epoll_ctl(m_i32epfd, EPOLL_CTL_ADD, (*iter)->get_fd(), &evt);
+				i32Ret = epoll_ctl(m_i32epfd, EPOLL_CTL_ADD, (*iter)->get_ioobj_handle(), &evt);
 				if (0 == i32Ret)
 				{
 					pairRet = m_setIoObjs.insert(*iter);
