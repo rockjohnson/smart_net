@@ -67,12 +67,12 @@ namespace nm_smartnet
 
 	void CTcpAcceptor::on_opened()
 	{
-
+		TRACE_LOG(m_log, "on_opened\n");
 	}
 
 	void CTcpAcceptor::on_closed()
 	{
-
+		TRACE_LOG(m_log, "on_closed\n");
 	}
 
 	int32_t CTcpAcceptor::close()
