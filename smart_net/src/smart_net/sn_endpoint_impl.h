@@ -73,8 +73,8 @@ namespace nm_smartnet
 		virtual void handle_input_evt();
 		virtual void handle_output_evt();
 		virtual void handle_io_error(int32_t i32ErrCode);
-		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
-		virtual void handle_del_from_io_task(int32_t i32IoType);
+		virtual void handle_added_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
+		virtual void handle_deled_from_io_task(int32_t i32IoType);
 		virtual int32_t get_ioobj_handle();
 
 //		virtual u_int32_t get_io_evt(int32_t i32IoType);
@@ -170,8 +170,8 @@ namespace nm_smartnet
 		virtual void handle_input_evt();
 		virtual void handle_output_evt();
 		virtual void handle_io_error(int32_t i32ErrCode);
-		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
-		virtual void handle_del_from_io_task(int32_t i32IoType);
+		virtual void handle_added_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
+		virtual void handle_deled_from_io_task(int32_t i32IoType);
 		virtual sock_handle_t get_ioobj_handle();
 
 		virtual void handle_add_into_timer_task();
@@ -289,13 +289,8 @@ namespace nm_smartnet
 		virtual void handle_output_evt();
 		virtual void handle_io_error(int32_t i32ErrCode);
 		virtual sock_handle_t get_ioobj_handle();
-		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32RetCode);
-
-//		virtual u_int32_t get_io_evt(int32_t i32IoType);
-//		virtual void set_input_task_id(int32_t i32id);
-//		virtual int32_t get_input_task_id();
-//		virtual void set_output_task_id(int32_t i32id);
-//		virtual int32_t get_output_task_id();
+		virtual void handle_added_into_io_task(int32_t i32IoType, int32_t i32RetCode);
+		virtual void handle_deled_from_io_task(int32_t i32IoType);
 
 	public:
 		///first, you should open this endpoint, but it is async. and if succeed, then on_opened will callback.
@@ -314,7 +309,7 @@ namespace nm_smartnet
 		virtual void on_opened(int32_t i32ErrCode) = 0;
 		virtual void on_closed() = 0;
 		virtual void on_recved_data(nm_mem::mem_ptr_t &pData) = 0;
-		virtual void on_io_error(int32_t i32ErrCode) = 0;
+//		virtual void on_io_error(int32_t i32ErrCode) = 0;
 
 	private:
 		int32_t handling_closed_to_added_into_helper(int32_t i32CurState, int32_t i32Evt,
@@ -333,9 +328,9 @@ namespace nm_smartnet
 				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_close_while_opened(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_ot_to_deling_from_it(int32_t i32CurState, int32_t i32Evt,
+		int32_t handling_deling_from_it_to_deling_from_ot(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_it_to_closed(int32_t i32CurState, int32_t i32Evt,
+		int32_t handling_deling_from_ot_to_closed(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);

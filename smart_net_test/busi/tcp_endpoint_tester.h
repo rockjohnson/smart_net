@@ -16,8 +16,14 @@ namespace nm_busi
 	class CTcpEndpointTester : public nm_smartnet::CTcpEndpoint
 	{
 	public:
-		CTcpEndpointTester();
+		CTcpEndpointTester(nm_smartnet::tcp_acceptor_ptr_t&);
 		virtual ~CTcpEndpointTester();
+
+	protected:
+		///
+		virtual void on_opened(int32_t i32ErrCode);
+		virtual void on_closed();
+		virtual void on_recved_data(nm_mem::mem_ptr_t &pData);
 	};
 	typedef nm_utils::CSmartPtr<nm_busi::CTcpEndpointTester> tcp_ep_tester_ptr_t;
 

@@ -32,8 +32,8 @@ namespace nm_framework
 		virtual void handle_input_evt() = 0;
 		virtual void handle_output_evt() = 0;
 		virtual void handle_io_error(int32_t i32ErrCode) = 0;
-		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode) = 0;
-		virtual void handle_del_from_io_task(int32_t i32IoType) = 0;
+		virtual void handle_added_into_io_task(int32_t i32IoType, int32_t i32ReturnCode) = 0;
+		virtual void handle_deled_from_io_task(int32_t i32IoType) = 0;
 		virtual sock_handle_t get_ioobj_handle() = 0;
 
 		void set_io_evt(int32_t i32IoType, u_int32_t ui32IoEvt)

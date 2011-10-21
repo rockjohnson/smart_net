@@ -29,7 +29,8 @@ namespace nm_framework
 		// TODO Auto-generated destructor stub
 	}
 
-	int32_t CSNEngine::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt, int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
+	int32_t CSNEngine::start(u_int32_t ui32InputThreadCnt, u_int32_t ui32OutputThreadCnt,
+			int32_t i32IoEvtNotifier, int32_t i32MsTimeout)
 	{
 		SParas sp;
 		sp.ui32A = ui32InputThreadCnt;
@@ -43,7 +44,8 @@ namespace nm_framework
 	 *
 	 * if this func return err, you should call stop func :)...
 	 * */
-	int32_t CSNEngine::starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CSNEngine::starting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState,
+			cmn_pvoid_t pVoid)
 	{
 		using namespace nm_thread;
 
@@ -55,7 +57,9 @@ namespace nm_framework
 		int32_t i32MsTimeout = sp.i32D;
 
 		///checking
-		IF_TRUE_THEN_RETURN_CODE((0 == ui32InputThreadCnt || 0 == ui32OutputThreadCnt || 0 == i32IoEvtNotifier), RET_ERR);
+		IF_TRUE_THEN_RETURN_CODE(
+				(0 == ui32InputThreadCnt || 0 == ui32OutputThreadCnt || 0 == i32IoEvtNotifier),
+				RET_ERR);
 		///start thread
 		///output task
 		int32_t i32Ret = 0;
@@ -107,7 +111,8 @@ namespace nm_framework
 		return RET_SUC;
 	}
 
-	int32_t CSNEngine::stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CSNEngine::stopping(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState,
+			cmn_pvoid_t pVoid)
 	{
 		///stop all io thread
 		for (thread_vec_t::iterator iter = m_vecThreads.begin(); iter != m_vecThreads.end(); ++iter)
@@ -149,8 +154,11 @@ namespace nm_framework
 		if (EIT_INPUT_TYPE == i32IoType)
 		{
 			///assign input task, thread safe?
-			input_handle_task_ptr_t pInputTask;
-			for (input_task_vec_t::iterator iter = m_vecInputTasks.begin(); iter != m_vecInputTasks.end(); ++iter)
+			CMN_ASSERT(!m_vecInputTasks.empty());
+			input_handle_task_ptr_t pInputTask = *(m_vecInputTasks.begin());
+			i32MinCnt = pInputTask->get_ioobj_cnt();
+			for (input_task_vec_t::iterator iter = m_vecInputTasks.begin(); iter
+					!= m_vecInputTasks.end(); ++iter)
 			{
 				i32Tmp = (*iter)->get_ioobj_cnt();
 				if (0 == i32Tmp)
@@ -170,10 +178,11 @@ namespace nm_framework
 		if (EIT_OUTPUT_TYPE == i32IoType)
 		{
 			///output task
-			i32MinCnt = 0;
 			i32Tmp = 0;
-			output_handle_task_ptr_t pOutputTask;
-			for (output_task_vec_t::iterator iter = m_vecOutputTasks.begin(); iter != m_vecOutputTasks.end(); ++iter)
+			output_handle_task_ptr_t pOutputTask = *(m_vecOutputTasks.begin());
+			i32MinCnt = pOutputTask->get_ioobj_cnt();
+			for (output_task_vec_t::iterator iter = m_vecOutputTasks.begin(); iter
+					!= m_vecOutputTasks.end(); ++iter)
 			{
 				i32Tmp = (*iter)->get_ioobj_cnt();
 				if (0 == i32Tmp)

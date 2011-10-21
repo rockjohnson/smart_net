@@ -160,7 +160,7 @@ namespace nm_event
 
 				stRet = m_setIoObjs.erase(*iter);
 				CMN_ASSERT(1 == stRet);
-				(*iter)->handle_del_from_io_task(m_i32IoType);
+				(*iter)->handle_deled_from_io_task(m_i32IoType);
 			}
 
 			vecTmp.clear();
@@ -189,14 +189,14 @@ namespace nm_event
 					pairRet = m_setIoObjs.insert(*iter);
 					CMN_ASSERT(pairRet.second);
 				}
-				(*iter)->handle_add_into_io_task(m_i32IoType, i32Ret);
+				(*iter)->handle_added_into_io_task(m_i32IoType, i32Ret);
 			}
 
 			vecTmp.clear();
 		}
 
 		///wait io event...
-		TRACE_LOG(m_log, ELL_DEBUG, "epoll wait\n");
+		//TRACE_LOG(m_log, ELL_DEBUG, "epoll wait\n");
 		int32_t i32Ret = epoll_wait(m_i32epfd, m_arrEvts, MAX_EVENTS, m_i32MsTimeout);
 		if (-1 == i32Ret)
 		{
