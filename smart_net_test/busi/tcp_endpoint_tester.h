@@ -17,6 +17,7 @@ namespace nm_busi
 	{
 	public:
 		CTcpEndpointTester(nm_smartnet::tcp_acceptor_ptr_t&);
+		CTcpEndpointTester(nm_smartnet::tcp_connector_ptr_t&);
 		virtual ~CTcpEndpointTester();
 
 	protected:

@@ -17,6 +17,12 @@ namespace nm_busi
 		// TODO Auto-generated constructor stub
 	}
 
+	CTcpEndpointTester::CTcpEndpointTester(nm_smartnet::tcp_connector_ptr_t &pT)
+		:nm_smartnet::CTcpEndpoint(pT)
+		{
+			// TODO Auto-generated constructor stub
+		}
+
 	CTcpEndpointTester::~CTcpEndpointTester()
 	{
 		// TODO Auto-generated destructor stub

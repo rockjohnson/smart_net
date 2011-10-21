@@ -327,7 +327,7 @@ namespace nm_smartnet
 
 	CTcpEndpoint::CTcpEndpoint(const tcp_connector_ptr_t &pTcpConnector) :
 		m_sm(this), m_pTcpConnector(pTcpConnector), m_i32SMPendingEvt(-1),
-				m_pSNEngine(m_pTcpConnector->get_engine())
+				m_pSNEngine(pTcpConnector->get_engine())
 	{
 		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDED_INTO_HELPER,
 				&CTcpEndpoint::handling_closed_to_added_into_helper);
@@ -890,6 +890,7 @@ namespace nm_smartnet
 	{
 		CMN_ASSERT(NULL == m_pTcpSock);
 		m_pTcpSock = SYS_NOTRW_NEW(nm_network::CTcpSock);
+		m_pTcpSock->open();
 		m_pTcpSock->set_nonblock(true);
 		m_pTcpSock->connect(m_strAcceptorIp, m_ui16AcceptorPort);
 

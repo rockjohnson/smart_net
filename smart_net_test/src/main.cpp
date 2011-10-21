@@ -29,7 +29,8 @@ int main()
 //	std::cout<<"ok3"<<std::endl;
 	nm_busi::tcp_ep_tester_ptr_t pA = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
 	pA->open();
-//	nm_busi::tcp_ep_tester_ptr_t pB = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpConnector));
+	nm_busi::tcp_ep_tester_ptr_t pB = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpConnector));
+	pB->open();
 #endif
 
 	//	pA->open();
