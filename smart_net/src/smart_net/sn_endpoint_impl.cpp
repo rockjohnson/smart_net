@@ -34,7 +34,7 @@ namespace nm_smartnet
 				&CTcpAcceptor::handling_deling_from_it_to_closed);
 
 		///
-		m_log.init("./", "tcp_acceptor_", ELL_DEBUG, 300);
+		m_log.init(".", "tcp_acceptor_", ELL_DEBUG, 300);
 		///
 		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
 	}
@@ -376,7 +376,7 @@ namespace nm_smartnet
 	 * */
 	int32_t CTcpEndpoint::open()
 	{
-		m_log.init("./", "tcp_endpoint_", ELL_DEBUG, 60);
+		m_log.init(".", "tcp_endpoint_", ELL_DEBUG, 60);
 
 		return m_sm.post_evt(EE_OPEN, NULL);
 	}

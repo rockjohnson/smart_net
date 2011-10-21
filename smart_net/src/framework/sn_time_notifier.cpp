@@ -13,7 +13,6 @@ namespace nm_framework
 {
 
 	CTimeNotifier::CTimeNotifier()
-	:m_vecTimerAddCache(100), m_vecTimerDelCache(100)
 	{
 		// TODO Auto-generated constructor stub
 	}

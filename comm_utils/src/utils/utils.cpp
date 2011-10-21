@@ -288,7 +288,8 @@ namespace nm_utils
 		}
 #elif __PLATFORM__ == __PLATFORM_LINUX__
 		char *pszTemp = strdupa(pcszDir);
-		char *pszToken = strtok(pszTemp, DELIMITERS);
+		char *pTmp = NULL;
+		char *pszToken = strtok_r(pszTemp, DELIMITERS, &pTmp);
 		if (NULL == pszToken)
 		{
 			return -1;
@@ -311,7 +312,7 @@ namespace nm_utils
 			RETURN_IF_FAIL_EX(mkdir(szTemp, md), -2)
 		}
 
-		while (NULL != (pszToken = strtok(NULL, DELIMITERS)))
+		while (NULL != (pszToken = strtok_r(NULL, DELIMITERS, &pTmp)))
 		{
 			strcat(szTemp, DELIMITERS);
 			strcat(szTemp, pszToken);

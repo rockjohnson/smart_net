@@ -66,7 +66,6 @@ namespace nm_event
 		m_i32epfd(-1), m_i32MsTimeout(0), m_i32IoType(0)
 	{
 		ZERO_MEM(&m_arrEvts, sizeof(m_arrEvts));
-		m_log.init("./", "epoll_", ELL_DEBUG, 1000);
 	}
 
 	CEpoll::~CEpoll()
@@ -85,6 +84,10 @@ namespace nm_event
 
 		m_i32IoType = i32IoTaskType;
 		m_i32MsTimeout = i32MsTimeout;
+
+		char buf[1024] = {0};
+		sprintf(buf, "./epoll_%d", i32IoTaskType);
+		m_log.init(buf, "epoll_", ELL_DEBUG, 10);
 
 		return (m_i32epfd = epoll_create(UNUSED)) < 0 ? CMNERR_COMMON_ERR : CMNERR_SUC;
 	}
