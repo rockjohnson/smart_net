@@ -44,7 +44,6 @@
 									<listOptionValue builtIn="false" value="smart_net"/>
 									<listOptionValue builtIn="false" value="comm_utils"/>
 									<listOptionValue builtIn="false" value="pthread"/>
-									<listOptionValue builtIn="false" value="tcmalloc"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1299343604" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/comm_utils/Debug}&quot;"/>

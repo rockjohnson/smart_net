@@ -18,6 +18,7 @@
 
 #include <utils/obj_factory.h>
 #include <utils/smart_lock.h>
+#include <log/smart_log.h>
 
 #include "../framework/sn_io_evt_notifier.h"
 
@@ -90,6 +91,8 @@ private:
 	nm_utils::CSpinLock m_lkIoObjAddCache;
 	io_obj_vec_t m_vecIoObjsDelCache;
 	nm_utils::CSpinLock m_lkIoObjDelCache;
+	///
+	nm_utils::CSmartLog m_log;
 };
 
 }

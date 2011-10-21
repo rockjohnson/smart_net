@@ -66,6 +66,7 @@ namespace nm_event
 		m_i32epfd(-1), m_i32MsTimeout(0), m_i32IoType(0)
 	{
 		ZERO_MEM(&m_arrEvts, sizeof(m_arrEvts));
+		m_log.init("./", "epoll_", ELL_DEBUG, 1000);
 	}
 
 	CEpoll::~CEpoll()
@@ -195,6 +196,7 @@ namespace nm_event
 		int32_t i32Ret = epoll_wait(m_i32epfd, m_arrEvts, MAX_EVENTS, m_i32MsTimeout);
 		if (-1 == i32Ret)
 		{
+			TRACE_LAST_ERR(m_log, "epoll_wait error!\n");
 			CMN_ASSERT(false);
 			return CMNERR_FATAL_ERR;
 		}

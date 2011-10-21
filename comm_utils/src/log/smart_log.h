@@ -21,6 +21,7 @@
 #include "../utils/time_info.h"
 #include "../utils/smart_lock.h"
 #include "../utils/file.h"
+#include "../utils/utils.h"
 
 enum ELogLevel
 {
@@ -94,8 +95,8 @@ namespace nm_utils
 #define TRACE_LAST_ERR(log_obj, expr) \
 		{ \
 			int32_t iErrCode = errno; \
-			char_t szBuf[1024] = {0}; \
-			TRACE_LOG(log_obj, ELL_ERR, "%s: %s(%d)\n", #expr, get_sys_err_msg(iErrCode, szBuf, sizeof(szBuf)), iErrCode); \
+			cmn_char_t szBuf[1024] = {0}; \
+			TRACE_LOG(log_obj, ELL_ERR, "%s: %s(%d)\n", #expr, nm_utils::get_sys_err_msg(iErrCode, szBuf, sizeof(szBuf)), iErrCode); \
 		}
 
 #elif __PLATFORM__ == __PLATFORM_WINDOWS__

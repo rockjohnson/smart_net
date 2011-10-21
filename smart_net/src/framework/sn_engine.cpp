@@ -74,6 +74,7 @@ namespace nm_framework
 			pOutputTask->set_indx(m_vecOutputTasks.size() - 1);
 			m_vecThreads.push_back(pThread);
 		}
+
 		///input task
 		for (int32_t i = 0; i < ui32InputThreadCnt; i++)
 		{
