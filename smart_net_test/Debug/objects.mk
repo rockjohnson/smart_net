@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lsmart_net -lcomm_utils -lpthread
+LIBS := -lsmart_net -lcomm_utils -lpthread -ltcmalloc
 

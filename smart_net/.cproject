@@ -39,7 +39,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/comm_utils/src}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.1888071663" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.other.verbose.663001127" name="Verbose (-v)" superClass="gnu.cpp.compiler.option.other.verbose" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.other.verbose.663001127" name="Verbose (-v)" superClass="gnu.cpp.compiler.option.other.verbose" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.321458048" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.lib.debug.1160321851" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.lib.debug">

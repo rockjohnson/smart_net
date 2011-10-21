@@ -67,12 +67,17 @@ namespace nm_framework
 
 			thread_ptr_t pThread = SYS_NOTRW_NEW(CThread);
 			pThread->assign_task(pOutputTask);
+#if 0
 			i32Ret = pThread->start();
+#endif
 			IF_TRUE_THEN_RETURN_CODE((i32Ret < 0), RET_ERR);
 
 			m_vecOutputTasks.push_back(pOutputTask);
 			pOutputTask->set_indx(m_vecOutputTasks.size() - 1);
 			m_vecThreads.push_back(pThread);
+#if 1
+			thread_ptr_t pTmp = m_vecThreads.front();
+#endif
 		}
 
 		///input task
