@@ -46,18 +46,18 @@ namespace nm_event
 		return pIoEvtNotifier;
 	}
 
-//	/*
-//	 * select ..
-//	 * */
-//	CSelect::CSelect()
-//	{
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	CSelect::~CSelect()
-//	{
-//		// TODO Auto-generated destructor stub
-//	}
+	//	/*
+	//	 * select ..
+	//	 * */
+	//	CSelect::CSelect()
+	//	{
+	//		// TODO Auto-generated constructor stub
+	//	}
+	//
+	//	CSelect::~CSelect()
+	//	{
+	//		// TODO Auto-generated destructor stub
+	//	}
 
 	/*
 	 * epoll ...
@@ -193,9 +193,15 @@ namespace nm_event
 		}
 
 		///wait io event...
+		TRACE_LOG(m_log, ELL_DEBUG, "epoll wait\n");
 		int32_t i32Ret = epoll_wait(m_i32epfd, m_arrEvts, MAX_EVENTS, m_i32MsTimeout);
 		if (-1 == i32Ret)
 		{
+			if (EINTR == errno)
+			{
+				return CMNERR_SUC;
+			}
+
 			TRACE_LAST_ERR(m_log, "epoll_wait error!\n");
 			CMN_ASSERT(false);
 			return CMNERR_FATAL_ERR;

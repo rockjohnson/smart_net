@@ -72,6 +72,11 @@ namespace nm_utils
 	{
 	public:
 		CSmartPtr(T *pObj = 0);
+		CSmartPtr(const CSmartPtr<T> &ptr)
+		:m_pObj(ptr.get_ptr())
+		{
+			inc_ref();
+		}
 		template<typename TT>
 		CSmartPtr(const CSmartPtr<TT> &ptr)
 		:m_pObj(ptr.get_ptr())

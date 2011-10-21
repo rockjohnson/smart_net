@@ -8,12 +8,15 @@
 #ifndef TEST_CPP11_H_
 #define TEST_CPP11_H_
 
+#if 0
 #include <cxxtest/TestSuite.h>
 #include <iostream>
 #include <vector>
 #include <string>
 #include <typeinfo>
 #include <atomic>
+
+
 
 constexpr int get_five()
 {
@@ -146,7 +149,7 @@ template<class F, class P> void g(F f, P t)
 
 /////////////////////////////////////
 
-class CCPPTest: public CxxTest::TestSuite
+class CCPPTest:
 {
 public:
 
@@ -318,4 +321,5 @@ public:
 			}
 		};
 
+#endif
 #endif /* TEST_CPP11_H_ */

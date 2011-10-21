@@ -10,8 +10,6 @@
 
 #include <cxxtest/TestSuite.h>
 
-#define __TEST_STD_THREAD__ 1
-
 #if (__TEST_MY_THREAD__)
 
 #include <thread/thread_ex.h>
@@ -53,7 +51,7 @@ public:
 };
 
 
-//class MyTestSuite : public CxxTest::TestSuite
+//class MyTestSuite :
 //{
 //public:
 //void testAddition( void )
@@ -67,7 +65,7 @@ public:
 
 #include <thread>
 
-class CStdThreadTest : public CxxTest::TestSuite
+class CStdThreadTest :
 {
 
 public:

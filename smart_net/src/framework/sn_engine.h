@@ -8,7 +8,7 @@
 #ifndef __SHARED_OBJ_H__
 #define __SHARED_OBJ_H__
 
-#include <deque>
+#include <vector>
 
 #include <utils/state_machine.h>
 #include <thread/thread_ex.h>
@@ -61,13 +61,13 @@ namespace nm_framework
 		///state
 		nm_utils::CStateMachine<CSNEngine> m_sm;
 		///threads
-		typedef std::deque<nm_thread::thread_ptr_t> thread_vec_t;
+		typedef std::vector<nm_thread::thread_ptr_t> thread_vec_t;
 		thread_vec_t m_vecThreads;
 		///
-		typedef std::deque<input_handle_task_ptr_t> input_task_vec_t;
+		typedef std::vector<input_handle_task_ptr_t> input_task_vec_t;
 		input_task_vec_t m_vecInputTasks;
 		///
-		typedef std::deque<output_handle_task_ptr_t> output_task_vec_t;
+		typedef std::vector<output_handle_task_ptr_t> output_task_vec_t;
 		output_task_vec_t m_vecOutputTasks;
 		///
 		misc_task_ptr_t m_pMiscTask;

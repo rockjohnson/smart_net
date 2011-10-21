@@ -154,33 +154,33 @@ namespace nm_utils
 	}
 
 
-#define LOCAL_FMT_BUF_SIZE (4196)
-	int CSmartLog::trace_log(cmn_cstr_t pcszFmt, ...)
-	{
-        va_list ap;
-        char szBuf[LOCAL_FMT_BUF_SIZE] = {0};
-
-        va_start(ap, pcszFmt);
-        int iRet = vsnprintf(szBuf, LOCAL_FMT_BUF_SIZE, pcszFmt, ap);
-        va_end(ap);
-
-        assert(0 < iRet);
-
-//        if (ET_FILE | m_iTraceTarget)
-//        {
-//        	if (check_log_file() >= 0)
-//        	{
-//        		fwrite(szBuf, 0 > iRet ? LOCAL_FMT_BUF_SIZE : iRet, 1, m_pLogFile);
-//        	}
-//        }
+//#define LOCAL_FMT_BUF_SIZE (4196)
+//	int CSmartLog::trace_log(cmn_cstr_t pcszFmt, ...)
+//	{
+//        va_list ap;
+//        char szBuf[LOCAL_FMT_BUF_SIZE] = {0};
 //
-//        if ((ET_CONSOLE | m_iTraceTarget) && (NULL != stdout))
-//        {
-//        	fwrite(szBuf, 0 > iRet ? LOCAL_FMT_BUF_SIZE : iRet, 1, stdout);
-//        }
-
-		return RET_SUC;
-	}
+//        va_start(ap, pcszFmt);
+//        int iRet = vsnprintf(szBuf, LOCAL_FMT_BUF_SIZE, pcszFmt, ap);
+//        va_end(ap);
+//
+//        assert(0 < iRet);
+//
+////        if (ET_FILE | m_iTraceTarget)
+////        {
+////        	if (check_log_file() >= 0)
+////        	{
+////        		fwrite(szBuf, 0 > iRet ? LOCAL_FMT_BUF_SIZE : iRet, 1, m_pLogFile);
+////        	}
+////        }
+////
+////        if ((ET_CONSOLE | m_iTraceTarget) && (NULL != stdout))
+////        {
+////        	fwrite(szBuf, 0 > iRet ? LOCAL_FMT_BUF_SIZE : iRet, 1, stdout);
+////        }
+//
+//		return RET_SUC;
+//	}
 
 	/**
 	 * trace log to target...

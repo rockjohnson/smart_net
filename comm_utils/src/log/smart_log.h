@@ -51,7 +51,7 @@ namespace nm_utils
 		///the trace log func
 		void trace_log(const int32_t iLogLev, cmn_cstr_t pcszFileName, cmn_cstr_t pcszFunc, int32_t i32LineNo, cmn_cstr_t pcszLog, int32_t i32Target);
 		///...
-		int32_t trace_log(cmn_cstr_t pcszFmt, ...);
+		//int32_t trace_log(cmn_cstr_t pcszFmt, ...);
 		///you should close the log after your using.
 		int32_t close(bool bClose = false);
 		///

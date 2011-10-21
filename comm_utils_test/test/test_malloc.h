@@ -8,7 +8,7 @@
 #ifndef TEST_MALLOC_H_
 #define TEST_MALLOC_H_
 
-//#include <stdlib.h>
+#include <stdlib.h>
 //#include <jemalloc/jemalloc.h>
 #include <cxxtest/TestSuite.h>
 

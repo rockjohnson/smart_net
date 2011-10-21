@@ -71,6 +71,8 @@ int main()
 
 #endif
 
+	sleep(100000000);
+
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 	return 0;
 }
