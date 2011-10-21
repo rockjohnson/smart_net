@@ -8,6 +8,8 @@
 #ifndef __SN_SOCKET_IMPL_H__
 #define __SN_SOCKET_IMPL_H__
 
+#include <memory/mem.h>
+
 #include "../common/sn_common.h"
 #include "sn_socket.h"
 
@@ -41,6 +43,12 @@ public:
 	virtual int32_t set_nonblock(bool bFlag);
 	virtual CIpv4Addr& get_peer_addr();
 	virtual CIpv4Addr& get_local_addr();
+
+	virtual int32_t send(nm_mem::mem_ptr_t&);
+	virtual int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len);
+
+	virtual int32_t recv(nm_mem::mem_ptr_t&);
+	virtual int32_t recv(cmn_pvoid_t pV, u_int32_t ui32Size);
 
 private:
 	CIpv4Addr m_localaddr;

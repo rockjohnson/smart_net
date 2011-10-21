@@ -102,7 +102,8 @@ namespace nm_network
 		struct sockaddr_in remoteAddr;
 		ZERO_MEM(&remoteAddr, sizeof(remoteAddr));
 		socklen_t slSize = sizeof(remoteAddr);
-		sock_handle_t sockhandle = ::accept(m_handle, reinterpret_cast<struct sockaddr*> (&remoteAddr), &slSize);
+		sock_handle_t sockhandle = ::accept(m_handle,
+				reinterpret_cast<struct sockaddr*> (&remoteAddr), &slSize);
 		if (INVALID_SOCKET >= sockhandle)
 		{
 			CMN_ASSERT(false);
@@ -123,8 +124,64 @@ namespace nm_network
 		destAddr.sin_port = remoteAddr.get_port_nbo();
 		destAddr.sin_addr = *static_cast<struct in_addr*> (remoteAddr.get_ip_nbo());
 
-		int32_t i32ret = ::connect(m_handle, reinterpret_cast<struct sockaddr*> (&destAddr), sizeof(destAddr));
+		int32_t i32ret = ::connect(m_handle, reinterpret_cast<struct sockaddr*> (&destAddr),
+				sizeof(destAddr));
 
-		return CMNERR_SUC == i32ret ? CMNERR_SUC : (EINPROGRESS == errno ? SNERR_IN_PROGRESS : CMNERR_COMMON_ERR);
+		return CMNERR_SUC == i32ret ? CMNERR_SUC : (EINPROGRESS == errno ? SNERR_IN_PROGRESS
+				: CMNERR_COMMON_ERR);
+	}
+
+	int32_t CTcpSock::connect(const cmn_string_t &strAcceptorIp, u_int64_t ui16AcceptorPort)
+	{
+		struct sockaddr_in destAddr;
+		destAddr.sin_family = AF_INET;
+		destAddr.sin_port = ::htons(ui16AcceptorPort);
+		destAddr.sin_addr.s_addr = ::inet_addr(strAcceptorIp.c_str());
+
+		int32_t i32ret = ::connect(m_handle, reinterpret_cast<struct sockaddr*> (&destAddr),
+				sizeof(destAddr));
+
+		return CMNERR_SUC == i32ret ? CMNERR_SUC : (EINPROGRESS == errno ? SNERR_IN_PROGRESS
+				: CMNERR_COMMON_ERR);
+	}
+
+	sock_handle_t CTcpSock::get_handle()
+	{
+		return m_handle;
+	}
+
+	bool CTcpSock::is_opened()
+	{
+		return (INVALID_SOCKET < m_handle);
+	}
+
+	int32_t CTcpSock::send(nm_mem::mem_ptr_t&)
+	{
+
+	}
+
+	int32_t CTcpSock::send(cmn_pvoid_t pV, u_int32_t ui32Len)
+	{
+
+	}
+
+	int32_t CTcpSock::recv(nm_mem::mem_ptr_t&)
+	{
+
+	}
+
+	int32_t CTcpSock::recv(cmn_pvoid_t pV, u_int32_t ui32Size)
+	{
+
+	}
+
+	CIpv4Addr& CTcpSock::get_peer_addr()
+	{
+		return m_peeraddr;
+	}
+
+	CIpv4Addr& CTcpSock::get_local_addr()
+	{
+		return m_localaddr;
 	}
 }

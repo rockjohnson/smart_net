@@ -45,6 +45,12 @@ public:
 	virtual int32_t set_nonblock(bool bFlag) = 0;
 	virtual nm_network::CIpv4Addr& get_peer_addr() = 0;
 	virtual nm_network::CIpv4Addr& get_local_addr() = 0;
+
+	virtual int32_t send(nm_mem::mem_ptr_t&) = 0;
+	virtual int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len) = 0;
+
+	virtual int32_t recv(nm_mem::mem_ptr_t&) = 0;
+	virtual int32_t recv(cmn_pvoid_t pV, u_int32_t ui32Size) = 0;
 };
 typedef nm_utils::CSmartPtr<nm_framework::ISocket> sock_ptr_t;
 

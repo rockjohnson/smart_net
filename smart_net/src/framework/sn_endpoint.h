@@ -29,7 +29,7 @@ public:
 public:
 	virtual bool is_openned() = 0;
 	virtual int32_t close() = 0; ///close and delete from net engine.
-	virtual int32_t send_data(nm_memory::mem_ptr_t &pData) = 0; ///thread-safe send func.
+	virtual int32_t send_data(nm_mem::mem_ptr_t &pData) = 0; ///thread-safe send func.
 	virtual int32_t get_type() = 0;
 	virtual int32_t get_proto_id() = 0;
 	virtual nm_network::ipv4_addr_ptr_t& get_peer_addr() const = 0;
@@ -39,7 +39,7 @@ public:
 
 protected:
 	virtual void on_opened(nm_network::CIpv4Addr &peeraddr) = 0;
-	virtual void on_recv_data(nm_memory::mem_ptr_t &pdata, nm_network::CIpv4Addr &peeraddr) = 0;
+	virtual void on_recv_data(nm_mem::mem_ptr_t &pdata, nm_network::CIpv4Addr &peeraddr) = 0;
 	virtual void on_error(int32_t i32errcode) = 0;
 	virtual void on_closed() = 0;
 };

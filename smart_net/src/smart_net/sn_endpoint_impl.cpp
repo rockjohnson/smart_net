@@ -64,6 +64,16 @@ namespace nm_smartnet
 		return m_sm.post_evt(EE_OPEN, &sp);
 	}
 
+	void CTcpAcceptor::on_opened()
+	{
+
+	}
+
+	void CTcpAcceptor::on_closed()
+	{
+
+	}
+
 	int32_t CTcpAcceptor::close()
 	{
 		return m_sm.post_evt(EE_CLOSE, NULL);
@@ -134,7 +144,7 @@ namespace nm_smartnet
 
 		CMN_ASSERT(m_pTcpSockListener->is_opened());
 
-		(void) on_opened(CMNERR_SUC);
+		on_opened();
 
 		return CMNERR_SUC;
 	}
@@ -371,6 +381,11 @@ namespace nm_smartnet
 		return m_sm.post_evt(EE_OPEN, NULL);
 	}
 
+	sock_handle_t CTcpEndpoint::get_ioobj_handle()
+	{
+		return m_pTcpSock->get_handle();
+	}
+
 	/**
 	 * 此函数只将endpoint加入到connector或acceptor中
 	 * */
@@ -587,6 +602,14 @@ namespace nm_smartnet
 	int32_t CTcpEndpoint::close()
 	{
 		return m_sm.post_evt(EE_CLOSE, NULL);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpEndpoint::send_data(nm_mem::mem_ptr_t &pData)
+	{
+		return m_sm.get_cur_state() == ES_OPENED ? m_pTcpSock->send(pData) : CMNERR_COMMON_ERR;
 	}
 
 	/*--------------------------------------------------------------------------------------------*/

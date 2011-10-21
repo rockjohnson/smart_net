@@ -7,7 +7,7 @@
 
 #include "mem.h"
 
-namespace nm_memory
+namespace nm_mem
 {
 
 CMemBlock::CMemBlock()

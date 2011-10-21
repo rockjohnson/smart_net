@@ -85,7 +85,7 @@ namespace nm_smartnet
 
 	public:
 		int32_t open(const cmn_string_t &strIP, u_int16_t ui16Port);
-		virtual void on_opened(int32_t i32ErrCode);
+		virtual void on_opened();
 		int32_t close();
 		virtual void on_closed();
 		int32_t add_endpoint(const tcp_endpoint_ptr_t &pTcpEP);
@@ -288,9 +288,8 @@ namespace nm_smartnet
 		virtual void handle_input_evt();
 		virtual void handle_output_evt();
 		virtual void handle_io_error(int32_t i32ErrCode);
-		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
-		virtual void handle_erased_from_ioset(int32_t i32IoType);
-		virtual int32_t get_ioobj_handle();
+		virtual sock_handle_t get_ioobj_handle();
+		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32RetCode);
 
 //		virtual u_int32_t get_io_evt(int32_t i32IoType);
 //		virtual void set_input_task_id(int32_t i32id);
@@ -304,7 +303,7 @@ namespace nm_smartnet
 		///if you want close this endpoint, please invoke this func, but it is aysnc.
 		virtual int32_t close();
 		///send data, async.
-		virtual int32_t send_data(nm_memory::mem_ptr_t &pData);
+		virtual int32_t send_data(nm_mem::mem_ptr_t &pData);
 		//int32_t get_type();
 		nm_network::ipv4_addr_ptr_t& get_peer_addr() const;
 		nm_network::ipv4_addr_ptr_t& get_local_addr() const;
@@ -314,7 +313,7 @@ namespace nm_smartnet
 		///
 		virtual void on_opened(int32_t i32ErrCode) = 0;
 		virtual void on_closed() = 0;
-		virtual void on_recved_data(nm_memory::mem_ptr_t &pData) = 0;
+		virtual void on_recved_data(nm_mem::mem_ptr_t &pData) = 0;
 		virtual void on_io_error(int32_t i32ErrCode) = 0;
 
 	private:
@@ -373,7 +372,7 @@ namespace nm_smartnet
 		int32_t open(const std::string &strMulticastIP, const std::string &strBindIP,
 				u_int16_t ui16BindPort);
 		int32_t close();
-		int32_t send_data(nm_memory::mem_ptr_t &pData);
+		int32_t send_data(nm_mem::mem_ptr_t &pData);
 
 	protected:
 		virtual void handle_input_evt(); ///handle input event.
@@ -383,7 +382,7 @@ namespace nm_smartnet
 		virtual void on_opened() = 0;
 		virtual void on_closed() = 0;
 		virtual void on_error() = 0;
-		virtual void on_recved_data(nm_memory::mem_ptr_t &pData) = 0;
+		virtual void on_recved_data(nm_mem::mem_ptr_t &pData) = 0;
 	};
 }
 

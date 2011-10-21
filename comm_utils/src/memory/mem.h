@@ -11,7 +11,7 @@
 #include "../common/common.h"
 #include "../utils/smart_ptr.h"
 
-namespace nm_memory
+namespace nm_mem
 {
 
 class CMemBlock : public nm_cmn_base::ICommonBase
@@ -32,7 +32,7 @@ private:
 	u_int32_t m_ui32Offset;
 	u_int32_t m_ui32Len;
 };
-typedef nm_utils::CSmartPtr<nm_memory::CMemBlock> mem_ptr_t;
+typedef nm_utils::CSmartPtr<nm_mem::CMemBlock> mem_ptr_t;
 
 }
 
