@@ -62,10 +62,14 @@ namespace nm_framework
 		for (int32_t i = 0; i < ui32OutputThreadCnt; i++)
 		{
 			output_handle_task_ptr_t pOutputTask = SYS_NOTRW_NEW(COutputHandleTask);
+			i32Ret = pOutputTask->init(i32IoEvtNotifier, i32MsTimeout);
+			IF_TRUE_THEN_RETURN_CODE((i32Ret < 0), RET_ERR);
+
 			thread_ptr_t pThread = SYS_NOTRW_NEW(CThread);
 			pThread->assign_task(pOutputTask);
 			i32Ret = pThread->start();
 			IF_TRUE_THEN_RETURN_CODE((i32Ret < 0), RET_ERR);
+
 			m_vecOutputTasks.push_back(pOutputTask);
 			pOutputTask->set_indx(m_vecOutputTasks.size() - 1);
 			m_vecThreads.push_back(pThread);
@@ -74,10 +78,14 @@ namespace nm_framework
 		for (int32_t i = 0; i < ui32InputThreadCnt; i++)
 		{
 			input_handle_task_ptr_t pInputTask = SYS_NOTRW_NEW(CInputHandleTask);
+			i32Ret = pInputTask->init(i32IoEvtNotifier, i32MsTimeout);
+			IF_TRUE_THEN_RETURN_CODE((i32Ret < 0), RET_ERR);
+
 			thread_ptr_t pThread = SYS_NOTRW_NEW(CThread);
 			pThread->assign_task(pInputTask);
 			i32Ret = pThread->start();
 			IF_TRUE_THEN_RETURN_CODE((i32Ret < 0), RET_ERR);
+
 			m_vecInputTasks.push_back(pInputTask);
 			pInputTask->set_id(m_vecInputTasks.size() - 1);
 			m_vecThreads.push_back(pThread);

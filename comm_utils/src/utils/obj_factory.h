@@ -26,7 +26,7 @@ public:
 	virtual ~CObjFactory(){}
 
 public:
-	virtual obj_ptr_t& create_obj(int32_t i32Type) = 0;
+	virtual obj_ptr_t create_obj(int32_t i32Type) = 0;
 //	{
 //		(void)i32Type;
 //		return obj_ptr_t(SYS_NOTRW_NEW(T));

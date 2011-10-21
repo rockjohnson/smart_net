@@ -28,7 +28,7 @@ class CIoEvtNotifierFactory : public nm_utils::CObjFactory<nm_framework::IIoEvtN
 {
 
 public:
-	virtual obj_ptr_t& create_obj(int32_t i32Type);
+	virtual obj_ptr_t create_obj(int32_t i32Type);
 };
 
 /**

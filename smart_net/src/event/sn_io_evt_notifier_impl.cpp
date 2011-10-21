@@ -10,11 +10,11 @@
 namespace nm_event
 {
 
-	CIoEvtNotifierFactory::obj_ptr_t& CIoEvtNotifierFactory::create_obj(int32_t i32IoEvtNotifier)
+	CIoEvtNotifierFactory::obj_ptr_t CIoEvtNotifierFactory::create_obj(int32_t i32IoEvtNotifier)
 	{
 		using namespace nm_framework;
 
-		io_evt_notifier_ptr_t pIoEvtNotifier = NULL;
+		CIoEvtNotifierFactory::obj_ptr_t pIoEvtNotifier = NULL;
 
 		if (EIEN_ALL <= i32IoEvtNotifier || EIEN_NONE >= i32IoEvtNotifier)
 		{

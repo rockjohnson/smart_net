@@ -178,13 +178,13 @@ void COutputHandleTask::set_indx(int32_t i32Indx)
 	m_i32TaskId = i32Indx;
 }
 
-int32_t COutputHandleTask::init(int32_t i32ioevtnotifier, int32_t i32MStimeout)
+int32_t COutputHandleTask::init(int32_t i32IoEvtNotifier, int32_t i32MStimeout)
 {
 	IF_TRUE_THEN_RETURN_CODE(NULL != m_pIoEvtNotifier, CMNERR_COMMON_ERR);
 
 	///create io event notify mechanism obj.
 	nm_event::CIoEvtNotifierFactory fac;
-	m_pIoEvtNotifier = fac.create_obj(i32ioevtnotifier);
+	m_pIoEvtNotifier = fac.create_obj(i32IoEvtNotifier);
 	IF_TRUE_THEN_RETURN_CODE(NULL == m_pIoEvtNotifier, CMNERR_COMMON_ERR);
 
 	return m_pIoEvtNotifier->init(EIT_OUTPUT_TYPE, i32MStimeout);
