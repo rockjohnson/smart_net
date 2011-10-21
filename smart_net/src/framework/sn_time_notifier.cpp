@@ -54,7 +54,7 @@ namespace nm_framework
 			}
 
 			///delete cache
-			for (timer_vec_t::iterator iter = m_vecTimerDelCache.begin(); iter != m_vecTimerDelCache.end(); ++iter)
+			for (timer_vec_t::iterator iter = vecTmp.begin(); iter != vecTmp.end(); ++iter)
 			{
 				timer_set_t::size_type ret = m_setTimers.erase(*iter);
 				CMN_ASSERT(1 == ret);
@@ -73,7 +73,7 @@ namespace nm_framework
 			}
 
 			///add cache.
-			for (timer_vec_t::iterator iter = m_vecTimerAddCache.begin(); iter != m_vecTimerAddCache.end(); iter++)
+			for (timer_vec_t::iterator iter = vecTmp.begin(); iter != vecTmp.end(); iter++)
 			{
 				timer_set_ret_t ret = m_setTimers.insert(*iter);
 				CMN_ASSERT(ret.second);

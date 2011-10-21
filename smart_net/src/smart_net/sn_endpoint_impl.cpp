@@ -693,6 +693,8 @@ namespace nm_smartnet
 
 		///
 		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT);
+		///
+		m_log.init("tcp_connector", "c_", ELL_DEBUG, 60);
 	}
 
 	/**
@@ -1067,12 +1069,12 @@ namespace nm_smartnet
 
 	void CTcpConnector::on_opened()
 	{
-
+		TRACE_LOG(m_log, ELL_DEBUG, "tcp connect opened!\n");
 	}
 
 	void CTcpConnector::on_closed()
 	{
-
+		TRACE_LOG(m_log, ELL_DEBUG, "tcp connect closed!\n");
 	}
 
 	/**

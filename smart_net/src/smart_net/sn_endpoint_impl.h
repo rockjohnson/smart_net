@@ -177,12 +177,6 @@ namespace nm_smartnet
 		virtual void handle_add_into_timer_task();
 		virtual void handle_del_from_timer_task();
 
-//		virtual u_int32_t get_io_evt(int32_t i32IoType);
-//		virtual void set_input_task_id(int32_t i32id);
-//		virtual int32_t get_input_task_id();
-//		virtual void set_output_task_id(int32_t i32id);
-//		virtual int32_t get_output_task_id();
-
 	private:
 		int32_t add_endpoint(const tcp_endpoint_ptr_t&);
 		int32_t del_endpoint(const tcp_endpoint_ptr_t&);
@@ -238,6 +232,7 @@ namespace nm_smartnet
 		nm_utils::CSpinLock m_lkIdleEps;
 		typedef std::deque<tcp_endpoint_ptr_t> tcp_endpoint_deque_t;
 		tcp_endpoint_deque_t m_dequeIdleEps;
+		nm_utils::CSmartLog m_log;
 	};
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpConnector> tcp_connector_ptr_t;
 
