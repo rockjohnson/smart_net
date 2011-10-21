@@ -213,7 +213,7 @@ namespace nm_smartnet
 				cmn_pvoid_t pVoid);
 		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_ot_after_close_to_deling_from_tt(int32_t i32CurState, int32_t i32Evt,
+		int32_t handling_deling_from_ot_close_to_deling_from_tt(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_close_while_deling_from_ot_normal(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
@@ -224,8 +224,8 @@ namespace nm_smartnet
 
 	protected:
 		virtual void on_timer();
-		virtual void on_open();
-		virtual void on_close();
+		virtual void on_opened();
+		virtual void on_closed();
 
 	private:
 		nm_network::tcp_sock_ptr_t m_pTcpSock;

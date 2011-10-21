@@ -108,7 +108,7 @@ namespace nm_event
 		return CMNERR_COMMON_ERR;
 	}
 
-	int32_t CEpoll::add_io_obj(const nm_framework::io_obj_ptr_t &pIoObj)
+	int32_t CEpoll::add_ioobj(const nm_framework::io_obj_ptr_t &pIoObj)
 	{
 		CMN_ASSERT(pIoObj != NULL);
 		IF_TRUE_THEN_RETURN_CODE(0 == pIoObj->get_io_evt(m_i32IoType), CMNERR_SUC); ///no event
@@ -121,7 +121,7 @@ namespace nm_event
 		return CMNERR_SUC;
 	}
 
-	int32_t CEpoll::del_io_obj(const nm_framework::io_obj_ptr_t &pIoObj)
+	int32_t CEpoll::del_ioobj(const nm_framework::io_obj_ptr_t &pIoObj)
 	{
 		CMN_ASSERT(pIoObj != NULL);
 		IF_TRUE_THEN_RETURN_CODE(0 == pIoObj->get_io_evt(m_i32IoType), CMNERR_SUC); ///no event

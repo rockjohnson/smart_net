@@ -45,7 +45,7 @@ public:
 	int32_t add_io_obj(const io_obj_ptr_t &pioobj);
 	int32_t del_io_obj(const io_obj_ptr_t &pioobj);
 	///
-	int32_t get_ioobj_cnt();
+	u_int32_t get_ioobj_cnt(){return m_pIoEvtNotifier->get_ioobj_cnt();}
 
 private:
 	io_evt_notifier_ptr_t m_pIoEvtNotifier; ///the io event notify mechanism obj;
@@ -77,7 +77,7 @@ public:
 	int32_t add_io_obj(const io_obj_ptr_t &pioobj);
 	int32_t del_io_obj(const io_obj_ptr_t &pioobj);
 	///
-	int32_t get_ioobj_cnt();
+	int32_t get_ioobj_cnt(){return m_pIoEvtNotifier->get_ioobj_cnt();}
 
 private:
 	io_evt_notifier_ptr_t m_pIoEvtNotifier; ///the io event notify mechanism obj;

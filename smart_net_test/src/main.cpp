@@ -20,7 +20,7 @@ int main()
 	IF_TRUE_THEN_RETURN_CODE(pTcpAcceptor->open(cmn_string_t("0.0.0.0"), 9999) < 0, -1);
 
 	nm_smartnet::tcp_connector_ptr_t pTcpConnector = SYS_NOTRW_NEW(nm_smartnet::CTcpConnector(pSNEngine));
-	IF_TRUE_THEN_RETURN_CODE(pTcpConnector->open(cmn_string_t("127.0.0.1"), 9999) < 0, -1);
+	IF_TRUE_THEN_RETURN_CODE(pTcpConnector->open(cmn_string_t("127.0.0.1"), 9999, 1000000) < 0, -1);
 
 //	nm_busi::tcp_ep_tester_ptr_t pA = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
 //	nm_busi::tcp_ep_tester_ptr_t pB = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpConnector));

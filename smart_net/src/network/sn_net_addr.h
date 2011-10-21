@@ -21,8 +21,8 @@ namespace nm_network
 class INetAddr : public nm_cmn_base::ICommonBase
 {
 public:
-	INetAddr();
-	virtual ~INetAddr();
+	INetAddr(){}
+	virtual ~INetAddr(){}
 
 public:
 	virtual int32_t set_ip(cmn_cstr_t pcszIp) = 0;

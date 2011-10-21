@@ -84,7 +84,7 @@ int32_t CInputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 
 //	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
 	pIoObj->set_task_id(EIT_INPUT_TYPE, m_i32TaskId);
-	return m_pIoEvtNotifier->add_io_obj(pIoObj);
+	return m_pIoEvtNotifier->add_ioobj(pIoObj);
 }
 
 /**
@@ -106,7 +106,7 @@ int32_t CInputHandleTask::del_io_obj(const io_obj_ptr_t &pioobj)
 //
 //	return ret.second ? CMNERR_SUC : CMNERR_COMMON_ERR;
 
-	return m_pIoEvtNotifier->del_io_obj(pioobj);
+	return m_pIoEvtNotifier->del_ioobj(pioobj);
 }
 
 //void CInputHandleTask::update_io_set()
@@ -204,14 +204,14 @@ int32_t COutputHandleTask::add_io_obj(const io_obj_ptr_t &pIoObj)
 	CMN_ASSERT(NULL != m_pIoEvtNotifier);
 
 	pIoObj->set_task_id(EIT_OUTPUT_TYPE, m_i32TaskId);
-	return m_pIoEvtNotifier->add_io_obj(pIoObj);
+	return m_pIoEvtNotifier->add_ioobj(pIoObj);
 }
 
 int32_t COutputHandleTask::del_io_obj(const io_obj_ptr_t &pioobj)
 {
 	CMN_ASSERT(NULL != m_pIoEvtNotifier);
 
-	return m_pIoEvtNotifier->del_io_obj(pioobj);
+	return m_pIoEvtNotifier->del_ioobj(pioobj);
 }
 
 void COutputHandleTask::exec()

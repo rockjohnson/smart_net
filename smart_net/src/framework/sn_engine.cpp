@@ -223,4 +223,17 @@ namespace nm_framework
 
 		m_sm.end_lock_state();
 	}
+
+	/**
+	 *
+	 * */
+	int32_t CSNEngine::del_timer(const timer_obj_ptr_t &pTimerObj)
+	{
+		CMN_ASSERT(NULL != pTimerObj);
+		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED), CMNERR_COMMON_ERR);
+
+		m_pMiscTask->del_timer(pTimerObj);
+
+		m_sm.end_lock_state();
+	}
 }

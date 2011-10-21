@@ -39,6 +39,7 @@ public:
 	virtual int32_t bind(const std::string &strBindIP, u_int16_t ui16BindPort) = 0;
 	virtual int32_t listen(int32_t i32Backlog) = 0;
 	virtual int32_t connect(const nm_network::CIpv4Addr &remoteAddr) = 0;
+	virtual int32_t connect(const cmn_string_t &strAcceptorIp, u_int64_t ui16AcceptorPort) = 0;
 	virtual sock_handle_t get_handle() = 0;
 	virtual bool is_opened() = 0;
 	virtual int32_t set_nonblock(bool bFlag) = 0;

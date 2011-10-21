@@ -22,8 +22,8 @@ public:
 	typedef nm_utils::CSmartPtr<nm_utils::CObjFactory<T> > obj_factory_ptr_t;
 
 public:
-	CObjFactory();
-	virtual ~CObjFactory();
+	CObjFactory(){}
+	virtual ~CObjFactory(){}
 
 public:
 	virtual obj_ptr_t& create_obj(int32_t i32Type) = 0;

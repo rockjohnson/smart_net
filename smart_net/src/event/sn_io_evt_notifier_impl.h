@@ -66,8 +66,9 @@ public:
 	int32_t init(int32_t i32IoTaskType, int32_t i32MsTimeout);
 	int32_t destroy();
 	///
-	int32_t add_io_obj(const nm_framework::io_obj_ptr_t &pIoObj);
-	int32_t del_io_obj(const nm_framework::io_obj_ptr_t &pIoObj);
+	u_int32_t get_ioobj_cnt(){return (m_setIoObjs.size() + m_vecIoObjsAddCache.size() - m_vecIoObjsDelCache.size());}
+	int32_t add_ioobj(const nm_framework::io_obj_ptr_t &pIoObj);
+	int32_t del_ioobj(const nm_framework::io_obj_ptr_t &pIoObj);
 	///
 	int32_t exec();
 

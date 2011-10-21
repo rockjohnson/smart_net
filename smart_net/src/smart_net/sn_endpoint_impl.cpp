@@ -625,7 +625,7 @@ namespace nm_smartnet
 				&CTcpConnector::handling_connected);
 
 		m_sm.reg_evt_state(ES_DELING_FROM_OT_CLOSE, EE_DELED_FROM_OT, ES_DELING_FROM_TT,
-				&CTcpConnector::handling_deling_from_ot_after_close_to_deling_from_tt);
+				&CTcpConnector::handling_deling_from_ot_close_to_deling_from_tt);
 
 		m_sm.reg_evt_state(ES_DELING_FROM_OT_NORMAL, EE_CLOSE, ES_DELING_FROM_OT_NORMAL,
 				&CTcpConnector::handling_close_while_deling_from_ot_normal);
@@ -810,7 +810,7 @@ namespace nm_smartnet
 			return CMNERR_COMMON_ERR;
 		}
 
-		//on_opend(CMNERR_SUC);
+		on_opened();
 
 		return CMNERR_SUC;
 	}
@@ -927,7 +927,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CTcpConnector::handling_deling_from_ot_after_close_to_deling_from_tt(
+	int32_t CTcpConnector::handling_deling_from_ot_close_to_deling_from_tt(
 			int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		CMN_ASSERT(!m_pTcpSock->is_opened());
@@ -1006,10 +1006,20 @@ namespace nm_smartnet
 	int32_t CTcpConnector::handling_deling_from_tt_to_closed(int32_t i32CurState, int32_t i32Evt,
 			int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
-		on_close();
+		on_closed();
 
 		return CMNERR_SUC;
 	}
+
+	void CTcpConnector::on_opened()
+	{
+
+	}
+
+	void CTcpConnector::on_closed()
+		{
+
+		}
 
 	/**
 	 *
