@@ -136,7 +136,7 @@ namespace nm_smartnet
 			ES_CLOSED,
 			ES_CHECKING_TIMER,
 			ES_ADDING_INTO_OT,
-			ES_DELING_FROM_OT_AFTER_CLOSE,
+			ES_DELING_FROM_OT_CLOSE,
 			ES_ADDING_INTO_TT,
 			ES_DELING_FROM_TT,
 			ES_CONNECTING,
@@ -172,7 +172,7 @@ namespace nm_smartnet
 		virtual void handle_io_error(int32_t i32ErrCode);
 		virtual void handle_add_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
 		virtual void handle_del_from_io_task(int32_t i32IoType);
-		virtual int32_t get_ioobj_handle();
+		virtual sock_handle_t get_ioobj_handle();
 
 		virtual void handle_add_into_timer_task();
 		virtual void handle_del_from_timer_task();
@@ -211,10 +211,6 @@ namespace nm_smartnet
 				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_connected(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState,
 				cmn_pvoid_t pVoid);
-		int32_t handling_opened_to_deling_from_ot(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_ot_to_closed(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_deling_from_ot_after_close_to_deling_from_tt(int32_t i32CurState, int32_t i32Evt,
