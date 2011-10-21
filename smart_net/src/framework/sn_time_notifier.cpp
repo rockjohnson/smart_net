@@ -46,7 +46,7 @@ namespace nm_framework
 		///delete first
 		if (!m_vecTimerDelCache.empty())
 		{
-			timer_vec_t vecTmp(m_vecTimerDelCache.size() + MORE);
+			timer_vec_t vecTmp;
 			{
 				nm_utils::spin_scopelk_t lk(m_lkTimerDelCache);
 				vecTmp.swap(m_vecTimerDelCache);
@@ -65,8 +65,7 @@ namespace nm_framework
 		///add
 		if (!m_vecTimerAddCache.empty())
 		{
-			timer_vec_t vecTmp(m_vecTimerAddCache.size() + MORE);
-
+			timer_vec_t vecTmp;
 			{
 				nm_utils::spin_scopelk_t lk(m_lkTimerAddCache);
 				vecTmp.swap(m_vecTimerAddCache);

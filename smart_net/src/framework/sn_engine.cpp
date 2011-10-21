@@ -142,7 +142,7 @@ namespace nm_framework
 		///
 		IF_TRUE_THEN_RETURN_CODE(NULL == pIoObj, CMNERR_COMMON_ERR);
 		///cool!!
-		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED), CMNERR_COMMON_ERR);
+		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED) < 0, CMNERR_COMMON_ERR);
 
 		int32_t i32Tmp = 0;
 		int32_t i32MinCnt = 0;
@@ -203,7 +203,7 @@ namespace nm_framework
 		///
 		IF_TRUE_THEN_RETURN_CODE(NULL == pIoObj, CMNERR_COMMON_ERR);
 		///cool!!
-		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED), CMNERR_COMMON_ERR);
+		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED) < 0, CMNERR_COMMON_ERR);
 
 		///assign input task, thread safe?
 		if (EIT_INPUT_TYPE == i32IoType)
@@ -231,7 +231,7 @@ namespace nm_framework
 	int32_t CSNEngine::add_timer(const timer_obj_ptr_t &pTimerObj)
 	{
 		CMN_ASSERT(NULL != pTimerObj);
-		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED), CMNERR_COMMON_ERR);
+		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED) < 0, CMNERR_COMMON_ERR);
 
 		m_pMiscTask->add_timer(pTimerObj);
 
@@ -244,7 +244,7 @@ namespace nm_framework
 	int32_t CSNEngine::del_timer(const timer_obj_ptr_t &pTimerObj)
 	{
 		CMN_ASSERT(NULL != pTimerObj);
-		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED), CMNERR_COMMON_ERR);
+		IF_TRUE_THEN_RETURN_CODE(m_sm.begin_lock_state(ES_STARTED) < 0, CMNERR_COMMON_ERR);
 
 		m_pMiscTask->del_timer(pTimerObj);
 

@@ -66,10 +66,12 @@ namespace nm_framework
 				case EIT_INPUT_TYPE:
 				{
 					ui32IoEvt = m_ui32InputEvt;
+					break;
 				}
 				case EIT_OUTPUT_TYPE:
 				{
 					ui32IoEvt = m_ui32OutputEvt;
+					break;
 				}
 				default:
 				{

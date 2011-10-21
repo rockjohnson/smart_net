@@ -32,6 +32,7 @@ namespace nm_smartnet
 				&CTcpAcceptor::handling_opened_to_deling_from_it);
 		m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_CLOSED,
 				&CTcpAcceptor::handling_deling_from_it_to_closed);
+		m_sm.set_cur_state(ES_CLOSED);
 
 		///
 		m_log.init(".", "tcp_acceptor_", ELL_DEBUG, 300);

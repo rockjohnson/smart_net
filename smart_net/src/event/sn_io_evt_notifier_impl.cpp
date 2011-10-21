@@ -143,7 +143,7 @@ namespace nm_event
 		///del io obj from epoll set, the
 		if (!m_vecIoObjsDelCache.empty())
 		{
-			io_obj_vec_t vecTmp(m_vecIoObjsDelCache.size());
+			io_obj_vec_t vecTmp;
 			{
 				nm_utils::spin_scopelk_t lk(m_lkIoObjDelCache);
 				vecTmp.swap(m_vecIoObjsDelCache);
@@ -169,7 +169,7 @@ namespace nm_event
 		///add io obj into epoll set
 		if (!m_vecIoObjsAddCache.empty())
 		{
-			io_obj_vec_t vecTmp(m_vecIoObjsAddCache.size());
+			io_obj_vec_t vecTmp;
 			{
 				nm_utils::spin_scopelk_t lk(m_lkIoObjAddCache);
 				vecTmp.swap(m_vecIoObjsAddCache);
