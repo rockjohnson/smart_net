@@ -6,7 +6,7 @@
  */
 
 #include "sn_io_task.h"
-#include "../event/sn_io_evt_notifier_impl.h"
+#include "sn_io_evt_notifier_impl.h"
 
 namespace nm_framework
 {

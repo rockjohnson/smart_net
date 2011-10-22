@@ -26,6 +26,5 @@ SUBDIRS := \
 src/smart_net \
 src/network \
 src/framework \
-src/event \
 src/common \
 

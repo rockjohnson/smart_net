@@ -12,7 +12,6 @@ RM := rm -rf
 -include src/smart_net/subdir.mk
 -include src/network/subdir.mk
 -include src/framework/subdir.mk
--include src/event/subdir.mk
 -include src/common/subdir.mk
 -include objects.mk
 

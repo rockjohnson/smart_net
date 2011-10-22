@@ -31,6 +31,11 @@ int main()
 	pA->open();
 	nm_busi::tcp_ep_tester_ptr_t pB = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpConnector));
 	pB->open();
+
+	sleep(10);
+
+	pB->close();
+
 #endif
 
 	//	pA->open();
