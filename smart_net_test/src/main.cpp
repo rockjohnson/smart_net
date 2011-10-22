@@ -35,6 +35,9 @@ int main()
 	sleep(10);
 
 	pB->close();
+	pA->close();
+	pB->open();
+	pA->open();
 
 #endif
 

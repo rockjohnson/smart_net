@@ -317,12 +317,12 @@ namespace nm_smartnet
 				&CTcpEndpoint::handling_deling_from_it_to_deling_from_ot);
 		m_sm.reg_evt_state(ES_DELING_FROM_OT, EE_DELED_FROM_OT, ES_CLOSED,
 				&CTcpEndpoint::handling_deling_from_ot_to_closed);
-
 		m_sm.set_cur_state(ES_CLOSED);
-
 		///
 		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
 		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT | EPOLLET);
+		///
+		m_log.init(".", "tcp_endpoint_", ELL_DEBUG, 60);
 	}
 
 	CTcpEndpoint::CTcpEndpoint(const tcp_connector_ptr_t &pTcpConnector) :
@@ -364,10 +364,11 @@ namespace nm_smartnet
 		m_sm.reg_evt_state(ES_DELING_FROM_OT, EE_DELED_FROM_OT, ES_CLOSED,
 				&CTcpEndpoint::handling_deling_from_ot_to_closed);
 		m_sm.set_cur_state(ES_CLOSED);
-
 		///
 		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
 		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT | EPOLLET);
+		///
+		m_log.init(".", "tcp_endpoint_", ELL_DEBUG, 60);
 	}
 
 	CTcpEndpoint::~CTcpEndpoint()
@@ -380,8 +381,6 @@ namespace nm_smartnet
 	 * */
 	int32_t CTcpEndpoint::open()
 	{
-		m_log.init(".", "tcp_endpoint_", ELL_DEBUG, 60);
-
 		return m_sm.post_evt(EE_OPEN, NULL);
 	}
 
@@ -1051,6 +1050,8 @@ namespace nm_smartnet
 			m_pTcpSock->close();
 			m_pTcpSock = NULL;
 		}
+
+		return CMNERR_SUC;
 	}
 
 	int32_t CTcpConnector::handling_deling_from_tt_to_closed(int32_t i32CurState, int32_t i32Evt,
