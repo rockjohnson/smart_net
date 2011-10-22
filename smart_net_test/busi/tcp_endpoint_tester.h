@@ -22,7 +22,7 @@ namespace nm_busi
 
 	protected:
 		///
-		virtual void on_opened(int32_t i32ErrCode);
+		virtual void on_opened();
 		virtual void on_closed();
 		virtual void on_recved_data(nm_mem::mem_ptr_t &pData);
 	};

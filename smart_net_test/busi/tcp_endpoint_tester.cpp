@@ -11,31 +11,31 @@
 namespace nm_busi
 {
 
-	CTcpEndpointTester::CTcpEndpointTester(nm_smartnet::tcp_acceptor_ptr_t &pT)
-	:nm_smartnet::CTcpEndpoint(pT)
+	CTcpEndpointTester::CTcpEndpointTester(nm_smartnet::tcp_acceptor_ptr_t &pT) :
+		nm_smartnet::CTcpEndpoint(pT)
 	{
 		// TODO Auto-generated constructor stub
 	}
 
-	CTcpEndpointTester::CTcpEndpointTester(nm_smartnet::tcp_connector_ptr_t &pT)
-		:nm_smartnet::CTcpEndpoint(pT)
-		{
-			// TODO Auto-generated constructor stub
-		}
+	CTcpEndpointTester::CTcpEndpointTester(nm_smartnet::tcp_connector_ptr_t &pT) :
+		nm_smartnet::CTcpEndpoint(pT)
+	{
+		// TODO Auto-generated constructor stub
+	}
 
 	CTcpEndpointTester::~CTcpEndpointTester()
 	{
 		// TODO Auto-generated destructor stub
 	}
 
-	void CTcpEndpointTester::on_opened(int32_t i32ErrCode)
+	void CTcpEndpointTester::on_opened()
 	{
-		std::cout<<"tester opened"<<std::endl;
+		std::cout << "tester opened" << std::endl;
 	}
 
 	void CTcpEndpointTester::on_closed()
 	{
-		std::cout<<"tester closed"<<std::endl;
+		std::cout << "tester closed" << std::endl;
 	}
 
 	void CTcpEndpointTester::on_recved_data(nm_mem::mem_ptr_t &pData)

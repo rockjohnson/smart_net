@@ -18,6 +18,9 @@ namespace nm_smartnet
 	CTcpAcceptor::CTcpAcceptor(const nm_framework::sn_engine_ptr_t &pSNEngine) :
 		m_sm(this), m_pSNEngine(pSNEngine)
 	{
+		///原则：
+		///1，只有在closed状态时，才能open，所以在任何其他状态，状态机都不提供open事件的处理；
+		///2，close和internal err是可以在任何状态都要处理的事件，除了已经在关闭状态中或已经是closed时；
 		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDING_INTO_IT,
 				&CTcpAcceptor::handling_closed_to_adding_into_it);
 
@@ -29,11 +32,14 @@ namespace nm_smartnet
 				&CTcpAcceptor::handling_adding_into_it_to_opened);
 
 		m_sm.reg_evt_state(ES_OPENED, EE_CLOSE, ES_DELING_FROM_IT,
-				&CTcpAcceptor::handling_opened_to_deling_from_it);
+				&CTcpAcceptor::handling_close_while_opened);
+		m_sm.reg_evt_state(ES_OPENED, EE_INTERNAL_ERR, ES_DELING_FROM_IT,
+				&CTcpAcceptor::handling_internal_err_while_opened);
+
 		m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_CLOSED,
 				&CTcpAcceptor::handling_deling_from_it_to_closed);
-		m_sm.set_cur_state(ES_CLOSED);
 
+		m_sm.set_cur_state(ES_CLOSED);
 		///
 		m_log.init(".", "tcp_acceptor_", ELL_DEBUG, 300);
 		///
@@ -105,7 +111,16 @@ namespace nm_smartnet
 		return CMNERR_SUC;
 	}
 
-	int32_t CTcpAcceptor::handling_opened_to_deling_from_it(int32_t i32CurState, int32_t i32Evt,
+	int32_t CTcpAcceptor::handling_close_while_opened(int32_t i32CurState, int32_t i32Evt,
+			int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		CMN_ASSERT(m_pTcpSockListener->is_opened());
+		m_pTcpSockListener->close();
+
+		return m_pSNEngine->del_endpoint(tcp_acceptor_ptr_t(this), EIT_INPUT_TYPE);
+	}
+
+	int32_t CTcpAcceptor::handling_internal_err_while_opened(int32_t i32CurState, int32_t i32Evt,
 			int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		CMN_ASSERT(m_pTcpSockListener->is_opened());
@@ -153,16 +168,10 @@ namespace nm_smartnet
 	int32_t CTcpAcceptor::add_endpoint(const tcp_endpoint_ptr_t &pTcpEp)
 	{
 		int32_t i32Ret = CMNERR_SUC;
-
-		//if (ES_OPENED == m_sm.get_cur_state()) ///weak check...
 		{
 			nm_utils::spin_scopelk_t lk(m_lkIdleEps);
 			m_dequeIdleEps.push_back(pTcpEp);
 		}
-		//		else
-		//		{
-		//			i32Ret = CMNERR_COMMON_ERR;
-		//		}
 
 		return i32Ret;
 	}
@@ -267,7 +276,7 @@ namespace nm_smartnet
 
 	void CTcpAcceptor::handle_io_error(int32_t i32ErrCode)
 	{
-		CMN_ASSERT(false);
+		CMN_ASSERT(CMNERR_SUC == m_sm.post_evt(EE_INTERNAL_ERR, NULL));
 	}
 
 	int32_t CTcpAcceptor::get_ioobj_handle()
@@ -296,8 +305,8 @@ namespace nm_smartnet
 				&CTcpEndpoint::handling_close_while_adding_into_ot);
 		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_INTERNAL_ERR, ES_CLOSED,
 				&CTcpEndpoint::handling_internal_err_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT,
-				ES_ADDING_INTO_IT, &CTcpEndpoint::handling_added_into_ot_to_adding_into_it);
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_ADDING_INTO_IT,
+				&CTcpEndpoint::handling_added_into_ot_to_adding_into_it);
 
 		///这个时候发生关闭or internal err事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_INPUT_TASK
 		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT,
@@ -342,8 +351,8 @@ namespace nm_smartnet
 				&CTcpEndpoint::handling_close_while_adding_into_ot);
 		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_INTERNAL_ERR, ES_CLOSED,
 				&CTcpEndpoint::handling_internal_err_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT,
-				ES_ADDING_INTO_IT, &CTcpEndpoint::handling_added_into_ot_to_adding_into_it);
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_ADDING_INTO_IT,
+				&CTcpEndpoint::handling_added_into_ot_to_adding_into_it);
 
 		///这个时候发生关闭or internal err事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_INPUT_TASK
 		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT,
@@ -572,7 +581,8 @@ namespace nm_smartnet
 			return CMNERR_COMMON_ERR;
 		}
 
-		(void) on_opened(CMNERR_SUC);
+		///
+		on_opened();
 
 		return CMNERR_SUC;
 	}

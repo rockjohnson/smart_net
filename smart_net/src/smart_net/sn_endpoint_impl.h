@@ -73,7 +73,9 @@ namespace nm_smartnet
 				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_opened_to_deling_from_it(int32_t i32CurState, int32_t i32Evt,
+		int32_t handling_close_while_opened(int32_t i32CurState, int32_t i32Evt,
+				int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_opened(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_deling_from_it_to_closed(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
@@ -273,7 +275,7 @@ namespace nm_smartnet
 
 	protected:
 		///
-		virtual void on_opened(int32_t i32ErrCode) = 0;
+		virtual void on_opened() = 0;
 		virtual void on_closed() = 0;
 		virtual void on_recved_data(nm_mem::mem_ptr_t &pData) = 0;
 		//		virtual void on_io_error(int32_t i32ErrCode) = 0;
