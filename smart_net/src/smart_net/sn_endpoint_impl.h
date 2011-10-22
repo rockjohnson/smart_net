@@ -134,7 +134,8 @@ namespace nm_smartnet
 
 		DISALLOW_COPY_AND_ASSIGN( CTcpConnector);
 	public:
-		int32_t open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort, u_int64_t ui64IntervalInUs);
+		int32_t open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort,
+				u_int64_t ui64IntervalInUs);
 		int32_t close();
 
 	protected:
@@ -178,12 +179,12 @@ namespace nm_smartnet
 				cmn_pvoid_t pVoid);
 		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_ot_close_to_deling_from_tt(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_ot_close_to_deling_from_tt(int32_t i32CurState,
+				int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_close_while_deling_from_ot_normal(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_ot_normal_to_checking_timer(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_ot_normal_to_checking_timer(int32_t i32CurState,
+				int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_deling_from_tt_to_closed(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
 
@@ -220,8 +221,8 @@ namespace nm_smartnet
 			ES_CLOSING,
 			ES_CLOSED_READY,
 			ES_CLOSED,
-			ES_ADDING_INTO_OUTPUT_TASK,
-			ES_ADDING_INTO_INPUT_TASK,
+			ES_ADDING_INTO_OT,
+			ES_ADDING_INTO_IT,
 			ES_DELED_FROM_IT,
 			ES_DELING_FROM_IT,
 			ES_DELING_FROM_OT
@@ -237,8 +238,8 @@ namespace nm_smartnet
 			EE_IOERR,
 			EE_INTERNAL_ERR,
 			EE_CONNECTED,
-			EE_ADDED_INTO_OUTPUT_TASK,
-			EE_ADDED_INTO_INPUT_TASK,
+			EE_ADDED_INTO_OT,
+			EE_ADDED_INTO_IT,
 			EE_DELED_FROM_IT,
 			EE_DELED_FROM_OT
 		};
@@ -275,7 +276,7 @@ namespace nm_smartnet
 		virtual void on_opened(int32_t i32ErrCode) = 0;
 		virtual void on_closed() = 0;
 		virtual void on_recved_data(nm_mem::mem_ptr_t &pData) = 0;
-//		virtual void on_io_error(int32_t i32ErrCode) = 0;
+		//		virtual void on_io_error(int32_t i32ErrCode) = 0;
 
 	private:
 		int32_t handling_closed_to_added_into_helper(int32_t i32CurState, int32_t i32Evt,

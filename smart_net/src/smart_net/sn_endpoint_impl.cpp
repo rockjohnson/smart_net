@@ -159,10 +159,10 @@ namespace nm_smartnet
 			nm_utils::spin_scopelk_t lk(m_lkIdleEps);
 			m_dequeIdleEps.push_back(pTcpEp);
 		}
-//		else
-//		{
-//			i32Ret = CMNERR_COMMON_ERR;
-//		}
+		//		else
+		//		{
+		//			i32Ret = CMNERR_COMMON_ERR;
+		//		}
 
 		return i32Ret;
 	}
@@ -288,23 +288,23 @@ namespace nm_smartnet
 
 		m_sm.reg_evt_state(ES_ADDED_INTO_HELPER, EE_CLOSE, ES_CLOSED,
 				&CTcpEndpoint::handling_added_into_helper_to_closed);
-		m_sm.reg_evt_state(ES_ADDED_INTO_HELPER, EE_CONNECTED, ES_ADDING_INTO_OUTPUT_TASK,
+		m_sm.reg_evt_state(ES_ADDED_INTO_HELPER, EE_CONNECTED, ES_ADDING_INTO_OT,
 				&CTcpEndpoint::handling_added_into_helper_to_adding_into_ot);
 
 		///这个时候发生关闭事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_OUTPUT_TASK
-		m_sm.reg_evt_state(ES_ADDING_INTO_OUTPUT_TASK, EE_CLOSE, ES_ADDING_INTO_OUTPUT_TASK,
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT,
 				&CTcpEndpoint::handling_close_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OUTPUT_TASK, EE_INTERNAL_ERR, ES_CLOSED,
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_INTERNAL_ERR, ES_CLOSED,
 				&CTcpEndpoint::handling_internal_err_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OUTPUT_TASK, EE_ADDED_INTO_OUTPUT_TASK,
-				ES_ADDING_INTO_INPUT_TASK, &CTcpEndpoint::handling_added_into_ot_to_adding_into_it);
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT,
+				ES_ADDING_INTO_IT, &CTcpEndpoint::handling_added_into_ot_to_adding_into_it);
 
 		///这个时候发生关闭or internal err事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_INPUT_TASK
-		m_sm.reg_evt_state(ES_ADDING_INTO_INPUT_TASK, EE_INTERNAL_ERR, ES_ADDING_INTO_INPUT_TASK,
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT,
 				&CTcpEndpoint::handling_internal_err_while_adding_into_it);
-		m_sm.reg_evt_state(ES_ADDING_INTO_INPUT_TASK, EE_CLOSE, ES_ADDING_INTO_INPUT_TASK,
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_CLOSE, ES_ADDING_INTO_IT,
 				&CTcpEndpoint::handling_close_while_adding_into_it);
-		m_sm.reg_evt_state(ES_ADDING_INTO_INPUT_TASK, EE_ADDED_INTO_INPUT_TASK, ES_OPENED,
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_ADDED_INTO_IT, ES_OPENED,
 				&CTcpEndpoint::handling_adding_into_it_to_opened);
 
 		///not handling internal err, when in the next two state.
@@ -334,23 +334,23 @@ namespace nm_smartnet
 
 		m_sm.reg_evt_state(ES_ADDED_INTO_HELPER, EE_CLOSE, ES_CLOSED,
 				&CTcpEndpoint::handling_added_into_helper_to_closed);
-		m_sm.reg_evt_state(ES_ADDED_INTO_HELPER, EE_CONNECTED, ES_ADDING_INTO_OUTPUT_TASK,
+		m_sm.reg_evt_state(ES_ADDED_INTO_HELPER, EE_CONNECTED, ES_ADDING_INTO_OT,
 				&CTcpEndpoint::handling_added_into_helper_to_adding_into_ot);
 
 		///这个时候发生关闭事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_OUTPUT_TASK
-		m_sm.reg_evt_state(ES_ADDING_INTO_OUTPUT_TASK, EE_CLOSE, ES_ADDING_INTO_OUTPUT_TASK,
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT,
 				&CTcpEndpoint::handling_close_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OUTPUT_TASK, EE_INTERNAL_ERR, ES_CLOSED,
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_INTERNAL_ERR, ES_CLOSED,
 				&CTcpEndpoint::handling_internal_err_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OUTPUT_TASK, EE_ADDED_INTO_OUTPUT_TASK,
-				ES_ADDING_INTO_INPUT_TASK, &CTcpEndpoint::handling_added_into_ot_to_adding_into_it);
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT,
+				ES_ADDING_INTO_IT, &CTcpEndpoint::handling_added_into_ot_to_adding_into_it);
 
 		///这个时候发生关闭or internal err事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_INPUT_TASK
-		m_sm.reg_evt_state(ES_ADDING_INTO_INPUT_TASK, EE_INTERNAL_ERR, ES_ADDING_INTO_INPUT_TASK,
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT,
 				&CTcpEndpoint::handling_internal_err_while_adding_into_it);
-		m_sm.reg_evt_state(ES_ADDING_INTO_INPUT_TASK, EE_CLOSE, ES_ADDING_INTO_INPUT_TASK,
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_CLOSE, ES_ADDING_INTO_IT,
 				&CTcpEndpoint::handling_close_while_adding_into_it);
-		m_sm.reg_evt_state(ES_ADDING_INTO_INPUT_TASK, EE_ADDED_INTO_INPUT_TASK, ES_OPENED,
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_ADDED_INTO_IT, ES_OPENED,
 				&CTcpEndpoint::handling_adding_into_it_to_opened);
 
 		///not handling internal err, when in the next two state.
@@ -415,11 +415,11 @@ namespace nm_smartnet
 
 		if (EIT_OUTPUT_TYPE == i32IoType)
 		{
-			m_sm.post_evt(EE_ADDED_INTO_OUTPUT_TASK, NULL);
+			m_sm.post_evt(EE_ADDED_INTO_OT, NULL);
 		}
 		else if (EIT_INPUT_TYPE == i32IoType)
 		{
-			m_sm.post_evt(EE_ADDED_INTO_INPUT_TASK, NULL);
+			m_sm.post_evt(EE_ADDED_INTO_IT, NULL);
 		}
 		else
 		{
@@ -544,13 +544,6 @@ namespace nm_smartnet
 
 		return CMNERR_SUC;
 	}
-
-	//	u_int32_t CTcpEndpoint::get_io_evt(int32_t i32IoType)
-	//	{
-	//		CMN_ASSERT(EIT_INPUT_TYPE == i32IoType || EIT_OUTPUT_TYPE == i32IoType);
-	//
-	//		return (EIT_INPUT_TYPE == i32IoType) ? EPOLLIN : EPOLLOUT;
-	//	}
 
 	int32_t CTcpEndpoint::handling_added_into_helper_to_adding_into_ot(int32_t i32CurState,
 			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
