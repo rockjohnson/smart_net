@@ -19,32 +19,9 @@
 
 namespace nm_smartnet
 {
-	//	/**
-	//	 * tcp endpoint enum.
-	//	 * */
-	//	enum ETcpEndpointType
-	//	{
-	//		E_TCP_INBOUND_ENDPOINT = 0, E_TCP_OUTBOUND_ENDPOINT
-	//	};
-	//
-	//	/**
-	//	 * tcp endpoint
-	//	 * */
-	//	enum
-	//	{
-	//		ES_INIT = 0, ES_IN_ENGINE, ES_IN_ENGINE_AND_IN_RECV_THREAD, ES_IN_ENGINE_AND_IN_SEND_THREAD, ES_IN_ENGINE_RUNNING, ES_IN_ENGINE_STOP_RUNNING
-	//	};
-	//
-	//	enum
-	//	{
-	//		EE_ADD_INTO_ENGINE = 0,
-	//		EE_DEL_FROM_ENGINE,
-	//		EE_IN_ENGINE_ADD_INTO_SEND_THREAD,
-	//		EE_IN_ENGINE_DEL_FROM_SEND_THREAD,
-	//		EE_IN_ENGINE_ADD_INTO_RECV_THREAD,
-	//		EE_IN_ENGINE_DEL_FROM_RECV_THREAD
-	//	};
-
+	/**
+	 *
+	 * */
 	class CTcpEndpoint;
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpEndpoint> tcp_endpoint_ptr_t;
 
@@ -76,12 +53,6 @@ namespace nm_smartnet
 		virtual void handle_added_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
 		virtual void handle_deled_from_io_task(int32_t i32IoType);
 		virtual int32_t get_ioobj_handle();
-
-//		virtual u_int32_t get_io_evt(int32_t i32IoType);
-//		virtual void set_input_task_id(int32_t i32id);
-//		virtual int32_t get_input_task_id();
-//		virtual void set_output_task_id(int32_t i32id);
-//		virtual int32_t get_output_task_id();
 
 	public:
 		int32_t open(const cmn_string_t &strIP, u_int16_t ui16Port);
@@ -225,10 +196,10 @@ namespace nm_smartnet
 		nm_network::tcp_sock_ptr_t m_pTcpSock;
 		cmn_string_t m_strAcceptorIp;
 		u_int16_t m_ui16AcceptorPort;
+		nm_utils::CStateMachine<CTcpConnector> m_sm;
 		u_int64_t m_ui64Interval;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
 		int32_t m_i32PendingEvt;
-		nm_utils::CStateMachine<CTcpConnector> m_sm;
 		nm_utils::CSpinLock m_lkIdleEps;
 		typedef std::deque<tcp_endpoint_ptr_t> tcp_endpoint_deque_t;
 		tcp_endpoint_deque_t m_dequeIdleEps;
