@@ -38,12 +38,20 @@ namespace nm_smartnet
 
 		enum
 		{
-			ES_OPENED = 0, ES_CLOSED, ES_ADDING_INTO_IT, ES_DELING_FROM_IT
+			ES_OPENED = 0,
+			ES_CLOSED,
+			ES_ADDING_INTO_IT,
+			ES_DELING_FROM_IT
 		};
 
 		enum
 		{
-			EE_NONE, EE_OPEN = 0, EE_CLOSE, EE_ADDED_INTO_IT, EE_DELED_FROM_IT, EE_INTERNAL_ERR
+			EE_NONE,
+			EE_OPEN = 0,
+			EE_CLOSE,
+			EE_ADDED_INTO_IT,
+			EE_DELED_FROM_IT,
+			EE_INTERNAL_ERR
 		};
 
 	public:
@@ -90,9 +98,9 @@ namespace nm_smartnet
 		nm_utils::CSmartLog m_log;
 		nm_network::CIpv4Addr m_bindAddr;
 
-		nm_utils::CSpinLock m_lkIdleEps;
+		nm_utils::CSpinLock m_lkIdleEndpoints;
 		typedef std::deque<tcp_endpoint_ptr_t> tcp_endpoint_deque_t;
-		tcp_endpoint_deque_t m_dequeIdleEps;
+		tcp_endpoint_deque_t m_dqIdleEndpoints;
 	};
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpAcceptor> tcp_acceptor_ptr_t;
 
@@ -185,6 +193,8 @@ namespace nm_smartnet
 				int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_close_while_deling_from_ot_normal(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_deling_from_ot_normal(int32_t i32CurState, int32_t i32Evt,
+				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_deling_from_ot_normal_to_checking_timer(int32_t i32CurState,
 				int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_deling_from_tt_to_closed(int32_t i32CurState, int32_t i32Evt,
@@ -205,7 +215,7 @@ namespace nm_smartnet
 		int32_t m_i32PendingEvt;
 		nm_utils::CSpinLock m_lkIdleEps;
 		typedef std::deque<tcp_endpoint_ptr_t> tcp_endpoint_deque_t;
-		tcp_endpoint_deque_t m_dequeIdleEps;
+		tcp_endpoint_deque_t m_dqIdleEndpoints;
 		nm_utils::CSmartLog m_log;
 	};
 	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpConnector> tcp_connector_ptr_t;
@@ -281,6 +291,7 @@ namespace nm_smartnet
 		//		virtual void on_io_error(int32_t i32ErrCode) = 0;
 
 	private:
+		void init_sm();
 		int32_t handling_closed_to_added_into_helper(int32_t i32CurState, int32_t i32Evt,
 				int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_added_into_helper_to_closed(int32_t i32CurState, int32_t i32Evt,

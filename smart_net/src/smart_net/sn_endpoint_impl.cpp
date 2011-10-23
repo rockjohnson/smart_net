@@ -169,8 +169,8 @@ namespace nm_smartnet
 	{
 		int32_t i32Ret = CMNERR_SUC;
 		{
-			nm_utils::spin_scopelk_t lk(m_lkIdleEps);
-			m_dequeIdleEps.push_back(pTcpEp);
+			nm_utils::spin_scopelk_t lk(m_lkIdleEndpoints);
+			m_dqIdleEndpoints.push_back(pTcpEp);
 		}
 
 		return i32Ret;
@@ -178,16 +178,16 @@ namespace nm_smartnet
 
 	int32_t CTcpAcceptor::del_endpoint(const tcp_endpoint_ptr_t &pTcpEp)
 	{
-		nm_utils::spin_scopelk_t lk(m_lkIdleEps);
+		nm_utils::spin_scopelk_t lk(m_lkIdleEndpoints);
 
 		bool bFlag = false;
-		for (tcp_endpoint_deque_t::iterator iter = m_dequeIdleEps.begin(); iter
-				!= m_dequeIdleEps.end(); ++iter)
+		for (tcp_endpoint_deque_t::iterator iter = m_dqIdleEndpoints.begin(); iter
+				!= m_dqIdleEndpoints.end(); ++iter)
 		{
 			if ((*iter) == pTcpEp)
 			{
 				bFlag = true;
-				m_dequeIdleEps.erase(iter);
+				m_dqIdleEndpoints.erase(iter);
 				break;
 			}
 		}
@@ -212,8 +212,7 @@ namespace nm_smartnet
 			m_sm.post_evt(EE_INTERNAL_ERR, NULL);
 		}
 
-		m_sm.post_evt(EE_ADDED_INTO_IT, &i32RetCode);
-
+		(void) m_sm.post_evt(EE_ADDED_INTO_IT, &i32RetCode);
 	}
 
 	void CTcpAcceptor::handle_deled_from_io_task(int32_t i32IoType)
@@ -228,6 +227,9 @@ namespace nm_smartnet
 		CMN_ASSERT(CMNERR_SUC == m_sm.post_evt(EE_DELED_FROM_IT, NULL));
 	}
 
+	/**
+	 *
+	 * */
 	void CTcpAcceptor::handle_input_evt()
 	{
 		///accept new connection
@@ -241,13 +243,13 @@ namespace nm_smartnet
 			pTcpEp = NULL;
 
 			{
-				nm_utils::spin_scopelk_t lk(m_lkIdleEps);
-				if (m_dequeIdleEps.empty())
+				nm_utils::spin_scopelk_t lk(m_lkIdleEndpoints);
+				if (m_dqIdleEndpoints.empty())
 				{
 					break;
 				}
-				pTcpEp = m_dequeIdleEps.front();
-				m_dequeIdleEps.pop_front();
+				pTcpEp = m_dqIdleEndpoints.front();
+				m_dqIdleEndpoints.pop_front();
 			}
 
 			if (CMNERR_SUC == pTcpEp->handle_connected(pNewSock))
@@ -284,6 +286,462 @@ namespace nm_smartnet
 		return m_pTcpSockListener->get_handle();
 	}
 
+	/*--------------------------------------------------------------------------------------------*/
+
+	/**
+	 *
+	 * */
+	CTcpConnector::CTcpConnector(const nm_framework::sn_engine_ptr_t &pSNEngine) :
+		m_pSNEngine(pSNEngine), m_i32PendingEvt(EE_NONE), m_sm(this), m_ui64Interval(0)
+	{
+		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDING_INTO_TT,
+				&CTcpConnector::handling_closed_to_adding_into_tt);
+
+		m_sm.reg_evt_state(ES_ADDING_INTO_TT, EE_CLOSE, ES_ADDING_INTO_TT,
+				&CTcpConnector::handling_close_while_adding_into_tt);
+		m_sm.reg_evt_state(ES_ADDING_INTO_TT, EE_ADDED_INTO_TT, ES_CHECKING_TIMER,
+				&CTcpConnector::handling_adding_into_tt_to_checking_timer);
+
+		m_sm.reg_evt_state(ES_CHECKING_TIMER, EE_CLOSE, ES_DELING_FROM_TT,
+				&CTcpConnector::handling_close_while_checking_timer);
+		m_sm.reg_evt_state(ES_CHECKING_TIMER, EE_CONNECT, ES_ADDING_INTO_OT,
+				&CTcpConnector::handling_checking_timer_to_adding_into_ot);
+
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT,
+				&CTcpConnector::handling_close_while_adding_into_ot);
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_INTERNAL_ERR, ES_ADDING_INTO_OT,
+				&CTcpConnector::handling_internal_err_while_adding_into_ot);
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_CONNECTING,
+				&CTcpConnector::handling_adding_into_ot_to_connecting);
+
+		m_sm.reg_evt_state(ES_CONNECTING, EE_CLOSE, ES_DELING_FROM_OT_CLOSE,
+				&CTcpConnector::handling_close_while_connecting);
+		m_sm.reg_evt_state(ES_CONNECTING, EE_INTERNAL_ERR, ES_DELING_FROM_OT_NORMAL,
+				&CTcpConnector::handling_internal_err_while_connecting);
+		m_sm.reg_evt_state(ES_CONNECTING, EE_CONNECTED, ES_DELING_FROM_OT_NORMAL,
+				&CTcpConnector::handling_connected);
+
+		m_sm.reg_evt_state(ES_DELING_FROM_OT_CLOSE, EE_DELED_FROM_OT, ES_DELING_FROM_TT,
+				&CTcpConnector::handling_deling_from_ot_close_to_deling_from_tt);
+
+		m_sm.reg_evt_state(ES_DELING_FROM_OT_NORMAL, EE_CLOSE, ES_DELING_FROM_OT_NORMAL,
+				&CTcpConnector::handling_close_while_deling_from_ot_normal);
+		m_sm.reg_evt_state(ES_DELING_FROM_OT_NORMAL, EE_INTERNAL_ERR, ES_DELING_FROM_OT_NORMAL,
+				&CTcpConnector::handling_internal_err_while_deling_from_ot_normal);
+		m_sm.reg_evt_state(ES_DELING_FROM_OT_NORMAL, EE_DELED_FROM_OT, ES_CHECKING_TIMER,
+				&CTcpConnector::handling_deling_from_ot_normal_to_checking_timer);
+
+		m_sm.reg_evt_state(ES_DELING_FROM_TT, EE_DELED_FROM_TT, ES_CLOSED,
+				&CTcpConnector::handling_deling_from_tt_to_closed);
+
+		m_sm.set_cur_state(ES_CLOSED);
+		///
+		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT);
+		///
+		m_log.init("tcp_connector", "c_", ELL_DEBUG, 60);
+	}
+
+	/**
+	 *
+	 * */
+	CTcpConnector::~CTcpConnector()
+	{
+		{
+			nm_utils::spin_scopelk_t lk(m_lkIdleEps);
+			m_dqIdleEndpoints.clear();
+		}
+
+		m_pTcpSock = NULL;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort,
+			u_int64_t ui64Interval)
+	{
+		SParas sp;
+		sp.strIP = strAcceptorIP;
+		sp.ui16Port = ui16AcceptorPort;
+		sp.ui64Val = ui64Interval;
+		return m_sm.post_evt(EE_OPEN, &sp);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::close()
+	{
+		return m_sm.post_evt(EE_CLOSE, NULL);
+	}
+
+	/**
+	 *
+	 * */
+	void CTcpConnector::handle_input_evt()
+	{
+		CMN_ASSERT(false);
+	}
+
+	/**
+	 *
+	 * */
+	void CTcpConnector::handle_output_evt()
+	{
+		(void) m_sm.post_evt(EE_CONNECTED, NULL);
+	}
+
+	void CTcpConnector::handle_io_error(int32_t i32ErrCode)
+	{
+		(void) m_sm.post_evt(EE_INTERNAL_ERR, NULL);
+	}
+
+	void CTcpConnector::handle_added_into_io_task(int32_t i32IoType, int32_t i32RetCode)
+	{
+		CMN_ASSERT(EIT_OUTPUT_TYPE == i32IoType);
+
+		if (CMNERR_SUC != i32RetCode)
+		{
+			CMN_ASSERT(CMNERR_SUC == m_sm.post_evt(EE_INTERNAL_ERR, NULL));
+		}
+		else
+		{
+			(void) m_sm.post_evt(EE_ADDED_INTO_OT, NULL);
+		}
+	}
+
+	void CTcpConnector::handle_deled_from_io_task(int32_t i32IoType)
+	{
+		CMN_ASSERT(EIT_OUTPUT_TYPE == i32IoType);
+
+		(void) m_sm.post_evt(EE_DELED_FROM_OT, NULL);
+	}
+
+	sock_handle_t CTcpConnector::get_ioobj_handle()
+	{
+		CMN_ASSERT(NULL != m_pTcpSock);
+
+		return m_pTcpSock->get_handle();
+	}
+
+	void CTcpConnector::handle_add_into_timer_task()
+	{
+		m_sm.post_evt(EE_ADDED_INTO_TT, NULL);
+	}
+
+	void CTcpConnector::handle_del_from_timer_task()
+	{
+		m_sm.post_evt(EE_DELED_FROM_TT, NULL);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::add_endpoint(const tcp_endpoint_ptr_t &pTcpEp)
+	{
+		nm_utils::spin_scopelk_t lk(m_lkIdleEps);
+		m_dqIdleEndpoints.push_back(pTcpEp);
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::del_endpoint(const tcp_endpoint_ptr_t &pTcpEp)
+	{
+		nm_utils::spin_scopelk_t lk(m_lkIdleEps);
+
+		bool bFlag = false;
+		for (tcp_endpoint_deque_t::iterator iter = m_dqIdleEndpoints.begin(); iter
+				!= m_dqIdleEndpoints.end(); ++iter)
+		{
+			if ((*iter) == pTcpEp)
+			{
+				bFlag = true;
+				m_dqIdleEndpoints.erase(iter);
+				break;
+			}
+		}
+
+		CMN_ASSERT(bFlag);
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_closed_to_adding_into_tt(int32_t i32CurState, int32_t i32Evt,
+			int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_i32PendingEvt = EE_NONE;
+
+		SParas *pSp = static_cast<SParas*> (pVoid);
+		m_strAcceptorIp = pSp->strIP;
+		m_ui16AcceptorPort = pSp->ui16Port;
+		m_ui64Interval = pSp->ui64Val;
+
+		CMN_ASSERT(m_ui64Interval > 0);
+
+		set_interval(m_ui64Interval);
+
+		///add into timer
+		return m_pSNEngine->add_timer(tcp_connector_ptr_t(this));
+	}
+
+	int32_t CTcpConnector::handling_close_while_adding_into_tt(int32_t i32CurState, int32_t i32Evt,
+			int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_i32PendingEvt = EE_CLOSE;
+
+		return CMNERR_SUC;
+	}
+
+	int32_t CTcpConnector::handling_adding_into_tt_to_checking_timer(int32_t i32CurState,
+			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		if (EE_NONE != m_i32PendingEvt)
+		{
+			CMN_ASSERT(EE_CLOSE == m_i32PendingEvt);
+			m_pSNEngine->del_timer(tcp_connector_ptr_t(this));
+			m_sm.set_cur_state(ES_DELING_FROM_TT);
+
+			return CMNERR_COMMON_ERR;
+		}
+
+		on_opened();
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_close_while_checking_timer(int32_t i32CurState, int32_t i32Evt,
+			int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		CMN_ASSERT(NULL == m_pTcpSock);
+
+		return m_pSNEngine->del_timer(tcp_connector_ptr_t(this));
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_checking_timer_to_adding_into_ot(int32_t i32CurState,
+			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		CMN_ASSERT(NULL == m_pTcpSock);
+		m_pTcpSock = SYS_NOTRW_NEW(nm_network::CTcpSock);
+		m_pTcpSock->open();
+		m_pTcpSock->set_nonblock(true);
+		m_pTcpSock->connect(m_strAcceptorIp, m_ui16AcceptorPort);
+
+		return m_pSNEngine->add_endpoint(tcp_connector_ptr_t(this), EIT_OUTPUT_TYPE);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
+			int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_i32PendingEvt = EE_CLOSE;
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_adding_into_ot_to_connecting(int32_t i32CurState,
+			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		///什么时候只赋值m_i32PendingEvt，什么时候判断m_i32PendingEvt需要解释下：
+		///如果一个状态不是一个稳态的，如加入output task等，则只直接赋值m_i32PendingEvt，如果是一个稳态了，则开始处理m_i32PendingEvt。
+		if (EE_NONE != m_i32PendingEvt)
+		{
+			m_pTcpSock->close();
+			m_pSNEngine->del_endpoint(tcp_connector_ptr_t(this), EIT_OUTPUT_TYPE);
+			m_sm.set_cur_state(
+					EE_CLOSE == m_i32PendingEvt ? ES_DELING_FROM_OT_CLOSE
+							: ES_DELING_FROM_OT_NORMAL);
+
+			return CMNERR_COMMON_ERR;
+		}
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_close_while_connecting(int32_t i32CurState, int32_t i32Evt,
+			int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_pTcpSock->close();
+
+		return m_pSNEngine->del_endpoint(tcp_connector_ptr_t(this), EIT_OUTPUT_TYPE);
+	}
+
+	int32_t CTcpConnector::handling_internal_err_while_connecting(int32_t i32CurState,
+			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_pTcpSock->close();
+
+		return m_pSNEngine->del_endpoint(tcp_connector_ptr_t(this), EIT_OUTPUT_TYPE);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_connected(int32_t i32CurState, int32_t i32Evt,
+			int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		CMN_ASSERT(m_pTcpSock->is_opened());
+
+		return m_pSNEngine->del_endpoint(tcp_connector_ptr_t(this), EIT_OUTPUT_TYPE);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_internal_err_while_adding_into_ot(int32_t i32CurState,
+			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_i32PendingEvt = EE_INTERNAL_ERR;
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_deling_from_ot_close_to_deling_from_tt(int32_t i32CurState,
+			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		CMN_ASSERT(!m_pTcpSock->is_opened());
+
+		return m_pSNEngine->del_timer(tcp_connector_ptr_t(this));
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_close_while_deling_from_ot_normal(int32_t i32CurState,
+			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_i32PendingEvt = EE_CLOSE;
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_internal_err_while_deling_from_ot_normal(int32_t i32CurState,
+			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_pTcpSock->close();
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CTcpConnector::handling_deling_from_ot_normal_to_checking_timer(int32_t i32CurState,
+			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		///CMN_ASSERT(m_pTcpSock->is_opened());
+
+		if (!m_pTcpSock->is_opened()) ///ocurred internal err while deling from ot
+		{
+			m_pTcpSock = NULL;
+			return CMNERR_SUC;
+		}
+
+		if (EE_NONE != m_i32PendingEvt)
+		{
+			CMN_ASSERT(EE_CLOSE == m_i32PendingEvt);
+
+			m_pTcpSock->close();
+			m_pSNEngine->del_timer(tcp_connector_ptr_t(this));
+			m_sm.set_cur_state(ES_DELING_FROM_TT);
+
+			return CMNERR_COMMON_ERR;
+		}
+
+		///established new connection
+		CMN_ASSERT((NULL != m_pTcpSock) && m_pTcpSock->is_opened()); ///for test
+
+		///
+		tcp_endpoint_ptr_t pTcpEp = NULL;
+		for (;;)
+		{
+			pTcpEp = NULL;
+
+			{
+				nm_utils::spin_scopelk_t lk(m_lkIdleEps);
+				if (m_dqIdleEndpoints.empty())
+				{
+					break;
+				}
+				pTcpEp = m_dqIdleEndpoints.front();
+				m_dqIdleEndpoints.pop_front();
+			}
+
+			if (CMNERR_SUC == pTcpEp->handle_connected(m_pTcpSock))
+			{
+				break;
+			}
+#if 0
+			else
+			{
+				///why error ? :), yes ,e.g. closing...
+			}
+#endif
+		}
+
+		if (NULL == pTcpEp)
+		{
+			m_pTcpSock->close();
+			m_pTcpSock = NULL;
+		}
+
+		return CMNERR_SUC;
+	}
+
+	int32_t CTcpConnector::handling_deling_from_tt_to_closed(int32_t i32CurState, int32_t i32Evt,
+			int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		on_closed();
+
+		return CMNERR_SUC;
+	}
+
+	void CTcpConnector::on_opened()
+	{
+		TRACE_LOG(m_log, ELL_DEBUG, "tcp connect opened!\n");
+	}
+
+	void CTcpConnector::on_closed()
+	{
+		TRACE_LOG(m_log, ELL_DEBUG, "tcp connect closed!\n");
+	}
+
+	/**
+	 *
+	 * */
+	void CTcpConnector::on_timer()
+	{
+		if (!m_dqIdleEndpoints.empty())
+		{
+			(void) m_sm.post_evt(EE_CONNECT, NULL);
+		}
+	}
+
 	/*------------------------------------------------------------------------------------------------------*/
 	/**
 	 * tcp endpoint.
@@ -292,41 +750,7 @@ namespace nm_smartnet
 		m_sm(this), m_pTcpAcceptor(pTcpAcceptor), m_i32SMPendingEvt(EE_NONE),
 				m_pSNEngine(pTcpAcceptor->get_engine())
 	{
-		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDED_INTO_HELPER,
-				&CTcpEndpoint::handling_closed_to_added_into_helper);
-
-		m_sm.reg_evt_state(ES_ADDED_INTO_HELPER, EE_CLOSE, ES_CLOSED,
-				&CTcpEndpoint::handling_added_into_helper_to_closed);
-		m_sm.reg_evt_state(ES_ADDED_INTO_HELPER, EE_CONNECTED, ES_ADDING_INTO_OT,
-				&CTcpEndpoint::handling_added_into_helper_to_adding_into_ot);
-
-		///这个时候发生关闭事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_OUTPUT_TASK
-		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT,
-				&CTcpEndpoint::handling_close_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_INTERNAL_ERR, ES_CLOSED,
-				&CTcpEndpoint::handling_internal_err_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_ADDING_INTO_IT,
-				&CTcpEndpoint::handling_added_into_ot_to_adding_into_it);
-
-		///这个时候发生关闭or internal err事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_INPUT_TASK
-		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT,
-				&CTcpEndpoint::handling_internal_err_while_adding_into_it);
-		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_CLOSE, ES_ADDING_INTO_IT,
-				&CTcpEndpoint::handling_close_while_adding_into_it);
-		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_ADDED_INTO_IT, ES_OPENED,
-				&CTcpEndpoint::handling_adding_into_it_to_opened);
-
-		///not handling internal err, when in the next two state.
-		m_sm.reg_evt_state(ES_OPENED, EE_INTERNAL_ERR, ES_DELING_FROM_IT,
-				&CTcpEndpoint::handling_internal_err_while_opened);
-		m_sm.reg_evt_state(ES_OPENED, EE_CLOSE, ES_DELING_FROM_IT,
-				&CTcpEndpoint::handling_close_while_opened);
-
-		m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_DELING_FROM_OT,
-				&CTcpEndpoint::handling_deling_from_it_to_deling_from_ot);
-		m_sm.reg_evt_state(ES_DELING_FROM_OT, EE_DELED_FROM_OT, ES_CLOSED,
-				&CTcpEndpoint::handling_deling_from_ot_to_closed);
-		m_sm.set_cur_state(ES_CLOSED);
+		init_sm();
 		///
 		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
 		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT | EPOLLET);
@@ -338,6 +762,16 @@ namespace nm_smartnet
 		m_sm(this), m_pTcpConnector(pTcpConnector), m_i32SMPendingEvt(-1),
 				m_pSNEngine(pTcpConnector->get_engine())
 	{
+		init_sm();
+		///
+		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
+		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT | EPOLLET);
+		///
+		m_log.init(".", "tcp_endpoint_", ELL_DEBUG, 60);
+	}
+
+	void CTcpEndpoint::init_sm()
+	{
 		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDED_INTO_HELPER,
 				&CTcpEndpoint::handling_closed_to_added_into_helper);
 
@@ -372,12 +806,9 @@ namespace nm_smartnet
 				&CTcpEndpoint::handling_deling_from_it_to_deling_from_ot);
 		m_sm.reg_evt_state(ES_DELING_FROM_OT, EE_DELED_FROM_OT, ES_CLOSED,
 				&CTcpEndpoint::handling_deling_from_ot_to_closed);
+
 		m_sm.set_cur_state(ES_CLOSED);
-		///
-		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
-		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT | EPOLLET);
-		///
-		m_log.init(".", "tcp_endpoint_", ELL_DEBUG, 60);
+
 	}
 
 	CTcpEndpoint::~CTcpEndpoint()
@@ -643,454 +1074,6 @@ namespace nm_smartnet
 	int32_t CTcpEndpoint::send_data(nm_mem::mem_ptr_t &pData)
 	{
 		return m_sm.get_cur_state() == ES_OPENED ? m_pTcpSock->send(pData) : CMNERR_COMMON_ERR;
-	}
-
-	/*--------------------------------------------------------------------------------------------*/
-
-	/**
-	 *
-	 * */
-	CTcpConnector::CTcpConnector(const nm_framework::sn_engine_ptr_t &pSNEngine) :
-		m_pSNEngine(pSNEngine), m_i32PendingEvt(EE_NONE), m_sm(this), m_ui64Interval(0)
-	{
-		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDING_INTO_TT,
-				&CTcpConnector::handling_closed_to_adding_into_tt);
-
-		m_sm.reg_evt_state(ES_ADDING_INTO_TT, EE_CLOSE, ES_ADDING_INTO_TT,
-				&CTcpConnector::handling_close_while_adding_into_tt);
-		m_sm.reg_evt_state(ES_ADDING_INTO_TT, EE_ADDED_INTO_TT, ES_CHECKING_TIMER,
-				&CTcpConnector::handling_adding_into_tt_to_checking_timer);
-
-		m_sm.reg_evt_state(ES_CHECKING_TIMER, EE_CLOSE, ES_DELING_FROM_TT,
-				&CTcpConnector::handling_close_while_checking_timer);
-		m_sm.reg_evt_state(ES_CHECKING_TIMER, EE_CONNECT, ES_ADDING_INTO_OT,
-				&CTcpConnector::handling_checking_timer_to_adding_into_ot);
-
-		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT,
-				&CTcpConnector::handling_close_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_INTERNAL_ERR, ES_ADDING_INTO_OT,
-				&CTcpConnector::handling_internal_err_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_CONNECTING,
-				&CTcpConnector::handling_adding_into_ot_to_connecting);
-
-		m_sm.reg_evt_state(ES_CONNECTING, EE_CLOSE, ES_DELING_FROM_OT_CLOSE,
-				&CTcpConnector::handling_close_while_connecting);
-		m_sm.reg_evt_state(ES_CONNECTING, EE_INTERNAL_ERR, ES_DELING_FROM_OT_NORMAL,
-				&CTcpConnector::handling_internal_err_while_connecting);
-		m_sm.reg_evt_state(ES_CONNECTING, EE_CONNECTED, ES_DELING_FROM_OT_NORMAL,
-				&CTcpConnector::handling_connected);
-
-		m_sm.reg_evt_state(ES_DELING_FROM_OT_CLOSE, EE_DELED_FROM_OT, ES_DELING_FROM_TT,
-				&CTcpConnector::handling_deling_from_ot_close_to_deling_from_tt);
-
-		m_sm.reg_evt_state(ES_DELING_FROM_OT_NORMAL, EE_CLOSE, ES_DELING_FROM_OT_NORMAL,
-				&CTcpConnector::handling_close_while_deling_from_ot_normal);
-		m_sm.reg_evt_state(ES_DELING_FROM_OT_NORMAL, EE_DELED_FROM_OT, ES_CHECKING_TIMER,
-				&CTcpConnector::handling_deling_from_ot_normal_to_checking_timer);
-
-		m_sm.reg_evt_state(ES_DELING_FROM_TT, EE_DELED_FROM_TT, ES_CLOSED,
-				&CTcpConnector::handling_deling_from_tt_to_closed);
-
-		m_sm.set_cur_state(ES_CLOSED);
-
-		///
-		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT);
-		///
-		m_log.init("tcp_connector", "c_", ELL_DEBUG, 60);
-	}
-
-	/**
-	 *
-	 * */
-	CTcpConnector::~CTcpConnector()
-	{
-		{
-			nm_utils::spin_scopelk_t lk(m_lkIdleEps);
-			m_dequeIdleEps.clear();
-		}
-
-		m_pTcpSock = NULL;
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort,
-			u_int64_t ui64Interval)
-	{
-		SParas sp;
-		sp.strIP = strAcceptorIP;
-		sp.ui16Port = ui16AcceptorPort;
-		sp.ui64Val = ui64Interval;
-		return m_sm.post_evt(EE_OPEN, &sp);
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::close()
-	{
-		return m_sm.post_evt(EE_CLOSE, NULL);
-	}
-
-	/**
-	 *
-	 * */
-	void CTcpConnector::handle_input_evt()
-	{
-		CMN_ASSERT(false);
-	}
-
-	/**
-	 *
-	 * */
-
-	void CTcpConnector::handle_output_evt()
-	{
-		(void) m_sm.post_evt(EE_CONNECTED, NULL);
-	}
-
-	void CTcpConnector::handle_io_error(int32_t i32ErrCode)
-	{
-		(void) m_sm.post_evt(EE_INTERNAL_ERR, NULL);
-	}
-
-	void CTcpConnector::handle_added_into_io_task(int32_t i32IoType, int32_t i32RetCode)
-	{
-		CMN_ASSERT(EIT_OUTPUT_TYPE == i32IoType);
-
-		if (CMNERR_SUC != i32RetCode)
-		{
-			CMN_ASSERT(CMNERR_SUC == m_sm.post_evt(EE_INTERNAL_ERR, NULL));
-		}
-		else
-		{
-			CMN_ASSERT(CMNERR_SUC == m_sm.post_evt(EE_ADDED_INTO_OT, NULL));
-		}
-	}
-
-	void CTcpConnector::handle_deled_from_io_task(int32_t i32IoType)
-	{
-		CMN_ASSERT(EIT_OUTPUT_TYPE == i32IoType);
-
-		CMN_ASSERT(CMNERR_SUC == m_sm.post_evt(EE_DELED_FROM_OT, NULL));
-	}
-
-	sock_handle_t CTcpConnector::get_ioobj_handle()
-	{
-		CMN_ASSERT(NULL != m_pTcpSock);
-		return m_pTcpSock->get_handle();
-	}
-
-	void CTcpConnector::handle_add_into_timer_task()
-	{
-		m_sm.post_evt(EE_ADDED_INTO_TT, NULL);
-	}
-
-	void CTcpConnector::handle_del_from_timer_task()
-	{
-		m_sm.post_evt(EE_DELED_FROM_TT, NULL);
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::add_endpoint(const tcp_endpoint_ptr_t &pTcpEp)
-	{
-		nm_utils::spin_scopelk_t lk(m_lkIdleEps);
-		m_dequeIdleEps.push_back(pTcpEp);
-
-		return CMNERR_SUC;
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::del_endpoint(const tcp_endpoint_ptr_t &pTcpEp)
-	{
-		nm_utils::spin_scopelk_t lk(m_lkIdleEps);
-
-		bool bFlag = false;
-		for (tcp_endpoint_deque_t::iterator iter = m_dequeIdleEps.begin(); iter
-				!= m_dequeIdleEps.end(); ++iter)
-		{
-			if ((*iter) == pTcpEp)
-			{
-				bFlag = true;
-				m_dequeIdleEps.erase(iter);
-				break;
-			}
-		}
-
-		CMN_ASSERT(bFlag);
-
-		return CMNERR_SUC;
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::handling_closed_to_adding_into_tt(int32_t i32CurState, int32_t i32Evt,
-			int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		m_i32PendingEvt = EE_NONE;
-
-		SParas *pSp = static_cast<SParas*> (pVoid);
-		m_strAcceptorIp = pSp->strIP;
-		m_ui16AcceptorPort = pSp->ui16Port;
-		m_ui64Interval = pSp->ui64Val;
-
-		CMN_ASSERT(m_ui64Interval > 0);
-
-		set_interval(m_ui64Interval);
-
-		///add into timer
-		return m_pSNEngine->add_timer(tcp_connector_ptr_t(this));
-	}
-
-	int32_t CTcpConnector::handling_close_while_adding_into_tt(int32_t i32CurState, int32_t i32Evt,
-			int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		m_i32PendingEvt = EE_CLOSE;
-
-		return CMNERR_SUC;
-	}
-
-	int32_t CTcpConnector::handling_adding_into_tt_to_checking_timer(int32_t i32CurState,
-			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		if (EE_NONE != m_i32PendingEvt)
-		{
-			CMN_ASSERT(EE_CLOSE == m_i32PendingEvt);
-			m_pSNEngine->del_timer(tcp_connector_ptr_t(this));
-			m_sm.set_cur_state(ES_DELING_FROM_TT);
-
-			return CMNERR_COMMON_ERR;
-		}
-
-		on_opened();
-
-		return CMNERR_SUC;
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::handling_close_while_checking_timer(int32_t i32CurState, int32_t i32Evt,
-			int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		CMN_ASSERT(NULL == m_pTcpSock);
-
-		return m_pSNEngine->del_timer(tcp_connector_ptr_t(this));
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::handling_checking_timer_to_adding_into_ot(int32_t i32CurState,
-			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		CMN_ASSERT(NULL == m_pTcpSock);
-		m_pTcpSock = SYS_NOTRW_NEW(nm_network::CTcpSock);
-		m_pTcpSock->open();
-		m_pTcpSock->set_nonblock(true);
-		m_pTcpSock->connect(m_strAcceptorIp, m_ui16AcceptorPort);
-
-		return m_pSNEngine->add_endpoint(tcp_connector_ptr_t(this), EIT_OUTPUT_TYPE);
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
-			int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		//CMN_ASSERT(EE_NONE == m_i32PendingEvt);
-		m_i32PendingEvt = EE_CLOSE;
-
-		return CMNERR_SUC;
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::handling_adding_into_ot_to_connecting(int32_t i32CurState,
-			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		///什么时候只赋值m_i32PendingEvt，什么时候判断m_i32PendingEvt需要解释下：
-		///如果一个状态不是一个稳态的，如加入output task等，则只直接赋值m_i32PendingEvt，如果是一个稳态了，则开始处理m_i32PendingEvt。
-		if (EE_NONE != m_i32PendingEvt)
-		{
-			m_pTcpSock->close();
-			m_pSNEngine->del_endpoint(tcp_connector_ptr_t(this), EIT_OUTPUT_TYPE);
-			m_sm.set_cur_state(
-					EE_CLOSE == m_i32PendingEvt ? ES_DELING_FROM_OT_CLOSE
-							: ES_DELING_FROM_OT_NORMAL);
-
-			return CMNERR_COMMON_ERR;
-		}
-		//
-		//		int32_t i32ErrCode = *(static_cast<int32_t*>(pVoid));
-		//		if (CMNERR_SUC != i32ErrCode)
-		//		{
-		//			m_pTcpSock->close();
-		//			m_sm.set_cur_state(ES_CHECKING_TIMER);
-		//
-		//			return CMNERR_COMMON_ERR;
-		//		}
-
-		return CMNERR_SUC;
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::handling_close_while_connecting(int32_t i32CurState, int32_t i32Evt,
-			int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		m_pTcpSock->close();
-
-		return m_pSNEngine->del_endpoint(tcp_connector_ptr_t(this), EIT_OUTPUT_TYPE);
-	}
-
-	int32_t CTcpConnector::handling_internal_err_while_connecting(int32_t i32CurState,
-			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		m_pTcpSock->close();
-
-		return m_pSNEngine->del_endpoint(tcp_connector_ptr_t(this), EIT_OUTPUT_TYPE);
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::handling_connected(int32_t i32CurState, int32_t i32Evt,
-			int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		CMN_ASSERT(m_pTcpSock->is_opened());
-
-		return m_pSNEngine->del_endpoint(tcp_connector_ptr_t(this), EIT_OUTPUT_TYPE);
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::handling_internal_err_while_adding_into_ot(int32_t i32CurState,
-			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		m_i32PendingEvt = EE_INTERNAL_ERR;
-
-		return CMNERR_SUC;
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::handling_deling_from_ot_close_to_deling_from_tt(int32_t i32CurState,
-			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		CMN_ASSERT(!m_pTcpSock->is_opened());
-
-		return m_pSNEngine->del_timer(tcp_connector_ptr_t(this));
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::handling_close_while_deling_from_ot_normal(int32_t i32CurState,
-			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		m_i32PendingEvt = EE_CLOSE;
-
-		return CMNERR_SUC;
-	}
-
-	/**
-	 *
-	 * */
-	int32_t CTcpConnector::handling_deling_from_ot_normal_to_checking_timer(int32_t i32CurState,
-			int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		CMN_ASSERT(m_pTcpSock->is_opened());
-
-		if (EE_NONE != m_i32PendingEvt)
-		{
-			CMN_ASSERT(EE_CLOSE == m_i32PendingEvt);
-
-			m_pTcpSock->close();
-			m_pSNEngine->del_timer(tcp_connector_ptr_t(this));
-			m_sm.set_cur_state(ES_DELING_FROM_TT);
-
-			return CMNERR_COMMON_ERR;
-		}
-
-		///established new connection
-		CMN_ASSERT((NULL != m_pTcpSock) && m_pTcpSock->is_opened()); ///for test
-
-		///
-		tcp_endpoint_ptr_t pTcpEp = NULL;
-		for (;;)
-		{
-			pTcpEp = NULL;
-
-			{
-				nm_utils::spin_scopelk_t lk(m_lkIdleEps);
-				if (m_dequeIdleEps.empty())
-				{
-					break;
-				}
-				pTcpEp = m_dequeIdleEps.front();
-				m_dequeIdleEps.pop_front();
-			}
-
-			if (CMNERR_SUC == pTcpEp->handle_connected(m_pTcpSock))
-			{
-				break;
-			}
-#if 0
-			else
-			{
-				///why error ? :), yes ,e.g. closing...
-			}
-#endif
-		}
-
-		if (NULL == pTcpEp)
-		{
-			m_pTcpSock->close();
-			m_pTcpSock = NULL;
-		}
-
-		return CMNERR_SUC;
-	}
-
-	int32_t CTcpConnector::handling_deling_from_tt_to_closed(int32_t i32CurState, int32_t i32Evt,
-			int32_t i32NextState, cmn_pvoid_t pVoid)
-	{
-		on_closed();
-
-		return CMNERR_SUC;
-	}
-
-	void CTcpConnector::on_opened()
-	{
-		TRACE_LOG(m_log, ELL_DEBUG, "tcp connect opened!\n");
-	}
-
-	void CTcpConnector::on_closed()
-	{
-		TRACE_LOG(m_log, ELL_DEBUG, "tcp connect closed!\n");
-	}
-
-	/**
-	 *
-	 * */
-	void CTcpConnector::on_timer()
-	{
-		if (!m_dequeIdleEps.empty())
-		{
-			m_sm.post_evt(EE_CONNECT, NULL);
-		}
 	}
 
 }
