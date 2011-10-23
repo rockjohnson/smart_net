@@ -73,7 +73,7 @@ namespace nm_network
 //		return m_iSock == INVALID_SOCKET ? false : true;
 //	}
 
-	//not thread safe.
+	//thread safe.
 	int CSocket::close()
 	{
 		if (!m_lock_close.try_lock())
@@ -100,15 +100,6 @@ namespace nm_network
 		return 0;
 	}
 
-//	void CSocket::clear_buf()
-//	{
-//		m_queue_recv.clear();
-//
-//		m_lock_send.lock();
-//		m_queue_send.clear();
-//		m_lock_send.unlock();
-//	}
-
 	void CSocket::reset()
 	{
 		ASSERT(m_iSock >= 0);
@@ -123,9 +114,9 @@ namespace nm_network
 	int CSocket::get_linger(us16_t &usSwitch, us16_t &usSecs)
 	{
 		struct linger lin = {0};
-#if defined(__PLATEFORM_WINDOWS__)
+#if (__PLATEFORM_WINDOWS__)
 		int len = sizeof(lin);
-#elif defined(__PLATEFORM_LINUX__)
+#elif (__PLATEFORM_LINUX__)
 		socklen_t len = sizeof(lin);
 #endif
 		if (getsockopt(m_iSock, SOL_SOCKET, SO_LINGER, (char*)&lin, &len) < 0)

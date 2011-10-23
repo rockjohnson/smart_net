@@ -8,7 +8,13 @@
 #ifndef __ATOMIC_H__
 #define __ATOMIC_H__
 
-#include "../common/common.h"
+#include <assert.h>
+#include <string>
+
+#include "../common/defines.h"
+#include "../common/containers.h"
+#include "../common/types.h"
+#include "../common/err_info.h"
 
 #if __PLATFORM__ == __PLATFORM_WINDOWS__
 #include <Windows.h>

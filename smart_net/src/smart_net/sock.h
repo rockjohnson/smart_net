@@ -212,15 +212,15 @@ namespace nm_network
 	class SOFT_NET_API CTcpSock: public CSocket
 	{
 		//private:
-		struct SSnder
+		struct SSendInfo
 		{
-			SSnder(mem_ptr_t &ptr) :
-		m_ptr(ptr), /*m_uiLen(ptr->get_len()),*/
+			SSendInfo(mem_ptr_t &ptr) :
+		m_pData(ptr), /*m_uiLen(ptr->get_len()),*/
 			m_uiOffset(ptr->get_offset())
 		{
 		}
-		SSnder(const SSnder &other) :
-		m_ptr(other.m_ptr) /*, m_uiLen(other.m_uiLen)*/, m_uiOffset(
+		SSendInfo(const SSendInfo &other) :
+		m_pData(other.m_pData) /*, m_uiLen(other.m_uiLen)*/, m_uiOffset(
 			other.m_uiOffset)
 		{
 		}
@@ -235,7 +235,7 @@ namespace nm_network
 			m_uiOffset = uiOffset;
 		}
 
-		mem_ptr_t m_ptr;
+		mem_ptr_t m_pData;
 		ui32_t m_uiOffset;
 		};
 	public:
@@ -255,14 +255,14 @@ namespace nm_network
 		ui32_t get_recv_data_len();
 
 
-		bool if_exist_pending_send_data(){return !m_queue_send.empty();}
+		bool if_exist_pending_send_data(){return !m_qSendCache.empty();}
 
 	private:
 		int __asyn_send(mem_ptr_t &ptr);
 
 	private:
 		CAutoLock m_lock_send;
-		std::deque<SSnder> m_queue_send;
+		std::deque<SSendInfo> m_qSendCache;
 		//
 		std::deque<mem_ptr_t> m_queue_recv;
 	};

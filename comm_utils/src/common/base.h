@@ -9,62 +9,87 @@
 #define __NONCOPYABLE_H__
 
 #include "types.h"
+#include "defines.h"
+#include "../utils/atomic.h"
 
 namespace nm_cmn_base
 {
-class CNoncopyable
-{
-protected:
-	CNoncopyable()
+	class CNoncopyable
 	{
-	}
-	virtual ~CNoncopyable()
+	protected:
+		CNoncopyable()
+		{
+		}
+		virtual ~CNoncopyable()
+		{
+		}
+	private:
+		// emphasize the following members are private
+		CNoncopyable(const CNoncopyable&);
+		const CNoncopyable& operator=(const CNoncopyable&);
+	};
+
+	class CNonnewobj
 	{
-	}
-private:
-	// emphasize the following members are private
-	CNoncopyable(const CNoncopyable&);
-	const CNoncopyable& operator=(const CNoncopyable&);
-};
+	private:
+		CNonnewobj()
+		{
+		}
+		CNonnewobj(const CNonnewobj &t)
+		{
+		}
+	public:
+		virtual ~CNonnewobj()
+		{
+		}
+	};
 
-class CNonnewobj
-{
-private:
-	CNonnewobj()
+	/**
+	 * common base
+	 * */
+	class ICommonBase
 	{
-	}
-	CNonnewobj(const CNonnewobj &t)
-	{
-	}
-public:
-	virtual ~CNonnewobj()
-	{
-	}
-};
+	protected:
+		inline ICommonBase() :
+			m_iCnt(0)
+		{
+		}
 
-/**
- * common base
- * */
-class ICommonBase
-{
-protected:
-	ICommonBase();
-	virtual ~ICommonBase();
+		inline virtual ~ICommonBase()
+		{
+			CMN_ASSERT(m_iCnt == 0);
+		}
 
-public:
-	void inc_ref();
-	void dec_ref();
-	virtual void dispose_this_obj();
-	inline int get_ref_cnt();
+	DISALLOW_COPY_AND_ASSIGN(ICommonBase);
 
-private:
-	ICommonBase(const ICommonBase &other);
-	ICommonBase& operator =(const ICommonBase&);
+	public:
+		inline void inc_ref()
+		{
+			nm_utils::atomic_increment(&m_iCnt);
+		}
 
-private:
-	int32_t m_iCnt;
-};
+		inline void dec_ref()
+		{
+			CMN_ASSERT(m_iCnt> 0);
+			if (nm_utils::atomic_exchange_and_add(&m_iCnt, -1) == 1)
+			{
+				dispose_this_obj();
+			}
+		}
 
+		inline void dispose_this_obj()
+		{
+			delete this;
+		}
+
+		inline int get_ref_cnt()
+		{
+			return m_iCnt;
+		}
+
+	private:
+		int32_t m_iCnt;
+	};
 }
 
 #endif /* __NONCOPYABLE_H__ */

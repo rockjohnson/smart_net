@@ -13,45 +13,45 @@ namespace nm_cmn_base
 
 using namespace nm_utils;
 
-ICommonBase::ICommonBase() :
-	m_iCnt(0)
-{
-}
+//ICommonBase::ICommonBase() :
+//	m_iCnt(0)
+//{
+//}
+//
+//ICommonBase::~ICommonBase()
+//{
+//	CMN_ASSERT(m_iCnt == 0);
+//}
+//
+//inline void ICommonBase::inc_ref()
+//{
+//	atomic_increment(&m_iCnt);
+//}
+//
+//inline void ICommonBase::dec_ref()
+//{
+//	CMN_ASSERT(m_iCnt> 0);
+//	if (atomic_exchange_and_add(&m_iCnt, -1) == 1)
+//	{
+//		dispose_this_obj();
+//	}
+//}
+//
+//inline void ICommonBase::dispose_this_obj()
+//{
+//	delete this;
+//}
 
-ICommonBase::~ICommonBase()
-{
-	CMN_ASSERT(m_iCnt == 0);
-}
+//inline int ICommonBase::get_ref_cnt()
+//{
+//	return m_iCnt;
+//}
 
-void ICommonBase::inc_ref()
-{
-	atomic_increment(&m_iCnt);
-}
-
-void ICommonBase::dec_ref()
-{
-	CMN_ASSERT(m_iCnt> 0);
-	if (atomic_exchange_and_add(&m_iCnt, -1) == 1)
-	{
-		dispose_this_obj();
-	}
-}
-
-void ICommonBase::dispose_this_obj()
-{
-	delete this;
-}
-
-int ICommonBase::get_ref_cnt()
-{
-	return m_iCnt;
-}
-
-ICommonBase::ICommonBase(const ICommonBase &other)
-{
-}
-ICommonBase& ICommonBase::operator =(const ICommonBase&)
-{
-	return *this;
-}
+//ICommonBase::ICommonBase(const ICommonBase &other)
+//{
+//}
+//ICommonBase& ICommonBase::operator =(const ICommonBase&)
+//{
+//	return *this;
+//}
 }

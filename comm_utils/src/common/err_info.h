@@ -22,7 +22,8 @@ enum
 	CMNERR_CALL_SYS_FUN_FAILED,
 	CMNERR_COMMON_ERR,
 	CMNERR_FATAL_ERR,
-	CMNERR_IO_ERR
+	CMNERR_IO_ERR,
+	CMNERR_SEND_PENDING
 };
 
 const char* get_cmn_err_info(int32_t i32ErrCode);
