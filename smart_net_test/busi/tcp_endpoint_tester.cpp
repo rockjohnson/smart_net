@@ -40,7 +40,10 @@ namespace nm_busi
 
 	void CTcpEndpointTester::on_recved_data(nm_mem::mem_ptr_t &pData)
 	{
-
+		pData->get_buf()[pData->get_len()] = 0;
+		std::cout<< "on_recved_data : "<< pData->get_data() <<std::endl;
+		send_data(pData);
+		pData = NULL;
 	}
 
 }

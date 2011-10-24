@@ -325,7 +325,6 @@ namespace nm_smartnet
 
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
 		nm_network::tcp_sock_ptr_t m_pTcpSock;
-		nm_network::tcp_sock_ptr_t m_pTcpSockTmp;
 		nm_network::ipv4_addr_ptr_t m_pPeerAddr;
 		tcp_connector_ptr_t m_pTcpConnector;
 		tcp_acceptor_ptr_t m_pTcpAcceptor;

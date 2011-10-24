@@ -1028,8 +1028,8 @@ namespace nm_smartnet
 		if (ES_OPENED == m_sm.get_cur_state()) ///有可能INPUT 处理线程先设置完毕，并开始接受数据，但是发送线程还在设置过程中，所以epoll要用level triger
 		{
 			TRACE_LOG(m_log, ELL_DEBUG, "handle_input_evt\n");
-			nm_mem::mem_ptr_t pM;
-			on_recved_data(pM);
+			m_pTcpSock->handle_can_recv(1024);
+			on_recved_data(m_pTcpSock->get_recv_data());
 		}
 	}
 
@@ -1038,6 +1038,7 @@ namespace nm_smartnet
 		if (ES_OPENED == m_sm.get_cur_state()) ///如果发生了错误，导致状态不是OPENNED时，就不用处理IO了。
 		{
 			TRACE_LOG(m_log, ELL_DEBUG, "handle_output_evt\n");
+			m_pTcpSock->handle_can_send();
 		}
 	}
 

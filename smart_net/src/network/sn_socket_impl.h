@@ -83,6 +83,10 @@ namespace nm_network
 		virtual int32_t handle_can_recv(u_int32_t uiMemSize);
 		virtual int32_t recv(cmn_pvoid_t pV, u_int32_t ui32Size);
 		int32_t handle_can_send();
+		nm_mem::mem_ptr_t& get_recv_data()
+		{
+			return m_pRecvData;
+		}
 
 	private:
 		CIpv4Addr m_localaddr;

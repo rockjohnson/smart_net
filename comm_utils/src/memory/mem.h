@@ -14,13 +14,16 @@
 namespace nm_mem
 {
 
+#define MEM_SZ (8192*4)
 	class CMemBlock: public nm_cmn_base::ICommonBase
 	{
 	public:
-		inline CMemBlock(){}
+		inline CMemBlock()
+		:m_ui32Sz(MEM_SZ), m_ui32Offset(0), m_ui32Len(0)
+		{
+		}
 		inline ~CMemBlock()
 		{
-			reset();
 		}
 
 	public:
@@ -98,13 +101,13 @@ namespace nm_mem
 		inline void reset()
 		{
 			//SAFE_DELETE_ARR(m_pBytes);
-			m_ui32Sz = 0;
+			m_ui32Sz = MEM_SZ;
 			m_ui32Offset = 0;
 			m_ui32Len = 0;
 		}
 
 	private:
-		cmn_byte_t m_pBytes[8192*4];
+		cmn_byte_t m_pBytes[MEM_SZ];
 		u_int32_t m_ui32Sz;
 		u_int32_t m_ui32Offset;
 		u_int32_t m_ui32Len;
