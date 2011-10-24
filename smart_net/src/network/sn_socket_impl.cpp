@@ -255,7 +255,7 @@ namespace nm_network
 			{
 				m_lkSending.unlock();
 
-				if (CMNERR_SUC == m_qSendCache.back()->append(pData->get_data(), pData->get_len()))
+				if (CMNERR_SUC != m_qSendCache.back()->append(pData->get_data(), pData->get_len()))
 				{
 					m_qSendCache.push_back(pData);
 				}
@@ -264,56 +264,51 @@ namespace nm_network
 			}
 		}
 
-		int32_t i32Ret = 0;
-		for (;;)
+		int32_t i32Ret = ::send(m_hSock, (const char*) (pData->get_data()), pData->get_len(), 0/*MSG_NOSIGNAL*/);
+		if (i32Ret < 0)
 		{
-			i32Ret = ::send(m_hSock, (const char*) (pData->get_data()), pData->get_len(), 0/*MSG_NOSIGNAL*/);
-			if (i32Ret < 0)
-			{
 #if (__PLATFORM__ == __PLATFORM_LINUX__)
-				if (EWOULDBLOCK/*EAGAIN*/== errno)
+			if (EWOULDBLOCK/*EAGAIN*/== errno)
 #elif defined(__PLATEFORM_WINDOWS__)
-				if (WSAEWOULDBLOCK/*EAGAIN*/==::GetLastError())
+			if (WSAEWOULDBLOCK/*EAGAIN*/==::GetLastError())
 #endif
-				{
-					//ASSERT(false); //should not reach here
-					//CMN_ASSERT(pData->get_len() > snder.get_offset());
-					//m_qSendCache.push_back(snder);//cache it.
-					i32Ret = CMNERR_SEND_PENDING;
-				}
-				else
-				{
-					//error occurred!
-					//TRACE_LAST_ERR( send);
-					//close_sock();
-					i32Ret = CMNERR_IO_ERR;
-				}
-				break;
+			{
+				//ASSERT(false); //should not reach here
+				//CMN_ASSERT(pData->get_len() > snder.get_offset());
+				//m_qSendCache.push_back(snder);//cache it.
+				return CMNERR_SEND_PENDING;
 			}
+			else
+			{
+				//error occurred!
+				//TRACE_LAST_ERR( send);
+				//close_sock();
+				return CMNERR_IO_ERR;
+			}
+		}
 
 #ifdef __FOR_DEBUG__
-			if (0 == i32Ret)
-			{
-				TRACE_LAST_ERR(send);
-				continue;
-			}
+		if (0 == i32Ret)
+		{
+			TRACE_LAST_ERR(send);
+			continue;
+		}
 #endif
-			CMN_ASSERT(0 != i32Ret); //what the meaning if zero??
+		CMN_ASSERT(0 != i32Ret); //what the meaning if zero??
 
-			if (pData->get_len() > i32Ret)
+		if (pData->get_len() > i32Ret)
+		{
+			pData->dec_head_data(i32Ret);
 			{
-				pData->move_head_data(i32Ret);
-				{
-					nm_utils::spin_scopelk_t lk(m_lkSendQ);
-					m_qSendCache.push_front(pData);
-				}
-				i32Ret = CMNERR_SEND_PENDING;
+				nm_utils::spin_scopelk_t lk(m_lkSendQ);
+				m_qSendCache.push_front(pData);
 			}
-
-			break;
+			i32Ret = CMNERR_SEND_PENDING;
 		}
 
 		m_lkSending.unlock();
+
+		i32Ret = CMNERR_SUC;
 		return i32Ret;
 	}
 
@@ -360,7 +355,7 @@ namespace nm_network
 
 				if (i32Ret < pData->get_len())
 				{
-					pData->move_head_data(i32Ret);
+					pData->dec_head_data(i32Ret);
 					i32Ret = CMNERR_SEND_PENDING;
 					break;
 				}
