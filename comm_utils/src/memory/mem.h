@@ -11,15 +11,16 @@
 #include "../common/common.h"
 #include "../utils/smart_ptr.h"
 
+#define MAX_MEM_SIZE (8192*4)
+
 namespace nm_mem
 {
 
-#define MEM_SZ (8192*4)
 	class CMemBlock: public nm_cmn_base::ICommonBase
 	{
 	public:
 		inline CMemBlock()
-		:m_ui32Sz(MEM_SZ), m_ui32Offset(0), m_ui32Len(0)
+		:m_ui32Sz(MAX_MEM_SIZE), m_ui32Offset(0), m_ui32Len(0)
 		{
 		}
 		inline ~CMemBlock()
@@ -58,6 +59,10 @@ namespace nm_mem
 		inline void inc_len(u_int32_t ui32Len)
 		{
 			m_ui32Len += ui32Len;
+		}
+		inline void inc_offset(u_int32_t ui32Len)
+		{
+			m_ui32Offset += ui32Len;
 		}
 		inline cmn_byte_t* get_tail_free_buf()
 		{
@@ -101,20 +106,20 @@ namespace nm_mem
 		inline void reset()
 		{
 			//SAFE_DELETE_ARR(m_pBytes);
-			m_ui32Sz = MEM_SZ;
+			m_ui32Sz = MAX_MEM_SIZE;
 			m_ui32Offset = 0;
 			m_ui32Len = 0;
 		}
 
 	private:
-		cmn_byte_t m_pBytes[MEM_SZ];
+		cmn_byte_t m_pBytes[MAX_MEM_SIZE];
 		u_int32_t m_ui32Sz;
 		u_int32_t m_ui32Offset;
 		u_int32_t m_ui32Len;
 	};
 	typedef nm_utils::CSmartPtr<nm_mem::CMemBlock> mem_ptr_t;
 
-#define NEW_MEM() \
+#define NEW_MEM(v) \
 		SYS_NOTRW_NEW(nm_mem::CMemBlock)
 
 }

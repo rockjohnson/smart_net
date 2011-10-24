@@ -110,5 +110,13 @@
 
 #define __USED_IN_MULTI_THREAD__ (1)
 //#define __USING_LOCK_FREE_CONTAINER__ (1)
+#define HTONL(v) \
+	htonl(v)
+#define HTONS(v) \
+	htons(v)
+#define NTOHS(v) \
+	ntohs(v)
+#define NTOHL(v) \
+	ntohl(v)
 
 #endif /* DEFINES_H_ */

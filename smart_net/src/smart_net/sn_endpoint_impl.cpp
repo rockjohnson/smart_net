@@ -641,8 +641,6 @@ namespace nm_smartnet
 	int32_t CTcpConnector::handling_deling_from_ot_normal_to_checking_timer(int32_t i32CurState, int32_t i32Evt,
 			int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
-		///CMN_ASSERT(m_pTcpSock->is_opened());
-
 		if (!m_pTcpSock->is_opened()) ///ocurred internal err while deling from ot
 		{
 			m_pTcpSock = NULL;

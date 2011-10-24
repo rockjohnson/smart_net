@@ -6,6 +6,10 @@
  */
 #include <iostream>
 
+#include <smart_net/dispatcher.h>
+#include <smart_net/archive.h>
+
+
 #include "tcp_endpoint_tester.h"
 
 namespace nm_busi
@@ -30,7 +34,11 @@ namespace nm_busi
 
 	void CTcpEndpointTester::on_opened()
 	{
+		using namespace nm_pkg;
+
 		std::cout << "tester opened" << std::endl;
+		nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgReg> arc(3);
+		CPkgReg &pkg = arc.get_next_body();
 	}
 
 	void CTcpEndpointTester::on_closed()

@@ -2,9 +2,14 @@
 #define __BASE_DISPATCH_H__
 
 #include <deque>
-#include <mem.h>
+#if (__USING_C11__)
 #include <unordered_map> //should add -std=c++0x with gcc
-#include "type.h"
+#else
+#include <google/dense_hash_map>
+#endif
+
+#include <common/common.h>
+#include <memory/mem.h>
 #include "pkg.h"
 
 #ifdef __USING_COMPRESSED_DATA__
@@ -46,8 +51,12 @@ namespace nm_pkg
 	template<typename PCONN>
 	class CDispMgr
 	{
-		typedef void (*P_FUN)(PCONN&, mem_queue_t&, ui32_t, ui32_t);
+		typedef void (*P_FUN)(PCONN&, nm_mem::mem_ptr_t&, u_int32_t, u_int32_t);
+#if (__USING_C11__)
 		typedef STD::unordered_map<int/*msg code*/, P_FUN/*handle function*/> hash_map;
+#else
+		typedef google::dense_hash_map<int/*msg code*/, P_FUN/*handle function*/> hash_map;
+#endif
 
 	public:
 		template<typename PKG>
