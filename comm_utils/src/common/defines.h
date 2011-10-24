@@ -109,6 +109,6 @@
 	void operator=(const TypeName&)
 
 #define __USED_IN_MULTI_THREAD__ (1)
-#define __USING_LOCK_FREE_CONTAINER__ (1)
+//#define __USING_LOCK_FREE_CONTAINER__ (1)
 
 #endif /* DEFINES_H_ */

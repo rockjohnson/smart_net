@@ -76,11 +76,11 @@ namespace nm_network
 		virtual CIpv4Addr& get_peer_addr();
 		virtual CIpv4Addr& get_local_addr();
 
-		virtual int32_t sendex(nm_mem::mem_ptr_t&);
+		//virtual int32_t sendex(nm_mem::mem_ptr_t&);
 		virtual int32_t send(nm_mem::mem_ptr_t&);
 		virtual int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len);
 
-		virtual int32_t recv(nm_mem::mem_ptr_t&);
+		virtual int32_t handle_can_recv(u_int32_t uiMemSize);
 		virtual int32_t recv(cmn_pvoid_t pV, u_int32_t ui32Size);
 		int32_t handle_can_send();
 
@@ -88,8 +88,12 @@ namespace nm_network
 		CIpv4Addr m_localaddr;
 		CIpv4Addr m_peeraddr;
 		sock_handle_t m_hSock;
+		nm_utils::CMutexLock m_lkSending;
 		nm_utils::CSpinLock m_lkSendQ;
-		std::deque<SSendInfo> m_qSendCache;
+		typedef std::deque<nm_mem::mem_ptr_t> mem_queue_t;
+		mem_queue_t m_qSendCache;
+		mem_queue_t m_qSending;
+		nm_mem::mem_ptr_t m_pRecvData;
 	};
 
 ///**

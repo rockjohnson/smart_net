@@ -254,7 +254,6 @@ namespace nm_network
 		mem_queue_t& get_recv_data();
 		ui32_t get_recv_data_len();
 
-
 		bool if_exist_pending_send_data(){return !m_qSendCache.empty();}
 
 	private:
@@ -264,7 +263,7 @@ namespace nm_network
 		CAutoLock m_lock_send;
 		std::deque<SSendInfo> m_qSendCache;
 		//
-		std::deque<mem_ptr_t> m_queue_recv;
+		std::deque<mem_ptr_t> m_qRecving;
 	};
 
 	///

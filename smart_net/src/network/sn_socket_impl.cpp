@@ -7,7 +7,7 @@
 
 #include "sn_socket_impl.h"
 
-#if __PLATFORM__ == __PLATFORM_LINUX__
+#if (__PLATFORM__ == __PLATFORM_LINUX__)
 #include <sys/types.h>
 #include <sys/socket.h>
 #endif
@@ -16,7 +16,6 @@
 
 namespace nm_network
 {
-
 	/**
 	 * tcp socket.
 	 * */
@@ -150,103 +149,125 @@ namespace nm_network
 		return (INVALID_SOCKET < m_hSock);
 	}
 
-	int32_t CTcpSock::sendex(nm_mem::mem_ptr_t &pData)
-	{
-		CMN_ASSERT(pData->get_cur_len() > 0);
-
-		//if there have been a block of data needed sending, just push me after it.
-		if (!m_qSendCache.empty())
-		{
-			if (!(1 == m_qSendCache.back().m_pData->get_ref_cnt()) && (CMNERR_SUC
-					== m_qSendCache.back().m_pData->append(pData->get_data(), pData->get_len())))
-			{
-				m_qSendCache.push_back(SSendInfo(pData));
-			}
-
-			return CMNERR_SEND_PENDING;
-		}
-
-		SSendInfo snder(pData);
-		int32_t i32Ret = 0;
-		for (;;)
-		{
-			i32Ret = ::send(m_hSock, (const char*) (pData->get_buf() + snder.get_offset()),
-					pData->get_len() - snder.get_offset(), 0/*MSG_NOSIGNAL*/);
-			if (i32Ret < 0)
-			{
-#if (__PLATFORM__ == __PLATFORM_LINUX__)
-				if (EWOULDBLOCK/*EAGAIN*/== errno)
-#elif defined(__PLATEFORM_WINDOWS__)
-				if (WSAEWOULDBLOCK/*EAGAIN*/==::GetLastError())
-#endif
-				{
-					//ASSERT(false); //should not reach here
-					CMN_ASSERT(pData->get_len() > snder.get_offset());
-					m_qSendCache.push_back(snder);//cache it.
-					i32Ret = CMNERR_SEND_PENDING;
-				}
-				else
-				{
-					//error occurred!
-					//TRACE_LAST_ERR( send);
-					//close_sock();
-					i32Ret = CMNERR_IO_ERR;
-				}
-				break;
-			}
-
-#ifdef __FOR_DEBUG__
-			if (0 == i32Ret)
-			{
-				TRACE_LAST_ERR(send);
-				continue;
-			}
-#endif
-			CMN_ASSERT(0 != i32Ret); //what the meaning if zero??
-
-			if (i32Ret < (pData->get_len() - snder.get_offset()))
-			{
-				snder.set_offset(snder.get_offset() + i32Ret);
-				m_qSendCache.push_back(snder);//cache it.
-				i32Ret = CMNERR_SEND_PENDING;
-				break;
-			}
-
-			snder.set_offset(snder.get_offset() + i32Ret);
-			if (snder.get_offset() == pData->get_len())
-			{
-				//TRACE_LOG(LOG, ELL_DEBUG, L"%d is sent\n", ptr->get_cur_len());
-				//all are sent.
-				i32Ret = CMNERR_SUC;
-				break;
-			}
-		}
-
-		return i32Ret;
-	}
+	//	int32_t CTcpSock::sendex(nm_mem::mem_ptr_t &pData)
+	//	{
+	//		CMN_ASSERT(pData->get_cur_len() > 0);
+	//
+	//		//if there have been a block of data needed sending, just push me after it.
+	//		if (!m_qSendCache.empty())
+	//		{
+	//			if (!(1 == m_qSendCache.back().m_pData->get_ref_cnt()) && (CMNERR_SUC
+	//					== m_qSendCache.back().m_pData->append(pData->get_data(), pData->get_len())))
+	//			{
+	//				m_qSendCache.push_back(SSendInfo(pData));
+	//			}
+	//
+	//			return CMNERR_SEND_PENDING;
+	//		}
+	//
+	//		SSendInfo snder(pData);
+	//		int32_t i32Ret = 0;
+	//		for (;;)
+	//		{
+	//			i32Ret = ::send(m_hSock, (const char*) (pData->get_buf() + snder.get_offset()),
+	//					pData->get_len() - snder.get_offset(), 0/*MSG_NOSIGNAL*/);
+	//			if (i32Ret < 0)
+	//			{
+	//#if (__PLATFORM__ == __PLATFORM_LINUX__)
+	//				if (EWOULDBLOCK/*EAGAIN*/== errno)
+	//#elif defined(__PLATEFORM_WINDOWS__)
+	//				if (WSAEWOULDBLOCK/*EAGAIN*/==::GetLastError())
+	//#endif
+	//				{
+	//					//ASSERT(false); //should not reach here
+	//					CMN_ASSERT(pData->get_len() > snder.get_offset());
+	//					m_qSendCache.push_back(snder);//cache it.
+	//					i32Ret = CMNERR_SEND_PENDING;
+	//				}
+	//				else
+	//				{
+	//					//error occurred!
+	//					//TRACE_LAST_ERR( send);
+	//					//close_sock();
+	//					i32Ret = CMNERR_IO_ERR;
+	//				}
+	//				break;
+	//			}
+	//
+	//#ifdef __FOR_DEBUG__
+	//			if (0 == i32Ret)
+	//			{
+	//				TRACE_LAST_ERR(send);
+	//				continue;
+	//			}
+	//#endif
+	//			CMN_ASSERT(0 != i32Ret); //what the meaning if zero??
+	//
+	//			if (i32Ret < (pData->get_len() - snder.get_offset()))
+	//			{
+	//				snder.set_offset(snder.get_offset() + i32Ret);
+	//				m_qSendCache.push_back(snder);//cache it.
+	//				i32Ret = CMNERR_SEND_PENDING;
+	//				break;
+	//			}
+	//
+	//			snder.set_offset(snder.get_offset() + i32Ret);
+	//			if (snder.get_offset() == pData->get_len())
+	//			{
+	//				//TRACE_LOG(LOG, ELL_DEBUG, L"%d is sent\n", ptr->get_cur_len());
+	//				//all are sent.
+	//				i32Ret = CMNERR_SUC;
+	//				break;
+	//			}
+	//		}
+	//
+	//		return i32Ret;
+	//	}
 
 	int32_t CTcpSock::send(nm_mem::mem_ptr_t &pData)
 	{
 		CMN_ASSERT(pData->get_cur_len() > 0);
+		CMN_ASSERT(pData->get_ref_cnt() == 1);
 
-		//if there have been a block of data needed sending, just push me after it.
-		if (!m_qSendCache.empty())
+		if (!m_lkSending.try_lock()) ///try send lock failed
 		{
-			if (!(1 == m_qSendCache.back().m_pData->get_ref_cnt()) && (CMNERR_SUC
-					== m_qSendCache.back().m_pData->append(pData->get_data(), pData->get_len())))
+			///put the msg into queue, then return.
+			nm_utils::spin_scopelk_t splk(m_lkSendQ);
+			if (m_qSendCache.empty())
 			{
-				m_qSendCache.push_back(SSendInfo(pData));
+				m_qSendCache.push_back(pData);
+			}
+			else
+			{
+				if (!CMNERR_SUC == m_qSendCache.back()->append(pData->get_data(), pData->get_len()))
+				{
+					m_qSendCache.push_back(pData);
+				}
 			}
 
 			return CMNERR_SEND_PENDING;
 		}
+		else
+		{
+			nm_utils::spin_scopelk_t splk(m_lkSendQ);
+			//if there have been a block of data needed sending, just push me after it.
+			if (!m_qSendCache.empty())
+			{
+				m_lkSending.unlock();
 
-		SSendInfo snder(pData);
+				if (CMNERR_SUC == m_qSendCache.back()->append(pData->get_data(), pData->get_len()))
+				{
+					m_qSendCache.push_back(pData);
+				}
+
+				return CMNERR_SEND_PENDING;
+			}
+		}
+
 		int32_t i32Ret = 0;
 		for (;;)
 		{
-			i32Ret = ::send(m_hSock, (const char*) (pData->get_buf() + snder.get_offset()),
-					pData->get_len() - snder.get_offset(), 0/*MSG_NOSIGNAL*/);
+			i32Ret = ::send(m_hSock, (const char*) (pData->get_data()), pData->get_len(), 0/*MSG_NOSIGNAL*/);
 			if (i32Ret < 0)
 			{
 #if (__PLATFORM__ == __PLATFORM_LINUX__)
@@ -256,8 +277,8 @@ namespace nm_network
 #endif
 				{
 					//ASSERT(false); //should not reach here
-					CMN_ASSERT(pData->get_len() > snder.get_offset());
-					m_qSendCache.push_back(snder);//cache it.
+					//CMN_ASSERT(pData->get_len() > snder.get_offset());
+					//m_qSendCache.push_back(snder);//cache it.
 					i32Ret = CMNERR_SEND_PENDING;
 				}
 				else
@@ -279,24 +300,20 @@ namespace nm_network
 #endif
 			CMN_ASSERT(0 != i32Ret); //what the meaning if zero??
 
-			if (i32Ret < (pData->get_len() - snder.get_offset()))
+			if (pData->get_len() > i32Ret)
 			{
-				snder.set_offset(snder.get_offset() + i32Ret);
-				m_qSendCache.push_back(snder);//cache it.
+				pData->move_head_data(i32Ret);
+				{
+					nm_utils::spin_scopelk_t lk(m_lkSendQ);
+					m_qSendCache.push_front(pData);
+				}
 				i32Ret = CMNERR_SEND_PENDING;
-				break;
 			}
 
-			snder.set_offset(snder.get_offset() + i32Ret);
-			if (snder.get_offset() == pData->get_len())
-			{
-				//TRACE_LOG(LOG, ELL_DEBUG, L"%d is sent\n", ptr->get_cur_len());
-				//all are sent.
-				i32Ret = CMNERR_SUC;
-				break;
-			}
+			break;
 		}
 
+		m_lkSending.unlock();
 		return i32Ret;
 	}
 
@@ -305,58 +322,64 @@ namespace nm_network
 	 * */
 	int32_t CTcpSock::handle_can_send()
 	{
-		CScopeLock < CAutoLock > lock(m_lock_send);
+		nm_utils::mtx_scopelk_t lk(m_lkSending);
+
+		if (m_qSending.empty())
+		{
+			nm_utils::spin_scopelk_t lk(m_lkSendQ);
+			m_qSending.swap(m_qSendCache);
+		}
 
 		int32_t i32Ret = 0;
-		while (!m_queue_send.empty())
+		while (!m_qSending.empty())
 		{
-			SSnder &snder = m_queue_send.front();
+			nm_mem::mem_ptr_t &pData = m_qSending.front();
 			for (;;)
 			{
-				i32Ret = ::send(m_iSock, (const char*) (snder.m_ptr->get_buf() + snder.get_offset()),
-						snder.m_ptr->get_len() - snder.get_offset(), 0);
+				i32Ret = ::send(m_hSock, (const char*) (pData->get_data()), pData->get_len(), 0);
 				if (i32Ret < 0)
 				{
-#if defined(__PLATEFORM_LINUX__)
+#if (__PLATFORM__ == __PLATFORM_LINUX__)
 					if (EWOULDBLOCK == errno)
 #elif defined(__PLATEFORM_WINDOWS__)
 					if (WSAEWOULDBLOCK == ::GetLastError())
 #endif
 					{
 						//ASSERT(false);//should not reach here.
-						ASSERT(snder.m_ptr->get_len() > snder.get_offset());
-						i32Ret = SEND_IS_PENDING;
+						i32Ret = CMNERR_SEND_PENDING;
 					}
 					else
 					{
-						TRACE_LAST_ERR(send);
+						//TRACE_LAST_ERR(send);
 						//close_sock();
 					}
 					break;
 				}
 
-				ASSERT(i32Ret != 0);
+				CMN_ASSERT(i32Ret != 0);
 
-				if (i32Ret < (snder.m_ptr->get_len() - snder.get_offset()))
+				if (i32Ret < pData->get_len())
 				{
-					snder.set_offset(snder.get_offset() + i32Ret);
-					i32Ret = SEND_IS_PENDING;
+					pData->move_head_data(i32Ret);
+					i32Ret = CMNERR_SEND_PENDING;
 					break;
 				}
 
-				snder.set_offset(snder.get_offset() + i32Ret);
-				i32Ret = RET_SUC;
-				if (snder.get_offset() == snder.m_ptr->get_len())
-				{
-					//all are sent.
-					m_queue_send.pop_front();
-					break;
-				}
+				i32Ret = CMNERR_SUC;
+				CMN_ASSERT(i32Ret == pData->get_len());
+				m_qSending.pop_front();
+				break;
 			}
 
-			if (i32Ret != RET_SUC)
+			if (i32Ret != CMNERR_SUC)
 			{
 				break;
+			}
+
+			if (m_qSending.empty())
+			{
+				nm_utils::spin_scopelk_t lk(m_lkSendQ);
+				m_qSending.swap(m_qSendCache);
 			}
 		}
 
@@ -368,9 +391,45 @@ namespace nm_network
 
 	}
 
-	int32_t CTcpSock::recv(nm_mem::mem_ptr_t&)
+	int32_t CTcpSock::handle_can_recv(u_int32_t uiMemSize)
 	{
+		if (NULL != m_pRecvData)
+		{
+			m_pRecvData->move_data_ahead();
+		}
+		else
+		{
+			m_pRecvData = NEW_MEM();
+		}
 
+		int32_t i32Ret = ::recv(m_hSock, (char*) m_pRecvData->get_tail_free_buf(), m_pRecvData->get_tail_free_size(), 0);
+		if (0 == i32Ret)
+		{
+			//normal shutdown
+			//TRACE_LOG(LOG, ELL_INFO, L"the peer has performed an orderly shutdown\n");
+			return CMNERR_IO_ERR;
+		}
+		else if (i32Ret < 0)
+		{
+#if (__PLATFORM__ == __PLATFORM_LINUX__)
+			if (EWOULDBLOCK == errno)
+#elif defined(__PLATEFORM_WINDOWS__)
+			if (WSAEWOULDBLOCK == ::GetLastError())
+#endif
+			{
+				//ASSERT(false); ///should not reach here
+				return CMNERR_SEND_PENDING;
+			}
+			else
+			{
+				//TRACE_LAST_ERR(recv);
+				return CMNERR_IO_ERR;
+			}
+		}
+
+		m_pRecvData->inc_len(i32Ret);
+
+		return CMNERR_SUC;
 	}
 
 	int32_t CTcpSock::recv(cmn_pvoid_t pV, u_int32_t ui32Size)
