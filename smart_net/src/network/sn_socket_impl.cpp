@@ -325,7 +325,7 @@ namespace nm_network
 			m_qSending.swap(m_qSendCache);
 		}
 
-		int32_t i32Ret = 0;
+		int32_t i32Ret = CMNERR_SUC;
 		while (!m_qSending.empty())
 		{
 			nm_mem::mem_ptr_t &pData = m_qSending.front();
@@ -347,11 +347,12 @@ namespace nm_network
 					{
 						//TRACE_LAST_ERR(send);
 						//close_sock();
+						i32Ret = CMNERR_IO_ERR;
 					}
 					break;
 				}
 
-				CMN_ASSERT(i32Ret != 0);
+				CMN_ASSERT(0 != i32Ret);
 
 				if (i32Ret < pData->get_len())
 				{
