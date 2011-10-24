@@ -414,7 +414,8 @@ namespace nm_network
 #endif
 			{
 				//ASSERT(false); ///should not reach here
-				return CMNERR_SEND_PENDING;
+				CMN_ASSERT(false);
+				return CMNERR_RECV_PENDING;
 			}
 			else
 			{

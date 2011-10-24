@@ -36,6 +36,7 @@ namespace nm_busi
 	void CTcpEndpointTester::on_closed()
 	{
 		std::cout << "tester closed" << std::endl;
+		open();
 	}
 
 	void CTcpEndpointTester::on_recved_data(nm_mem::mem_ptr_t &pData)

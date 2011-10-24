@@ -887,9 +887,13 @@ namespace nm_smartnet
 				: m_pTcpConnector->del_endpoint(tcp_endpoint_ptr_t(this));
 		CMN_ASSERT(CMNERR_SUC == i32Ret);
 
+		///ugly code, but :)...
+		m_sm.set_cur_state(ES_CLOSED);
 		on_closed();
+		m_pTcpSock = NULL;
+		return CMNERR_COMMON_ERR;
 
-		return CMNERR_SUC;
+		//return CMNERR_SUC;
 	}
 
 	/**
@@ -963,9 +967,12 @@ namespace nm_smartnet
 	int32_t CTcpEndpoint::handling_deling_from_ot_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState,
 			cmn_pvoid_t pVoid)
 	{
+		m_sm.set_cur_state(ES_CLOSED);
 		on_closed();
+		m_pTcpSock = NULL;
+		return CMNERR_COMMON_ERR;
 
-		return CMNERR_SUC;
+		//return CMNERR_SUC;
 	}
 
 	int32_t CTcpEndpoint::handling_added_into_helper_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
@@ -1012,8 +1019,14 @@ namespace nm_smartnet
 		if (ES_OPENED == m_sm.get_cur_state()) ///有可能INPUT 处理线程先设置完毕，并开始接受数据，但是发送线程还在设置过程中，所以epoll要用level triger
 		{
 			TRACE_LOG(m_log, ELL_DEBUG, "handle_input_evt\n");
-			m_pTcpSock->handle_can_recv(1024);
-			on_recved_data(m_pTcpSock->get_recv_data());
+			if (m_pTcpSock->handle_can_recv(1024) != CMNERR_SUC)
+			{
+				close();
+			}
+			else
+			{
+				on_recved_data(m_pTcpSock->get_recv_data());
+			}
 		}
 	}
 
