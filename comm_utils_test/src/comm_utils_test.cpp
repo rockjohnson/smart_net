@@ -40,6 +40,19 @@ public:
  void runTest() { suite_CFileTest.test_create(); }
 } testDescription_CFileTest_test_create;
 
+#include "../test/test_libcds.h"
+
+static CLibcdsTest suite_CLibcdsTest;
+
+static CxxTest::List Tests_CLibcdsTest = { 0, 0 };
+CxxTest::StaticSuiteDescription suiteDescription_CLibcdsTest( "../test/test_libcds.h", 32, "CLibcdsTest", suite_CLibcdsTest, Tests_CLibcdsTest );
+
+static class TestDescription_CLibcdsTest_test_queue : public CxxTest::RealTestDescription {
+public:
+ TestDescription_CLibcdsTest_test_queue() : CxxTest::RealTestDescription( Tests_CLibcdsTest, suiteDescription_CLibcdsTest, 35, "test_queue" ) {}
+ void runTest() { suite_CLibcdsTest.test_queue(); }
+} testDescription_CLibcdsTest_test_queue;
+
 #include "../test/test_malloc.h"
 
 static CMallocTest suite_CMallocTest;

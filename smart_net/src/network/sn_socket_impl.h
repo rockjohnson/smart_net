@@ -13,6 +13,10 @@
 #include <memory/mem.h>
 #include <utils/smart_lock.h>
 
+#if (__USING_LOCK_FREE_CONTAINER__)
+#include <intrusive/optimistic_queue.h>
+#endif
+
 #include "../common/sn_common.h"
 #include "sn_socket.h"
 
@@ -78,6 +82,7 @@ namespace nm_network
 
 		virtual int32_t recv(nm_mem::mem_ptr_t&);
 		virtual int32_t recv(cmn_pvoid_t pV, u_int32_t ui32Size);
+		int32_t handle_can_send();
 
 	private:
 		CIpv4Addr m_localaddr;
