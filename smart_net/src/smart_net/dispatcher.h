@@ -22,13 +22,13 @@ namespace nm_pkg
 	CSingleton<nm_pkg::CDispMgr<nm_utils::CSmartPtr<CONN> > >::instance()
 
 #define DISPATCH_PKG(CONN, P_CONN_OBJ, PKG_HDR, PKG_VER) \
-	ui32_t uiSize = m_sock.get_recv_data_len(); \
+	u_int32_t uiSize = m_sock.get_recv_data_len(); \
 	nm_utils::CSmartPtr<CONN> pConn(P_CONN_OBJ); \
 	DISPATCHER(CONN).dispatch<PKG_HDR>(pConn, recv_data, uiSize, PKG_VER);
 
 #define DISPATCH(CONN) \
 	DISPATCH_PKG(CONN, this, CPkgHdr, VERSION)
-	/*ui32_t uiSize = m_sock.get_recv_data_len(); \
+	/*u_int32_t uiSize = m_sock.get_recv_data_len(); \
 	nm_utils::CSmartPtr<CONN> pConn(this); \
 	DISPATCHER(CONN).dispatch<CPkgHdr>(pConn, recv_data, uiSize, VERSION);*/
 
@@ -60,10 +60,10 @@ namespace nm_pkg
 
 	public:
 		template<typename PKG>
-		static void dispatch_fun(PCONN &pConn, mem_queue_t &raw_data, ui32_t uiSize/*size of package bodys*/, ui32_t uiTag)
+		static void dispatch_fun(PCONN &pConn, mem_queue_t &raw_data, u_int32_t uiSize/*size of package bodys*/, u_int32_t uiTag)
 		{
 #ifdef __FOR_DEBUG__
-				ui32_t ui = 0;
+				u_int32_t ui = 0;
 				for (mem_queue_t::iterator iter = raw_data.begin();
 				iter != raw_data.end(); iter++)
 				{
@@ -74,7 +74,7 @@ namespace nm_pkg
 
 			//PKG pkg(pBytes, uiSize);
 			ASSERT(!raw_data.empty());
-			static const ui32_t uiPkgSize = sizeof(PKG);
+			static const u_int32_t uiPkgSize = sizeof(PKG);
 			mem_ptr_t pMem;
 			while (uiSize > 0)
 			{
@@ -94,7 +94,7 @@ namespace nm_pkg
 					///ԭ������ڱ��δ��루����ϸ����������Ļ��Ͳ���ʹ���ڴ���е��ڴ����������Ϣ����
 					ASSERT((pMem->get_cur_len() + raw_data.front()->get_cur_len()) >= uiPkgSize);//the size of one package body must <= MAX_MEM_SIZE
 					//copy data
-					ui32_t uiTemp = uiPkgSize - pMem->get_cur_len();
+					u_int32_t uiTemp = uiPkgSize - pMem->get_cur_len();
 					pMem->rearrange();
 					pMem->append(raw_data.front()->get_cur_buf(), uiTemp);
 					raw_data.front()->inc_offset(uiTemp);
@@ -112,7 +112,7 @@ namespace nm_pkg
 					raw_data.pop_front();
 					ASSERT((pMem->get_cur_len() + raw_data.front()->get_cur_len()) >= pPkg->get_real_size()); //the size of one package body must <= MAX_MEM_SIZE
 					//
-					ui32_t uiTemp = pPkg->get_real_size() - pMem->get_cur_len();
+					u_int32_t uiTemp = pPkg->get_real_size() - pMem->get_cur_len();
 					pMem->rearrange();
 					pMem->append(raw_data.front()->get_cur_buf(), uiTemp);
 					raw_data.front()->inc_offset(uiTemp);
@@ -145,18 +145,18 @@ namespace nm_pkg
 			m_hmFuns[iKey] = pFun;
 		}
 
-		void dispatch(PCONN &pConn, int iCmd, deque<mem_ptr_t> &raw_data, ui32_t uiSize, ui32_t uiTag)
+		void dispatch(PCONN &pConn, int iCmd, deque<mem_ptr_t> &raw_data, u_int32_t uiSize, u_int32_t uiTag)
 		{
 			ASSERT(m_hmFuns.find(iCmd) != m_hmFuns.end());
 			m_hmFuns[iCmd](pConn, raw_data, uiSize, uiTag);
 		}
 
 		template <typename H>
-		void dispatch(PCONN &pConn, mem_queue_t &recv_data, ui32_t uiSize, ui32_t uiVer)
+		void dispatch(PCONN &pConn, mem_queue_t &recv_data, u_int32_t uiSize, u_int32_t uiVer)
 		{
 			ASSERT(!recv_data.empty());
-			static const ui32_t uiPkgHdr = sizeof(H);
-			//static const ui32_t uiBytesDataLen = sizeof(ui32_t);
+			static const u_int32_t uiPkgHdr = sizeof(H);
+			//static const u_int32_t uiBytesDataLen = sizeof(u_int32_t);
 			mem_ptr_t pMem;
 			while (uiSize > MINI_PKG_HDR_SIZE /*uiBytesDataLen*/ /*uiPkgHdr*/)
 			{
@@ -172,7 +172,7 @@ namespace nm_pkg
 					//confirm have enough bytes
 					pMem->rearrange();
 					recv_data.pop_front();
-					ui32_t uiTemp = MINI_PKG_HDR_SIZE/*uiBytesDataLen*/ - pMem->get_cur_len();
+					u_int32_t uiTemp = MINI_PKG_HDR_SIZE/*uiBytesDataLen*/ - pMem->get_cur_len();
 					pMem->append(recv_data.front()->get_cur_buf(), uiTemp);
 					recv_data.front()->inc_offset(uiTemp);
 					if (recv_data.front()->get_cur_len() == 0)
@@ -195,7 +195,7 @@ namespace nm_pkg
 				}
 				//
 				//获取此段数据的长度（也许是压缩的、也许是非压缩的）
-				ui32_t uiTempDataLen = NTOHL(*((ui32_t*)(pMem->get_cur_buf())));
+				u_int32_t uiTempDataLen = NTOHL(*((u_int32_t*)(pMem->get_cur_buf())));
 				//if (uiPkgHdr > uiTempDataLen)  //you see, the data length value must be the first member of pkg header.
 				//{
 				//	//error
@@ -207,7 +207,7 @@ namespace nm_pkg
 				//
 				if (uiTempDataLen/*uiPkgHdr*/ > uiSize)  //you see, the data length value must be the first member of pkg header.
 				{
-					TRACE_LOG(LOG, ELL_DEBUG, L"received data size is smaller than pkg header, pkg size is : %u\n", NTOHL(*((ui32_t*)(pMem->get_cur_buf()))));
+					TRACE_LOG(LOG, ELL_DEBUG, L"received data size is smaller than pkg header, pkg size is : %u\n", NTOHL(*((u_int32_t*)(pMem->get_cur_buf()))));
 					break;
 				}
 
@@ -238,7 +238,7 @@ namespace nm_pkg
 				{
 					pMem->rearrange();
 					recv_data.pop_front();
-					ui32_t uiTemp = uiPkgHdr - pMem->get_cur_len();
+					u_int32_t uiTemp = uiPkgHdr - pMem->get_cur_len();
 					pMem->append(recv_data.front()->get_cur_buf(), uiTemp);
 					recv_data.front()->inc_offset(uiTemp);
 					if (recv_data.front()->get_cur_len() == 0)
@@ -261,7 +261,7 @@ namespace nm_pkg
 				//
 				/*if (uiSize < pHdr->get_len())
 				{
-					TRACE_LOG(LOG, ELL_DEBUG, L"received data size too small, pkg size is : %u\n", ntohl(*((ui32_t*)(pMem->get_cur_buf()))));
+					TRACE_LOG(LOG, ELL_DEBUG, L"received data size too small, pkg size is : %u\n", ntohl(*((u_int32_t*)(pMem->get_cur_buf()))));
 					break;
 				}*/
 				//
@@ -299,11 +299,11 @@ namespace nm_pkg
 
 		///which will receive the pkg head firstly.
 		template <typename H>
-		void dispatch_ex(PCONN &pConn, mem_queue_t &recv_data, ui32_t uiSize, ui32_t uiVer)
+		void dispatch_ex(PCONN &pConn, mem_queue_t &recv_data, u_int32_t uiSize, u_int32_t uiVer)
 		{
 			ASSERT(!recv_data.empty());
-			static const ui32_t uiPkgHdr = sizeof(H);
-			//static const ui32_t uiBytesDataLen = sizeof(ui32_t);
+			static const u_int32_t uiPkgHdr = sizeof(H);
+			//static const u_int32_t uiBytesDataLen = sizeof(u_int32_t);
 			mem_ptr_t pMem;
 			while (uiSize > uiPkgHdr)
 			{
@@ -319,7 +319,7 @@ namespace nm_pkg
 				{
 					pMem->rearrange();
 					recv_data.pop_front();
-					ui32_t uiTemp = uiPkgHdr - pMem->get_cur_len();
+					u_int32_t uiTemp = uiPkgHdr - pMem->get_cur_len();
 					pMem->append(recv_data.front()->get_cur_buf(), uiTemp);
 					recv_data.front()->inc_offset(uiTemp);
 					if (recv_data.front()->get_cur_len() == 0)
@@ -342,7 +342,7 @@ namespace nm_pkg
 				//
 				if (uiSize < pHdr->get_len())
 				{
-					TRACE_LOG(LOG, ELL_DEBUG, L"received data size too small, pkg size is : %u\n", NTOHL(*((ui32_t*)(pMem->get_cur_buf()))));
+					TRACE_LOG(LOG, ELL_DEBUG, L"received data size too small, pkg size is : %u\n", NTOHL(*((u_int32_t*)(pMem->get_cur_buf()))));
 					break;
 				}
 				//
@@ -377,13 +377,13 @@ namespace nm_pkg
 	template<typename PCONN>
 	class CUdpPkgDispMgr
 	{
-		typedef void (*P_FUN)(PCONN&, mem_ptr_t&, ui32_t, us16_t, ui32_t);
+		typedef void (*P_FUN)(PCONN&, mem_ptr_t&, u_int32_t, us16_t, u_int32_t);
 		typedef STD::unordered_map<int/*msg code*/, P_FUN/*handle function*/>
 				hash_map;
 	public:
 		template<typename PKG>
-		static void dispatch_fun(PCONN &pConn, mem_ptr_t &ptr, ui32_t uiIp,
-				us16_t usPort, ui32_t uiTag)
+		static void dispatch_fun(PCONN &pConn, mem_ptr_t &ptr, u_int32_t uiIp,
+				us16_t usPort, u_int32_t uiTag)
 		{
 			PKG *pPkg = (PKG*) (ptr->get_cur_buf());
 			if (ptr->get_cur_len() != pPkg->get_real_size())
@@ -403,11 +403,11 @@ namespace nm_pkg
 
 		//process udp pkg
 		template<typename H>
-		void dispatch(PCONN &pConn, mem_ptr_t &pMem, ui32_t uiIp, us16_t usPort,
-				ui32_t uiVer)
+		void dispatch(PCONN &pConn, mem_ptr_t &pMem, u_int32_t uiIp, us16_t usPort,
+				u_int32_t uiVer)
 		{
-			static const ui32_t uiPkgHdr = sizeof(H);
-			ui32_t uiSize = pMem->get_cur_len();
+			static const u_int32_t uiPkgHdr = sizeof(H);
+			u_int32_t uiSize = pMem->get_cur_len();
 
 			//
 			if (uiSize < MINI_PKG_HDR_SIZE/*uiBytesDataLen*/)
@@ -430,7 +430,7 @@ namespace nm_pkg
 			}
 
 #ifdef __USING_COMPRESSED_DATA__
-			ui32_t uiTempDataLen = NTOHL(*((ui32_t*)(pMem->get_cur_buf())));
+			u_int32_t uiTempDataLen = NTOHL(*((u_int32_t*)(pMem->get_cur_buf())));
 			ASSERT(uiSize == uiTempDataLen);
 			
 			if ((*(pMem->get_cur_buf() + PKG_SIZE_TYPE_SIZE)) == COMPRESSED_PKG)
@@ -493,7 +493,7 @@ namespace nm_pkg
 //class CMsg
 //{
 //public:
-//	CMsg(byte_t *pBytes, ui32_t ui)
+//	CMsg(byte_t *pBytes, u_int32_t ui)
 //	{
 
 //	}

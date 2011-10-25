@@ -78,7 +78,7 @@ namespace nm_mem
 		}
 		inline cmn_byte_t* get_cur_buf()
 		{
-			return (m_pBytes + m_ui32Offset);
+			return (m_pBytes + m_ui32Offset + m_ui32Len);
 		}
 		inline cmn_byte_t* get_buf()
 		{
