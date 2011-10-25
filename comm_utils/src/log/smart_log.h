@@ -74,7 +74,7 @@ namespace nm_utils
 		time_t m_tmLogFileStart;
 #endif
 		u_int32_t m_i32IntervalInSeconds; //the log file interval
-		CMutexLock m_lock;
+		CMutexLock m_lk;
 	};
 
 #if __PLATFORM__ == __PLATFORM_LINUX__

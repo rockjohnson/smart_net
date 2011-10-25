@@ -40,10 +40,15 @@ namespace nm_pkg
 	{
 		typedef void (*P_FUN)(PCONN&, nm_mem::mem_ptr_t&, u_int32_t, u_int32_t);
 #if (__USING_C11__)
-		typedef STD::unordered_map<int/*msg code*/, P_FUN/*handle function*/> hash_map;
+		typedef STD::unordered_map<int32_t/*msg code*/, P_FUN/*handle function*/> hash_map;
 #else
-		typedef google::dense_hash_map<int/*msg code*/, P_FUN/*handle function*/> hash_map;
+		typedef google::dense_hash_map<int32_t/*msg code*/, P_FUN/*handle function*/> hash_map;
 #endif
+	public:
+		CDispatcher()
+		{
+			m_hmFuns.set_empty_key(-1);
+		}
 
 	public:
 		template<typename PKG>

@@ -15,7 +15,7 @@ int main()
 	SET_PKG_HANDLER(nm_busi::CTcpEndpointTester, nm_pkg::CPkgReg);
 
 	nm_framework::sn_engine_ptr_t pSNEngine = SYS_NOTRW_NEW(nm_framework::CSNEngine);
-	IF_TRUE_THEN_RETURN_CODE(pSNEngine->start(1, 1, nm_framework::EIEN_EPOLL, 100) < 0, -1);
+	IF_TRUE_THEN_RETURN_CODE(pSNEngine->start(2, 2, nm_framework::EIEN_EPOLL, 100) < 0, -1);
 
 #if 1
 	std::cout<<"ok1"<<std::endl;

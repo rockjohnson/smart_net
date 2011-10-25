@@ -750,7 +750,9 @@ namespace nm_smartnet
 		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
 		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT | EPOLLET);
 		///
-		m_log.init(".", "tcp_endpoint_", ELL_DEBUG, 60);
+		char buf[1024] = {0};
+		sprintf(buf, "%ld_", (long)this);
+		m_log.init(".", buf, ELL_DEBUG, 60);
 	}
 
 	void CTcpEndpoint::init_sm()
@@ -1069,7 +1071,7 @@ namespace nm_smartnet
 	 * */
 	int32_t CTcpEndpoint::send_data(nm_mem::mem_ptr_t &pData)
 	{
-		return m_sm.get_cur_state() == ES_OPENED ? m_pTcpSock->send(pData) : CMNERR_COMMON_ERR;
+		return m_pTcpSock->send(pData);
 	}
 
 }

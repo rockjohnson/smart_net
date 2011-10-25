@@ -80,7 +80,7 @@ namespace nm_utils
 		}
 
 		{
-			CScopeLock<CMutexLock> lock(m_lock);
+			mtx_scopelk_t lk(m_lk);
 
 			if ((m_LogFile.is_open()) && ((ZERO >= m_i32IntervalInSeconds) || (time(NULL) < (m_tmLogFileStart + m_i32IntervalInSeconds))))
 			{
@@ -141,7 +141,6 @@ namespace nm_utils
 					strTemp.c_str(), pTm->tm_hour, pTm->tm_min, pTm->tm_sec);
 #endif
 
-			//const string_t strTmp(szLogFileName);
 			i32Ret = m_LogFile.create(cmn_string_t(szLogFileName));
 			if (ZERO > i32Ret)
 			{
