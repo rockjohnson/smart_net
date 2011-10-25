@@ -12,6 +12,8 @@ using namespace std;
 
 int main()
 {
+	SET_PKG_HANDLER(nm_busi::CTcpEndpointTester, nm_pkg::CPkgReg);
+
 	nm_framework::sn_engine_ptr_t pSNEngine = SYS_NOTRW_NEW(nm_framework::CSNEngine);
 	IF_TRUE_THEN_RETURN_CODE(pSNEngine->start(1, 1, nm_framework::EIEN_EPOLL, 100) < 0, -1);
 
@@ -34,8 +36,6 @@ int main()
 	nm_busi::tcp_ep_tester_ptr_t pC = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
 	nm_busi::tcp_ep_tester_ptr_t pD = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
 	nm_busi::tcp_ep_tester_ptr_t pE = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
-
-
 
 	pA->open();
 	pC->open();

@@ -12,6 +12,9 @@
 
 //#include "../framework/sn_engine.h"
 #include "sn_endpoint_impl.h"
+#include "dispatcher.h"
+#include "archive.h"
+#include "pkg.h"
 
 //namespace nm_smartnet
 //{

@@ -10,6 +10,7 @@
 
 #include <smart_net/smart_net.h>
 
+
 namespace nm_busi
 {
 
@@ -19,6 +20,9 @@ namespace nm_busi
 		CTcpEndpointTester(nm_smartnet::tcp_acceptor_ptr_t&);
 		CTcpEndpointTester(nm_smartnet::tcp_connector_ptr_t&);
 		virtual ~CTcpEndpointTester();
+
+	public:
+		void handle_pkg(nm_pkg::CPkgReg &, u_int32_t uiTag);
 
 	protected:
 		///

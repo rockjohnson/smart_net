@@ -18,8 +18,6 @@
 #include "zlib_wrapper.h"
 #endif
 
-namespace nm_pkg
-{
 #define DISPATCHER(CONN) \
 	nm_utils::CSingleton<nm_pkg::CDispatcher<nm_utils::CSmartPtr<CONN> > >::instance()
 
@@ -29,25 +27,12 @@ namespace nm_pkg
 
 #define DISPATCH(CONN) \
 	DISPATCH_PKG(CONN, this, nm_pkg::CPkgHdr, VERSION)
-	/*u_int32_t uiSize = m_sock.get_recv_data_len(); \
-	nm_utils::CSmartPtr<CONN> pConn(this); \
-	DISPATCHER(CONN).dispatch<CPkgHdr>(pConn, recv_data, uiSize, VERSION);*/
-
-//#define DISPATCHER_UDP_PKG(CONN) \
-//	CSingleton<nm_pkg::CUdpPkgDispMgr<nm_utils::CSmartPtr<CONN> > >::instance()
-
-//#define DISPATCH_UDP_PKG(CONN, PKG_HDR) \
-//	nm_utils::CSmartPtr<CONN> pConn(this); \
-//	DISPATCHER_UDP_PKG(CONN).dispatch<PKG_HDR>(pConn, pMem, ulIp, usPort, VERSION);
 
 #define SET_PKG_HANDLER(CONN, PKG) \
-	DISPATCHER(CONN).reg_fun((int)PKG::PKG_OPCODE, &CDispatcher<nm_utils::CSmartPtr<CONN> >::dispatch_fun<PKG>)
+	DISPATCHER(CONN).reg_fun((int)PKG::PKG_OPCODE, &nm_pkg::CDispatcher<nm_utils::CSmartPtr<CONN> >::dispatch_fun<PKG>)
 
-//#define SET_UDP_PKG_HANDLER(CONN, PKG) \
-//	DISPATCHER_UDP_PKG(CONN).reg_fun((int)PKG::PKG_OPCODE, &CUdpPkgDispMgr<nm_utils::CSmartPtr<CONN> >::dispatch_fun<PKG>)
-
-	using namespace nm_utils;
-	using namespace std;
+namespace nm_pkg
+{
 	using nm_mem::mem_ptr_t;
 
 	template<typename PCONN>
@@ -78,7 +63,7 @@ namespace nm_pkg
 
 		void reg_fun(int32_t i32Opcode, P_FUN pFun)
 		{
-			ASSERT(m_hmFuns.find(i32Opcode) == m_hmFuns.end());
+			CMN_ASSERT(m_hmFuns.find(i32Opcode) == m_hmFuns.end());
 			m_hmFuns[i32Opcode] = pFun;
 		}
 
