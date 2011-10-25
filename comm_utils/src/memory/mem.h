@@ -64,6 +64,10 @@ namespace nm_mem
 		{
 			m_ui32Offset += ui32Len;
 		}
+		inline void dec_len(u_int32_t ui32Len)
+		{
+			m_ui32Len -= ui32Len;
+		}
 		inline cmn_byte_t* get_tail_free_buf()
 		{
 			return (m_pBytes + m_ui32Offset + m_ui32Len);
@@ -75,10 +79,6 @@ namespace nm_mem
 		inline u_int32_t get_cur_len()
 		{
 			return m_ui32Len;
-		}
-		inline cmn_byte_t* get_cur_buf()
-		{
-			return (m_pBytes + m_ui32Offset + m_ui32Len);
 		}
 		inline cmn_byte_t* get_buf()
 		{

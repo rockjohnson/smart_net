@@ -23,7 +23,6 @@ namespace nm_pkg
 	//package header + package body + package body + ...
 	//#define BYTES_DATA_LEN sizeof(u_int32_t)
 
-#define NORMAL_PKG (1)
 	typedef std::deque<nm_mem::mem_ptr_t> mem_queue_t;
 
 	///为了使用高效使用可靠组播协议，本版本不支持queue mem队列了:<
@@ -31,8 +30,8 @@ namespace nm_pkg
 	class CArchive
 	{
 	public:
-		CArchive(u_int16_t usCnt/*estimated value*/) :
-			m_pHdr(NULL), m_i32Cnt(usCnt), m_uiLen(0), m_bPending(false)
+		CArchive(int32_t i32Cnt = -1/*estimated value*/) :
+			m_pHdr(NULL), m_i32Cnt((-1 == i32Cnt) ? MAX_MEM_SIZE : i32Cnt), m_bPending(false)
 		{
 		}
 		~CArchive()
@@ -56,7 +55,7 @@ namespace nm_pkg
 			static const u_int32_t s_ui32MaxPkgSize = B::get_max_size();
 			CMN_ASSERT(NULL == m_pMem);
 			m_pMem = NEW_MEM(((HdrSize + s_ui32MaxPkgSize * m_i32Cnt) > MAX_MEM_SIZE ? MAX_MEM_SIZE : (HdrSize + s_ui32MaxPkgSize * m_i32Cnt)));
-			m_pHdr = new (m_pMem->get_cur_buf()) H(B::PKG_OPCODE, 0, bVer/*, bChk*/);
+			m_pHdr = new (m_pMem->get_tail_free_buf()) H(B::PKG_OPCODE, 0, bVer/*, bChk*/);
 			m_pMem->inc_len(HdrSize);
 			//m_pMem->inc_offset(HdrSize);
 			//m_bPending = false;
@@ -101,12 +100,12 @@ namespace nm_pkg
 
 			m_bPending = true;
 			//return *pB;
-			return (B*)(m_pMem->get_cur_buf());
+			return (B*)(m_pMem->get_tail_free_buf());
 		}
 
 		u_int32_t get_len()
 		{
-			return m_uiLen;
+			return (NULL == m_pMem) ? 0 : m_pMem->get_len();
 		}
 
 #ifdef __USING_COMPRESSED_DATA__
@@ -160,7 +159,7 @@ namespace nm_pkg
 				return;
 			}
 
-			B *pB = (B*) (m_pMem->get_cur_buf());
+			B *pB = (B*) (m_pMem->get_tail_free_buf());
 			m_pMem->inc_len(pB->get_real_size());
 			//m_pMem->inc_offset(pB->get_real_size());
 			m_bPending = false;
@@ -169,10 +168,8 @@ namespace nm_pkg
 	private:
 		H *m_pHdr;
 		int32_t m_i32Cnt; //estimate how many package(body).
-		u_int32_t m_uiLen; ///total length
 		bool m_bPending; //one package is ready
 		nm_mem::mem_ptr_t m_pMem;
-		//mem_queue_t m_qMem;
 #ifdef __USING_COMPRESSED_DATA__
 		mem_queue_t m_queue_compressed;
 #endif
