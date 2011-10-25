@@ -8,7 +8,7 @@
 
 #include <smart_net/dispatcher.h>
 #include <smart_net/archive.h>
-
+#include <smart_net/pkg.h>
 
 #include "tcp_endpoint_tester.h"
 
@@ -36,9 +36,25 @@ namespace nm_busi
 	{
 		using namespace nm_pkg;
 
-		std::cout << "tester opened" << std::endl;
-		nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgReg> arc(3);
-		CPkgReg &pkg = arc.get_next_body();
+//		std::cout << "tester opened" << std::endl;
+//		while (true)
+//		{
+		nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgReg> ar(3);
+		nm_pkg::CPkgReg *pPkg = ar.get_next_body();
+		pPkg->set_id(10);
+		send_data(ar.serialize());
+//		///pKg....
+//		CPkgReg *pPkg = arc.get_next_body();
+//		CPkgReg *pPkg = arc.get_next_body();
+//		if (NULl == pPkg)
+//		{
+//			send(arch.serialize());
+//		}
+//		}
+//
+//
+//		SET_PKG_HANDLER(EP_REG, handle_reg_pkg);
+
 	}
 
 	void CTcpEndpointTester::on_closed()
@@ -49,6 +65,8 @@ namespace nm_busi
 
 	void CTcpEndpointTester::on_recved_data(nm_mem::mem_ptr_t &pData)
 	{
+		DISPATCH(CTcpEndpointTester);
+
 		pData->get_buf()[pData->get_len()] = 0;
 		std::cout<< "on_recved_data : "<< pData->get_data() <<std::endl;
 		send_data(pData);

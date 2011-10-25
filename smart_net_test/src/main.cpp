@@ -22,7 +22,6 @@ int main()
 
 	std::cout<<"ok2"<<std::endl;
 	IF_TRUE_THEN_RETURN_CODE(pTcpAcceptor->open(cmn_string_t("0.0.0.0"), 9999) < 0, -1);
-
 	std::cout<<"ok3"<<std::endl;
 
 	nm_smartnet::tcp_connector_ptr_t pTcpConnector = SYS_NOTRW_NEW(nm_smartnet::CTcpConnector(pSNEngine));
@@ -35,6 +34,9 @@ int main()
 	nm_busi::tcp_ep_tester_ptr_t pC = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
 	nm_busi::tcp_ep_tester_ptr_t pD = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
 	nm_busi::tcp_ep_tester_ptr_t pE = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
+
+
+
 	pA->open();
 	pC->open();
 	pD->open();

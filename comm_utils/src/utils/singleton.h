@@ -9,8 +9,9 @@
 #define __SINGLETON_H__
 
 #include <stdlib.h>
-#include "../common/defines.h"
-#include "../thread/auto_lock.h"
+
+#include "../common/common.h"
+#include "smart_lock.h"
 
 namespace nm_utils
 {
@@ -34,10 +35,10 @@ namespace nm_utils
 		{
 			if (s_t == NULL)
 			{
-				CScopeLock<CMutexLock> lock(s_lock);
+				spin_scopelk_t lk(s_lock);
 				if (s_t == NULL)
 				{
-					s_t = SYS_NEW T;
+					s_t = SYS_NOTRW_NEW(T);
 					::atexit(destroy);
 				}
 			}
@@ -57,13 +58,13 @@ namespace nm_utils
 
 	private:
 		static T *s_t;
-		static CMutexLock s_lock;
+		static CSpinLock s_lock;
 	};
 
 	template<typename T>
 	T* CSingleton<T>::s_t = NULL;
 	template<typename T>
-	CMutexLock CSingleton<T>::s_lock;
+	CSpinLock CSingleton<T>::s_lock;
 }
 
 #endif /* __SINGLETON_H__ */

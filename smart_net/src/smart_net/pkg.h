@@ -36,8 +36,8 @@ public:\
 		return sizeof(pkg_cls); \
 	}
 
-//#define SET_PKG_HANDLER(CONN, PKG)
-//		DISPATCHER(CONN).reg_fun((int)PKG::PKG_OPCODE, &CDispMgr<nm_utils::CSmartPtr<CONN> >::dispatch_fun<PKG>)
+	//#define SET_PKG_HANDLER(CONN, PKG)
+	//		DISPATCHER(CONN).reg_fun((int)PKG::PKG_OPCODE, &CDispMgr<nm_utils::CSmartPtr<CONN> >::dispatch_fun<PKG>)
 
 #define PROCESS_PROTOCAL(PKG) \
 	int process(PKG &pkg, u_int32_t uiPkgTag)
@@ -46,13 +46,12 @@ public:\
 	int process(mem_ptr_t &pPkgMem, PKG &pkg, u_int32_t uiSrcIp, us16_t usSrcPort, u_int32_t uiPkgTag)
 
 #define VERSION 0x00
-//#define CHECK_CODE 0x0
+	//#define CHECK_CODE 0x0
 #define PKG_SIZE_TYPE_SIZE sizeof(u_int32_t)
 #define MINI_PKG_HDR_SIZE (PKG_SIZE_TYPE_SIZE + 1)  /*bytes*/ //����Ϣϵͳ�е�CPkgHdr�еģ�ǰ4���ֽ��Ǳ���Ϣ���ȣ���5���ֽ�Ϊ��Ϣ����
-
 #define NORMAL_PKG 0x00
 
-//#define __USING_COMPRESSED_DATA__
+	//#define __USING_COMPRESSED_DATA__
 
 #ifdef __USING_COMPRESSED_DATA__
 #define COMPRESSED_PKG 0x01
@@ -63,7 +62,7 @@ public:\
 
 	using namespace nm_utils;
 
-//#pragma pack(4)
+	//#pragma pack(4)
 #pragma pack(push, 4)
 
 	//package header
@@ -71,14 +70,22 @@ public:\
 	{
 	public:
 		CPkgHdr(u_int16_t usOpcode, u_int32_t uiLen, cmn_byte_t bVer = VERSION, cmn_byte_t bType = NORMAL_PKG,
-			/*cmn_byte_t bChk = CHECK_CODE,*/ u_int32_t uiTag = 0/*0 means not used in this msg*/)
-			:m_uiLen(HTONL(uiLen)), m_bType(bType), m_bVer(bVer)
-			, /*m_bChk(bChk),*/ m_usOpcode(HTONS(usOpcode)),m_uiTag(uiTag)
-		{}
-		~CPkgHdr(){}
+		/*cmn_byte_t bChk = CHECK_CODE,*/u_int32_t uiTag = 0/*0 means not used in this msg*/) :
+			m_uiLen(HTONL(uiLen)), m_bType(bType), m_bVer(bVer), /*m_bChk(bChk),*/m_usOpcode(HTONS(usOpcode)), m_uiTag(uiTag)
+		{
+		}
+		~CPkgHdr()
+		{
+		}
 
-		u_int16_t get_opcode(){return NTOHS(m_usOpcode);}
-		cmn_byte_t get_ver(){return m_bVer;}
+		u_int16_t get_opcode()
+		{
+			return NTOHS(m_usOpcode);
+		}
+		cmn_byte_t get_ver()
+		{
+			return m_bVer;
+		}
 		//cmn_byte_t get_chkcd(){return m_bChk;}
 		void set_len(u_int32_t uiLen)
 		{
@@ -111,11 +118,11 @@ public:\
 
 	protected:
 		//all are in network byte order
-		u_int32_t m_uiLen;    //total length, must be the first member
-		cmn_byte_t m_bType;    //0: normal, 1: compressed....
-		cmn_byte_t m_bVer;     //version & check code
+		u_int32_t m_uiLen; //total length, must be the first member
+		cmn_byte_t m_bType; //0: normal, 1: compressed....
+		cmn_byte_t m_bVer; //version & check code
 		u_int16_t m_usOpcode; //operate code
-		u_int32_t m_uiTag;    //the tag which can uniquely identify one msg, host byte order is enough; 0 means no use;
+		u_int32_t m_uiTag; //the tag which can uniquely identify one msg, host byte order is enough; 0 means no use;
 		//cmn_byte_t m_bChk;     //check code
 	};
 
@@ -131,10 +138,12 @@ public:\
 
 	class CPkgReg
 	{
-		DECL_OPCODE(EP_REG)
+	DECL_OPCODE(EP_REG)
 	public:
-		CPkgReg(u_int32_t uiID)
-		:m_uiID(uiID){}
+		CPkgReg(u_int32_t uiID) :
+			m_uiID(uiID)
+		{
+		}
 
 	public:
 		static u_int32_t get_max_size()
@@ -155,10 +164,10 @@ public:\
 		{
 			m_uiID = iId;
 		}
-//		void process(chat_ptr_t &client)
-//		{
-//			;
-//		}
+		//		void process(chat_ptr_t &client)
+		//		{
+		//			;
+		//		}
 	private:
 		u_int32_t m_uiID;
 		char buf[20];
@@ -213,7 +222,6 @@ public:\
 
 //#pragma pack()
 #pragma pack(pop)
-
 
 //	class CProtocalMgr
 //	{
