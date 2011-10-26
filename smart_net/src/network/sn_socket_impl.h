@@ -111,12 +111,12 @@ namespace nm_network
 		{
 		public:
 			SInfo(mem_ptr_t &ptr, ui32_t uiIp, us16_t usPort) :
-				m_uiIp(uiIp), m_usPort(usPort), m_ptr_mem(ptr)
+			m_uiIp(uiIp), m_usPort(usPort), m_ptr_mem(ptr)
 			{
 			}
 
 			explicit SInfo(const SInfo &other) :
-				m_uiIp(other.m_uiIp), m_usPort(other.m_usPort), m_ptr_mem(other.m_ptr_mem)
+			m_uiIp(other.m_uiIp), m_usPort(other.m_usPort), m_ptr_mem(other.m_ptr_mem)
 			{
 			}
 
@@ -180,8 +180,7 @@ namespace nm_network
 	{
 		enum
 		{
-			E_RECV_ENDPOINT = 0,
-			E_SEND_ENDPOINT
+			E_RECV_ENDPOINT = 0, E_SEND_ENDPOINT
 		};
 
 	public:
@@ -215,6 +214,15 @@ namespace nm_network
 		nm_mem::mem_ptr_t m_pMem;
 		u_int32_t m_ui32LatestRecvedSeqNo;
 		struct sockaddr_in m_addrSender;
+		union
+		{
+			struct
+			{
+				u_int32_t ui32BindIp;
+				u_int16_t ui32BindPort;
+			};
+			u_int64_t ui64Id;
+		} m_epid;
 	};
 
 }

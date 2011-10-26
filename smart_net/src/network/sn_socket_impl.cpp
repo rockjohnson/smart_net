@@ -679,7 +679,6 @@ namespace nm_network
 		u_int32_t ui32SeqNo;
 		u_int32_t ui8Opcode :8;
 		u_int32_t i32Len :24;
-		cmn_byte_t data[0];
 	};
 
 	/**
@@ -697,6 +696,15 @@ namespace nm_network
 	{
 		u_int32_t ui32Begin;
 		u_int32_t ui32End;
+		u_int64_t ui64Id;
+	};
+
+	/**
+	 *
+	 * */
+	struct SRmpOdata
+	{
+		u_int32_t ui32SeqNo;
 	};
 
 #pragma pack(pop)
@@ -765,6 +773,11 @@ namespace nm_network
 		return ::bind(m_hSock, (struct sockaddr*) &bindAddr, sizeof(bindAddr));
 	}
 
+	int32_t CRmpSock::get_local_bind_addr(struct sockaddr_in &addr)
+	{
+		return getsockname(m_hSock, (struct sockaddr*)(&addr), sizeof(addr));
+	}
+
 	int32_t CRmpSock::join_multicast_group(const cmn_string_t &strMulticastIp)
 	{
 		struct ip_mreqn mreq;
@@ -773,7 +786,18 @@ namespace nm_network
 		mreq.imr_address.s_addr = INADDR_ANY;
 		mreq.imr_ifindex = 0;
 
-		return (setsockopt(m_hSock, SOL_IP, IP_ADD_MEMBERSHIP, (const char*) &mreq, sizeof(mreq)) < 0) ? CMNERR_COMMON_ERR : CMNERR_SUC;
+		int32_t i32Ret = setsockopt(m_hSock, SOL_IP, IP_ADD_MEMBERSHIP, (const char*) &mreq, sizeof(mreq));
+		if (CMNERR_SUC == i32Ret)
+		{
+			m_epid.ui64Id = 0;
+			struct sockaddr_in addr;
+			CMN_ASSERT(CMNERR_SUC == get_local_addr(addr));
+			m_epid.ui32BindIp = addr.sin_addr.s_addr;
+			m_epid.ui16BindPort = addr.sin_port;
+			CMN_ASSERT(m_epid.ui64Id > 0);
+		}
+
+		return i32Ret;
 	}
 
 	sock_handle_t CRmpSock::get_handle()
@@ -870,6 +894,22 @@ namespace nm_network
 	///
 	int32_t CRmpSock::handle_odata()
 	{
+		SRmpOdata *pOdata = static_cast<SRmpOdata*>(m_pMem->get_data());
+		if (pOdata->ui32SeqNo == (1 + m_ui32LatestRecvedSeqNo))
+		{
+			m_pMem->dec_head_data(sizeof(SRmpOdata));
+		}
+		else if (pOdata->ui32SeqNo <= m_ui32LatestRecvedSeqNo)
+		{
+			//repeated pkg,discard it
+			m_pMem->reset();
+		}
+		else //ui32SeqNo > (m_ui32LatestRecvedSeqNo+1)
+		{
+			///lost some pkg or wrong ordered.
+
+		}
+
 		return CMNERR_SUC;
 	}
 
@@ -892,8 +932,9 @@ namespace nm_network
 		if (pHb->ui32LatestSeqNo > m_ui32LatestRecvedSeqNo)
 		{
 			SRmpNak nak;
-			nake.ui32Begin = m_ui32LatestRecvedSeqNo + 1;
-			nake.ui32End = pHb->ui32LatestSeqNo;
+			nak.ui32Begin = m_ui32LatestRecvedSeqNo + 1;
+			nak.ui32End = pHb->ui32LatestSeqNo;
+			nak.ui64Id = m_epid.ui64Id;
 			for (;;)
 			{
 				i32Ret = sendto(m_hSock, &nak, sizeof(nake), 0, (const struct sockaddr*) (&m_addrSender), sizeof(m_addrSender));
@@ -901,6 +942,7 @@ namespace nm_network
 				{
 					if (EWOULDBLOCK == errno)
 					{
+						CMN_ASSERT(false);
 						continue;
 					}
 					else
@@ -917,6 +959,9 @@ namespace nm_network
 		{
 			///do nothing...
 		}
+
+		///zero mem.
+		m_pMem->reset();
 
 		return i32Ret;
 	}
