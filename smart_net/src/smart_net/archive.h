@@ -52,7 +52,7 @@ namespace nm_pkg
 				return m_pHdr;
 			}
 
-			static const u_int32_t s_ui32MaxPkgSize = B::get_max_size();
+			//static const u_int32_t s_ui32MaxPkgSize = B::get_max_size();
 			CMN_ASSERT(NULL == m_pMem);
 			m_pMem = NEW_MEM(((HdrSize + s_ui32MaxPkgSize * m_i32Cnt) > MAX_MEM_SIZE ? MAX_MEM_SIZE : (HdrSize + s_ui32MaxPkgSize * m_i32Cnt)));
 			m_pHdr = new (m_pMem->get_tail_free_buf()) H(B::PKG_OPCODE, 0, bVer/*, bChk*/);
@@ -68,7 +68,7 @@ namespace nm_pkg
 			///
 			if (NULL == m_pHdr)
 			{
-				get_hdr();
+				(void)get_hdr();
 			}
 
 			///将上个消息体的信息补充下
@@ -79,19 +79,6 @@ namespace nm_pkg
 			{
 				return NULL;
 			}
-//			CMN_ASSERT(uiMaxPkgSize <= MAX_MEM_SIZE); //attention!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//			CMN_ASSERT(NULL != m_pMem);
-//			if (m_pMem->get_total_free_size() < uiMaxPkgSize)
-//			{
-//				m_pMem->set_offset(0); //for sending
-//				m_uiLen += m_pMem->get_len();
-//				m_qMem.push_back(m_pMem);
-//				m_pMem = NEW_MEM(((uiMaxPkgSize * m_usCnt) > MAX_MEM_SIZE ? MAX_MEM_SIZE : (uiMaxPkgSize * m_usCnt)));
-//			}
-
-			//B *pB = (B*)(m_pMem->get_cur_buf());
-			//m_pMem->inc_len(PkgSize);
-			//m_pMem->inc_offset(PkgSize);
 
 			if (0 == --m_i32Cnt)
 			{

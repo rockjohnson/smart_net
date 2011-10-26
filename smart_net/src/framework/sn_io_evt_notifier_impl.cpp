@@ -65,7 +65,7 @@ namespace nm_event
 	 * epoll ...
 	 * */
 	CEpoll::CEpoll() :
-		m_i32epfd(-1), m_i32MsTimeout(0), m_i32IoType(0)
+		m_i32epfd(-1), m_i32IoType(0), m_i32MsTimeout(0)
 	{
 		ZERO_MEM(&m_arrEvts, sizeof(m_arrEvts));
 	}
@@ -116,7 +116,7 @@ namespace nm_event
 
 	int32_t CEpoll::add_ioobj(const nm_framework::io_obj_ptr_t &pIoObj)
 	{
-		CMN_ASSERT(pIoObj != NULL);
+		CMN_ASSERT(NULL != pIoObj);
 		IF_TRUE_THEN_RETURN_CODE(0 == pIoObj->get_io_evt(m_i32IoType), CMNERR_SUC); ///no event
 
 		{
@@ -129,7 +129,7 @@ namespace nm_event
 
 	int32_t CEpoll::del_ioobj(const nm_framework::io_obj_ptr_t &pIoObj)
 	{
-		CMN_ASSERT(pIoObj != NULL);
+		CMN_ASSERT(NULL != pIoObj);
 		IF_TRUE_THEN_RETURN_CODE(0 == pIoObj->get_io_evt(m_i32IoType), CMNERR_SUC); ///no event
 
 		{

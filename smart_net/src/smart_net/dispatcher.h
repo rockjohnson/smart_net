@@ -110,6 +110,11 @@ namespace nm_pkg
 				pMem->dec_head_data(s_ui32PkgHdr);
 				dispatch(pConn, pHdr->get_opcode(), pMem, pHdr->get_len() - s_ui32PkgHdr, pHdr->get_tag());
 			}
+
+			if (CMNERR_SUC != i32Ret)
+			{
+				pConn->close();
+			}
 		}
 
 //		///which will receive the pkg head firstly.

@@ -19,7 +19,6 @@ typedef cds::gc::HP hp_gc;
 struct Foo: public ci::optimistic_queue::node<hp_gc>
 {
 	// Your data
-	//...\
 
 	Foo(int ii): i(ii)
 		{

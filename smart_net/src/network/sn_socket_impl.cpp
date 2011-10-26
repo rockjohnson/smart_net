@@ -10,6 +10,7 @@
 #if (__PLATFORM__ == __PLATFORM_LINUX__)
 #include <sys/types.h>
 #include <sys/socket.h>
+ #include <arpa/inet.h>
 #endif
 
 #include <utils/utils.h>
@@ -83,7 +84,7 @@ namespace nm_network
 
 		struct sockaddr_in bindAddr;
 		bindAddr.sin_family = AF_INET;
-		bindAddr.sin_port = ::htons(ui16BindPort);
+		bindAddr.sin_port = htons(ui16BindPort);
 		bindAddr.sin_addr.s_addr = ::inet_addr(strBindIP.c_str());
 
 		return ::bind(m_hSock, (struct sockaddr*) &bindAddr, sizeof(bindAddr));
@@ -131,7 +132,7 @@ namespace nm_network
 	{
 		struct sockaddr_in destAddr;
 		destAddr.sin_family = AF_INET;
-		destAddr.sin_port = ::htons(ui16AcceptorPort);
+		destAddr.sin_port = htons(ui16AcceptorPort);
 		destAddr.sin_addr.s_addr = ::inet_addr(strAcceptorIp.c_str());
 
 		int32_t i32ret = ::connect(m_hSock, reinterpret_cast<struct sockaddr*> (&destAddr), sizeof(destAddr));
