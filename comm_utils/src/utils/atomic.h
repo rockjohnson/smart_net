@@ -36,7 +36,8 @@ namespace nm_utils
 #elif __PLATFORM__ == __PLATFORM_LINUX__
 
 #ifdef __USING_GNU_ATOMIC__
-		return __gnu_cxx::__exchange_and_add_dispatch(pw, dv);
+		//return __gnu_cxx::__exchange_and_add_dispatch(pw, dv);
+		return __sync_fetch_and_add(pw, dv);
 #else
 		// int r = *pw;
 		// *pw += dv;
@@ -66,7 +67,8 @@ namespace nm_utils
 #elif __PLATFORM__ == __PLATFORM_LINUX__
 
 #ifdef __USING_GNU_ATOMIC__
-		__gnu_cxx::__atomic_add_dispatch(pw, 1);
+		//__gnu_cxx::__atomic_add_dispatch(pw, 1);
+		__sync_fetch_and_add(pw, 1);
 #else
 		//atomic_exchange_and_add( pw, 1 );
 

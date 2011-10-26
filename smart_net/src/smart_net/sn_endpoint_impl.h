@@ -38,20 +38,12 @@ namespace nm_smartnet
 
 		enum
 		{
-			ES_OPENED = 0,
-			ES_CLOSED,
-			ES_ADDING_INTO_IT,
-			ES_DELING_FROM_IT
+			ES_OPENED = 0, ES_CLOSED, ES_ADDING_INTO_IT, ES_DELING_FROM_IT
 		};
 
 		enum
 		{
-			EE_NONE,
-			EE_OPEN = 0,
-			EE_CLOSE,
-			EE_ADDED_INTO_IT,
-			EE_DELED_FROM_IT,
-			EE_INTERNAL_ERR
+			EE_NONE, EE_OPEN = 0, EE_CLOSE, EE_ADDED_INTO_IT, EE_DELED_FROM_IT, EE_INTERNAL_ERR
 		};
 
 	public:
@@ -75,20 +67,13 @@ namespace nm_smartnet
 		}
 
 	private:
-		int32_t handling_closed_to_adding_into_it(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_close_while_opened(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_internal_err_while_opened(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_it_to_closed(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_closed_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_it_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
 		nm_utils::CStateMachine<CTcpAcceptor> m_sm;
@@ -144,8 +129,7 @@ namespace nm_smartnet
 
 		DISALLOW_COPY_AND_ASSIGN( CTcpConnector);
 	public:
-		int32_t open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort,
-				u_int64_t ui64IntervalInUs);
+		int32_t open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort, u_int64_t ui64IntervalInUs);
 		int32_t close();
 
 	protected:
@@ -167,38 +151,22 @@ namespace nm_smartnet
 			return m_pSNEngine;
 		}
 
-		int32_t handling_closed_to_adding_into_tt(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_close_while_adding_into_tt(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_adding_into_tt_to_checking_timer(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_close_while_checking_timer(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_checking_timer_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_adding_into_ot_to_connecting(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_close_while_connecting(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_internal_err_while_connecting(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_connected(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState,
-				cmn_pvoid_t pVoid);
-		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_ot_close_to_deling_from_tt(int32_t i32CurState,
-				int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_close_while_deling_from_ot_normal(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_internal_err_while_deling_from_ot_normal(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_ot_normal_to_checking_timer(int32_t i32CurState,
-				int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_tt_to_closed(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_closed_to_adding_into_tt(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_adding_into_tt(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_adding_into_tt_to_checking_timer(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_checking_timer(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_checking_timer_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_adding_into_ot_to_connecting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_connecting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_connecting(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_connected(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_ot_close_to_deling_from_tt(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_deling_from_ot_normal(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_deling_from_ot_normal(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_ot_normal_to_checking_timer(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_tt_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	protected:
 		virtual void on_timer();
@@ -288,46 +256,31 @@ namespace nm_smartnet
 		virtual void on_opened() = 0;
 		virtual void on_closed() = 0;
 		virtual void on_recved_data(nm_mem::mem_ptr_t &pData) = 0;
-		//		virtual void on_io_error(int32_t i32ErrCode) = 0;
 
 	private:
 		void init_sm();
-		int32_t handling_closed_to_added_into_helper(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_added_into_helper_to_closed(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_internal_err_while_opened(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_close_while_opened(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_it_to_deling_from_ot(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_deling_from_ot_to_closed(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_added_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
-		int32_t handling_added_into_helper_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt,
-				int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_closed_to_added_into_helper(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_added_into_helper_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_it_to_deling_from_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_ot_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_added_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_added_into_helper_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
 		nm_utils::CStateMachine<CTcpEndpoint> m_sm; ///state machine make the obj state thread-safe
 		int32_t m_i32SMPendingEvt; ///为了简化设计，在状态达到OPENNED之前，发生的IO ERROR或 INTERNAL ERROR，并不直接处理，而是在达到这个状态时才处理。
-
+		tcp_connector_ptr_t m_pTcpConnector;
+		tcp_acceptor_ptr_t m_pTcpAcceptor;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
 		nm_network::tcp_sock_ptr_t m_pTcpSock;
 		nm_network::ipv4_addr_ptr_t m_pPeerAddr;
-		tcp_connector_ptr_t m_pTcpConnector;
-		tcp_acceptor_ptr_t m_pTcpAcceptor;
 		nm_utils::CSmartLog m_log;
 	};
 
@@ -336,15 +289,32 @@ namespace nm_smartnet
 	 * */
 	class CRmpEndpoint: public nm_framework::IIoObj
 	{
+		enum
+		{
+			E_RECV_ENDPOINT = 0,
+			E_SEND_ENDPOINT
+		};
+
+		enum
+		{
+			EE_OPEN = 0
+
+		};
+
+		enum
+		{
+			ES_OPENED = 0,
+			ES_CLOSED
+
+		};
+
 	public:
-		CRmpEndpoint(nm_framework::sn_engine_ptr_t &pNetEngine);
+		CRmpEndpoint(nm_framework::sn_engine_ptr_t &pNetEngine, int32_t i32EpType);
 		virtual ~CRmpEndpoint();
 
 		DISALLOW_COPY_AND_ASSIGN( CRmpEndpoint);
-
 	public:
-		int32_t open(const std::string &strMulticastIP, const std::string &strBindIP,
-				u_int16_t ui16BindPort);
+		int32_t open(const cmn_string_t &strMulticastIP, const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
 		int32_t close();
 		int32_t send_data(nm_mem::mem_ptr_t &pData);
 
@@ -357,6 +327,17 @@ namespace nm_smartnet
 		virtual void on_closed() = 0;
 		virtual void on_error() = 0;
 		virtual void on_recved_data(nm_mem::mem_ptr_t &pData) = 0;
+	private:
+		int32_t handling_
+
+	private:
+		nm_utils::CStateMachine<nm_smartnet::CRmpEndpoint> m_sm;
+		nm_framework::sn_engine_ptr_t m_pEngine;
+		CRmpSock m_sock;
+		cmn_string_t m_strBindIp
+		u_int16_t m_ui16BindPort;
+		cmn_string_t m_strMulticastIp;
+		int32_t m_i32EpType;
 	};
 }
 

@@ -35,16 +35,16 @@ public:
 public:
 	virtual int32_t open(sock_handle_t sockhandle) = 0;
 	virtual int32_t close() = 0;
-	virtual int32_t bind(nm_network::CIpv4Addr &bindaddr) = 0;
-	virtual int32_t bind(const std::string &strBindIP, u_int16_t ui16BindPort) = 0;
-	virtual int32_t listen(int32_t i32Backlog) = 0;
-	virtual int32_t connect(const nm_network::CIpv4Addr &remoteAddr) = 0;
-	virtual int32_t connect(const cmn_string_t &strAcceptorIp, u_int64_t ui16AcceptorPort) = 0;
+	virtual int32_t bind(nm_network::CIpv4Addr &bindaddr){return CMNERR_NOT_IMPL;}
+	virtual int32_t bind(const cmn_string_t &strBindIP, u_int16_t ui16BindPort) = 0;
+	virtual int32_t listen(int32_t i32Backlog) {return CMNERR_NOT_IMPL;}
+	virtual int32_t connect(const nm_network::CIpv4Addr &remoteAddr){return CMNERR_NOT_IMPL;}
+	virtual int32_t connect(const cmn_string_t &strAcceptorIp, u_int64_t ui16AcceptorPort){return CMNERR_NOT_IMPL;}
 	virtual sock_handle_t get_handle() = 0;
 	virtual bool is_opened() = 0;
 	virtual int32_t set_nonblock(bool bFlag) = 0;
-	virtual nm_network::CIpv4Addr& get_peer_addr() = 0;
-	virtual nm_network::CIpv4Addr& get_local_addr() = 0;
+	virtual nm_network::CIpv4Addr& get_peer_addr(){}
+	virtual nm_network::CIpv4Addr& get_local_addr(){}
 
 	virtual int32_t send(nm_mem::mem_ptr_t&) = 0;
 	virtual int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len) = 0;

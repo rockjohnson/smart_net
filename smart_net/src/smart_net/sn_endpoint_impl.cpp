@@ -1074,4 +1074,51 @@ namespace nm_smartnet
 		return m_pTcpSock->send(pData);
 	}
 
+	/*------------------------------------------------------------------------------*/
+	/**
+	 *
+	 * */
+	CRmpEndpoint::CRmpEndpoint(nm_framework::sn_engine_ptr_t &pSnEngine, int32_t i32EpType)
+	:m_pEngine(pSnEngine)
+	 {
+		if (E_RECV_ENDPOINT)
+		{
+			m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_)
+		}
+		else
+		{
+			CMN_ASSERT(E_SEND_ENDPOINT == i32EpType);
+			m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_)
+		}
+
+	 }
+
+	/**
+	 *
+	 * */
+	CRmpEndpoint::~CRmpEndpoint()
+	{
+	}
+
+	/**
+	 *
+	 * */
+	struct SPara
+	{
+		cmn_string_t strMulticast;
+		cmn_string_t strBindIp;
+		u_int16_t ui16BindPort;
+	};
+	int32_t CRmpEndpoint::open(cmn_string_t &strMulticastIp, cmn_string_t &strBindIp, u_int16_t ui16BindPort)
+	{
+		SPara sp;
+		sp.strMulticast = strMulticastIp;
+		sp.strBindIp = strBindIp;
+		sp.ui16BindPort = ui16BindPort;
+
+		return m_sm.post_evt(EE_OPEN, &sp);
+	}
+
+
+
 }
