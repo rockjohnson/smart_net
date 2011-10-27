@@ -28,7 +28,8 @@ enum
 	CMNERR_INCOMPLETED_PKG,
 	CMNERR_UNKNOWN_PKG,
 	CMNERR_NOT_IMPL,
-	CMNERR_NO_DATA
+	CMNERR_NO_DATA,
+	CMNERR_NO_SPACE
 };
 
 const char* get_cmn_err_info(int32_t i32ErrCode);

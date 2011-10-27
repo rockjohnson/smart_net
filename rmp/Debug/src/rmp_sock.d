@@ -17,7 +17,8 @@ src/rmp_sock.d: ../src/rmp_sock.cpp \
  /home/rock/Workspace/smart_net/smart_net/comm_utils/src/memory/mem.h \
  /home/rock/Workspace/smart_net/smart_net/comm_utils/src/memory/../common/common.h \
  /home/rock/Workspace/smart_net/smart_net/comm_utils/src/memory/../utils/smart_ptr.h \
- /home/rock/Workspace/smart_net/smart_net/comm_utils/src/memory/../utils/atomic.h
+ /home/rock/Workspace/smart_net/smart_net/comm_utils/src/memory/../utils/atomic.h \
+ /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/smart_lock.h
 
 /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/utils.h:
 
@@ -56,3 +57,5 @@ src/rmp_sock.d: ../src/rmp_sock.cpp \
 /home/rock/Workspace/smart_net/smart_net/comm_utils/src/memory/../utils/smart_ptr.h:
 
 /home/rock/Workspace/smart_net/smart_net/comm_utils/src/memory/../utils/atomic.h:
+
+/home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/smart_lock.h:

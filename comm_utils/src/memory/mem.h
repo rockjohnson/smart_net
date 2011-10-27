@@ -19,8 +19,8 @@ namespace nm_mem
 	class CMemBlock: public nm_cmn_base::ICommonBase
 	{
 	public:
-		inline CMemBlock()
-		:m_ui32Sz(sizeof(m_bytes)), m_ui32Offset(0), m_ui32Len(0)
+		inline CMemBlock(u_int32_t ui32Offset = 0)
+		:m_ui32InitOffset(ui32Offset), m_ui32Sz(sizeof(m_bytes)), m_ui32Offset(ui32Offset), m_ui32Len(0)
 		{
 		}
 		inline ~CMemBlock()
@@ -100,16 +100,29 @@ namespace nm_mem
 			return CMNERR_SUC;
 		}
 
+		inline int32_t inc_head_data(u_int32_t ui32Len)
+		{
+			if (ui32Len > m_ui32Offset)
+			{
+				return CMNERR_COMMON_ERR;
+			}
+
+			m_ui32Offset -= ui32Len;
+			m_ui32Len += ui32Len;
+			return CMNERR_SUC;
+		}
+
 		inline void reset()
 		{
 			//SAFE_DELETE_ARR(m_pBytes);
 			//m_ui32Sz = MAX_MEM_SIZE;
-			m_ui32Offset = 0;
+			m_ui32Offset = m_ui32InitOffset;
 			m_ui32Len = 0;
 		}
 
 	private:
 		cmn_byte_t m_bytes[MAX_MEM_SIZE];
+		const u_int32_t m_ui32InitOffset;
 		u_int32_t m_ui32Sz;
 		u_int32_t m_ui32Offset;
 		u_int32_t m_ui32Len;

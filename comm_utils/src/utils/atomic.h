@@ -22,7 +22,7 @@
 #endif
 
 #ifdef __USING_GNU_ATOMIC__
-#include <ext/atomicity.h>
+//#include <ext/atomicity.h>
 #endif
 
 namespace nm_utils

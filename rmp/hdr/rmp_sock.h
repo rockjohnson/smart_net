@@ -16,6 +16,7 @@
 #include <vector>
 #include <common/common.h>
 #include <memory/mem.h>
+#include <utils/smart_lock.h>
 
 namespace nm_network
 {
@@ -105,7 +106,7 @@ namespace nm_network
 		};
 
 	public:
-		CRmpSock();
+		CRmpSock(int32_t i32EpType);
 		~CRmpSock();
 
 	public:
@@ -129,7 +130,9 @@ namespace nm_network
 
 		int32_t handle_odata();
 		int32_t handle_hb();
-		nm_mem::mem_ptr_t& get_recved_data();
+		int32_t handle_nak();
+		int32_t handle_ack();
+		int32_t get_recved_data(nm_mem::mem_ptr_t&);
 
 	private:
 		cmn_string_t m_strBindIp;
@@ -144,6 +147,17 @@ namespace nm_network
 		u_int32_t m_ui32ValidPkgBegin;
 		u_int32_t m_ui32ValidPkgEnd;
 		std::vector<nm_mem::mem_ptr_t> m_vecUnorderedPkgs;
+		struct SPkgInfo
+		{
+			nm_mem::mem_ptr_t m_pMem;
+			int32_t i32Acks;
+		};
+		std::vector<SPkgInfo> m_vecSenderWin;
+		nm_utils::CSpinLock m_lkSenderWin;
+		u_int32_t m_ui32ValidSendingDataHead; 	///最旧的没有接受到足够ack的包序列号
+		u_int32_t m_ui32ValidSendingDataTail;   ///最近一次成功放入发送窗口的包的下一个序号
+		u_int32_t m_ui32SendingSeqNo;          	///记录目前已经组播发送出去的包序列号
+		u_int32_t m_ui32PkgSeqNoGenerator;     	///发送包的序列号生成记录器
 		struct sockaddr_in m_addrSender;
 		union
 		{

@@ -238,7 +238,9 @@ namespace nm_network
 	{
 		EP_DATA = 0, ///must be 0.
 		EP_HB,
-		EP_ALL
+		EP_NAK,
+		EP_ACK,
+		EP_ALL ///pkgs which receiver handling
 	};
 
 #pragma pack(push, 4)
@@ -247,9 +249,8 @@ namespace nm_network
 	 * */
 	struct SRmpHdr
 	{
-		u_int32_t ui32SeqNo;
+		u_int32_t ui24Len :24;
 		u_int32_t ui8Opcode :8;
-		u_int32_t i32Len :24;
 	};
 
 	/**
@@ -265,6 +266,7 @@ namespace nm_network
 	 * */
 	struct SRmpNak
 	{
+		SRmpHdr hdr;
 		u_int32_t ui32Begin;
 		u_int32_t ui32End;
 		u_int64_t ui64Id;
@@ -287,21 +289,37 @@ namespace nm_network
 		P_FUN fun;
 	};
 
-	struct SHander recvep_pkg_handlers[EP_ALL] = { { EP_DATA, &CRmpSock::handle_odata }, { EP_HB, &CRmpSock::handle_hb } };
+	struct SHander pkg_handlers[EP_ALL] =
+	{
+			{ EP_DATA, &CRmpSock::handle_odata },
+			{ EP_HB, &CRmpSock::handle_hb },
+			{ EP_NAK, &CRmpSock::handle_nak },
+			{ EP_ACK, &CRmpSock::handle_ack }
+	};
 
 	/**
 	 *
 	 * */
 #define __UNORDERED_PKGS_CNT__ (100000)
-	CRmpSock::CRmpSock() :
-		m_vecUnorderedPkgs(__UNORDERED_PKGS_CNT__)
+#define __SEND_WIN_SIZE__ (1000000)
+	CRmpSock::CRmpSock(int32_t i32EpType)
 	{
-
+		if (E_RECV_ENDPOINT == i32EpType)
+		{
+			m_vecUnorderedPkgs.resize(__UNORDERED_PKGS_CNT__);
+		}
+		else if (E_SEND_ENDPOINT == i32EpType)
+		{
+			m_vecSenderWin.resize(__SEND_WIN_SIZE__);
+		}
+		else
+		{
+			CMN_ASSERT(false);
+		}
 	}
 
 	CRmpSock::~CRmpSock()
 	{
-
 	}
 
 	/**
@@ -391,7 +409,27 @@ namespace nm_network
 
 	int32_t CRmpSock::send(nm_mem::mem_ptr_t &pM)
 	{
+		///
+		CMN_ASSERT(CMNERR_SUC == pM->inc_head_data(sizeof(SRmpOdata)));
+		SRmpOdata *pOdata = (SRmpOdata*)(pM->get_data());
+		///
+		CMN_ASSERT(CMNERR_SUC == pM->inc_head_data(sizeof(SRmpHdr)));
+		SRmpHdr *pHdr = (SRmpHdr*)(pM->get_data());
+		pHdr->ui8Opcode = EP_DATA;
+		pHdr->ui24Len = pM->get_len();
+		///added into send buf
+		{
+			nm_utils::spin_scopelk_t lk(m_lkSenderWin);  ///just for handle multi senders.
+			if ((m_ui32ValidSendingDataTail % m_vecSenderWin.capacity()) == m_ui32ValidSendingDataHead)
+			{
+				return CMNERR_NO_SPACE;
+			}
+			pOdata->ui32SeqNo = m_ui32ValidSendingDataTail;
+			m_vecSenderWin[pOdata->ui32SeqNo % m_vecSenderWin.capacity()].m_pMem = pM;
+			m_ui32ValidSendingDataTail++;
+		}
 
+		return CMNERR_SUC;
 	}
 
 	int32_t CRmpSock::handle_can_recv(u_int32_t ui32)
@@ -464,7 +502,7 @@ namespace nm_network
 		SRmpHdr *pHdr = (SRmpHdr*) (m_pMem->get_data());
 		IF_TRUE_THEN_RETURN_CODE((pHdr->ui8Opcode >= EP_ALL), CMNERR_COMMON_ERR);
 		m_pMem->dec_head_data(sizeof(SRmpHdr));
-		return (this->*(recvep_pkg_handlers[pHdr->ui8Opcode].fun))();
+		return (this->*(pkg_handlers[pHdr->ui8Opcode].fun))();
 	}
 
 	/**
@@ -473,7 +511,7 @@ namespace nm_network
 	 * */
 	int32_t CRmpSock::get_recved_data(nm_mem::mem_ptr_t &pMem)
 	{
-		if (NULL != m_pMem && m_pMem->get_len() > 0)
+		if ((NULL != m_pMem) && (m_pMem->get_len() > 0))
 		{
 			pMem = m_pMem;
 			m_pMem = NULL;
@@ -580,31 +618,34 @@ namespace nm_network
 		return CMNERR_SUC;
 	}
 
-//	int32_t CRmpSock::udp_send()
-//	{
-//		//		remote_addr.sin_addr.s_addr = snder.get_ip();
-//		//		remote_addr.sin_port = snder.get_port();
-//		//		static const ui32_t uiAddrSize = sizeof(remote_addr);
-//		//		SRmpNak nak;
-//		//		nake.ui32Begin = m_ui32LatestRecvedSeqNo + 1;
-//		//nake	.ui32End =
-//		//	iRet = ::sendto(m_hSock, , , 0,
-//		//			(const struct sockaddr*)(&remote_addr), uiAddrSize);
-//	}
+	//	int32_t CRmpSock::udp_send()
+	//	{
+	//		//		remote_addr.sin_addr.s_addr = snder.get_ip();
+	//		//		remote_addr.sin_port = snder.get_port();
+	//		//		static const ui32_t uiAddrSize = sizeof(remote_addr);
+	//		//		SRmpNak nak;
+	//		//		nake.ui32Begin = m_ui32LatestRecvedSeqNo + 1;
+	//		//nake	.ui32End =
+	//		//	iRet = ::sendto(m_hSock, , , 0,
+	//		//			(const struct sockaddr*)(&remote_addr), uiAddrSize);
+	//	}
 
 	int32_t CRmpSock::handle_hb()
 	{
 		int32_t i32Ret = CMNERR_SUC;
-		SRmpHb *pHb = static_cast<SRmpHb*> (m_pMem->get_data());
+		SRmpHb *pHb = (SRmpHb*) (m_pMem->get_data());
 		if (pHb->ui32LatestSeqNo > m_ui32LatestRecvedValidSeqNo)
 		{
+
 			SRmpNak nak;
+			nak.hdr.ui24Len = sizeof(SRmpNak);
+			nak.hdr.ui8Opcode = EP_NAK;
 			nak.ui32Begin = m_ui32LatestRecvedValidSeqNo + 1;
 			nak.ui32End = pHb->ui32LatestSeqNo;
 			nak.ui64Id = m_epid.ui64Id;
 			for (;;)
 			{
-				i32Ret = sendto(m_hSock, &nak, sizeof(nake), 0, (const struct sockaddr*) (&m_addrSender), sizeof(m_addrSender));
+				i32Ret = sendto(m_hSock, &nak, sizeof(nak), 0, (const struct sockaddr*) (&m_addrSender), sizeof(m_addrSender));
 				if (i32Ret < 0)
 				{
 					if (EWOULDBLOCK == errno)
@@ -633,10 +674,32 @@ namespace nm_network
 		return i32Ret;
 	}
 
-	///
-	int32_t CRmpSock::handle_sendep_data()
+	/**
+	 *
+	 * */
+	int32_t CRmpSock::handle_nak()
 	{
 
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpSock::handle_ack()
+	{
+
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpSock::handle_sendep_data()
+	{
+		///
+		SRmpHdr *pHdr = (SRmpHdr*) (m_pMem->get_data());
+		IF_TRUE_THEN_RETURN_CODE((pHdr->ui8Opcode >= EP_ALL), CMNERR_COMMON_ERR);
+		m_pMem->dec_head_data(sizeof(SRmpHdr));
+		return (this->*(pkg_handlers[pHdr->ui8Opcode].fun))();
 	}
 
 	int32_t CRmpSock::handle_can_send()
