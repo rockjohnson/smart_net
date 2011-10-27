@@ -111,8 +111,8 @@ namespace nm_pkg
 				dispatch(pConn, pHdr->get_opcode(), pMem, pHdr->get_len() - s_ui32PkgHdr, pHdr->get_tag());
 			}
 
-			if (CMNERR_COMMON_ERR == i32Ret
-					|| CMNERR_UNKNOWN_PKG == i32Ret)
+			if ((CMNERR_COMMON_ERR == i32Ret)
+					|| (CMNERR_UNKNOWN_PKG == i32Ret))
 			{
 				CMN_ASSERT(false);
 				pConn->close();
