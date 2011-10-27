@@ -100,9 +100,15 @@ int main()
 
 	while (1)
 	{
-
-	sleep(100000000);
-
+		if (pB->is_opened())
+		{
+			nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgReg> ar(3);
+			nm_pkg::CPkgReg *pPkg = ar.get_next_body();
+			pPkg->set_id(1);
+			nm_pkg::CPkgReg *pPkg1 = ar.get_next_body();
+			pPkg1->set_id(2);
+			pB->send_data(ar.serialize());
+		}
 	}
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 	return 0;

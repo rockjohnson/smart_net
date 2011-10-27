@@ -174,6 +174,7 @@ namespace nm_network
 	};
 #endif
 
+#if 0
 	/**
 	 *
 	 * */
@@ -230,6 +231,7 @@ namespace nm_network
 			u_int64_t ui64Id;
 		} m_epid;
 	};
+#endif
 
 }
 

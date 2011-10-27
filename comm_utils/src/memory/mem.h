@@ -45,6 +45,7 @@ namespace nm_mem
 			if (m_ui32Offset > 0)
 			{
 				::memmove(m_pBytes, m_pBytes + m_ui32Offset, m_ui32Len);
+				m_ui32Offset = 0;
 			}
 		}
 		inline void dec_head_data(u_int32_t ui32Len)

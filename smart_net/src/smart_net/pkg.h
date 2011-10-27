@@ -45,7 +45,7 @@ public:\
 #define PROCESS_UDP_PROTOCAL(PKG) \
 	int process(mem_ptr_t &pPkgMem, PKG &pkg, u_int32_t uiSrcIp, us16_t usSrcPort, u_int32_t uiPkgTag)
 
-#define VERSION 0x00
+#define PKG_VER 0x00
 	//#define CHECK_CODE 0x0
 #define PKG_SIZE_TYPE_SIZE sizeof(u_int32_t)
 #define MINI_PKG_HDR_SIZE (PKG_SIZE_TYPE_SIZE + 1)  /*bytes*/ //����Ϣϵͳ�е�CPkgHdr�еģ�ǰ4���ֽ��Ǳ���Ϣ���ȣ���5���ֽ�Ϊ��Ϣ����
@@ -69,7 +69,7 @@ public:\
 	class CPkgHdr
 	{
 	public:
-		CPkgHdr(u_int16_t usOpcode, u_int32_t uiLen, cmn_byte_t bVer = VERSION, cmn_byte_t bType = NORMAL_PKG,
+		CPkgHdr(u_int16_t usOpcode, u_int32_t uiLen, cmn_byte_t bVer = PKG_VER, cmn_byte_t bType = NORMAL_PKG,
 		/*cmn_byte_t bChk = CHECK_CODE,*/u_int32_t uiTag = 0/*0 means not used in this msg*/) :
 			m_uiLen(HTONL(uiLen)), m_bType(bType), m_bVer(bVer), /*m_bChk(bChk),*/m_usOpcode(HTONS(usOpcode)), m_uiTag(uiTag)
 		{

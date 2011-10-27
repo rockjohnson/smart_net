@@ -49,7 +49,7 @@ namespace nm_busi
 
 	void CTcpEndpointTester::handle_pkg(nm_pkg::CPkgReg &pkg, u_int32_t uiTag)
 	{
-		std::cout<< "handle_pkg reg pkg: " << pkg.get_opcode() << ", id: "<< pkg.get_id()<< std::endl;
+		//std::cout<< "handle_pkg reg pkg: " << pkg.get_opcode() << ", id: "<< pkg.get_id()<< std::endl;
 	}
 
 }

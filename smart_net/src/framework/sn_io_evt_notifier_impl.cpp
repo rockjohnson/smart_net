@@ -87,7 +87,7 @@ namespace nm_event
 		m_i32IoType = i32IoTaskType;
 		m_i32MsTimeout = i32MsTimeout;
 
-		char buf[1024] = {0};
+		char buf[1024] = { 0 };
 		sprintf(buf, "./epoll_%d", i32IoTaskType);
 		m_log.init(buf, "epoll_", ELL_DEBUG, 10);
 
@@ -221,9 +221,9 @@ namespace nm_event
 			ui32Evts = m_arrEvts[i].events;
 
 			//error
-			if (ui32Evts & EPOLLERR)
+			if ((ui32Evts & EPOLLERR) || (ui32Evts & EPOLLHUP))
 			{
-				CMN_ASSERT(false); ///check how this happened
+				//CMN_ASSERT(false); ///check how this happened
 				pIoObj->handle_io_error(CMNERR_IO_ERR);
 			}
 			else

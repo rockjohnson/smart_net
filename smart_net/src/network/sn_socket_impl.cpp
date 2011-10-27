@@ -415,9 +415,12 @@ namespace nm_network
 				CMN_ASSERT(false);
 				return CMNERR_RECV_PENDING;
 			}
+			else if (EINTR == errno)
+			{
+				return CMNERR_SUC;
+			}
 			else
 			{
-				//TRACE_LAST_ERR(recv);
 				return CMNERR_IO_ERR;
 			}
 		}
@@ -661,6 +664,7 @@ namespace nm_network
 	}
 #endif
 
+#if 0
 	/*--------------------------------------------------------------------*/
 
 	enum EOpcode
@@ -1035,5 +1039,6 @@ namespace nm_network
 //		int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len) = 0;
 //
 //		int32_t handle_can_recv(u_int32_t);
+#endif
 
 }

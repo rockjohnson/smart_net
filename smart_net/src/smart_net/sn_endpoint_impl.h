@@ -287,6 +287,7 @@ namespace nm_smartnet
 		nm_utils::CSmartLog m_log;
 	};
 
+#if 0
 	/**
 	 *
 	 * */
@@ -342,6 +343,7 @@ namespace nm_smartnet
 		cmn_string_t m_strMulticastIp;
 		int32_t m_i32EpType;
 	};
+#endif
 }
 
 #endif /* CONN_H_ */

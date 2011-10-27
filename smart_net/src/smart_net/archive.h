@@ -45,7 +45,7 @@ namespace nm_pkg
 		};
 
 	public:
-		H* get_hdr(cmn_byte_t bVer = VERSION/*, byte_t bChk = CHECK_CODE*/)
+		H* get_hdr(cmn_byte_t bVer = PKG_VER/*, byte_t bChk = CHECK_CODE*/)
 		{
 			if (NULL != m_pHdr)
 			{
