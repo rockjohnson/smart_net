@@ -17,5 +17,11 @@ typedef const char* cmn_cstr_t;
 typedef std::string cmn_string_t;
 typedef unsigned char cmn_byte_t;
 
+#if __PLATFORM__ == __PLATFORM_LINUX__
+typedef int32_t sock_handle_t;
+#elif __PLATFORM__ == __PLATFORM_WINDOWS__
+typedef SOCKET sock_handle_t;
+#endif
+
 
 #endif /* TYPES_H_ */

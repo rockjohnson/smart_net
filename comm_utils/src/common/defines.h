@@ -119,4 +119,6 @@
 #define NTOHL(v) \
 	ntohl(v)
 
+#define INVALID_SOCKET (-1)
+
 #endif /* DEFINES_H_ */

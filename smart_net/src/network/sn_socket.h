@@ -27,11 +27,6 @@ public:
 	{
 	}
 
-	enum
-	{
-		INVALID_SOCKET = -1
-	};
-
 public:
 	virtual int32_t open(sock_handle_t sockhandle) = 0;
 	virtual int32_t close() = 0;
