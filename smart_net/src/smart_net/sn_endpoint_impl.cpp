@@ -1071,7 +1071,7 @@ namespace nm_smartnet
 	 * */
 	int32_t CTcpEndpoint::send_data(nm_mem::mem_ptr_t &pData)
 	{
-		return m_pTcpSock->send(pData);
+		return m_sm.get_cur_state() == ES_OPENED ? m_pTcpSock->send(pData) : CMNERR_COMMON_ERR;
 	}
 
 	/*------------------------------------------------------------------------------*/

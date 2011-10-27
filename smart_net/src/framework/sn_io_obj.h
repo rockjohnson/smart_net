@@ -35,6 +35,7 @@ namespace nm_framework
 		virtual void handle_added_into_io_task(int32_t i32IoType, int32_t i32ReturnCode) = 0;
 		virtual void handle_deled_from_io_task(int32_t i32IoType) = 0;
 		virtual sock_handle_t get_ioobj_handle() = 0;
+		virtual bool is_opened() = 0;
 
 		void set_io_evt(int32_t i32IoType, u_int32_t ui32IoEvt)
 		{

@@ -359,8 +359,8 @@ namespace nm_network
 					break;
 				}
 
-				i32Ret = CMNERR_SUC;
 				CMN_ASSERT(i32Ret == pData->get_len());
+				i32Ret = CMNERR_SUC;
 				m_qSending.pop_front();
 				break;
 			}

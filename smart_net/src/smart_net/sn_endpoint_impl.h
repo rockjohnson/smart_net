@@ -56,7 +56,8 @@ namespace nm_smartnet
 
 	public:
 		int32_t open(const cmn_string_t &strIP, u_int16_t ui16Port);
-		virtual void on_opened();
+		bool is_opened(){return m_sm.get_cur_state() == ES_OPENED;}
+		void on_opened();
 		int32_t close();
 		virtual void on_closed();
 		int32_t add_endpoint(const tcp_endpoint_ptr_t &pTcpEP);
@@ -130,6 +131,7 @@ namespace nm_smartnet
 		DISALLOW_COPY_AND_ASSIGN( CTcpConnector);
 	public:
 		int32_t open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort, u_int64_t ui64IntervalInUs);
+		bool is_opened(){return m_sm.get_cur_state() == ES_OPENED;}
 		int32_t close();
 
 	protected:
@@ -242,6 +244,7 @@ namespace nm_smartnet
 	public:
 		///first, you should open this endpoint, but it is async. and if succeed, then on_opened will callback.
 		virtual int32_t open();
+		bool is_opened(){return m_sm.get_cur_state() == ES_OPENED;}
 		///if you want close this endpoint, please invoke this func, but it is aysnc.
 		virtual int32_t close();
 		///send data, async.
