@@ -721,7 +721,9 @@ namespace nm_network
 	/**
 	 *
 	 * */
+#define __UNORDERED_PKGS_SIZE__ (100000)
 	CRmpSock::CRmpSock()
+	:m_vecUnorderedPkgs(__UNORDERED_PKGS_SIZE__)
 	{
 
 	}
@@ -944,6 +946,15 @@ namespace nm_network
 		else //ui32SeqNo > (m_ui32LatestRecvedSeqNo+1)
 		{
 			///lost some pkg or wrong ordered.
+			///modify begin .end?
+			if (pOdata->ui32SeqNo < m_ui32UnvalidPkgBegin)
+			{
+				m_ui32UnvalidPkgBegin = pOdata->ui32SeqNo;
+			}
+			else if (pOdata->ui32SeqNo > m_ui32UnvalidPkgEnd)
+			{
+				if ((pOdata->ui32SeqNo - m_ui32LatestRecvedValidSeqNo) >= )
+			}
 
 		}
 
