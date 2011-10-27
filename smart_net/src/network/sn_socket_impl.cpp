@@ -271,16 +271,12 @@ namespace nm_network
 			if (WSAEWOULDBLOCK/*EAGAIN*/==::GetLastError())
 #endif
 			{
-				//ASSERT(false); //should not reach here
-				//CMN_ASSERT(pData->get_len() > snder.get_offset());
-				//m_qSendCache.push_back(snder);//cache it.
+				m_lkSending.unlock();
 				return CMNERR_SEND_PENDING;
 			}
 			else
 			{
-				//error occurred!
-				//TRACE_LAST_ERR( send);
-				//close_sock();
+				m_lkSending.unlock();
 				return CMNERR_IO_ERR;
 			}
 		}
@@ -294,6 +290,7 @@ namespace nm_network
 #endif
 		CMN_ASSERT(0 != i32Ret); //what the meaning if zero??
 
+		i32Ret = CMNERR_SUC;
 		if (pData->get_len() > i32Ret)
 		{
 			pData->dec_head_data(i32Ret);
@@ -305,6 +302,7 @@ namespace nm_network
 		}
 
 		m_lkSending.unlock();
+
 		return i32Ret;
 	}
 

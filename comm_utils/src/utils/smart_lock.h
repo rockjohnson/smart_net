@@ -102,7 +102,7 @@ namespace nm_utils
 		inline bool try_lock()
 		{
 #if __PLATFORM__ == __PLATFORM_LINUX__
-			return pthread_mutex_trylock(&m_mtx) == 0 ? true : false;
+			return pthread_mutex_trylock(&m_mtx) == 0;
 #elif __PLATFORM__ == __PLATFORM_WINDOWS__
 			return TryEnterCriticalSection(&m_cs) ? true : false;
 #endif
