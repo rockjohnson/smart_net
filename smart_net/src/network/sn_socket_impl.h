@@ -9,6 +9,7 @@
 #define __SN_SOCKET_IMPL_H__
 
 #include <deque>
+#include <vector>
 
 #include <memory/mem.h>
 #include <utils/smart_lock.h>
@@ -212,7 +213,12 @@ namespace nm_network
 		sock_handle_t m_hSock;
 		int32_t m_i32Type;
 		nm_mem::mem_ptr_t m_pMem;
-		u_int32_t m_ui32LatestRecvedSeqNo;
+		u_int32_t m_ui32LatestRecvedValidSeqNo;
+		u_int32_t m_ui32UnvalidPkgBegin;
+		u_int32_t m_ui32UnvalidPkgEnd;
+		u_int32_t m_ui32ValidPkgBegin;
+		u_int32_t m_ui32ValidPkgEnd;
+		std::vector<nm_mem::mem_ptr_t> m_vecUnorderedPkgs;
 		struct sockaddr_in m_addrSender;
 		union
 		{

@@ -775,7 +775,7 @@ namespace nm_network
 
 	int32_t CRmpSock::get_local_bind_addr(struct sockaddr_in &addr)
 	{
-		return getsockname(m_hSock, (struct sockaddr*)(&addr), sizeof(addr));
+		return getsockname(m_hSock, (struct sockaddr*) (&addr), sizeof(addr));
 	}
 
 	int32_t CRmpSock::join_multicast_group(const cmn_string_t &strMulticastIp)
@@ -894,12 +894,49 @@ namespace nm_network
 	///
 	int32_t CRmpSock::handle_odata()
 	{
-		SRmpOdata *pOdata = static_cast<SRmpOdata*>(m_pMem->get_data());
-		if (pOdata->ui32SeqNo == (1 + m_ui32LatestRecvedSeqNo))
+		SRmpOdata *pOdata = static_cast<SRmpOdata*> (m_pMem->get_data());
+		if (pOdata->ui32SeqNo == (1 + m_ui32LatestRecvedValidSeqNo))
 		{
+			///
 			m_pMem->dec_head_data(sizeof(SRmpOdata));
+			m_ui32LatestRecvedValidSeqNo++;
+			///activate the wrong ordered data
+			//|----------------|latestrecvvaliddata-----|lostdatabegin-----|lostdataend
+			if ((m_ui32LatestRecvedValidSeqNo + 1) == m_ui32UnvalidPkgBegin)
+			{
+				m_ui32ValidPkgBegin = m_ui32ValidPkgEnd = m_ui32UnvalidPkgBegin;
+
+				///find the valid pkg end
+				while (m_ui32ValidPkgEnd <= m_ui32UnvalidPkgEnd)
+				{
+					if (NULL == m_vecUnorderedPkgs[(m_ui32ValidPkgEnd+1) % m_vecUnorderedPkgs.capacity()])
+					{
+						break;
+					}
+					m_ui32ValidPkgEnd++;
+				}
+
+				if (m_ui32ValidPkgEnd < m_ui32UnvalidPkgEnd)
+				{
+					m_ui32UnvalidPkgBegin = m_ui32ValidPkgEnd + 1;
+					while (m_ui32UnvalidPkgBegin <= m_ui32UnvalidPkgEnd)
+					{
+						if (NULL != m_vecUnorderedPkgs[m_ui32UnvalidPkgBegin % m_vecUnorderedPkgs.capacity()])
+						{
+							break;
+						}
+						m_ui32UnvalidPkgBegin++;
+					}
+				}
+				else
+				{
+					m_ui32UnvalidPkgBegin = m_ui32UnvalidPkgEnd = 0;
+				}
+
+				m_ui32LatestRecvedValidSeqNo = m_ui32ValidPkgEnd;
+			}
 		}
-		else if (pOdata->ui32SeqNo <= m_ui32LatestRecvedSeqNo)
+		else if (pOdata->ui32SeqNo <= m_ui32LatestRecvedValidSeqNo)
 		{
 			//repeated pkg,discard it
 			m_pMem->reset();
@@ -929,10 +966,10 @@ namespace nm_network
 	{
 		int32_t i32Ret = CMNERR_SUC;
 		SRmpHb *pHb = static_cast<SRmpHb*> (m_pMem->get_data());
-		if (pHb->ui32LatestSeqNo > m_ui32LatestRecvedSeqNo)
+		if (pHb->ui32LatestSeqNo > m_ui32LatestRecvedValidSeqNo)
 		{
 			SRmpNak nak;
-			nak.ui32Begin = m_ui32LatestRecvedSeqNo + 1;
+			nak.ui32Begin = m_ui32LatestRecvedValidSeqNo + 1;
 			nak.ui32End = pHb->ui32LatestSeqNo;
 			nak.ui64Id = m_epid.ui64Id;
 			for (;;)
