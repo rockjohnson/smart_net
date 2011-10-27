@@ -20,7 +20,7 @@ namespace nm_mem
 	{
 	public:
 		inline CMemBlock()
-		:m_ui32Sz(MAX_MEM_SIZE), m_ui32Offset(0), m_ui32Len(0)
+		:m_ui32Sz(sizeof(m_bytes)), m_ui32Offset(0), m_ui32Len(0)
 		{
 		}
 		inline ~CMemBlock()
@@ -30,7 +30,7 @@ namespace nm_mem
 	public:
 		inline cmn_byte_t* get_data()
 		{
-			return (m_pBytes + m_ui32Offset);
+			return (m_bytes + m_ui32Offset);
 		}
 		inline u_int32_t get_len()
 		{
@@ -44,7 +44,7 @@ namespace nm_mem
 		{
 			if (m_ui32Offset > 0)
 			{
-				::memmove(m_pBytes, m_pBytes + m_ui32Offset, m_ui32Len);
+				::memmove(m_bytes, m_bytes + m_ui32Offset, m_ui32Len);
 				m_ui32Offset = 0;
 			}
 		}
@@ -71,19 +71,15 @@ namespace nm_mem
 		}
 		inline cmn_byte_t* get_tail_free_buf()
 		{
-			return (m_pBytes + m_ui32Offset + m_ui32Len);
+			return (m_bytes + m_ui32Offset + m_ui32Len);
 		}
 		inline u_int32_t get_total_free_size()
 		{
 			return (m_ui32Sz - m_ui32Len);
 		}
-		inline u_int32_t get_cur_len()
-		{
-			return m_ui32Len;
-		}
 		inline cmn_byte_t* get_buf()
 		{
-			return m_pBytes;
+			return m_bytes;
 		}
 
 		inline int32_t append(cmn_byte_t* pBytes, u_int32_t ui32Len)
@@ -92,13 +88,13 @@ namespace nm_mem
 			{
 				return CMNERR_COMMON_ERR;
 			}
-
+			///
 			if (get_tail_free_size() < ui32Len)
 			{
-				memmove(m_pBytes, m_pBytes+m_ui32Offset, m_ui32Len);
-				m_ui32Offset = 0;
+				move_data_ahead();
 			}
-			memcpy(m_pBytes+m_ui32Offset+m_ui32Len, pBytes, ui32Len);
+			///
+			memcpy(m_bytes+m_ui32Offset+m_ui32Len, pBytes, ui32Len);
 			m_ui32Len += ui32Len;
 
 			return CMNERR_SUC;
@@ -107,13 +103,13 @@ namespace nm_mem
 		inline void reset()
 		{
 			//SAFE_DELETE_ARR(m_pBytes);
-			m_ui32Sz = MAX_MEM_SIZE;
+			//m_ui32Sz = MAX_MEM_SIZE;
 			m_ui32Offset = 0;
 			m_ui32Len = 0;
 		}
 
 	private:
-		cmn_byte_t m_pBytes[MAX_MEM_SIZE];
+		cmn_byte_t m_bytes[MAX_MEM_SIZE];
 		u_int32_t m_ui32Sz;
 		u_int32_t m_ui32Offset;
 		u_int32_t m_ui32Len;

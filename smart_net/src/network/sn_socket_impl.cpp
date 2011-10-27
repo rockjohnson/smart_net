@@ -224,7 +224,7 @@ namespace nm_network
 
 	int32_t CTcpSock::send(nm_mem::mem_ptr_t &pData)
 	{
-		CMN_ASSERT(pData->get_cur_len() > 0);
+		CMN_ASSERT(pData->get_len() > 0);
 		CMN_ASSERT(pData->get_ref_cnt() == 1);
 
 		if (!m_lkSending.try_lock()) ///try send lock failed
@@ -237,7 +237,7 @@ namespace nm_network
 			}
 			else
 			{
-				if (!CMNERR_SUC == m_qSendCache.back()->append(pData->get_data(), pData->get_len()))
+				if (!(CMNERR_SUC == m_qSendCache.back()->append(pData->get_data(), pData->get_len())))
 				{
 					m_qSendCache.push_back(pData);
 				}
@@ -305,8 +305,6 @@ namespace nm_network
 		}
 
 		m_lkSending.unlock();
-
-		i32Ret = CMNERR_SUC;
 		return i32Ret;
 	}
 
@@ -327,48 +325,43 @@ namespace nm_network
 		while (!m_qSending.empty())
 		{
 			nm_mem::mem_ptr_t &pData = m_qSending.front();
-			for (;;)
+
+			i32Ret = ::send(m_hSock, (const char*) (pData->get_data()), pData->get_len(), 0);
+			if (i32Ret < 0)
 			{
-				i32Ret = ::send(m_hSock, (const char*) (pData->get_data()), pData->get_len(), 0);
-				if (i32Ret < 0)
-				{
 #if (__PLATFORM__ == __PLATFORM_LINUX__)
-					if (EWOULDBLOCK == errno)
+				if (EWOULDBLOCK == errno)
 #elif defined(__PLATEFORM_WINDOWS__)
-					if (WSAEWOULDBLOCK == ::GetLastError())
+				if (WSAEWOULDBLOCK == ::GetLastError())
 #endif
-					{
-						//ASSERT(false);//should not reach here.
-						i32Ret = CMNERR_SEND_PENDING;
-					}
-					else
-					{
-						//TRACE_LAST_ERR(send);
-						//close_sock();
-						i32Ret = CMNERR_IO_ERR;
-					}
-					break;
-				}
-
-				CMN_ASSERT(0 != i32Ret);
-
-				if (i32Ret < pData->get_len())
 				{
-					pData->dec_head_data(i32Ret);
+					//ASSERT(false);//should not reach here.
 					i32Ret = CMNERR_SEND_PENDING;
+				}
+				else if (EINTR == errno)
+				{
+					continue;
+				}
+				else
+				{
+					//TRACE_LAST_ERR(send);
+					//close_sock();
+					i32Ret = CMNERR_IO_ERR;
 					break;
 				}
-
-				CMN_ASSERT(i32Ret == pData->get_len());
-				i32Ret = CMNERR_SUC;
-				m_qSending.pop_front();
-				break;
 			}
 
-			if (i32Ret != CMNERR_SUC)
+			CMN_ASSERT(0 != i32Ret);
+
+			if (i32Ret < pData->get_len())
 			{
+				pData->dec_head_data(i32Ret);
+				i32Ret = CMNERR_SEND_PENDING;
 				break;
 			}
+
+			CMN_ASSERT(i32Ret == pData->get_len());
+			m_qSending.pop_front();
 
 			if (m_qSending.empty())
 			{

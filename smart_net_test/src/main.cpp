@@ -33,14 +33,14 @@ int main()
 
 //	std::cout<<"ok3"<<std::endl;
 	nm_busi::tcp_ep_tester_ptr_t pA = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
-	nm_busi::tcp_ep_tester_ptr_t pC = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
-	nm_busi::tcp_ep_tester_ptr_t pD = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
-	nm_busi::tcp_ep_tester_ptr_t pE = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
+//	nm_busi::tcp_ep_tester_ptr_t pC = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
+//	nm_busi::tcp_ep_tester_ptr_t pD = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
+//	nm_busi::tcp_ep_tester_ptr_t pE = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpAcceptor));
 
 	pA->open();
-	pC->open();
-	pD->open();
-	pE->open();
+//	pC->open();
+//	pD->open();
+//	pE->open();
 	nm_busi::tcp_ep_tester_ptr_t pB = SYS_NOTRW_NEW(nm_busi::CTcpEndpointTester(pTcpConnector));
 	pB->open();
 
@@ -98,18 +98,22 @@ int main()
 
 #endif
 
-	while (1)
+	int32_t i32Cnt = 0;
+	while (i32Cnt++ < 1000009)
 	{
 		if (pB->is_opened())
 		{
 			nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgReg> ar(3);
 			nm_pkg::CPkgReg *pPkg = ar.get_next_body();
-			pPkg->set_id(1);
-			nm_pkg::CPkgReg *pPkg1 = ar.get_next_body();
-			pPkg1->set_id(2);
+			pPkg->set_id(i32Cnt);
+//			nm_pkg::CPkgReg *pPkg1 = ar.get_next_body();
+//			pPkg1->set_id(2);
 			pB->send_data(ar.serialize());
 		}
 	}
+
+	sleep(10000000);
+
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 	return 0;
 }
