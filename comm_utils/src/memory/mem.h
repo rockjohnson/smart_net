@@ -32,6 +32,10 @@ namespace nm_mem
 		{
 			return (m_bytes + m_ui32Offset);
 		}
+		inline cmn_byte_t* get_offset_data(u_int32_t ui32Offset)
+		{
+			return (m_bytes + ui32Offset);
+		}
 		inline u_int32_t get_len()
 		{
 			return m_ui32Len;
@@ -80,6 +84,10 @@ namespace nm_mem
 		inline cmn_byte_t* get_buf()
 		{
 			return m_bytes;
+		}
+		inline u_int32_t get_init_offset()
+		{
+			return m_ui32InitOffset;
 		}
 
 		inline int32_t append(cmn_byte_t* pBytes, u_int32_t ui32Len)

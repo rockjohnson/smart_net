@@ -240,7 +240,8 @@ namespace nm_network
 		EP_HB,
 		EP_NAK,
 		EP_ACK,
-		EP_ALL ///pkgs which receiver handling
+		EP_ALL
+	///pkgs which receiver handling
 	};
 
 #pragma pack(push, 4)
@@ -289,13 +290,8 @@ namespace nm_network
 		P_FUN fun;
 	};
 
-	struct SHander pkg_handlers[EP_ALL] =
-	{
-			{ EP_DATA, &CRmpSock::handle_odata },
-			{ EP_HB, &CRmpSock::handle_hb },
-			{ EP_NAK, &CRmpSock::handle_nak },
-			{ EP_ACK, &CRmpSock::handle_ack }
-	};
+	struct SHander pkg_handlers[EP_ALL] = { { EP_DATA, &CRmpSock::handle_odata }, { EP_HB, &CRmpSock::handle_hb }, { EP_NAK, &CRmpSock::handle_nak },
+			{ EP_ACK, &CRmpSock::handle_ack } };
 
 	/**
 	 *
@@ -411,19 +407,28 @@ namespace nm_network
 	{
 		///
 		CMN_ASSERT(CMNERR_SUC == pM->inc_head_data(sizeof(SRmpOdata)));
-		SRmpOdata *pOdata = (SRmpOdata*)(pM->get_data());
+		SRmpOdata *pOdata = (SRmpOdata*) (pM->get_data());
 		///
 		CMN_ASSERT(CMNERR_SUC == pM->inc_head_data(sizeof(SRmpHdr)));
-		SRmpHdr *pHdr = (SRmpHdr*)(pM->get_data());
+		SRmpHdr *pHdr = (SRmpHdr*) (pM->get_data());
 		pHdr->ui8Opcode = EP_DATA;
 		pHdr->ui24Len = pM->get_len();
 		///added into send buf
 		{
-			nm_utils::spin_scopelk_t lk(m_lkSenderWin);  ///just for handle multi senders.
-			if ((m_ui32ValidSendingDataTail % m_vecSenderWin.capacity()) == m_ui32ValidSendingDataHead)
+			nm_utils::spin_scopelk_t lk(m_lkSenderWin); ///just for handle multi senders.
+			if ((0 != m_ui32ValidSendingDataTail) && (m_ui32SendingSeqNo + 1) != m_ui32ValidSendingDataTail)
 			{
-				return CMNERR_NO_SPACE;
+				if (CMNERR_SUC == m_vecSenderWin[m_ui32ValidSendingDataTail - 1].m_pMem->append(pM->get_offset_data(pM->get_init_offset),
+						pM->get_len() - pM->get_init_offset()))
+				{
+					return CMNERR_SUC;
+				}
+				else if ((m_ui32ValidSendingDataTail % m_vecSenderWin.capacity()) == m_ui32ValidSendingDataHead)
+				{
+					return CMNERR_NO_SPACE;
+				}
 			}
+			///
 			pOdata->ui32SeqNo = m_ui32ValidSendingDataTail;
 			m_vecSenderWin[pOdata->ui32SeqNo % m_vecSenderWin.capacity()].m_pMem = pM;
 			m_ui32ValidSendingDataTail++;
@@ -704,6 +709,7 @@ namespace nm_network
 
 	int32_t CRmpSock::handle_can_send()
 	{
+
 	}
 
 //
