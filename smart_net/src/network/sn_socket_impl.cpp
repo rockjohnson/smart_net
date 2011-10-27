@@ -335,6 +335,7 @@ namespace nm_network
 				{
 					//ASSERT(false);//should not reach here.
 					i32Ret = CMNERR_SEND_PENDING;
+					break;
 				}
 				else if (EINTR == errno)
 				{
@@ -342,8 +343,6 @@ namespace nm_network
 				}
 				else
 				{
-					//TRACE_LAST_ERR(send);
-					//close_sock();
 					i32Ret = CMNERR_IO_ERR;
 					break;
 				}

@@ -708,7 +708,7 @@ namespace nm_smartnet
 		init_sm();
 		///
 		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
-		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT | EPOLLET);
+		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT);
 		///
 		m_log.init(".", "tcp_endpoint_", ELL_DEBUG, 60);
 	}
@@ -719,7 +719,7 @@ namespace nm_smartnet
 		init_sm();
 		///
 		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
-		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT | EPOLLET);
+		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT);
 		///
 		char buf[1024] = { 0 };
 		sprintf(buf, "%ld_", (long) this);
@@ -991,7 +991,7 @@ namespace nm_smartnet
 	{
 		if (ES_OPENED == m_sm.get_cur_state()) ///如果发生了错误，导致状态不是OPENNED时，就不用处理IO了。
 		{
-			TRACE_LOG(m_log, ELL_DEBUG, "handle_output_evt\n");
+			//TRACE_LOG(m_log, ELL_DEBUG, "handle_output_evt\n");
 			if (m_pTcpSock->handle_can_send() == CMNERR_IO_ERR)
 			{
 				m_sm.post_evt(EE_INTERNAL_ERR, NULL);

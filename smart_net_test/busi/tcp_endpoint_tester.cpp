@@ -30,6 +30,7 @@ namespace nm_busi
 
 	void CTcpEndpointTester::on_opened()
 	{
+		std::cout << "tester opened" << std::endl;
 		nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgReg> ar(3);
 		nm_pkg::CPkgReg *pPkg = ar.get_next_body();
 		pPkg->set_id(10);

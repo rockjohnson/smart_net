@@ -90,6 +90,7 @@ namespace nm_pkg
 				if (pHdr->get_ver() != cByte/*VERSION*/
 						|| pHdr->get_len() < s_ui32PkgHdr)
 				{
+					CMN_ASSERT(false);
 					i32Ret = CMNERR_COMMON_ERR;
 					break;
 				}
@@ -103,6 +104,7 @@ namespace nm_pkg
 				///
 				if (m_hmFuns.find(pHdr->get_opcode()) == m_hmFuns.end())
 				{
+					CMN_ASSERT(false);
 					i32Ret = CMNERR_UNKNOWN_PKG;
 					break;
 				}
@@ -114,7 +116,6 @@ namespace nm_pkg
 			if ((CMNERR_COMMON_ERR == i32Ret)
 					|| (CMNERR_UNKNOWN_PKG == i32Ret))
 			{
-				CMN_ASSERT(false);
 				pConn->close();
 			}
 		}

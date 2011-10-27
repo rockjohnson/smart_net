@@ -98,7 +98,13 @@ int main()
 
 #endif
 
+	while (!pB->is_opened())
+	{
+		sleep(1);
+	}
+
 	int32_t i32Cnt = 0;
+	int32_t i32Ret = 0;
 	while (i32Cnt++ < 1000009)
 	{
 		if (pB->is_opened())
@@ -108,12 +114,24 @@ int main()
 			pPkg->set_id(i32Cnt);
 //			nm_pkg::CPkgReg *pPkg1 = ar.get_next_body();
 //			pPkg1->set_id(2);
-			pB->send_data(ar.serialize());
+			i32Ret = pB->send_data(ar.serialize());
+//			if (CMNERR_SEND_PENDING)
+//			{
+//				cout << "!!!1 World!!!" << endl; // prints !!!Hello World!!!
+//			}
+//			else if (CMNERR_SUC == i32Ret)
+//			{
+//				cout << "!!!2 World!!!" << endl; // prints !!!Hello World!!!
+//			}
+//			else
+//			{
+//				cout << "!!!3 World!!!" << endl; // prints !!!Hello World!!!
+//			}
 		}
 	}
 
-	sleep(10000000);
-
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+
+	sleep(10000000);
 	return 0;
 }
