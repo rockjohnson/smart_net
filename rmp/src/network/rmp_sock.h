@@ -98,7 +98,7 @@ namespace nm_network
 	/**
 	 *
 	 * */
-	class CRmpSock
+	class CRmpSock : public nm_cmn_base::ICommonBase
 	{
 		enum
 		{
@@ -174,6 +174,8 @@ namespace nm_network
 			u_int64_t ui64Id;
 		} m_epid;
 	};
+
+	typedef nm_utils::CSmartPtr<nm_network::CTcpSock> tcp_sock_ptr_t;
 #endif
 }
 

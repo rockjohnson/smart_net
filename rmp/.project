@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>librmp</name>
+	<name>libnet</name>
 	<comment></comment>
 	<projects>
 		<project>comm_utils</project>

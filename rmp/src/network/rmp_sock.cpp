@@ -7,7 +7,7 @@
 
 #include <unistd.h>
 #include <utils/utils.h>
-#include "../hdr/rmp_sock.h"
+#include "rmp_sock.h"
 
 namespace nm_network
 {

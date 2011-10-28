@@ -13,7 +13,7 @@
 #include <utils/state_machine.h>
 #include <memory/mem.h>
 #include <log/smart_log.h>
-#include <hdr/>
+#include <network/rmp_sock.h>
 
 #include "../framework/sn_engine.h"
 #include "../network/sn_socket_impl.h"
@@ -368,7 +368,7 @@ namespace nm_smartnet
 	private:
 		nm_utils::CStateMachine<nm_smartnet::CRmpSender> m_sm;
 		nm_framework::sn_engine_ptr_t m_pEngine;
-		CRmpSock m_sock;
+		nm_network::CRmpSock m_sock;
 		cmn_string_t m_strBindIp
 		u_int16_t m_ui16BindPort;
 		cmn_string_t m_strMulticastIp;

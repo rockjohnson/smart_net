@@ -515,7 +515,7 @@
 								<option id="gnu.cpp.compiler.lib.release.option.debugging.level.186630469" name="Debug Level" superClass="gnu.cpp.compiler.lib.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.294289805" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/comm_utils/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/librmp}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/librmp/src}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.162619827" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -Wreorder" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1785848586" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -535,7 +535,6 @@
 					<sourceEntries>
 						<entry excluding="network|task|event|smart_net|framework|common" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 						<entry excluding="engine|network|task|backup|event|smart_net|framework|protocols|src|common" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/network"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/common"/>
 						<entry excluding="task" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/framework"/>
 						<entry excluding="sock.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/smart_net"/>
