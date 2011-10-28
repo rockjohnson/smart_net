@@ -1062,6 +1062,7 @@ namespace nm_smartnet
 		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT, &CRmpEndpoint::handling_close_while_adding_into_ot));
 		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_ADDING_INTO_IT,	&CRmpEndpoint::handling_adding_into_ot_to_adding_into_it));
 
+		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT,	&CRmpEndpoint::handling_adding_into_ot_to_adding_into_it));
 		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_CLOSE, ES_ADDING_INTO_IT,	&CRmpEndpoint::handling_adding_into_ot_to_adding_into_it));
 		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_ADDED_INTO_IT, ES_OPENED,	&CRmpEndpoint::handling_adding_into_ot_to_adding_into_it));
 
@@ -1070,7 +1071,6 @@ namespace nm_smartnet
 
 		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_DELING_FROM_OT,	&CRmpEndpoint::handling_adding_into_ot_to_adding_into_it));
 		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_DELING_FROM_OT, EE_DELED_FROM_OT, ES_CLOSED,	&CRmpEndpoint::handling_adding_into_ot_to_adding_into_it));
-
 	}
 
 	/**
