@@ -135,6 +135,10 @@ namespace nm_network
 		int32_t get_recved_data(nm_mem::mem_ptr_t&);
 
 	private:
+		int32_t udp_send(nm_mem::mem_ptr_t &pMem, const struct sockaddr* pDestAddr);
+		int32_t udp_send(cmn_byte_t *pBytes, u_int32_t ui32Bytes, const struct sockaddr* pDestAddr);
+
+	private:
 		cmn_string_t m_strBindIp;
 		u_int16_t m_ui16BindPort;
 		cmn_string_t m_strMulticastIp;
@@ -152,13 +156,14 @@ namespace nm_network
 			nm_mem::mem_ptr_t m_pMem;
 			int32_t i32Acks;
 		};
-		std::vector<SPkgInfo> m_vecSenderWin;
+		std::vector<SPkgInfo> m_vecSendWin;
 		nm_utils::CSpinLock m_lkSenderWin;
 		volatile u_int32_t m_ui32ValidSendingDataHead; 	///最旧的没有接受到足够ack的包序列号
 		volatile u_int32_t m_ui32ValidSendingDataTail;   ///最近一次成功放入发送窗口的包的下一个序号
 		volatile u_int32_t m_ui32SendingSeqNo;          	///记录目前已经组播发送出去的包序列号
 		volatile u_int32_t m_ui32PkgSeqNoGenerator;     	///发送包的序列号生成记录器
 		struct sockaddr_in m_addrSender;
+		struct sockaddr_in m_addrMulticast;
 		union
 		{
 			struct

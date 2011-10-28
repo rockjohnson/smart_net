@@ -120,11 +120,11 @@ namespace nm_mem
 			return CMNERR_SUC;
 		}
 
-		inline void reset()
+		inline void reset(bool bUseInitOffset = false)
 		{
 			//SAFE_DELETE_ARR(m_pBytes);
 			//m_ui32Sz = MAX_MEM_SIZE;
-			m_ui32Offset = m_ui32InitOffset;
+			m_ui32Offset = bUseInitOffset ? m_ui32InitOffset : false;
 			m_ui32Len = 0;
 		}
 

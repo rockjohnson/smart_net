@@ -306,7 +306,7 @@ namespace nm_network
 		}
 		else if (E_SEND_ENDPOINT == i32EpType)
 		{
-			m_vecSenderWin.resize(__SEND_WIN_SIZE__);
+			m_vecSendWin.resize(__SEND_WIN_SIZE__);
 		}
 		else
 		{
@@ -418,19 +418,19 @@ namespace nm_network
 			nm_utils::spin_scopelk_t lk(m_lkSenderWin); ///just for handle multi senders.
 			if ((0 != m_ui32ValidSendingDataTail) && (m_ui32SendingSeqNo + 1) != m_ui32ValidSendingDataTail)
 			{
-				if (CMNERR_SUC == m_vecSenderWin[m_ui32ValidSendingDataTail - 1].m_pMem->append(pM->get_offset_data(pM->get_init_offset),
+				if (CMNERR_SUC == m_vecSendWin[m_ui32ValidSendingDataTail - 1].m_pMem->append(pM->get_offset_data(pM->get_init_offset),
 						pM->get_len() - pM->get_init_offset()))
 				{
 					return CMNERR_SUC;
 				}
-				else if ((m_ui32ValidSendingDataTail % m_vecSenderWin.capacity()) == m_ui32ValidSendingDataHead)
+				else if ((m_ui32ValidSendingDataTail % m_vecSendWin.capacity()) == m_ui32ValidSendingDataHead)
 				{
 					return CMNERR_NO_SPACE;
 				}
 			}
 			///
 			pOdata->ui32SeqNo = m_ui32ValidSendingDataTail;
-			m_vecSenderWin[pOdata->ui32SeqNo % m_vecSenderWin.capacity()].m_pMem = pM;
+			m_vecSendWin[pOdata->ui32SeqNo % m_vecSendWin.capacity()].m_pMem = pM;
 			m_ui32ValidSendingDataTail++;
 		}
 
@@ -635,38 +635,22 @@ namespace nm_network
 	//		//			(const struct sockaddr*)(&remote_addr), uiAddrSize);
 	//	}
 
+	/**
+	 * handle heart beat from sender.
+	 * */
 	int32_t CRmpSock::handle_hb()
 	{
 		int32_t i32Ret = CMNERR_SUC;
 		SRmpHb *pHb = (SRmpHb*) (m_pMem->get_data());
 		if (pHb->ui32LatestSeqNo > m_ui32LatestRecvedValidSeqNo)
 		{
-
 			SRmpNak nak;
 			nak.hdr.ui24Len = sizeof(SRmpNak);
 			nak.hdr.ui8Opcode = EP_NAK;
 			nak.ui32Begin = m_ui32LatestRecvedValidSeqNo + 1;
 			nak.ui32End = pHb->ui32LatestSeqNo;
 			nak.ui64Id = m_epid.ui64Id;
-			for (;;)
-			{
-				i32Ret = sendto(m_hSock, &nak, sizeof(nak), 0, (const struct sockaddr*) (&m_addrSender), sizeof(m_addrSender));
-				if (i32Ret < 0)
-				{
-					if (EWOULDBLOCK == errno)
-					{
-						CMN_ASSERT(false);
-						continue;
-					}
-					else
-					{
-						i32Ret = CMNERR_IO_ERR;
-						break;
-					}
-				}
-				i32Ret = CMNERR_SUC;
-				break;
-			}
+			in32Ret = udp_send(&nak, sizeof(nak), (const struct sockaddr*)(&m_addrSender));
 		}
 		else
 		{
@@ -707,9 +691,97 @@ namespace nm_network
 		return (this->*(pkg_handlers[pHdr->ui8Opcode].fun))();
 	}
 
+	/**
+	 *
+	 * */
+	int32_t CRmpSock::udp_send(nm_mem::mem_ptr_t &pMem, const struct sockaddr* pDestAddr)
+	{
+		int32_t i32Ret = CMNERR_SUC;
+		for (;;)
+		{
+			i32Ret = sendto(m_hSock, pMem->get_data(), pMem->get_len(), 0, pDestAddr, sizeof(struct sockaddr));
+			if (i32Ret < 0)
+			{
+				if (EWOULDBLOCK == errno)
+				{
+					i32Ret = CMNERR_SEND_PENDING;
+					break;
+				}
+				else if (EINTR == errno)
+				{
+					continue;
+				}
+				else
+				{
+					i32Ret = CMNERR_IO_ERR;
+					break;
+				}
+			}
+			i32Ret = CMNERR_SUC;
+			break;
+		}
+
+		return i32Ret;
+	}
+
+	int32_t CRmpSock::udp_send(cmn_byte_t *pBytes, u_int32_t ui32Bytes, const struct sockaddr *pDestAddr)
+	{
+		int32_t i32Ret = CMNERR_SUC;
+		for (;;)
+		{
+			i32Ret = sendto(m_hSock, pBytes, ui32Bytes, 0, pDestAddr, sizeof(struct sockaddr));
+			if (i32Ret < 0)
+			{
+				if (EWOULDBLOCK == errno)
+				{
+					i32Ret = CMNERR_SEND_PENDING;
+					break;
+				}
+				else if (EINTR == errno)
+				{
+					continue;
+				}
+				else
+				{
+					i32Ret = CMNERR_IO_ERR;
+					break;
+				}
+			}
+			i32Ret = CMNERR_SUC;
+			break;
+		}
+
+		return i32Ret;
+	}
+
+	/**
+	 * called by rmp sender ep.
+	 * called by io send thread
+	 * */
 	int32_t CRmpSock::handle_can_send()
 	{
+		///
+		int32_t i32Ret = CMNERR_SUC;
+		for (;;)
+		{
+			///is there some data available?
+			if (((m_ui32SendingSeqNo + 1) == m_ui32ValidSendingDataTail))
+			{
+				i32Ret = CMNERR_SUC;
+				break;
+			}
+			///
+			CMN_ASSERT(m_ui32SendingSeqNo < m_ui32ValidSendingDataTail);
+			///
+			i32Ret = udp_send(m_vecSendWin[m_ui32SendingSeqNo + 1], (const struct sockaddr*)(&m_addrMulticast));
+			if ((CMNERR_IO_ERR == i32Ret) || (CMNERR_SEND_PENDING == i32Ret))
+			{
+				break;
+			}
+			m_ui32SendingSeqNo++;
+		}
 
+		return i32Ret;
 	}
 
 //
