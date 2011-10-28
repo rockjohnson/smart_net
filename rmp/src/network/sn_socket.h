@@ -8,10 +8,10 @@
 #ifndef __SN_SOCKET_H__
 #define __SN_SOCKET_H__
 
-#include "../common/sn_common.h"
-#include "../network/sn_net_addr.h"
+//#include "../common/sn_common.h"
+#include "sn_net_addr.h"
 
-namespace nm_framework
+namespace nm_network
 {
 
 /**
@@ -43,11 +43,12 @@ public:
 
 	virtual int32_t send(nm_mem::mem_ptr_t&) = 0;
 	virtual int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len) = 0;
+	virtual int32_t handle_can_send() = 0;
 
 	virtual int32_t handle_can_recv(u_int32_t) = 0;
 	virtual int32_t recv(cmn_pvoid_t pV, u_int32_t ui32Size) = 0;
 };
-typedef nm_utils::CSmartPtr<nm_framework::ISocket> sock_ptr_t;
+typedef nm_utils::CSmartPtr<nm_network::ISocket> sock_ptr_t;
 
 }
 #endif /* __SN_SOCKET_H__ */

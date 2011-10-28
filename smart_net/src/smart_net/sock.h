@@ -209,7 +209,7 @@ namespace nm_network
 		CAddr m_local_addr;
 	};
 
-	class SOFT_NET_API CTcpSock: public CSocket
+	class SOFT_NET_API CRupSock: public CSocket
 	{
 		//private:
 		struct SSendInfo
@@ -239,8 +239,8 @@ namespace nm_network
 		ui32_t m_uiOffset;
 		};
 	public:
-		CTcpSock();
-		~CTcpSock();
+		CRupSock();
+		~CRupSock();
 
 	public:
 		int asyn_send(mem_ptr_t &ptr);

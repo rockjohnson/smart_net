@@ -14,7 +14,7 @@
 namespace nm_busi
 {
 
-	class CTcpEndpointTester : public nm_smartnet::CTcpEndpoint
+	class CTcpEndpointTester : public nm_smartnet::CRupEndpoint
 	{
 	public:
 		CTcpEndpointTester(nm_smartnet::tcp_acceptor_ptr_t&);

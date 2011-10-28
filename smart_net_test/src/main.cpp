@@ -20,13 +20,13 @@ int main()
 #if 1
 	std::cout<<"ok1"<<std::endl;
 
-	nm_smartnet::tcp_acceptor_ptr_t pTcpAcceptor = SYS_NOTRW_NEW(nm_smartnet::CTcpAcceptor(pSNEngine));
+	nm_smartnet::tcp_acceptor_ptr_t pTcpAcceptor = SYS_NOTRW_NEW(nm_smartnet::CRupAcceptor(pSNEngine));
 
 	std::cout<<"ok2"<<std::endl;
 	IF_TRUE_THEN_RETURN_CODE(pTcpAcceptor->open(cmn_string_t("0.0.0.0"), 8888) < 0, -1);
 	std::cout<<"ok3"<<std::endl;
 
-	nm_smartnet::tcp_connector_ptr_t pTcpConnector = SYS_NOTRW_NEW(nm_smartnet::CTcpConnector(pSNEngine));
+	nm_smartnet::tcp_connector_ptr_t pTcpConnector = SYS_NOTRW_NEW(nm_smartnet::CRupConnector(pSNEngine));
 	std::cout<<"ok4"<<std::endl;
 	IF_TRUE_THEN_RETURN_CODE(pTcpConnector->open(cmn_string_t("127.0.0.1"), 8888, 1000000) < 0, -1);
 	std::cout<<"ok5"<<std::endl;
@@ -71,15 +71,15 @@ int main()
 	pSmartNet->start(10, 10,nm_framework::EIEN_EPOLL, 10);
 
 	///2,create acceptor
-	tcp_ib_acceptor_ptr_t pTcpIBAcceptor = SYS_NOTRW_NEW(CTcpAcceptor(pSmartNet));
+	tcp_ib_acceptor_ptr_t pTcpIBAcceptor = SYS_NOTRW_NEW(CRupAcceptor(pSmartNet));
 	pTcpIBAcceptor->open(std::string("0.0.0.1"), 9999);
 
 	///3,create endpoint
-	tcp_endpoint_ptr_t pTcpIBEP = SYS_NOTRW_NEW(CTcpEndpoint(pTcpIBAcceptor));
+	rup_endpoint_ptr_t pTcpIBEP = SYS_NOTRW_NEW(CRupEndpoint(pTcpIBAcceptor));
 	pTcpIBEP->open();
 
 	///1,create outbound connector
-	tcp_ob_connector_ptr_t pTcpOBConnector = SYS_NOTHRW_NEW(CTcpConnector(pSmartNet));
+	tcp_ob_connector_ptr_t pTcpOBConnector = SYS_NOTHRW_NEW(CRupConnector(pSmartNet));
 	pTcpOBConnector->open(std::string("127.0.0.1"), 9999);
 
 	///2,create outbound endpoint
@@ -87,7 +87,7 @@ int main()
 	pTcpOBEP->open();
 
 	///1,create rmp endpoint
-	rmp_endpoint_ptr_t pRmpEP = SYS_NOTHRW_NEW(CRmpSender(pSmartNet));
+	rmp_endpoint_ptr_t pRmpEP = SYS_NOTHRW_NEW(CRmpEndpoint(pSmartNet));
 	pRmpEP->open(std::string("224.0.2.99"), std::string("127.0.0.1"), 9999);
 
 	::sleep(100000);

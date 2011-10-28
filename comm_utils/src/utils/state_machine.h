@@ -75,7 +75,7 @@ namespace nm_utils
 		event_handler_t m_evt_handler;
 	};
 
-#include "state_machine.inl"
+#include "state_machine.hpp"
 
 }
 

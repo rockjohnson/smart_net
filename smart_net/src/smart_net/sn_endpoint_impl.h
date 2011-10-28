@@ -9,33 +9,31 @@
 #define __CONN_H__
 
 #include <deque>
-
 #include <utils/state_machine.h>
 #include <memory/mem.h>
 #include <log/smart_log.h>
-#include <network/rmp_sock.h>
-
+#include <network/sn_socket_impl.h>
 #include "../framework/sn_engine.h"
-#include "../network/sn_socket_impl.h"
+
 
 namespace nm_smartnet
 {
 	/**
 	 *
 	 * */
-	class CTcpEndpoint;
-	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpEndpoint> tcp_endpoint_ptr_t;
+	class CRupEndpoint;
+	typedef nm_utils::CSmartPtr<nm_smartnet::CRupEndpoint> rup_endpoint_ptr_t;
 
 	/**
 	 *
 	 * */
-	class CTcpAcceptor: public nm_framework::IIoObj
+	class CRupAcceptor: public nm_framework::IIoObj
 	{
 	public:
-		CTcpAcceptor(const nm_framework::sn_engine_ptr_t&);
-		virtual ~CTcpAcceptor();
+		CRupAcceptor(const nm_framework::sn_engine_ptr_t&);
+		virtual ~CRupAcceptor();
 
-		DISALLOW_COPY_AND_ASSIGN( CTcpAcceptor);
+		DISALLOW_COPY_AND_ASSIGN( CRupAcceptor);
 
 		enum
 		{
@@ -64,8 +62,8 @@ namespace nm_smartnet
 		void on_opened();
 		int32_t close();
 		virtual void on_closed();
-		int32_t add_endpoint(const tcp_endpoint_ptr_t &pTcpEP);
-		int32_t del_endpoint(const tcp_endpoint_ptr_t &pTcpEP);
+		int32_t add_endpoint(const rup_endpoint_ptr_t &pTcpEP);
+		int32_t del_endpoint(const rup_endpoint_ptr_t &pTcpEP);
 		nm_framework::sn_engine_ptr_t& get_engine()
 		{
 			return m_pSNEngine;
@@ -81,25 +79,25 @@ namespace nm_smartnet
 		int32_t handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
-		nm_utils::CStateMachine<CTcpAcceptor> m_sm;
+		nm_utils::CStateMachine<CRupAcceptor> m_sm;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
-		nm_network::tcp_sock_ptr_t m_pTcpSockListener;
+		nm_network::rup_sock_ptr_t m_pTcpSockListener;
 		int32_t m_i32PendingEvt;
 		nm_utils::CSmartLog m_log;
 		nm_network::CIpv4Addr m_bindAddr;
 
 		nm_utils::CSpinLock m_lkIdleEndpoints;
-		typedef std::deque<tcp_endpoint_ptr_t> tcp_endpoint_deque_t;
+		typedef std::deque<rup_endpoint_ptr_t> tcp_endpoint_deque_t;
 		tcp_endpoint_deque_t m_dqIdleEndpoints;
 	};
-	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpAcceptor> tcp_acceptor_ptr_t;
+	typedef nm_utils::CSmartPtr<nm_smartnet::CRupAcceptor> tcp_acceptor_ptr_t;
 
 	/**
 	 * tcp connecter.
 	 * */
-	class CTcpConnector: public nm_framework::ITimerObj, public nm_framework::IIoObj
+	class CRupConnector: public nm_framework::ITimerObj, public nm_framework::IIoObj
 	{
-		friend class CTcpEndpoint;
+		friend class CRupEndpoint;
 
 		enum
 		{
@@ -129,10 +127,10 @@ namespace nm_smartnet
 		};
 
 	public:
-		CTcpConnector(const nm_framework::sn_engine_ptr_t&);
-		virtual ~CTcpConnector();
+		CRupConnector(const nm_framework::sn_engine_ptr_t&);
+		virtual ~CRupConnector();
 
-		DISALLOW_COPY_AND_ASSIGN( CTcpConnector);
+		DISALLOW_COPY_AND_ASSIGN( CRupConnector);
 	public:
 		int32_t open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort, u_int64_t ui64IntervalInUs);
 		bool is_opened()
@@ -153,8 +151,8 @@ namespace nm_smartnet
 		virtual void handle_del_from_timer_task();
 
 	private:
-		int32_t add_endpoint(const tcp_endpoint_ptr_t&);
-		int32_t del_endpoint(const tcp_endpoint_ptr_t&);
+		int32_t add_endpoint(const rup_endpoint_ptr_t&);
+		int32_t del_endpoint(const rup_endpoint_ptr_t&);
 		nm_framework::sn_engine_ptr_t& get_engine()
 		{
 			return m_pSNEngine;
@@ -183,24 +181,24 @@ namespace nm_smartnet
 		virtual void on_closed();
 
 	private:
-		nm_network::tcp_sock_ptr_t m_pTcpSock;
+		nm_network::rup_sock_ptr_t m_pTcpSock;
 		cmn_string_t m_strAcceptorIp;
 		u_int16_t m_ui16AcceptorPort;
-		nm_utils::CStateMachine<CTcpConnector> m_sm;
+		nm_utils::CStateMachine<CRupConnector> m_sm;
 		u_int64_t m_ui64Interval;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
 		int32_t m_i32PendingEvt;
 		nm_utils::CSpinLock m_lkIdleEps;
-		typedef std::deque<tcp_endpoint_ptr_t> tcp_endpoint_deque_t;
+		typedef std::deque<rup_endpoint_ptr_t> tcp_endpoint_deque_t;
 		tcp_endpoint_deque_t m_dqIdleEndpoints;
 		nm_utils::CSmartLog m_log;
 	};
-	typedef nm_utils::CSmartPtr<nm_smartnet::CTcpConnector> tcp_connector_ptr_t;
+	typedef nm_utils::CSmartPtr<nm_smartnet::CRupConnector> tcp_connector_ptr_t;
 
 	/**
 	 * tcp endpoint
 	 * */
-	class CTcpEndpoint: public nm_framework::IIoObj
+	class CRupEndpoint: public nm_framework::IIoObj
 	{
 		enum
 		{
@@ -234,11 +232,11 @@ namespace nm_smartnet
 		};
 
 	public:
-		CTcpEndpoint(const tcp_acceptor_ptr_t&);
-		CTcpEndpoint(const tcp_connector_ptr_t&);
-		virtual ~CTcpEndpoint();
+		CRupEndpoint(const tcp_acceptor_ptr_t&);
+		CRupEndpoint(const tcp_connector_ptr_t&);
+		virtual ~CRupEndpoint();
 
-		DISALLOW_COPY_AND_ASSIGN( CTcpEndpoint);
+		DISALLOW_COPY_AND_ASSIGN( CRupEndpoint);
 
 	protected:
 		virtual void handle_input_evt();
@@ -262,7 +260,7 @@ namespace nm_smartnet
 		//int32_t get_type();
 		nm_network::ipv4_addr_ptr_t& get_peer_addr() const;
 		nm_network::ipv4_addr_ptr_t& get_local_addr() const;
-		int32_t handle_connected(nm_network::tcp_sock_ptr_t&);
+		int32_t handle_connected(nm_network::rup_sock_ptr_t&);
 
 	protected:
 		///
@@ -287,26 +285,25 @@ namespace nm_smartnet
 		int32_t handling_added_into_helper_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
-		nm_utils::CStateMachine<CTcpEndpoint> m_sm; ///state machine make the obj state thread-safe
+		nm_utils::CStateMachine<CRupEndpoint> m_sm; ///state machine make the obj state thread-safe
 		int32_t m_i32SMPendingEvt; ///为了简化设计，在状态达到OPENNED之前，发生的IO ERROR或 INTERNAL ERROR，并不直接处理，而是在达到这个状态时才处理。
 		tcp_connector_ptr_t m_pTcpConnector;
 		tcp_acceptor_ptr_t m_pTcpAcceptor;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
-		nm_network::tcp_sock_ptr_t m_pTcpSock;
+		nm_network::rup_sock_ptr_t m_pTcpSock;
 		nm_network::ipv4_addr_ptr_t m_pPeerAddr;
 		nm_utils::CSmartLog m_log;
 	};
 
 	/**
-	 * reliable multicast sender endpoint.
+	 * reliable multicast endpoint.
 	 * */
-	class CRmpSender: public nm_framework::IIoObj
+	class CRmpEndpoint: public nm_framework::IIoObj
 	{
-		//		enum
-		//		{
-		//			E_RECV_ENDPOINT = 0,
-		//			E_SEND_ENDPOINT
-		//		};
+		enum
+		{
+			ERMP_RECV_ENDPOINT = 0, ERMP_SEND_ENDPOINT
+		};
 
 		enum
 		{
@@ -340,10 +337,10 @@ namespace nm_smartnet
 		};
 
 	public:
-		CRmpSender(nm_framework::sn_engine_ptr_t &pNetEngine);
-		virtual ~CRmpSender();
+		CRmpEndpoint(nm_framework::sn_engine_ptr_t &pNetEngine, int32_t i32Type);
+		virtual ~CRmpEndpoint();
 
-		DISALLOW_COPY_AND_ASSIGN( CRmpSender);
+		DISALLOW_COPY_AND_ASSIGN( CRmpEndpoint);
 
 	public:
 		int32_t open(const cmn_string_t &strMulticastIP, const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
@@ -363,17 +360,19 @@ namespace nm_smartnet
 		int32_t init_sm();
 
 		int32_t handling_closed_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_adding_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
-		nm_utils::CStateMachine<nm_smartnet::CRmpSender> m_sm;
+		nm_utils::CStateMachine<nm_smartnet::CRmpEndpoint> m_sm;
 		nm_framework::sn_engine_ptr_t m_pEngine;
-		nm_network::CRmpSock m_sock;
-		cmn_string_t m_strBindIp
+		nm_network::rmp_sock_ptr_t m_pSock;
+		cmn_string_t m_strBindIp;
 		u_int16_t m_ui16BindPort;
 		cmn_string_t m_strMulticastIp;
-		int32_t m_i32EpType;
+		int32_t m_i32Type;
 	};
+	typedef nm_utils::CSmartPtr<nm_smartnet::CRmpEndpoint> rmp_endpoint_ptr_t;
 }
 
 #endif /* CONN_H_ */

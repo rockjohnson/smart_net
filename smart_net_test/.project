@@ -3,9 +3,9 @@
 	<name>smart_net_test</name>
 	<comment></comment>
 	<projects>
-		<project>comm_utils</project>
-		<project>rmp</project>
-		<project>smart_net</project>
+		<project>libcomm_net</project>
+		<project>libcomm_utils</project>
+		<project>libsmart_net</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

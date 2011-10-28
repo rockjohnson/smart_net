@@ -3,7 +3,8 @@
 	<name>libsmart_net</name>
 	<comment></comment>
 	<projects>
-		<project>comm_utils</project>
+		<project>libcomm_net</project>
+		<project>libcomm_utils</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

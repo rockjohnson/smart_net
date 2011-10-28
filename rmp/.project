@@ -3,7 +3,7 @@
 	<name>libcomm_net</name>
 	<comment></comment>
 	<projects>
-		<project>comm_utils</project>
+		<project>libcomm_utils</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

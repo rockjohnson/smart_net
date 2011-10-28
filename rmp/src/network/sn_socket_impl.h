@@ -18,19 +18,19 @@
 #include <intrusive/optimistic_queue.h>
 #endif
 
-#include "../common/sn_common.h"
+//#include "../common/sn_common.h"
 #include "sn_socket.h"
 
 namespace nm_network
 {
 
 	/**
-	 * tcp socket
+	 * rup socket
 	 *
 	 * */
-	class CTcpSock;
-	typedef nm_utils::CSmartPtr<nm_network::CTcpSock> tcp_sock_ptr_t;
-	class CTcpSock: public nm_framework::ISocket
+	class CRupSock;
+	typedef nm_utils::CSmartPtr<nm_network::CRupSock> rup_sock_ptr_t;
+	class CRupSock: public nm_network::ISocket
 	{
 		struct SSendInfo
 		{
@@ -59,8 +59,8 @@ namespace nm_network
 		};
 
 	public:
-		CTcpSock();
-		virtual ~CTcpSock();
+		CRupSock();
+		virtual ~CRupSock();
 
 	public:
 		int32_t open(sock_handle_t sockhandle = INVALID_SOCKET);
@@ -68,7 +68,7 @@ namespace nm_network
 		int32_t bind(CIpv4Addr &bindaddr);
 		int32_t bind(const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
 		int32_t listen(int32_t i32Backlog);
-		tcp_sock_ptr_t accept();
+		rup_sock_ptr_t accept();
 		int32_t connect(const CIpv4Addr &remoteAddr);
 		int32_t connect(const cmn_string_t &strAcceptorIp, u_int64_t ui16AcceptorPort);
 		sock_handle_t get_handle();
@@ -100,6 +100,88 @@ namespace nm_network
 		mem_queue_t m_qSending;
 		nm_mem::mem_ptr_t m_pRecvData;
 	};
+
+	/**
+	 *
+	 * */
+	enum
+	{
+		ERMP_RECV_SOCK = 0, ERMP_SEND_SOCK
+	};
+	class CRmpSock: public nm_network::ISocket
+	{
+	public:
+		CRmpSock(int32_t i32EpType);
+		~CRmpSock();
+
+	public:
+		int32_t open(sock_handle_t hSock);
+		int32_t open(const cmn_string_t &);
+		int32_t close();
+		int32_t bind(const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
+		int32_t join_multicast_group(const cmn_string_t &strMulticastIp);
+		int32_t leave_multicast_group(const cmn_string_t &strMulticastIp);
+		sock_handle_t get_handle();
+		bool is_opened();
+		int32_t set_nonblock(bool bFlag);
+
+		int32_t send(nm_mem::mem_ptr_t&);
+		int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len);
+
+		int32_t handle_can_recv(u_int32_t);
+
+		int32_t get_local_bind_addr(struct sockaddr_in &addr);
+		int32_t handle_sendep_data();
+		int32_t handle_recvep_data();
+		int32_t handle_can_send();
+
+		int32_t handle_odata();
+		int32_t handle_hb();
+		int32_t handle_nak();
+		int32_t handle_ack();
+		int32_t get_recved_data(nm_mem::mem_ptr_t&);
+
+	private:
+		int32_t udp_send(nm_mem::mem_ptr_t &pMem, const struct sockaddr* pDestAddr);
+		int32_t udp_send(cmn_byte_t *pBytes, u_int32_t ui32Bytes, const struct sockaddr* pDestAddr);
+
+	private:
+		cmn_string_t m_strBindIp;
+		u_int16_t m_ui16BindPort;
+		cmn_string_t m_strMulticastIp;
+		sock_handle_t m_hSock;
+		int32_t m_i32Type;
+		nm_mem::mem_ptr_t m_pMem;
+		u_int32_t m_ui32LatestRecvedValidSeqNo;
+		u_int32_t m_ui32UnvalidPkgBegin;
+		u_int32_t m_ui32UnvalidPkgEnd;
+		u_int32_t m_ui32ValidPkgBegin;
+		u_int32_t m_ui32ValidPkgEnd;
+		std::vector<nm_mem::mem_ptr_t> m_vecUnorderedPkgs;
+		struct SPkgInfo
+		{
+			nm_mem::mem_ptr_t m_pMem;
+			int32_t i32Acks;
+		};
+		std::vector<SPkgInfo> m_vecSendWin;
+		nm_utils::CSpinLock m_lkSenderWin;
+		volatile u_int32_t m_ui32ValidSendingDataHead; ///最旧的没有接受到足够ack的包序列号
+		volatile u_int32_t m_ui32ValidSendingDataTail; ///最近一次成功放入发送窗口的包的下一个序号
+		volatile u_int32_t m_ui32SendingSeqNo; ///记录目前已经组播发送出去的包序列号
+		volatile u_int32_t m_ui32PkgSeqNoGenerator; ///发送包的序列号生成记录器
+		struct sockaddr_in m_addrSender;
+		struct sockaddr_in m_addrMulticast;
+		union
+		{
+			struct
+			{
+				u_int32_t ui32BindIp;
+				u_int16_t ui16BindPort;
+			};
+			u_int64_t ui64Id;
+		} m_epid;
+	};
+	typedef nm_utils::CSmartPtr<nm_network::CRmpSock> rmp_sock_ptr_t;
 }
 
 #endif /* SOCKET_H_ */
