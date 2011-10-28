@@ -13,6 +13,7 @@
 #include <utils/state_machine.h>
 #include <memory/mem.h>
 #include <log/smart_log.h>
+#include <hdr/>
 
 #include "../framework/sn_engine.h"
 #include "../network/sn_socket_impl.h"
@@ -56,7 +57,10 @@ namespace nm_smartnet
 
 	public:
 		int32_t open(const cmn_string_t &strIP, u_int16_t ui16Port);
-		bool is_opened(){return m_sm.get_cur_state() == ES_OPENED;}
+		bool is_opened()
+		{
+			return m_sm.get_cur_state() == ES_OPENED;
+		}
 		void on_opened();
 		int32_t close();
 		virtual void on_closed();
@@ -131,7 +135,10 @@ namespace nm_smartnet
 		DISALLOW_COPY_AND_ASSIGN( CTcpConnector);
 	public:
 		int32_t open(const cmn_string_t &strAcceptorIP, u_int16_t ui16AcceptorPort, u_int64_t ui64IntervalInUs);
-		bool is_opened(){return m_sm.get_cur_state() == ES_OPENED;}
+		bool is_opened()
+		{
+			return m_sm.get_cur_state() == ES_OPENED;
+		}
 		int32_t close();
 
 	protected:
@@ -244,7 +251,10 @@ namespace nm_smartnet
 	public:
 		///first, you should open this endpoint, but it is async. and if succeed, then on_opened will callback.
 		virtual int32_t open();
-		bool is_opened(){return m_sm.get_cur_state() == ES_OPENED;}
+		bool is_opened()
+		{
+			return m_sm.get_cur_state() == ES_OPENED;
+		}
 		///if you want close this endpoint, please invoke this func, but it is aysnc.
 		virtual int32_t close();
 		///send data, async.
@@ -287,36 +297,54 @@ namespace nm_smartnet
 		nm_utils::CSmartLog m_log;
 	};
 
-#if 0
 	/**
-	 *
+	 * reliable multicast sender endpoint.
 	 * */
-	class CRmpEndpoint: public nm_framework::IIoObj
+	class CRmpSender: public nm_framework::IIoObj
 	{
+		//		enum
+		//		{
+		//			E_RECV_ENDPOINT = 0,
+		//			E_SEND_ENDPOINT
+		//		};
+
 		enum
 		{
-			E_RECV_ENDPOINT = 0,
-			E_SEND_ENDPOINT
+			ES_ADDED_INTO_HELPER = 0,
+			ES_OPENED_READY,
+			ES_OPENED,
+			ES_CLOSING,
+			ES_CLOSED_READY,
+			ES_CLOSED,
+			ES_ADDING_INTO_OT,
+			ES_ADDING_INTO_IT,
+			ES_DELED_FROM_IT,
+			ES_DELING_FROM_IT,
+			ES_DELING_FROM_OT
 		};
 
 		enum
 		{
-			EE_OPEN = 0
-
-		};
-
-		enum
-		{
-			ES_OPENED = 0,
-			ES_CLOSED
-
+			EE_NONE = 0,
+			EE_OPEN,
+			EE_OPENED,
+			EE_CLOSE,
+			EE_CLOSED,
+			EE_IOERR,
+			EE_INTERNAL_ERR,
+			EE_CONNECTED,
+			EE_ADDED_INTO_OT,
+			EE_ADDED_INTO_IT,
+			EE_DELED_FROM_IT,
+			EE_DELED_FROM_OT
 		};
 
 	public:
-		CRmpEndpoint(nm_framework::sn_engine_ptr_t &pNetEngine, int32_t i32EpType);
-		virtual ~CRmpEndpoint();
+		CRmpSender(nm_framework::sn_engine_ptr_t &pNetEngine);
+		virtual ~CRmpSender();
 
-		DISALLOW_COPY_AND_ASSIGN( CRmpEndpoint);
+		DISALLOW_COPY_AND_ASSIGN( CRmpSender);
+
 	public:
 		int32_t open(const cmn_string_t &strMulticastIP, const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
 		int32_t close();
@@ -327,15 +355,18 @@ namespace nm_smartnet
 		virtual void handle_output_evt(); ///handle ouput event.
 		virtual void handle_error_evt(); ///handle error event.
 		///
-		virtual void on_opened() = 0;
-		virtual void on_closed() = 0;
-		virtual void on_error() = 0;
+		virtual void on_opened();
+		virtual void on_closed();
+		virtual void on_error();
 		virtual void on_recved_data(nm_mem::mem_ptr_t &pData) = 0;
 	private:
-		int32_t handling_
+		int32_t init_sm();
+
+		int32_t handling_closed_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_adding_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
-		nm_utils::CStateMachine<nm_smartnet::CRmpEndpoint> m_sm;
+		nm_utils::CStateMachine<nm_smartnet::CRmpSender> m_sm;
 		nm_framework::sn_engine_ptr_t m_pEngine;
 		CRmpSock m_sock;
 		cmn_string_t m_strBindIp
@@ -343,7 +374,6 @@ namespace nm_smartnet
 		cmn_string_t m_strMulticastIp;
 		int32_t m_i32EpType;
 	};
-#endif
 }
 
 #endif /* CONN_H_ */

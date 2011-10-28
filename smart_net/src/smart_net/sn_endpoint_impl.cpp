@@ -1033,31 +1033,34 @@ namespace nm_smartnet
 		return m_sm.get_cur_state() == ES_OPENED ? m_pTcpSock->send(pData) : CMNERR_COMMON_ERR;
 	}
 
-#if 0
 /*------------------------------------------------------------------------------*/
+
 /**
  *
  * */
-CRmpEndpoint::CRmpEndpoint(nm_framework::sn_engine_ptr_t &pSnEngine, int32_t i32EpType)
-:m_pEngine(pSnEngine)
+CRmpSender::CRmpSender(nm_framework::sn_engine_ptr_t &pSnEngine)
+:m_sm(this), m_pEngine(pSnEngine)
 {
-	if (E_RECV_ENDPOINT)
-	{
-		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_)
-	}
-	else
-	{
-		CMN_ASSERT(E_SEND_ENDPOINT == i32EpType);
-		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_)
-	}
-
+	init_sm();
 }
 
 /**
  *
  * */
-CRmpEndpoint::~CRmpEndpoint()
+CRmpSender::~CRmpSender()
 {
+}
+
+/**
+ * init sm
+ * */
+int32_t CRmpSender::init_sm()
+{
+	CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDING_INTO_OT, &CRmpSender::handling_closed_to_adding_into_ot));
+
+	CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT, &CRmpSender::handling_close_while_adding_into_ot));
+	CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_ADDING_INTO_IT, &CRmpSender::handling_adding_into_ot_to_adding_into_it));
+
 }
 
 /**
@@ -1069,7 +1072,11 @@ struct SPara
 	cmn_string_t strBindIp;
 	u_int16_t ui16BindPort;
 };
-int32_t CRmpEndpoint::open(cmn_string_t &strMulticastIp, cmn_string_t &strBindIp, u_int16_t ui16BindPort)
+
+/**
+ *
+ * */
+int32_t CRmpSender::open(cmn_string_t &strMulticastIp, cmn_string_t &strBindIp, u_int16_t ui16BindPort)
 {
 	SPara sp;
 	sp.strMulticast = strMulticastIp;
@@ -1078,6 +1085,27 @@ int32_t CRmpEndpoint::open(cmn_string_t &strMulticastIp, cmn_string_t &strBindIp
 
 	return m_sm.post_evt(EE_OPEN, &sp);
 }
-#endif
+
+/**
+ *
+ * */
+int32_t CRmpSender::handling_closed_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+{
+	SPara *pSp = (SPara*)(pVoid);
+	m_strMulticastIp = pSp->strMulticast;
+	m_strBindIp = pSp->strBindIp;
+	m_ui16BindPort = pSp->ui16BindPort;
+
+
+}
+
+
+/**
+ *
+ * */
+int32_t CRmpSender::handling_adding_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+{
+
+}
 
 }

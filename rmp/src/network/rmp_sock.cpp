@@ -623,18 +623,6 @@ namespace nm_network
 		return CMNERR_SUC;
 	}
 
-	//	int32_t CRmpSock::udp_send()
-	//	{
-	//		//		remote_addr.sin_addr.s_addr = snder.get_ip();
-	//		//		remote_addr.sin_port = snder.get_port();
-	//		//		static const ui32_t uiAddrSize = sizeof(remote_addr);
-	//		//		SRmpNak nak;
-	//		//		nake.ui32Begin = m_ui32LatestRecvedSeqNo + 1;
-	//		//nake	.ui32End =
-	//		//	iRet = ::sendto(m_hSock, , , 0,
-	//		//			(const struct sockaddr*)(&remote_addr), uiAddrSize);
-	//	}
-
 	/**
 	 * handle heart beat from sender.
 	 * */

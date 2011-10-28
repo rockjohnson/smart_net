@@ -87,7 +87,7 @@ int main()
 	pTcpOBEP->open();
 
 	///1,create rmp endpoint
-	rmp_endpoint_ptr_t pRmpEP = SYS_NOTHRW_NEW(CRmpEndpoint(pSmartNet));
+	rmp_endpoint_ptr_t pRmpEP = SYS_NOTHRW_NEW(CRmpSender(pSmartNet));
 	pRmpEP->open(std::string("224.0.2.99"), std::string("127.0.0.1"), 9999);
 
 	::sleep(100000);

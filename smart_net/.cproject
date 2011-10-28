@@ -515,8 +515,9 @@
 								<option id="gnu.cpp.compiler.lib.release.option.debugging.level.186630469" name="Debug Level" superClass="gnu.cpp.compiler.lib.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.294289805" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/comm_utils/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/librmp}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.other.other.162619827" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -Wreorder" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.162619827" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -Wreorder" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1785848586" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.lib.release.652204485" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.lib.release">
