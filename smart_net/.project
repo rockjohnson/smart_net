@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>smart_net</name>
+	<name>libsmart_net</name>
 	<comment></comment>
 	<projects>
 		<project>comm_utils</project>
