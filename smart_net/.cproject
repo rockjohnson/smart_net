@@ -8,8 +8,10 @@
 				<externalSettings>
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/smart_net"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/libsmart_net"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/smart_net/Debug"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="smart_net"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/libsmart_net/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="smart_net_debug"/>
 					</externalSetting>
 				</externalSettings>
 				<extensions>
@@ -21,7 +23,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactExtension="a" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.lib.debug.445467720" name="Debug" parent="cdt.managedbuild.config.gnu.lib.debug">
+				<configuration artifactExtension="a" artifactName="smart_net_debug" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.lib.debug.445467720" name="Debug" parent="cdt.managedbuild.config.gnu.lib.debug">
 					<folderInfo id="cdt.managedbuild.config.gnu.lib.debug.445467720." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.lib.debug.1563207621" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.lib.debug">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.lib.debug.908235044" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.lib.debug"/>
