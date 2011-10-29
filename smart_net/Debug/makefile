@@ -10,7 +10,6 @@ RM := rm -rf
 -include sources.mk
 -include subdir.mk
 -include src/smart_net/subdir.mk
--include src/network/subdir.mk
 -include src/framework/subdir.mk
 -include src/common/subdir.mk
 -include objects.mk
@@ -41,19 +40,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: libsmart_net.a
+all: liblibsmart_net.a
 
 # Tool invocations
-libsmart_net.a: $(OBJS) $(USER_OBJS)
+liblibsmart_net.a: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC Archiver'
-	ar -r "libsmart_net.a" $(OBJS) $(USER_OBJS) $(LIBS)
+	ar -r "liblibsmart_net.a" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(ARCHIVES)$(CPP_DEPS)$(CXX_DEPS)$(C_UPPER_DEPS) libsmart_net.a
+	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(ARCHIVES)$(CPP_DEPS)$(CXX_DEPS)$(C_UPPER_DEPS) liblibsmart_net.a
 	-@echo ' '
 
 .PHONY: all clean dependents

@@ -23,7 +23,7 @@
 
 namespace nm_network
 {
-
+	using nm_mem::mem_ptr_t;
 	/**
 	 * rup socket
 	 *
@@ -81,13 +81,13 @@ namespace nm_network
 		int32_t send(nm_mem::mem_ptr_t&);
 		int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len);
 
-		int32_t handle_can_recv(u_int32_t uiMemSize);
+		mem_ptr_t& handle_can_recv(u_int32_t uiMemSize);
 		int32_t recv(cmn_pvoid_t pV, u_int32_t ui32Size);
 		int32_t handle_can_send();
-		nm_mem::mem_ptr_t& get_recv_data()
-		{
-			return m_pRecvData;
-		}
+//		nm_mem::mem_ptr_t& get_recv_data()
+//		{
+//			return m_pRecvData;
+//		}
 
 	private:
 		CIpv4Addr m_localaddr;
@@ -98,7 +98,7 @@ namespace nm_network
 		typedef std::deque<nm_mem::mem_ptr_t> mem_queue_t;
 		mem_queue_t m_qSendCache;
 		mem_queue_t m_qSending;
-		nm_mem::mem_ptr_t m_pRecvData;
+		nm_mem::mem_ptr_t m_pRecvedData;
 	};
 
 	/**
@@ -128,7 +128,7 @@ namespace nm_network
 		int32_t send(nm_mem::mem_ptr_t&);
 		int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len);
 
-		int32_t handle_can_recv(u_int32_t);
+		mem_ptr_t& handle_can_recv(u_int32_t);
 
 		int32_t get_local_bind_addr(struct sockaddr_in &addr);
 		int32_t handle_sendep_data();

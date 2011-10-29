@@ -15,9 +15,9 @@
 #include <network/sn_socket_impl.h>
 #include "../framework/sn_engine.h"
 
-
 namespace nm_smartnet
 {
+	using nm_mem::mem_ptr_t;
 	/**
 	 *
 	 * */
@@ -101,29 +101,12 @@ namespace nm_smartnet
 
 		enum
 		{
-			ES_OPENED = 0,
-			ES_CLOSED,
-			ES_CHECKING_TIMER,
-			ES_ADDING_INTO_OT,
-			ES_DELING_FROM_OT_CLOSE,
-			ES_ADDING_INTO_TT,
-			ES_DELING_FROM_TT,
-			ES_CONNECTING,
-			ES_DELING_FROM_OT_NORMAL
+			ES_OPENED = 0, ES_CLOSED, ES_CHECKING_TIMER, ES_ADDING_INTO_OT, ES_DELING_FROM_OT_CLOSE, ES_ADDING_INTO_TT, ES_DELING_FROM_TT, ES_CONNECTING, ES_DELING_FROM_OT_NORMAL
 		};
 
 		enum
 		{
-			EE_NONE,
-			EE_OPEN = 0,
-			EE_CONNECT,
-			EE_CLOSE,
-			EE_ADDED_INTO_OT,
-			EE_DELED_FROM_OT,
-			EE_INTERNAL_ERR,
-			EE_ADDED_INTO_TT,
-			EE_CONNECTED,
-			EE_DELED_FROM_TT
+			EE_NONE, EE_OPEN = 0, EE_CONNECT, EE_CLOSE, EE_ADDED_INTO_OT, EE_DELED_FROM_OT, EE_INTERNAL_ERR, EE_ADDED_INTO_TT, EE_CONNECTED, EE_DELED_FROM_TT
 		};
 
 	public:
@@ -202,33 +185,12 @@ namespace nm_smartnet
 	{
 		enum
 		{
-			ES_ADDED_INTO_HELPER = 0,
-			ES_OPENED_READY,
-			ES_OPENED,
-			ES_CLOSING,
-			ES_CLOSED_READY,
-			ES_CLOSED,
-			ES_ADDING_INTO_OT,
-			ES_ADDING_INTO_IT,
-			ES_DELED_FROM_IT,
-			ES_DELING_FROM_IT,
-			ES_DELING_FROM_OT
+			ES_ADDED_INTO_HELPER = 0, ES_OPENED_READY, ES_OPENED, ES_CLOSING, ES_CLOSED_READY, ES_CLOSED, ES_ADDING_INTO_OT, ES_ADDING_INTO_IT, ES_DELED_FROM_IT, ES_DELING_FROM_IT, ES_DELING_FROM_OT
 		};
 
 		enum
 		{
-			EE_NONE = 0,
-			EE_OPEN,
-			EE_OPENED,
-			EE_CLOSE,
-			EE_CLOSED,
-			EE_IOERR,
-			EE_INTERNAL_ERR,
-			EE_CONNECTED,
-			EE_ADDED_INTO_OT,
-			EE_ADDED_INTO_IT,
-			EE_DELED_FROM_IT,
-			EE_DELED_FROM_OT
+			EE_NONE = 0, EE_OPEN, EE_OPENED, EE_CLOSE, EE_CLOSED, EE_IOERR, EE_INTERNAL_ERR, EE_CONNECTED, EE_ADDED_INTO_OT, EE_ADDED_INTO_IT, EE_DELED_FROM_IT, EE_DELED_FROM_OT
 		};
 
 	public:
@@ -290,7 +252,7 @@ namespace nm_smartnet
 		tcp_connector_ptr_t m_pTcpConnector;
 		tcp_acceptor_ptr_t m_pTcpAcceptor;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
-		nm_network::rup_sock_ptr_t m_pTcpSock;
+		nm_network::rup_sock_ptr_t m_pSock;
 		nm_network::ipv4_addr_ptr_t m_pPeerAddr;
 		nm_utils::CSmartLog m_log;
 	};
@@ -307,33 +269,12 @@ namespace nm_smartnet
 
 		enum
 		{
-			ES_ADDED_INTO_HELPER = 0,
-			ES_OPENED_READY,
-			ES_OPENED,
-			ES_CLOSING,
-			ES_CLOSED_READY,
-			ES_CLOSED,
-			ES_ADDING_INTO_OT,
-			ES_ADDING_INTO_IT,
-			ES_DELED_FROM_IT,
-			ES_DELING_FROM_IT,
-			ES_DELING_FROM_OT
+			ES_ADDED_INTO_HELPER = 0, ES_OPENED_READY, ES_OPENED, ES_CLOSING, ES_CLOSED_READY, ES_CLOSED, ES_ADDING_INTO_OT, ES_ADDING_INTO_IT, ES_DELED_FROM_IT, ES_DELING_FROM_IT, ES_DELING_FROM_OT
 		};
 
 		enum
 		{
-			EE_NONE = 0,
-			EE_OPEN,
-			EE_OPENED,
-			EE_CLOSE,
-			EE_CLOSED,
-			EE_IOERR,
-			EE_INTERNAL_ERR,
-			EE_CONNECTED,
-			EE_ADDED_INTO_OT,
-			EE_ADDED_INTO_IT,
-			EE_DELED_FROM_IT,
-			EE_DELED_FROM_OT
+			EE_NONE = 0, EE_OPEN, EE_OPENED, EE_CLOSE, EE_CLOSED, EE_IOERR, EE_INTERNAL_ERR, EE_CONNECTED, EE_ADDED_INTO_OT, EE_ADDED_INTO_IT, EE_DELED_FROM_IT, EE_DELED_FROM_OT
 		};
 
 	public:
@@ -348,29 +289,43 @@ namespace nm_smartnet
 		int32_t send_data(nm_mem::mem_ptr_t &pData);
 
 	protected:
-		virtual void handle_input_evt(); ///handle input event.
-		virtual void handle_output_evt(); ///handle ouput event.
-		virtual void handle_error_evt(); ///handle error event.
+		///
+		virtual void handle_input_evt();
+		virtual void handle_output_evt();
+		virtual void handle_io_error(int32_t i32ErrCode);
+		virtual void handle_added_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
+		virtual void handle_deled_from_io_task(int32_t i32IoType);
+		virtual sock_handle_t get_ioobj_handle();
+		virtual bool is_opened();
 		///
 		virtual void on_opened();
 		virtual void on_closed();
-		virtual void on_error();
 		virtual void on_recved_data(nm_mem::mem_ptr_t &pData) = 0;
 	private:
 		int32_t init_sm();
 
 		int32_t handling_closed_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_internal_err_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_close_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_it_to_deling_from_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_deling_from_ot_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
+		int32_t handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 		int32_t handling_adding_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
 		nm_utils::CStateMachine<nm_smartnet::CRmpEndpoint> m_sm;
-		nm_framework::sn_engine_ptr_t m_pEngine;
+		nm_framework::sn_engine_ptr_t m_pSNEngine;
 		nm_network::rmp_sock_ptr_t m_pSock;
 		cmn_string_t m_strBindIp;
 		u_int16_t m_ui16BindPort;
 		cmn_string_t m_strMulticastIp;
 		int32_t m_i32Type;
+		int32_t m_i32SMPendingEvt;
+		nm_utils::CSmartLog m_log;
 	};
 	typedef nm_utils::CSmartPtr<nm_smartnet::CRmpEndpoint> rmp_endpoint_ptr_t;
 }

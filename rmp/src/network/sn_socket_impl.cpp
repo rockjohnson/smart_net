@@ -262,7 +262,22 @@ namespace nm_network
 			}
 		}
 
+#if (__USING_OLD_IO_METHOD__)
 		int32_t i32Ret = ::send(m_hSock, (const char*) (pData->get_data()), pData->get_len(), 0/*MSG_NOSIGNAL*/);
+#else
+		struct iovec iov;
+		iov.iov_base = pData->get_data();
+		iov.iov_len = pData->get_len();
+		struct msghdr senddata;
+		senddata.msg_name = NULL;
+		senddata.msg_namelen = 0;
+		senddata.msg_iov = &iov;
+		senddata.msg_iovlen = 1;
+		senddata.msg_control = NULL;
+		senddata.msg_controllen = 0;
+		senddata.msg_flags = 0;
+		int32_t i32Ret = ::sendmsg(m_hSock, &senddata, 0);
+#endif
 		if (i32Ret < 0)
 		{
 #if (__PLATFORM__ == __PLATFORM_LINUX__)
@@ -320,11 +335,42 @@ namespace nm_network
 		}
 
 		int32_t i32Ret = CMNERR_SUC;
+#if (!__USING_OLD_IO_METHOD__)
+#define __MAX_IO_VEC_CNT__ (10)
+		struct iovec iov[__MAX_IO_VEC_CNT__];
+		struct msghdr senddata;
+		senddata.msg_name = NULL;
+		senddata.msg_namelen = 0;
+		senddata.msg_control = NULL;
+		senddata.msg_controllen = 0;
+		senddata.msg_flags = 0;
+		int32_t i32IoVecCnt = 0;
+		int32_t i32TotalLen = 0;
+#endif
 		while (!m_qSending.empty())
 		{
-			nm_mem::mem_ptr_t &pData = m_qSending.front();
+#if (!__USING_OLD_IO_METHOD__)
+			i32IoVecCnt = 0;
+			i32TotalLen = 0;
+			for (mem_queue_t::iterator iter = m_qSending.begin(); iter != m_qSending.end(); ++iter)
+			{
+				iov[i32IoVecCnt].iov_base = (*iter)->get_data();
+				iov[i32IoVecCnt].iov_len = (*iter)->get_len();
+				i32TotalLen += iov[i32IoVecCnt].iov_len;
+				i32IoVecCnt++;
+				if (__MAX_IO_VEC_CNT__ == i32IoVecCnt)
+				{
+					break;
+				}
+			}
+			senddata.msg_iov = iov;
+			senddata.msg_iovlen = i32IoVecCnt;
 
+			i32Ret = ::sendmsg(m_hSock, &senddata, 0);
+#else
+			nm_mem::mem_ptr_t &pData = m_qSending.front();
 			i32Ret = ::send(m_hSock, (const char*) (pData->get_data()), pData->get_len(), 0);
+#endif
 			if (i32Ret < 0)
 			{
 #if (__PLATFORM__ == __PLATFORM_LINUX__)
@@ -350,6 +396,29 @@ namespace nm_network
 
 			CMN_ASSERT(0 != i32Ret);
 
+#if (!__USING_OLD_IO_METHOD__)
+			if (i32Ret < i32TotalLen)
+			{
+				for (int32_t i = 0; (i < i32IoVecCnt) && (0 != i32Ret); i++)
+				{
+					if (i32Ret < iov[i].iov_len)
+					{
+						(*m_qSending.begin())->dec_head_data(i32Ret);
+						break;
+					}
+					else
+					{
+						i32Ret -= iov[i].iov_len;
+						m_qSending.pop_front();
+					}
+				}
+
+				i32Ret = CMNERR_SEND_PENDING;
+				break;
+			}
+
+			m_qSending.clear();
+#else
 			if (i32Ret < pData->get_len())
 			{
 				pData->dec_head_data(i32Ret);
@@ -359,6 +428,7 @@ namespace nm_network
 
 			CMN_ASSERT(i32Ret == pData->get_len());
 			m_qSending.pop_front();
+#endif
 
 			if (m_qSending.empty())
 			{
@@ -375,49 +445,70 @@ namespace nm_network
 
 	}
 
-	int32_t CRupSock::handle_can_recv(u_int32_t uiMemSize)
+	mem_ptr_t& CRupSock::handle_can_recv(u_int32_t uiMemSize)
 	{
-		if (NULL != m_pRecvData)
+		if (NULL != m_pRecvedData)
 		{
-			m_pRecvData->move_data_ahead();
+			m_pRecvedData->move_data_ahead();
 		}
 		else
 		{
-			m_pRecvData = NEW_MEM();
+			m_pRecvedData = NEW_MEM(uiMemSize);
 		}
 
-		int32_t i32Ret = ::recv(m_hSock, (char*) m_pRecvData->get_tail_free_buf(), m_pRecvData->get_tail_free_size(), 0);
-		if (0 == i32Ret)
+		do
 		{
-			//normal shutdown
-			//TRACE_LOG(LOG, ELL_INFO, L"the peer has performed an orderly shutdown\n");
-			return CMNERR_IO_ERR;
-		}
-		else if (i32Ret < 0)
-		{
-#if (__PLATFORM__ == __PLATFORM_LINUX__)
-			if (EWOULDBLOCK == errno)
-#elif defined(__PLATEFORM_WINDOWS__)
-			if (WSAEWOULDBLOCK == ::GetLastError())
+#if (__USING_OLD_IO_METHOD__)
+			int32_t i32Ret = ::recv(m_hSock, (char*) m_pRecvedData->get_tail_free_buf(), m_pRecvedData->get_tail_free_size(), 0);
+#else
+			struct iovec iov;
+			iov.iov_base = m_pRecvedData->get_tail_free_buf();
+			iov.iov_len = m_pRecvedData->get_tail_free_size();
+			struct msghdr recvdata;
+			recvdata.msg_name = NULL;
+			recvdata.msg_namelen = 0;
+			recvdata.msg_iov = &iov;
+			recvdata.msg_iovlen = 1;
+			recvdata.msg_control = NULL;
+			recvdata.msg_controllen = 0;
+			recvdata.msg_flags = 0;
+			int32_t i32Ret = ::recvmsg(m_hSock, &recvdata, 0);
 #endif
+			if (0 == i32Ret)
 			{
-				//ASSERT(false); ///should not reach here
-				CMN_ASSERT(false);
-				return CMNERR_RECV_PENDING;
+				//normal shutdown
+				//TRACE_LOG(LOG, ELL_INFO, L"the peer has performed an orderly shutdown\n");
+				m_pRecvedData = NULL;
+				break;
 			}
-			else if (EINTR == errno)
+			else if (i32Ret < 0)
 			{
-				return CMNERR_SUC;
+#if (__PLATFORM__ == __PLATFORM_LINUX__)
+				if (EWOULDBLOCK == errno)
+#elif defined(__PLATEFORM_WINDOWS__)
+				if (WSAEWOULDBLOCK == ::GetLastError())
+#endif
+				{
+					CMN_ASSERT(false); ///should not reach here
+					break;
+				}
+				else if (EINTR == errno)
+				{
+					CMN_ASSERT(false);
+					break;
+				}
+				else
+				{
+					m_pRecvedData = NULL;
+					break;
+				}
 			}
-			else
-			{
-				return CMNERR_IO_ERR;
-			}
+
+			m_pRecvedData->inc_len(i32Ret);
 		}
+		while (false);
 
-		m_pRecvData->inc_len(i32Ret);
-
-		return CMNERR_SUC;
+		return m_pRecvedData;
 	}
 
 	int32_t CRupSock::recv(cmn_pvoid_t pV, u_int32_t ui32Size)
@@ -494,8 +585,7 @@ namespace nm_network
 		P_FUN fun;
 	};
 
-	struct SHander pkg_handlers[EP_ALL] = { { EP_DATA, &CRmpSock::handle_odata }, { EP_HB, &CRmpSock::handle_hb }, { EP_NAK, &CRmpSock::handle_nak },
-			{ EP_ACK, &CRmpSock::handle_ack } };
+	struct SHander pkg_handlers[EP_ALL] = { { EP_DATA, &CRmpSock::handle_odata }, { EP_HB, &CRmpSock::handle_hb }, { EP_NAK, &CRmpSock::handle_nak }, { EP_ACK, &CRmpSock::handle_ack } };
 
 	/**
 	 *
@@ -550,7 +640,7 @@ namespace nm_network
 		ZERO_MEM(&m_addrMulticast, sizeof(m_addrMulticast));
 		m_addrMulticast.sin_addr.s_addr = inet_addr(strMulticast.c_str());
 
-		return open();
+		return open(INVALID_SOCKET);
 	}
 
 	/**
@@ -636,8 +726,7 @@ namespace nm_network
 			nm_utils::spin_scopelk_t lk(m_lkSenderWin); ///just for handle multi senders.
 			if ((0 != m_ui32ValidSendingDataTail) && (m_ui32SendingSeqNo + 1) != m_ui32ValidSendingDataTail)
 			{
-				if (CMNERR_SUC == m_vecSendWin[m_ui32ValidSendingDataTail - 1].m_pMem->append(pM->get_offset_data(pM->get_init_offset()),
-						pM->get_len() - pM->get_init_offset()))
+				if (CMNERR_SUC == m_vecSendWin[m_ui32ValidSendingDataTail - 1].m_pMem->append(pM->get_offset_data(pM->get_init_offset()), pM->get_len() - pM->get_init_offset()))
 				{
 					return CMNERR_SUC;
 				}
@@ -655,17 +744,15 @@ namespace nm_network
 		return CMNERR_SUC;
 	}
 
-	int32_t CRmpSock::handle_can_recv(u_int32_t ui32)
+	mem_ptr_t& CRmpSock::handle_can_recv(u_int32_t ui32)
 	{
-		int32_t i32Ret = CMNERR_SUC;
 		struct sockaddr_in remote_addr = { 0 };
 		u_int32_t uiAddrSize = sizeof(remote_addr);
-		for (;;)
+		do
 		{
 			m_pMem = NEW_MEM(ui32);
 
-			i32Ret = ::recvfrom(m_hSock, (char*) (m_pMem->get_buf()), m_pMem->get_total_free_size(), 0, (struct sockaddr*) (&remote_addr),
-					(socklen_t*) (&uiAddrSize));
+			int32_t i32Ret = ::recvfrom(m_hSock, (char*) (m_pMem->get_buf()), m_pMem->get_total_free_size(), 0, (struct sockaddr*) (&remote_addr), (socklen_t*) (&uiAddrSize));
 			if (i32Ret < 0)
 			{
 #if (__PLATFORM__ == __PLATFORM_LINUX__)
@@ -674,7 +761,13 @@ namespace nm_network
 				if (WSAEWOULDBLOCK == ::GetLastError())
 #endif
 				{
-					i32Ret = CMNERR_RECV_PENDING;
+					CMN_ASSERT(false);
+					break;
+				}
+				else if (EINTR == errno)
+				{
+					CMN_ASSERT(false);
+					break;
 				}
 				else
 				{
@@ -685,7 +778,8 @@ namespace nm_network
 						continue;
 					}
 #endif
-					i32Ret = CMNERR_IO_ERR;
+					m_pMem = NULL;
+					break;
 				}
 				break;
 			}
@@ -714,6 +808,7 @@ namespace nm_network
 				CMN_ASSERT(false);
 			}
 		}
+		while (false);
 
 		return CMNERR_COMMON_ERR;
 	}
@@ -856,7 +951,7 @@ namespace nm_network
 			nak.ui32Begin = m_ui32LatestRecvedValidSeqNo + 1;
 			nak.ui32End = pHb->ui32LatestSeqNo;
 			nak.ui64Id = m_epid.ui64Id;
-			i32Ret = udp_send((cmn_byte_t*)&nak, sizeof(nak), (const struct sockaddr*) (&m_addrSender));
+			i32Ret = udp_send((cmn_byte_t*) &nak, sizeof(nak), (const struct sockaddr*) (&m_addrSender));
 		}
 		else
 		{
