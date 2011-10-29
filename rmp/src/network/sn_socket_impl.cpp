@@ -578,21 +578,21 @@ namespace nm_network
 
 #pragma pack(pop)
 
-	typedef int32_t (CRmpSock::*P_FUN)();
+	typedef int32_t (CRmpSendSock::*P_FUN)();
 	struct SHander
 	{
 		int32_t i32Opcode;
 		P_FUN fun;
 	};
 
-	struct SHander pkg_handlers[EP_ALL] = { { EP_DATA, &CRmpSock::handle_odata }, { EP_HB, &CRmpSock::handle_hb }, { EP_NAK, &CRmpSock::handle_nak }, { EP_ACK, &CRmpSock::handle_ack } };
+	struct SHander pkg_handlers[EP_ALL] = { { EP_DATA, &CRmpSendSock::handle_odata }, { EP_HB, &CRmpSendSock::handle_hb }, { EP_NAK, &CRmpSendSock::handle_nak }, { EP_ACK, &CRmpSendSock::handle_ack } };
 
 	/**
 	 *
 	 * */
 #define __UNORDERED_PKGS_CNT__ (100000)
 #define __SEND_WIN_SIZE__ (1000000)
-	CRmpSock::CRmpSock(int32_t i32EpType)
+	CRmpSendSock::CRmpSendSock(int32_t i32EpType)
 	{
 		if (ERMP_RECV_SOCK == i32EpType)
 		{
@@ -608,14 +608,14 @@ namespace nm_network
 		}
 	}
 
-	CRmpSock::~CRmpSock()
+	CRmpSendSock::~CRmpSendSock()
 	{
 	}
 
 	/**
 	 *
 	 * */
-	int32_t CRmpSock::open(sock_handle_t hSock)
+	int32_t CRmpSendSock::open(sock_handle_t hSock)
 	{
 		IF_TRUE_THEN_RETURN_CODE(is_opened(), CMNERR_COMMON_ERR);
 
@@ -635,7 +635,7 @@ namespace nm_network
 	/**
 	 *
 	 * */
-	int32_t CRmpSock::open(const cmn_string_t &strMulticast)
+	int32_t CRmpSendSock::open(const cmn_string_t &strMulticast)
 	{
 		ZERO_MEM(&m_addrMulticast, sizeof(m_addrMulticast));
 		m_addrMulticast.sin_addr.s_addr = inet_addr(strMulticast.c_str());
@@ -646,7 +646,7 @@ namespace nm_network
 	/**
 	 *
 	 * */
-	int32_t CRmpSock::close()
+	int32_t CRmpSendSock::close()
 	{
 		IF_TRUE_THEN_RETURN_CODE(!is_opened(), CMNERR_COMMON_ERR);
 		sock_handle_t hSock = m_hSock;
@@ -656,7 +656,7 @@ namespace nm_network
 		return CMNERR_SUC;
 	}
 
-	int32_t CRmpSock::bind(const cmn_string_t &strBindIP, u_int16_t ui16BindPort)
+	int32_t CRmpSendSock::bind(const cmn_string_t &strBindIP, u_int16_t ui16BindPort)
 	{
 		CMN_ASSERT(INVALID_SOCKET < m_hSock);
 
@@ -668,13 +668,13 @@ namespace nm_network
 		return ::bind(m_hSock, (struct sockaddr*) &bindAddr, sizeof(bindAddr));
 	}
 
-	int32_t CRmpSock::get_local_bind_addr(struct sockaddr_in &addr)
+	int32_t CRmpSendSock::get_local_bind_addr(struct sockaddr_in &addr)
 	{
 		socklen_t len = sizeof(addr);
 		return getsockname(m_hSock, (struct sockaddr*) (&addr), &len);
 	}
 
-	int32_t CRmpSock::join_multicast_group(const cmn_string_t &strMulticastIp)
+	int32_t CRmpSendSock::join_multicast_group(const cmn_string_t &strMulticastIp)
 	{
 		struct ip_mreqn mreq;
 		memset(&mreq, 0, sizeof(mreq));
@@ -696,22 +696,22 @@ namespace nm_network
 		return i32Ret;
 	}
 
-	sock_handle_t CRmpSock::get_handle()
+	sock_handle_t CRmpSendSock::get_handle()
 	{
 		return m_hSock;
 	}
 
-	bool CRmpSock::is_opened()
+	bool CRmpSendSock::is_opened()
 	{
 		return (INVALID_SOCKET < m_hSock);
 	}
 
-	int32_t CRmpSock::set_nonblock(bool bFlag)
+	int32_t CRmpSendSock::set_nonblock(bool bFlag)
 	{
 		return nm_utils::set_block_flag(m_hSock, !bFlag);
 	}
 
-	int32_t CRmpSock::send(nm_mem::mem_ptr_t &pM)
+	int32_t CRmpSendSock::send(nm_mem::mem_ptr_t &pM)
 	{
 		///
 		CMN_ASSERT(CMNERR_SUC == pM->inc_head_data(sizeof(SRmpOdata)));
@@ -744,7 +744,7 @@ namespace nm_network
 		return CMNERR_SUC;
 	}
 
-	mem_ptr_t& CRmpSock::handle_can_recv(u_int32_t ui32)
+	mem_ptr_t& CRmpSendSock::handle_can_recv(u_int32_t ui32)
 	{
 		struct sockaddr_in remote_addr = { 0 };
 		u_int32_t uiAddrSize = sizeof(remote_addr);
@@ -814,7 +814,7 @@ namespace nm_network
 	}
 
 	///
-	int32_t CRmpSock::handle_recvep_data()
+	int32_t CRmpSendSock::handle_recvep_data()
 	{
 		///
 		SRmpHdr *pHdr = (SRmpHdr*) (m_pMem->get_data());
@@ -827,7 +827,7 @@ namespace nm_network
 	 * 这块实现的比较恶心，要注意调用这个函数必须循环调用，直到返回CMNERR_NO_DATA为止。
 	 * or will ocuurr error......!!!!!!!!!!!!
 	 * */
-	int32_t CRmpSock::get_recved_data(nm_mem::mem_ptr_t &pMem)
+	int32_t CRmpSendSock::get_recved_data(nm_mem::mem_ptr_t &pMem)
 	{
 		if ((NULL != m_pMem) && (m_pMem->get_len() > 0))
 		{
@@ -852,7 +852,7 @@ namespace nm_network
 	}
 
 	///
-	int32_t CRmpSock::handle_odata()
+	int32_t CRmpSendSock::handle_odata()
 	{
 		SRmpOdata *pOdata = (SRmpOdata*) (m_pMem->get_data());
 		if (pOdata->ui32SeqNo == (1 + m_ui32LatestRecvedValidSeqNo))
@@ -939,7 +939,7 @@ namespace nm_network
 	/**
 	 * handle heart beat from sender.
 	 * */
-	int32_t CRmpSock::handle_hb()
+	int32_t CRmpSendSock::handle_hb()
 	{
 		int32_t i32Ret = CMNERR_SUC;
 		SRmpHb *pHb = (SRmpHb*) (m_pMem->get_data());
@@ -967,7 +967,7 @@ namespace nm_network
 	/**
 	 *
 	 * */
-	int32_t CRmpSock::handle_nak()
+	int32_t CRmpSendSock::handle_nak()
 	{
 
 	}
@@ -975,7 +975,7 @@ namespace nm_network
 	/**
 	 *
 	 * */
-	int32_t CRmpSock::handle_ack()
+	int32_t CRmpSendSock::handle_ack()
 	{
 
 	}
@@ -983,7 +983,7 @@ namespace nm_network
 	/**
 	 *
 	 * */
-	int32_t CRmpSock::handle_sendep_data()
+	int32_t CRmpSendSock::handle_sendep_data()
 	{
 		///
 		SRmpHdr *pHdr = (SRmpHdr*) (m_pMem->get_data());
@@ -995,7 +995,7 @@ namespace nm_network
 	/**
 	 *
 	 * */
-	int32_t CRmpSock::udp_send(nm_mem::mem_ptr_t &pMem, const struct sockaddr* pDestAddr)
+	int32_t CRmpSendSock::udp_send(nm_mem::mem_ptr_t &pMem, const struct sockaddr* pDestAddr)
 	{
 		int32_t i32Ret = CMNERR_SUC;
 		for (;;)
@@ -1025,7 +1025,7 @@ namespace nm_network
 		return i32Ret;
 	}
 
-	int32_t CRmpSock::udp_send(cmn_byte_t *pBytes, u_int32_t ui32Bytes, const struct sockaddr *pDestAddr)
+	int32_t CRmpSendSock::udp_send(cmn_byte_t *pBytes, u_int32_t ui32Bytes, const struct sockaddr *pDestAddr)
 	{
 		int32_t i32Ret = CMNERR_SUC;
 		for (;;)
@@ -1059,7 +1059,7 @@ namespace nm_network
 	 * called by rmp sender ep.
 	 * called by io send thread
 	 * */
-	int32_t CRmpSock::handle_can_send()
+	int32_t CRmpSendSock::handle_can_send()
 	{
 		///
 		int32_t i32Ret = CMNERR_SUC;

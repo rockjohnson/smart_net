@@ -260,7 +260,7 @@ namespace nm_smartnet
 	/**
 	 * reliable multicast endpoint.
 	 * */
-	class CRmpEndpoint: public nm_framework::IIoObj
+	class CRmpEndpointSender: public nm_framework::IIoObj
 	{
 		enum
 		{
@@ -278,10 +278,10 @@ namespace nm_smartnet
 		};
 
 	public:
-		CRmpEndpoint(nm_framework::sn_engine_ptr_t &pNetEngine, int32_t i32Type);
-		virtual ~CRmpEndpoint();
+		CRmpEndpointSender(nm_framework::sn_engine_ptr_t &pNetEngine, int32_t i32Type);
+		virtual ~CRmpEndpointSender();
 
-		DISALLOW_COPY_AND_ASSIGN( CRmpEndpoint);
+		DISALLOW_COPY_AND_ASSIGN( CRmpEndpointSender);
 
 	public:
 		int32_t open(const cmn_string_t &strMulticastIP, const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
@@ -317,7 +317,7 @@ namespace nm_smartnet
 		int32_t handling_adding_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid);
 
 	private:
-		nm_utils::CStateMachine<nm_smartnet::CRmpEndpoint> m_sm;
+		nm_utils::CStateMachine<nm_smartnet::CRmpEndpointSender> m_sm;
 		nm_framework::sn_engine_ptr_t m_pSNEngine;
 		nm_network::rmp_sock_ptr_t m_pSock;
 		cmn_string_t m_strBindIp;
@@ -327,7 +327,7 @@ namespace nm_smartnet
 		int32_t m_i32SMPendingEvt;
 		nm_utils::CSmartLog m_log;
 	};
-	typedef nm_utils::CSmartPtr<nm_smartnet::CRmpEndpoint> rmp_endpoint_ptr_t;
+	typedef nm_utils::CSmartPtr<nm_smartnet::CRmpEndpointSender> rmp_endpoint_ptr_t;
 }
 
 #endif /* CONN_H_ */

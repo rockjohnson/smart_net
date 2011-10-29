@@ -1043,7 +1043,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	CRmpEndpoint::CRmpEndpoint(nm_framework::sn_engine_ptr_t &pSnEngine, int32_t i32Type) :
+	CRmpEndpointSender::CRmpEndpointSender(nm_framework::sn_engine_ptr_t &pSnEngine, int32_t i32Type) :
 		m_sm(this), m_pSNEngine(pSnEngine), m_i32Type(i32Type)
 	{
 		CMN_ASSERT(ERMP_SEND_ENDPOINT == i32Type || ERMP_RECV_ENDPOINT == i32Type);
@@ -1056,14 +1056,14 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	CRmpEndpoint::~CRmpEndpoint()
+	CRmpEndpointSender::~CRmpEndpointSender()
 	{
 	}
 
 	/**
 	 * init sm
 	 * */
-	int32_t CRmpEndpoint::init_sm()
+	int32_t CRmpEndpointSender::init_sm()
 	{
 		//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT, &CRmpEndpoint::handling_close_while_adding_into_ot));
 		//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_added_into_ot_to_adding_into_it));
@@ -1078,24 +1078,24 @@ namespace nm_smartnet
 		//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_DELING_FROM_OT, &CRmpEndpoint::handling_added_into_ot_to_adding_into_it));
 		//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_DELING_FROM_OT, EE_DELED_FROM_OT, ES_CLOSED, &CRmpEndpoint::handling_added_into_ot_to_adding_into_it));
 
-		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDING_INTO_OT, &CRmpEndpoint::handling_closed_to_adding_into_ot);
+		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDING_INTO_OT, &CRmpEndpointSender::handling_closed_to_adding_into_ot);
 
 		///这个时候发生关闭事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_OUTPUT_TASK
-		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT, &CRmpEndpoint::handling_close_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_INTERNAL_ERR, ES_CLOSED, &CRmpEndpoint::handling_internal_err_while_adding_into_ot);
-		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_adding_into_ot_to_adding_into_it);
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT, &CRmpEndpointSender::handling_close_while_adding_into_ot);
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_INTERNAL_ERR, ES_CLOSED, &CRmpEndpointSender::handling_internal_err_while_adding_into_ot);
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_ADDING_INTO_IT, &CRmpEndpointSender::handling_adding_into_ot_to_adding_into_it);
 
 		///这个时候发生关闭or internal err事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_INPUT_TASK
-		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_internal_err_while_adding_into_it);
-		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_CLOSE, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_close_while_adding_into_it);
-		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_ADDED_INTO_IT, ES_OPENED, &CRmpEndpoint::handling_adding_into_it_to_opened);
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT, &CRmpEndpointSender::handling_internal_err_while_adding_into_it);
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_CLOSE, ES_ADDING_INTO_IT, &CRmpEndpointSender::handling_close_while_adding_into_it);
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_ADDED_INTO_IT, ES_OPENED, &CRmpEndpointSender::handling_adding_into_it_to_opened);
 
 		///not handling internal err, when in the next two state.
-		m_sm.reg_evt_state(ES_OPENED, EE_INTERNAL_ERR, ES_DELING_FROM_IT, &CRmpEndpoint::handling_internal_err_while_opened);
-		m_sm.reg_evt_state(ES_OPENED, EE_CLOSE, ES_DELING_FROM_IT, &CRmpEndpoint::handling_close_while_opened);
+		m_sm.reg_evt_state(ES_OPENED, EE_INTERNAL_ERR, ES_DELING_FROM_IT, &CRmpEndpointSender::handling_internal_err_while_opened);
+		m_sm.reg_evt_state(ES_OPENED, EE_CLOSE, ES_DELING_FROM_IT, &CRmpEndpointSender::handling_close_while_opened);
 
-		m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_DELING_FROM_OT, &CRmpEndpoint::handling_deling_from_it_to_deling_from_ot);
-		m_sm.reg_evt_state(ES_DELING_FROM_OT, EE_DELED_FROM_OT, ES_CLOSED, &CRmpEndpoint::handling_deling_from_ot_to_closed);
+		m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_DELING_FROM_OT, &CRmpEndpointSender::handling_deling_from_it_to_deling_from_ot);
+		m_sm.reg_evt_state(ES_DELING_FROM_OT, EE_DELED_FROM_OT, ES_CLOSED, &CRmpEndpointSender::handling_deling_from_ot_to_closed);
 
 		m_sm.set_cur_state(ES_CLOSED);
 	}
@@ -1103,7 +1103,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::open(const cmn_string_t &strMulticastIp, const cmn_string_t &strBindIp, u_int16_t ui16BindPort)
+	int32_t CRmpEndpointSender::open(const cmn_string_t &strMulticastIp, const cmn_string_t &strBindIp, u_int16_t ui16BindPort)
 	{
 		SParasEx sp;
 		sp.strMulticast = strMulticastIp;
@@ -1116,7 +1116,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::handling_closed_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CRmpEndpointSender::handling_closed_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		SParasEx *pSp = (SParasEx*) (pVoid);
 		m_strMulticastIp = pSp->strMulticast;
@@ -1127,7 +1127,7 @@ namespace nm_smartnet
 		do
 		{
 			int32_t i32Type = ERMP_SEND_ENDPOINT == m_i32Type ? nm_network::ERMP_SEND_SOCK : nm_network::ERMP_RECV_SOCK;
-			m_pSock = SYS_NOTRW_NEW(nm_network::CRmpSock(i32Type));
+			m_pSock = SYS_NOTRW_NEW(nm_network::CRmpSendSock(i32Type));
 			i32Ret = m_pSock->open(m_strMulticastIp);
 			if (CMNERR_SUC != i32Ret)
 			{
@@ -1149,7 +1149,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CRmpEndpointSender::handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		TRACE_LOG(m_log, ELL_DEBUG, "handle close evt\n");
 		m_i32SMPendingEvt = EE_CLOSE;
@@ -1160,7 +1160,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	void CRmpEndpoint::handle_added_into_io_task(int32_t i32IoType, int32_t i32RetCode)
+	void CRmpEndpointSender::handle_added_into_io_task(int32_t i32IoType, int32_t i32RetCode)
 	{
 		if (i32RetCode < 0)
 		{
@@ -1184,7 +1184,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	void CRmpEndpoint::handle_deled_from_io_task(int32_t i32IoType)
+	void CRmpEndpointSender::handle_deled_from_io_task(int32_t i32IoType)
 	{
 		switch (i32IoType)
 		{
@@ -1209,7 +1209,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::handling_adding_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CRmpEndpointSender::handling_adding_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		if (EE_CLOSE == m_i32SMPendingEvt)
 		{
@@ -1227,7 +1227,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CRmpEndpointSender::handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		TRACE_LOG(m_log, ELL_DEBUG, "occured internal err\n");
 		m_i32SMPendingEvt = EE_INTERNAL_ERR;
@@ -1238,7 +1238,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CRmpEndpointSender::handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		TRACE_LOG(m_log, ELL_DEBUG, "occured internal err\n");
 		m_i32SMPendingEvt = EE_INTERNAL_ERR;
@@ -1249,7 +1249,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CRmpEndpointSender::handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		TRACE_LOG(m_log, ELL_DEBUG, "occurred close evt\n");
 		m_i32SMPendingEvt = EE_CLOSE;
@@ -1260,7 +1260,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::handling_close_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CRmpEndpointSender::handling_close_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		TRACE_LOG(m_log, ELL_DEBUG, "occurred close evt\n");
 		m_pSock->close();
@@ -1271,7 +1271,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::handling_deling_from_it_to_deling_from_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CRmpEndpointSender::handling_deling_from_it_to_deling_from_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		return m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_OUTPUT_TYPE);
 	}
@@ -1279,7 +1279,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::handling_deling_from_ot_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CRmpEndpointSender::handling_deling_from_ot_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		m_sm.set_cur_state(ES_CLOSED);
 		on_closed();
@@ -1290,7 +1290,7 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	int32_t CRmpEndpointSender::handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		if (EE_NONE != m_i32SMPendingEvt)
 		{

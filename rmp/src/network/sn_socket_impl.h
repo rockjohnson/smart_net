@@ -108,11 +108,11 @@ namespace nm_network
 	{
 		ERMP_RECV_SOCK = 0, ERMP_SEND_SOCK
 	};
-	class CRmpSock: public nm_network::ISocket
+	class CRmpSendSock: public nm_network::ISocket
 	{
 	public:
-		CRmpSock(int32_t i32EpType);
-		~CRmpSock();
+		CRmpSendSock(int32_t i32EpType);
+		~CRmpSendSock();
 
 	public:
 		int32_t open(sock_handle_t hSock);
@@ -181,7 +181,7 @@ namespace nm_network
 			u_int64_t ui64Id;
 		} m_epid;
 	};
-	typedef nm_utils::CSmartPtr<nm_network::CRmpSock> rmp_sock_ptr_t;
+	typedef nm_utils::CSmartPtr<nm_network::CRmpSendSock> rmp_sock_ptr_t;
 }
 
 #endif /* SOCKET_H_ */
