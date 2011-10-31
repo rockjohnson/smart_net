@@ -28,8 +28,9 @@
 								<option id="gnu.cpp.compiler.option.other.other.1574526748" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.other.verbose.616486917" name="Verbose (-v)" superClass="gnu.cpp.compiler.option.other.verbose" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.include.paths.2017981512" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_net/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/comm_utils/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libsmart_net/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcomm_net/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcomm_utils/src}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.510143878" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
