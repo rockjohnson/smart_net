@@ -23,7 +23,7 @@ namespace nm_utils
 #define LEVEL_THREE_MEM (4*LEVEL_TWO_MEM)
 #define LEVEL_FOUR_MEM (4*LEVEL_THREE_MEM)
 #define LEVEL_FIVE_MEM (4*LEVEL_FOUR_MEM)
-#define MAX_MEM_SIZE LEVEL_FIVE_MEM
+#define __MAX_MEM_SIZE__ LEVEL_FIVE_MEM
 #define NEW_MEM(size) CMemMgr::get_mem(size)
 
 	class CBaseMem : public CRefCnt

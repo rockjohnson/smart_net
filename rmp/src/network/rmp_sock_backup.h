@@ -98,7 +98,7 @@ namespace nm_network
 	/**
 	 *
 	 * */
-	class CRmpSendSock : public nm_cmn_base::ICommonBase
+	class CRmpSock : public nm_cmn_base::ICommonBase
 	{
 		enum
 		{
@@ -106,8 +106,8 @@ namespace nm_network
 		};
 
 	public:
-		CRmpSendSock(int32_t i32EpType);
-		~CRmpSendSock();
+		CRmpSock(int32_t i32EpType);
+		~CRmpSock();
 
 	public:
 		int32_t open(sock_handle_t hSock);
@@ -132,7 +132,7 @@ namespace nm_network
 		int32_t handle_hb();
 		int32_t handle_nak();
 		int32_t handle_ack();
-		int32_t get_recved_data(nm_mem::mem_ptr_t&);
+		int32_t get_next_recved_data(nm_mem::mem_ptr_t&);
 
 	private:
 		int32_t udp_send(nm_mem::mem_ptr_t &pMem, const struct sockaddr* pDestAddr);
@@ -145,11 +145,11 @@ namespace nm_network
 		sock_handle_t m_hSock;
 		int32_t m_i32Type;
 		nm_mem::mem_ptr_t m_pMem;
-		u_int32_t m_ui32LatestRecvedValidSeqNo;
-		u_int32_t m_ui32UnvalidPkgBegin;
-		u_int32_t m_ui32UnvalidPkgEnd;
-		u_int32_t m_ui32ValidPkgBegin;
-		u_int32_t m_ui32ValidPkgEnd;
+		u_int32_t m_ui64LatestRecvedValidSeqNo;
+		u_int32_t m_ui64UnvalidPkgBegin;
+		u_int32_t m_ui64UnvalidPkgEnd;
+		u_int32_t m_ui64ValidPkgBegin;
+		u_int32_t m_ui64ValidPkgEnd;
 		std::vector<nm_mem::mem_ptr_t> m_vecUnorderedPkgs;
 		struct SPkgInfo
 		{

@@ -30,7 +30,7 @@ namespace nm_network
 	 * */
 	class CRupSock;
 	typedef nm_utils::CSmartPtr<nm_network::CRupSock> rup_sock_ptr_t;
-	class CRupSock: public nm_network::ISocket
+	class CRupSock: public ISocket
 	{
 		struct SSendInfo
 		{
@@ -104,15 +104,18 @@ namespace nm_network
 	/**
 	 *
 	 * */
+#define __MAX_IO_VEC_CNT__ (10)
+	typedef sockaddr_in sn_sock_addr_t;
 	enum
 	{
 		ERMP_RECV_SOCK = 0, ERMP_SEND_SOCK
 	};
-	class CRmpSendSock: public nm_network::ISocket
+	class CRmpSock: public ISocket
 	{
+		typedef std::vector<nm_mem::mem_ptr_t> mem_vec_t;
 	public:
-		CRmpSendSock(int32_t i32EpType);
-		~CRmpSendSock();
+		CRmpSock(int32_t i32EpType);
+		~CRmpSock();
 
 	public:
 		int32_t open(sock_handle_t hSock);
@@ -128,22 +131,23 @@ namespace nm_network
 		int32_t send(nm_mem::mem_ptr_t&);
 		int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len);
 
-		mem_ptr_t& handle_can_recv(u_int32_t);
+		int32_t handle_can_recv(u_int32_t ui32MemSz);
 
-		int32_t get_local_bind_addr(struct sockaddr_in &addr);
-		int32_t handle_sendep_data();
-		int32_t handle_recvep_data();
+		int32_t get_local_bind_addr(sn_sock_addr_t&);
+		int32_t sendep_handle_data(sn_sock_addr_t&);
+		int32_t recvep_handle_data(sn_sock_addr_t&);
 		int32_t handle_can_send();
-
-		int32_t handle_odata();
-		int32_t handle_hb();
-		int32_t handle_nak();
-		int32_t handle_ack();
-		int32_t get_recved_data(nm_mem::mem_ptr_t&);
+		///
+		int32_t recvep_handle_odata(sn_sock_addr_t&);
+		int32_t recvep_handle_hb(sn_sock_addr_t&);
+		int32_t sendep_handle_nak(sn_sock_addr_t&);
+		int32_t sendep_handle_ack(sn_sock_addr_t&);
+		int32_t get_next_recved_data(nm_mem::mem_ptr_t &pMem);
 
 	private:
 		int32_t udp_send(nm_mem::mem_ptr_t &pMem, const struct sockaddr* pDestAddr);
 		int32_t udp_send(cmn_byte_t *pBytes, u_int32_t ui32Bytes, const struct sockaddr* pDestAddr);
+		int32_t udp_recv(mem_ptr_t &pMem, struct sockaddr_in &sSrcAddr);
 
 	private:
 		cmn_string_t m_strBindIp;
@@ -151,12 +155,11 @@ namespace nm_network
 		cmn_string_t m_strMulticastIp;
 		sock_handle_t m_hSock;
 		int32_t m_i32Type;
-		nm_mem::mem_ptr_t m_pMem;
-		u_int32_t m_ui32LatestRecvedValidSeqNo;
-		u_int32_t m_ui32UnvalidPkgBegin;
-		u_int32_t m_ui32UnvalidPkgEnd;
-		u_int32_t m_ui32ValidPkgBegin;
-		u_int32_t m_ui32ValidPkgEnd;
+
+		u_int64_t m_ui64LatestRecvedValidSeqNo;
+		u_int64_t m_ui64UnvalidPkgBegin;
+		u_int64_t m_ui64UnvalidPkgEnd;
+
 		std::vector<nm_mem::mem_ptr_t> m_vecUnorderedPkgs;
 		struct SPkgInfo
 		{
@@ -180,8 +183,21 @@ namespace nm_network
 			};
 			u_int64_t ui64Id;
 		} m_epid;
+
+		/*recv endpoint*/
+		/*-----------------------------------------------------------------*/
+		mem_ptr_t m_pMem; ///which store the recved data.
+		u_int8_t m_ui8SenderId; ///should be set by app level.
+		u_int64_t m_ui64ValidPkgBegin; ///
+		u_int64_t m_ui64ValidPkgEnd;
+		sn_sock_addr_t m_senderAddr;
+		/*-----------------------------------------------------------------*/
+
+		/*send endpoint*/
+		/*-----------------------------------------------------------------*/
+		/*-----------------------------------------------------------------*/
 	};
-	typedef nm_utils::CSmartPtr<nm_network::CRmpSendSock> rmp_sock_ptr_t;
+	typedef nm_utils::CSmartPtr<nm_network::CRmpSock> rmp_sock_ptr_t;
 }
 
 #endif /* SOCKET_H_ */

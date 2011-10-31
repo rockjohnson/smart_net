@@ -31,7 +31,7 @@ namespace nm_pkg
 	{
 	public:
 		CArchive(int32_t i32Cnt = -1/*estimated value*/) :
-			m_pHdr(NULL), m_i32Cnt((-1 == i32Cnt) ? MAX_MEM_SIZE : i32Cnt), m_bPending(false)
+			m_pHdr(NULL), m_i32Cnt((-1 == i32Cnt) ? __MAX_MEM_SIZE__ : i32Cnt), m_bPending(false)
 		{
 		}
 		~CArchive()
@@ -54,7 +54,7 @@ namespace nm_pkg
 
 			//static const u_int32_t s_ui32MaxPkgSize = B::get_max_size();
 			CMN_ASSERT(NULL == m_pMem);
-			m_pMem = NEW_MEM(((HdrSize + s_ui32MaxPkgSize * m_i32Cnt) > MAX_MEM_SIZE ? MAX_MEM_SIZE : (HdrSize + s_ui32MaxPkgSize * m_i32Cnt)));
+			m_pMem = NEW_MEM(((HdrSize + s_ui32MaxPkgSize * m_i32Cnt) > __MAX_MEM_SIZE__ ? __MAX_MEM_SIZE__ : (HdrSize + s_ui32MaxPkgSize * m_i32Cnt)));
 			m_pHdr = new (m_pMem->get_tail_free_buf()) H(B::PKG_OPCODE, 0, bVer/*, bChk*/);
 			m_pMem->inc_len(HdrSize);
 			//m_pMem->inc_offset(HdrSize);

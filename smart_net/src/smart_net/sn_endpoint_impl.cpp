@@ -1127,7 +1127,7 @@ namespace nm_smartnet
 		do
 		{
 			int32_t i32Type = ERMP_SEND_ENDPOINT == m_i32Type ? nm_network::ERMP_SEND_SOCK : nm_network::ERMP_RECV_SOCK;
-			m_pSock = SYS_NOTRW_NEW(nm_network::CRmpSendSock(i32Type));
+			m_pSock = SYS_NOTRW_NEW(nm_network::CRmpSock(i32Type));
 			i32Ret = m_pSock->open(m_strMulticastIp);
 			if (CMNERR_SUC != i32Ret)
 			{

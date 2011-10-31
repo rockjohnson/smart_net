@@ -11,7 +11,7 @@
 #include "../common/common.h"
 #include "../utils/smart_ptr.h"
 
-#define MAX_MEM_SIZE (8192*4)
+#define __MAX_MEM_SIZE__ (8192*4)
 
 namespace nm_mem
 {
@@ -81,6 +81,10 @@ namespace nm_mem
 		{
 			return (m_ui32Sz - m_ui32Len);
 		}
+		inline u_int32_t get_size()
+		{
+			return m_ui32Sz;
+		}
 		inline cmn_byte_t* get_buf()
 		{
 			return m_bytes;
@@ -129,7 +133,7 @@ namespace nm_mem
 		}
 
 	private:
-		cmn_byte_t m_bytes[MAX_MEM_SIZE];
+		cmn_byte_t m_bytes[__MAX_MEM_SIZE__];
 		const u_int32_t m_ui32InitOffset;
 		u_int32_t m_ui32Sz;
 		u_int32_t m_ui32Offset;
