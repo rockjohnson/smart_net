@@ -10,6 +10,12 @@
 
 #include <deque>
 #include <vector>
+#define __USING_GOOGLE_MAP__ (1)
+#if (__USING_GOOGLE_MAP__)
+#include <google/dense_hash_map>
+#else
+#include <map>
+#endif
 
 #include <memory/mem.h>
 #include <utils/smart_lock.h>
@@ -20,6 +26,8 @@
 
 //#include "../common/sn_common.h"
 #include "sn_socket.h"
+
+#define __MAX_NO_ANCK_TIME_US__ (5000000)
 
 namespace nm_network
 {
@@ -81,13 +89,13 @@ namespace nm_network
 		int32_t send(nm_mem::mem_ptr_t&);
 		int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len);
 
-		mem_ptr_t& handle_can_recv(u_int32_t uiMemSize);
+		int32_t handle_can_recv(u_int32_t uiMemSize);
 		int32_t recv(cmn_pvoid_t pV, u_int32_t ui32Size);
 		int32_t handle_can_send();
-//		nm_mem::mem_ptr_t& get_recv_data()
-//		{
-//			return m_pRecvData;
-//		}
+		nm_mem::mem_ptr_t& get_recv_data()
+		{
+			return m_pRecvedData;
+		}
 
 	private:
 		CIpv4Addr m_localaddr;
@@ -160,20 +168,7 @@ namespace nm_network
 		u_int64_t m_ui64UnvalidPkgBegin;
 		u_int64_t m_ui64UnvalidPkgEnd;
 
-		std::vector<nm_mem::mem_ptr_t> m_vecUnorderedPkgs;
-		struct SPkgInfo
-		{
-			nm_mem::mem_ptr_t m_pMem;
-			int32_t i32Acks;
-		};
-		std::vector<SPkgInfo> m_vecSendWin;
-		nm_utils::CSpinLock m_lkSenderWin;
-		volatile u_int32_t m_ui32ValidSendingDataHead; ///最旧的没有接受到足够ack的包序列号
-		volatile u_int32_t m_ui32ValidSendingDataTail; ///最近一次成功放入发送窗口的包的下一个序号
-		volatile u_int32_t m_ui32SendingSeqNo; ///记录目前已经组播发送出去的包序列号
-		volatile u_int32_t m_ui32PkgSeqNoGenerator; ///发送包的序列号生成记录器
-		struct sockaddr_in m_addrSender;
-		struct sockaddr_in m_addrMulticast;
+
 		union
 		{
 			struct
@@ -188,13 +183,44 @@ namespace nm_network
 		/*-----------------------------------------------------------------*/
 		mem_ptr_t m_pMem; ///which store the recved data.
 		u_int8_t m_ui8SenderId; ///should be set by app level.
-		u_int64_t m_ui64ValidPkgBegin; ///
-		u_int64_t m_ui64ValidPkgEnd;
-		sn_sock_addr_t m_senderAddr;
+		volatile u_int64_t m_ui64ValidPkgBegin; ///
+		volatile u_int64_t m_ui64ValidPkgEnd;
+		sn_sock_addr_t m_addrSender;
 		/*-----------------------------------------------------------------*/
 
 		/*send endpoint*/
 		/*-----------------------------------------------------------------*/
+		struct SPkgInfo
+		{
+			nm_mem::mem_ptr_t m_pMem;
+			int32_t i32Acks;
+		};
+		std::vector<mem_ptr_t> m_vecSendWin;
+		nm_utils::CSpinLock m_lkSenderWin;
+		volatile u_int64_t m_ui64ValidSendingDataHead; ///最旧的没有接受到足够ack的包序列号
+		volatile u_int64_t m_ui64ValidSendingDataTail; ///最近一次成功放入发送窗口的包的下一个序号
+		volatile u_int64_t m_ui64SendingSeqNo; ///记录目前已经组播发送出去的包序列号
+		volatile u_int64_t m_ui64PkgSeqNoGenerator; ///发送包的序列号生成记录器
+		struct sockaddr_in m_addrMulticast;
+		u_int64_t m_ui64MaxKeepAliveTimeUs;
+		u_int32_t m_ui32Naks;
+		u_int32_t m_ui32SendSpeed; ///should set by app level first...
+		std::vector<nm_mem::mem_ptr_t> m_vecUnorderedPkgs;
+		struct SRecverInfo
+		{
+			SRecverInfo()
+			:ui64LastRecvedSeqNo(0), ui32Naks(0), ui64LastUpdateTimeUs(0){}
+
+			u_int64_t ui64LastRecvedSeqNo;
+			u_int32_t ui32Naks;
+			u_int64_t ui64LastUpdateTimeUs;
+		};
+#if (__USING_GOOGLE_MAP__)
+		typedef google::dense_hash_map<u_int64_t, SRecverInfo> recver_map_t;
+#else
+		typedef std::map<u_int64_t, SRecverInfo> recver_map_t;
+#endif
+		recver_map_t m_mapRecvers;
 		/*-----------------------------------------------------------------*/
 	};
 	typedef nm_utils::CSmartPtr<nm_network::CRmpSock> rmp_sock_ptr_t;

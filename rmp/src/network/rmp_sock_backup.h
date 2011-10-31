@@ -158,10 +158,10 @@ namespace nm_network
 		};
 		std::vector<SPkgInfo> m_vecSendWin;
 		nm_utils::CSpinLock m_lkSenderWin;
-		volatile u_int32_t m_ui32ValidSendingDataHead; 	///最旧的没有接受到足够ack的包序列号
-		volatile u_int32_t m_ui32ValidSendingDataTail;   ///最近一次成功放入发送窗口的包的下一个序号
-		volatile u_int32_t m_ui32SendingSeqNo;          	///记录目前已经组播发送出去的包序列号
-		volatile u_int32_t m_ui32PkgSeqNoGenerator;     	///发送包的序列号生成记录器
+		volatile u_int32_t m_ui64ValidSendingDataHead; 	///最旧的没有接受到足够ack的包序列号
+		volatile u_int32_t m_ui64ValidSendingDataTail;   ///最近一次成功放入发送窗口的包的下一个序号
+		volatile u_int32_t m_ui64SendingSeqNo;          	///记录目前已经组播发送出去的包序列号
+		volatile u_int32_t m_ui64PkgSeqNoGenerator;     	///发送包的序列号生成记录器
 		struct sockaddr_in m_addrSender;
 		struct sockaddr_in m_addrMulticast;
 		union

@@ -38,8 +38,8 @@
 								<option id="gnu.cpp.compiler.lib.debug.option.optimization.level.343345848" name="Optimization Level" superClass="gnu.cpp.compiler.lib.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.lib.debug.option.debugging.level.1749117841" name="Debug Level" superClass="gnu.cpp.compiler.lib.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.786892435" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/comm_utils/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcds/cds}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcomm_utils/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcomm_net/src}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.1888071663" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -Wreorder" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.other.verbose.663001127" name="Verbose (-v)" superClass="gnu.cpp.compiler.option.other.verbose" value="false" valueType="boolean"/>

@@ -980,10 +980,14 @@ namespace nm_smartnet
 			return;
 		}
 
-		mem_ptr_t &pMem = m_pSock->handle_can_recv(RECV_BUF);
-		if (NULL != pMem)
+		int32_t i32Ret = m_pSock->handle_can_recv(RECV_BUF);
+		if (CMNERR_SUC == i32Ret)
 		{
-			on_recved_data(pMem);
+			on_recved_data(m_pSock->get_recv_data());
+		}
+		else if (CMNERR_RECV_PENDING == i32Ret)
+		{
+			CMN_ASSERT(false);
 		}
 		else
 		{
