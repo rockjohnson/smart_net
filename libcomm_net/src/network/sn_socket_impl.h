@@ -154,6 +154,7 @@ namespace nm_network
 		int32_t sendep_handle_nak(sn_sock_addr_t&);
 		int32_t sendep_handle_ack(sn_sock_addr_t&);
 		int32_t get_next_recved_data(nm_mem::mem_ptr_t &pMem);
+		void set_ack();
 
 	private:
 		int32_t udp_send(nm_mem::mem_ptr_t &pMem, const struct sockaddr* pDestAddr);
@@ -186,8 +187,11 @@ namespace nm_network
 		sn_sock_addr_t m_addrSender;
 
 		u_int64_t m_ui64LatestRecvedValidSeqNo;
-		u_int64_t m_ui64UnvalidPkgBegin;
-		u_int64_t m_ui64UnvalidPkgEnd;
+		u_int64_t m_ui64SendAckCnt; ///should be set by app level...
+		volatile u_int64_t m_ui64AppConfirmAck; ///经过应用层确认的ack。
+		volatile u_int64_t m_ui64AppConfirmAckTmp; ///上次发送ack时的记录数。
+		u_int64_t m_ui64UnvalidPkgBegin; ///the first data in the unvalid data vec.
+		u_int64_t m_ui64UnvalidPkgEnd; ///the last data in the unvalid data vec.
 		/*-----------------------------------------------------------------*/
 
 		/*send endpoint*/
@@ -207,7 +211,7 @@ namespace nm_network
 		u_int64_t m_ui64MaxKeepAliveTimeUs;
 		u_int32_t m_ui32Naks;
 		u_int32_t m_ui32SendSpeed; ///should set by app level first...
-		std::vector<nm_mem::mem_ptr_t> m_vecUnorderedPkgs;
+		std::vector<nm_mem::mem_ptr_t> m_vecUnvalidPkgs;
 		struct SRecverInfo
 		{
 			SRecverInfo()

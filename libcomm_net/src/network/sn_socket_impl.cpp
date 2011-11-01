@@ -609,7 +609,7 @@ namespace nm_network
 	{
 		if (RMP_RECV_SOCK == i32Type)
 		{
-			m_vecUnorderedPkgs.resize(__UNORDERED_PKGS_CNT__);
+			m_vecUnvalidPkgs.resize(__UNORDERED_PKGS_CNT__);
 		}
 		else if (RMP_SEND_SOCK == i32Type)
 		{
@@ -913,8 +913,8 @@ namespace nm_network
 		///
 		if (m_ui64ValidPkgBegin <= m_ui64ValidPkgEnd)
 		{
-			pMem = m_vecUnorderedPkgs[m_ui64ValidPkgBegin % m_vecUnorderedPkgs.capacity()];
-			m_vecUnorderedPkgs[m_ui64ValidPkgBegin % m_vecUnorderedPkgs.capacity()] = NULL;
+			pMem = m_vecUnvalidPkgs[m_ui64ValidPkgBegin % m_vecUnvalidPkgs.capacity()];
+			m_vecUnvalidPkgs[m_ui64ValidPkgBegin % m_vecUnvalidPkgs.capacity()] = NULL;
 			m_ui64ValidPkgBegin++;
 			return CMNERR_SUC;
 		}
@@ -923,7 +923,30 @@ namespace nm_network
 			m_ui64ValidPkgBegin = m_ui64ValidPkgEnd = 0;
 		}
 
+		set_ack();
+
 		return CMNERR_NO_DATA;
+	}
+
+	/**
+	 * 这个函数应该在你调用get_next_recved_data反馈CMNERR_NO_DATA之后调用，而且一定要调用。
+	 * */
+	void CRmpSock::set_ack()
+	{
+		m_ui64AppConfirmAck = m_ui64LatestRecvedValidSeqNo;
+		if ((m_ui64AppConfirmAck - m_ui64AppConfirmAckTmp) >= m_ui64SendAckCnt)
+		{
+			m_ui64AppConfirmAckTmp = m_ui64AppConfirmAck;
+			///send ack
+			cmn_byte_t buf[8192];
+			SRmpHdr *pHdr = (SRmpHdr*) buf;
+			pHdr->ui24Len = sizeof(SRmpAck) + sizeof(SRmpHdr);
+			pHdr->ui8Opcode = EP_ACK;
+			SRmpAck *pAck = (SRmpAck*) (buf + sizeof(SRmpHdr));
+			pAck->ui64SeqNo = m_ui64AppConfirmAckTmp;
+			pAck->ui64Id = m_epid.ui64Id;
+			i32Ret = udp_send(buf, pHdr->ui24Len, (const struct sockaddr*) (&m_addrSender));
+		}
 	}
 
 	/**
@@ -946,9 +969,9 @@ namespace nm_network
 				m_ui64ValidPkgBegin = m_ui64ValidPkgEnd = m_ui64UnvalidPkgBegin;
 
 				///find the valid pkg end
-				while (m_ui64ValidPkgEnd <= m_ui64UnvalidPkgEnd)
+				while (m_ui64ValidPkgEnd < m_ui64UnvalidPkgEnd)
 				{
-					if (NULL == m_vecUnorderedPkgs[(m_ui64ValidPkgEnd + 1) % m_vecUnorderedPkgs.capacity()])
+					if (NULL == m_vecUnvalidPkgs[(m_ui64ValidPkgEnd + 1) % m_vecUnvalidPkgs.capacity()])
 					{
 						break;
 					}
@@ -958,9 +981,9 @@ namespace nm_network
 				if (m_ui64ValidPkgEnd < m_ui64UnvalidPkgEnd)
 				{
 					m_ui64UnvalidPkgBegin = m_ui64ValidPkgEnd + 1;
-					while (m_ui64UnvalidPkgBegin <= m_ui64UnvalidPkgEnd)
+					while (m_ui64UnvalidPkgBegin < m_ui64UnvalidPkgEnd)
 					{
-						if (NULL != m_vecUnorderedPkgs[m_ui64UnvalidPkgBegin % m_vecUnorderedPkgs.capacity()])
+						if (NULL != m_vecUnvalidPkgs[m_ui64UnvalidPkgBegin % m_vecUnvalidPkgs.capacity()])
 						{
 							break;
 						}
@@ -992,7 +1015,7 @@ namespace nm_network
 			}
 			else if (pOdata->ui64SeqNo > m_ui64UnvalidPkgEnd)
 			{
-				if ((pOdata->ui64SeqNo - m_ui64LatestRecvedValidSeqNo) > m_vecUnorderedPkgs.capacity())
+				if ((pOdata->ui64SeqNo - m_ui64LatestRecvedValidSeqNo) > m_vecUnvalidPkgs.capacity())
 				{
 					///beyond limitation.
 					///discard it
@@ -1007,8 +1030,8 @@ namespace nm_network
 			///
 			if (bFlag)
 			{
-				CMN_ASSERT(NULL == m_vecUnorderedPkgs[pOdata->ui64SeqNo % m_vecUnorderedPkgs.capacity()]);
-				m_vecUnorderedPkgs[pOdata->ui64SeqNo % m_vecUnorderedPkgs.capacity()] = m_pMem;
+				CMN_ASSERT(NULL == m_vecUnvalidPkgs[pOdata->ui64SeqNo % m_vecUnvalidPkgs.capacity()]);
+				m_vecUnvalidPkgs[pOdata->ui64SeqNo % m_vecUnvalidPkgs.capacity()] = m_pMem;
 				m_pMem = NULL;
 			}
 
