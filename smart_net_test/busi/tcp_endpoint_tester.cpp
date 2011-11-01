@@ -55,7 +55,7 @@ namespace nm_busi
 		{
 			std::cout<< "recved : " << ui64 << pkg.get_id() << std::endl;
 		}
-		send_data();
+		//send_data();
 		//std::cout<< "handle_pkg reg pkg: " << pkg.get_opcode() << ", id: "<< pkg.get_id()<< std::endl;
 	}
 
