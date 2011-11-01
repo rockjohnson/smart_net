@@ -41,19 +41,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: libcomm_net_debug.a
+all: libcomm_net.a
 
 # Tool invocations
-libcomm_net_debug.a: $(OBJS) $(USER_OBJS)
+libcomm_net.a: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC Archiver'
-	ar -r "libcomm_net_debug.a" $(OBJS) $(USER_OBJS) $(LIBS)
+	ar -r "libcomm_net.a" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(ARCHIVES)$(CPP_DEPS)$(CXX_DEPS)$(C_UPPER_DEPS) libcomm_net_debug.a
+	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(ARCHIVES)$(CPP_DEPS)$(CXX_DEPS)$(C_UPPER_DEPS) libcomm_net.a
 	-@echo ' '
 
 .PHONY: all clean dependents
