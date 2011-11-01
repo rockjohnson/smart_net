@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-	SET_PKG_HANDLER(nm_busi::CTcpEndpointTester, nm_pkg::CPkgReg);
+	SET_PKG_HANDLER(nm_busi::CTcpEndpointTester, nm_pkg::CPkgHB);
 
 	nm_framework::sn_engine_ptr_t pSNEngine = SYS_NOTRW_NEW(nm_framework::CSNEngine);
 	IF_TRUE_THEN_RETURN_CODE(pSNEngine->start(2, 2, nm_framework::EIEN_EPOLL, 100) < 0, -1);
@@ -109,12 +109,12 @@ int main()
 	{
 		if (pB->is_opened())
 		{
-			nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgReg> ar(3);
-			nm_pkg::CPkgReg *pPkg = ar.get_next_body();
-			pPkg->set_id(i32Cnt);
-//			nm_pkg::CPkgReg *pPkg1 = ar.get_next_body();
-//			pPkg1->set_id(2);
-			i32Ret = pB->send_data(ar.serialize());
+//			nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgHB> ar(3);
+//			nm_pkg::CPkgHB *pPkg = ar.get_next_body();
+//			pPkg->set_id(i32Cnt);
+////			nm_pkg::CPkgReg *pPkg1 = ar.get_next_body();
+////			pPkg1->set_id(2);
+//			i32Ret = pB->send_data(ar.serialize());
 //			if (CMNERR_SEND_PENDING)
 //			{
 //				cout << "!!!1 World!!!" << endl; // prints !!!Hello World!!!

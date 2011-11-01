@@ -131,46 +131,25 @@ public:\
 	//two or more package body.
 	//the size of package body must less than MAX_MEM_SIZE
 
+	///opcode 0 is reserved by smart_net
 	enum
 	{
-		EP_REG
+		EP_HB = 0
 	};
 
-	class CPkgReg
+	///heart beat pkg....
+	class CPkgHB
 	{
-	DECL_OPCODE(EP_REG)
-	public:
-		CPkgReg(u_int32_t uiID) :
-			m_uiID(uiID)
-		{
-		}
-
+	DECL_OPCODE(EP_HB)
 	public:
 		static u_int32_t get_max_size()
 		{
-			return sizeof(CPkgReg);
+			return 0;
 		}
 		u_int32_t get_real_size()
 		{
-			return sizeof(CPkgReg);
+			return 0;
 		}
-
-		u_int32_t get_id()
-		{
-			return m_uiID;
-		}
-
-		void set_id(int iId)
-		{
-			m_uiID = iId;
-		}
-		//		void process(chat_ptr_t &client)
-		//		{
-		//			;
-		//		}
-	private:
-		u_int32_t m_uiID;
-		char buf[20];
 	};
 //
 //	//��Ϊ����Ϣϵͳ�ĵ�����Ϣ��Ĵ�С����С��MAX_MEM_SIZE�����������¶���

@@ -31,10 +31,10 @@ namespace nm_busi
 	void CTcpEndpointTester::on_opened()
 	{
 		std::cout << "tester opened" << std::endl;
-		nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgReg> ar(3);
-		nm_pkg::CPkgReg *pPkg = ar.get_next_body();
-		pPkg->set_id(10);
-		send_data(ar.serialize());
+//		nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgHB> ar(3);
+//		nm_pkg::CPkgHB *pPkg = ar.get_next_body();
+//		pPkg->set_id(10);
+//		send_data(ar.serialize());
 	}
 
 	void CTcpEndpointTester::on_closed()
@@ -48,13 +48,13 @@ namespace nm_busi
 		DISPATCH(CTcpEndpointTester);
 	}
 
-	void CTcpEndpointTester::handle_pkg(nm_pkg::CPkgReg &pkg, u_int32_t uiTag)
+	void CTcpEndpointTester::handle_pkg(nm_pkg::CPkgHB &pkg, u_int32_t uiTag)
 	{
-		static u_int64_t ui64 = 0;
-		if (((++ui64) % 100000) == 0)
-		{
-			std::cout<< "recved : " << ui64 << pkg.get_id() << std::endl;
-		}
+//		static u_int64_t ui64 = 0;
+//		if (((++ui64) % 100000) == 0)
+//		{
+//			std::cout<< "recved : " << ui64 << pkg.get_id() << std::endl;
+//		}
 		//send_data();
 		//std::cout<< "handle_pkg reg pkg: " << pkg.get_opcode() << ", id: "<< pkg.get_id()<< std::endl;
 	}

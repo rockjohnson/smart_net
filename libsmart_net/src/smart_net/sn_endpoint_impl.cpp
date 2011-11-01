@@ -6,7 +6,7 @@
  */
 
 #include <sys/epoll.h>
-
+#include "archive.h"
 #include "sn_endpoint_impl.h"
 
 namespace nm_smartnet
@@ -788,6 +788,12 @@ namespace nm_smartnet
 		///init sm err code to zero, when opening.
 		m_i32SMPendingEvt = EE_NONE;
 
+		m_ui64SendCnt = 0; ///the send count in a while
+		m_ui64RecvCnt = 0; ///the recv count in a while
+		m_ui64SendStore = 0;
+		m_ui64RecvStore = 0;
+		m_ui32CycleCnt = 0;
+
 		return (NULL != m_pTcpAcceptor) ? m_pTcpAcceptor->add_endpoint(rup_endpoint_ptr_t(this)) : m_pTcpConnector->add_endpoint(rup_endpoint_ptr_t(this));
 	}
 
@@ -979,6 +985,7 @@ namespace nm_smartnet
 			return;
 		}
 
+		m_ui64RecvCnt++;
 		int32_t i32Ret = m_pSock->handle_can_recv(RECV_BUF);
 		if (CMNERR_SUC == i32Ret)
 		{
@@ -995,6 +1002,7 @@ namespace nm_smartnet
 		}
 	}
 
+#define __MAX_CYCLE_CNT__ (1000000)
 	void CRupEndpoint::handle_output_evt()
 	{
 		if (ES_OPENED == m_sm.get_cur_state()) ///如果发生了错误，导致状态不是OPENNED时，就不用处理IO了。
@@ -1003,6 +1011,36 @@ namespace nm_smartnet
 			if (m_pSock->handle_can_send() == CMNERR_IO_ERR)
 			{
 				m_sm.post_evt(EE_INTERNAL_ERR, NULL);
+			}
+			else
+			{
+				///keep alive
+				if (++m_ui32CycleCnt > __MAX_CYCLE_CNT__)
+				{
+					m_ui32CycleCnt = 0;
+					///need send hb?
+					if (m_ui64SendCnt == m_ui64SendStore)
+					{
+						using namespace nm_pkg;
+						///send hb
+						CArchive<CPkgHdr, CPkgHB> ar;
+						m_pSock->send(ar.serialize());
+					}
+					else
+					{
+						m_ui64SendStore = m_ui64SendCnt;
+					}
+					///peer is alive?
+					if (m_ui64RecvCnt == m_ui64RecvStore)
+					{
+						///cut it down
+						m_sm.post_evt(EE_INTERNAL_ERR, NULL);
+					}
+					else
+					{
+						m_ui64RecvStore = m_ui64RecvCnt;
+					}
+				}
 			}
 		}
 	}
@@ -1038,6 +1076,7 @@ namespace nm_smartnet
 	 * */
 	int32_t CRupEndpoint::send_data(nm_mem::mem_ptr_t &pData)
 	{
+		m_ui64SendCnt++;
 		return m_sm.get_cur_state() == ES_OPENED ? m_pSock->send(pData) : CMNERR_COMMON_ERR;
 	}
 
@@ -1129,7 +1168,7 @@ namespace nm_smartnet
 		int32_t i32Ret = CMNERR_SUC;
 		do
 		{
-			int32_t i32Type = ERMP_SEND_ENDPOINT == m_i32Type ? nm_network::ERMP_SEND_SOCK : nm_network::ERMP_RECV_SOCK;
+			int32_t i32Type = ERMP_SEND_ENDPOINT == m_i32Type ? nm_network::RMP_SEND_SOCK : nm_network::RMP_RECV_SOCK;
 			m_pSock = SYS_NOTRW_NEW(nm_network::CRmpSock(i32Type));
 			i32Ret = m_pSock->open(m_strMulticastIp);
 			if (CMNERR_SUC != i32Ret)

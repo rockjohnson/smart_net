@@ -4,8 +4,10 @@
 #include <deque>
 #if (__USING_C11__)
 #include <unordered_map> //should add -std=c++0x with gcc
-#else
+#elif (__USING_GOOGLE_MAP__)
 #include <google/dense_hash_map>
+#else
+#include <map>
 #endif
 
 #include <common/common.h>
@@ -41,8 +43,10 @@ namespace nm_pkg
 		typedef void (*P_FUN)(PCONN&, nm_mem::mem_ptr_t&, u_int32_t, u_int32_t);
 #if (__USING_C11__)
 		typedef STD::unordered_map<int32_t/*msg code*/, P_FUN/*handle function*/> hash_map;
-#else
+#elif (__USING_GOOGLE_MAP__)
 		typedef google::dense_hash_map<int32_t/*msg code*/, P_FUN/*handle function*/> hash_map;
+#else
+
 #endif
 	public:
 		CDispatcher()
@@ -93,6 +97,12 @@ namespace nm_pkg
 					CMN_ASSERT(false);
 					i32Ret = CMNERR_COMMON_ERR;
 					break;
+				}
+				///
+				if (pHdr->get_len() == s_ui32PkgHdr)
+				{
+					pMem->dec_head_data(s_ui32PkgHdr);
+					continue;
 				}
 				///
 				if (pHdr->get_len() > pMem->get_len())

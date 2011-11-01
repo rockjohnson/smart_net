@@ -10,7 +10,7 @@
 
 #include <deque>
 #include <vector>
-#define __USING_GOOGLE_MAP__ (1)
+#include <common/common.h>
 #if (__USING_GOOGLE_MAP__)
 #include <google/dense_hash_map>
 #else
@@ -40,31 +40,31 @@ namespace nm_network
 	typedef nm_utils::CSmartPtr<nm_network::CRupSock> rup_sock_ptr_t;
 	class CRupSock: public ISocket
 	{
-		struct SSendInfo
-		{
-			SSendInfo(nm_mem::mem_ptr_t &ptr) :
-				m_pData(ptr), /*m_uiLen(ptr->get_len()),*/
-				m_uiOffset(ptr->get_offset())
-			{
-			}
-			SSendInfo(const SSendInfo &other) :
-				m_pData(other.m_pData) /*, m_uiLen(other.m_uiLen)*/, m_uiOffset(other.m_uiOffset)
-			{
-			}
-
-			u_int32_t get_offset()
-			{
-				return m_uiOffset;
-			}
-
-			void set_offset(u_int32_t uiOffset)
-			{
-				m_uiOffset = uiOffset;
-			}
-
-			nm_mem::mem_ptr_t m_pData;
-			u_int32_t m_uiOffset;
-		};
+//		struct SSendInfo
+//		{
+//			SSendInfo(nm_mem::mem_ptr_t &ptr) :
+//				m_pData(ptr), /*m_uiLen(ptr->get_len()),*/
+//				m_uiOffset(ptr->get_offset())
+//			{
+//			}
+//			SSendInfo(const SSendInfo &other) :
+//				m_pData(other.m_pData) /*, m_uiLen(other.m_uiLen)*/, m_uiOffset(other.m_uiOffset)
+//			{
+//			}
+//
+//			u_int32_t get_offset()
+//			{
+//				return m_uiOffset;
+//			}
+//
+//			void set_offset(u_int32_t uiOffset)
+//			{
+//				m_uiOffset = uiOffset;
+//			}
+//
+//			nm_mem::mem_ptr_t m_pData;
+//			u_int32_t m_uiOffset;
+//		};
 
 	public:
 		CRupSock();
@@ -113,16 +113,19 @@ namespace nm_network
 	 *
 	 * */
 #define __MAX_IO_VEC_CNT__ (10)
+#define __UNORDERED_PKGS_CNT__ (100000)
+#define __SEND_WIN_SIZE__ (1000000)
+
 	typedef sockaddr_in sn_sock_addr_t;
 	enum
 	{
-		ERMP_RECV_SOCK = 0, ERMP_SEND_SOCK
+		RMP_RECV_SOCK = 0, RMP_SEND_SOCK
 	};
 	class CRmpSock: public ISocket
 	{
 		typedef std::vector<nm_mem::mem_ptr_t> mem_vec_t;
 	public:
-		CRmpSock(int32_t i32EpType);
+		CRmpSock(int32_t i32Type);
 		~CRmpSock();
 
 	public:
@@ -130,8 +133,8 @@ namespace nm_network
 		int32_t open(const cmn_string_t &);
 		int32_t close();
 		int32_t bind(const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
-		int32_t join_multicast_group(const cmn_string_t &strMulticastIp);
-		int32_t leave_multicast_group(const cmn_string_t &strMulticastIp);
+		int32_t join_multicast_group();
+		int32_t leave_multicast_group();
 		sock_handle_t get_handle();
 		bool is_opened();
 		int32_t set_nonblock(bool bFlag);
@@ -160,14 +163,9 @@ namespace nm_network
 	private:
 		cmn_string_t m_strBindIp;
 		u_int16_t m_ui16BindPort;
-		cmn_string_t m_strMulticastIp;
+		//cmn_string_t m_strMulticastIp;
 		sock_handle_t m_hSock;
 		int32_t m_i32Type;
-
-		u_int64_t m_ui64LatestRecvedValidSeqNo;
-		u_int64_t m_ui64UnvalidPkgBegin;
-		u_int64_t m_ui64UnvalidPkgEnd;
-
 
 		union
 		{
@@ -186,6 +184,10 @@ namespace nm_network
 		volatile u_int64_t m_ui64ValidPkgBegin; ///
 		volatile u_int64_t m_ui64ValidPkgEnd;
 		sn_sock_addr_t m_addrSender;
+
+		u_int64_t m_ui64LatestRecvedValidSeqNo;
+		u_int64_t m_ui64UnvalidPkgBegin;
+		u_int64_t m_ui64UnvalidPkgEnd;
 		/*-----------------------------------------------------------------*/
 
 		/*send endpoint*/

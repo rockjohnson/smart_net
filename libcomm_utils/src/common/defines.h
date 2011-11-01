@@ -61,6 +61,8 @@
 //#define __USING_SIMPLE_LOG__ (1)
 #define __USING_GNU_ATOMIC__ (1)
 #define __DEBUG_VER__ (1)
+#define __USING_GOOGLE_MAP__ (1)
+//#define __USING_OLD_IO_METHOD__ (1)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define ZERO (0)

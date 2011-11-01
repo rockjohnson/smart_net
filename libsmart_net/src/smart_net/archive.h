@@ -9,7 +9,7 @@
 #define __ARCHIVE_H__
 
 #include <deque>
-#include "mem.h"
+#include <memory/mem.h>
 #include "pkg.h"
 
 #ifdef __USING_COMPRESSED_DATA__

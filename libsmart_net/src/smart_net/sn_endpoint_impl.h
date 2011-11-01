@@ -255,6 +255,12 @@ namespace nm_smartnet
 		nm_network::rup_sock_ptr_t m_pSock;
 		nm_network::ipv4_addr_ptr_t m_pPeerAddr;
 		nm_utils::CSmartLog m_log;
+		///keep alive
+		volatile u_int64_t m_ui64SendCnt; ///the send count in a while
+		volatile u_int64_t m_ui64RecvCnt; ///the recv count in a while
+		u_int64_t m_ui64SendStore;
+		u_int64_t m_ui64RecvStore;
+		u_int32_t m_ui32CycleCnt;
 	};
 
 	/**
