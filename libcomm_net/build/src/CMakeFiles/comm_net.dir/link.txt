@@ -1,0 +1,2 @@
+/usr/bin/ar cr ../lib/libcomm_net.a  CMakeFiles/comm_net.dir/network/sn_net_addr.cpp.o CMakeFiles/comm_net.dir/network/sn_socket_impl.cpp.o
+/usr/bin/ranlib ../lib/libcomm_net.a

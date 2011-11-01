@@ -1,0 +1,2 @@
+/usr/bin/ar cr ../lib/libcomm_utils.a  CMakeFiles/comm_utils.dir/common/base.cpp.o CMakeFiles/comm_utils.dir/common/err_info.cpp.o CMakeFiles/comm_utils.dir/memory/mem.cpp.o CMakeFiles/comm_utils.dir/log/smart_log.cpp.o CMakeFiles/comm_utils.dir/utils/time_info.cpp.o CMakeFiles/comm_utils.dir/utils/utils.cpp.o CMakeFiles/comm_utils.dir/utils/file.cpp.o CMakeFiles/comm_utils.dir/utils/event_engine.cpp.o CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.o
+/usr/bin/ranlib ../lib/libcomm_utils.a
