@@ -12,8 +12,6 @@ using namespace std;
 
 int main()
 {
-	SET_PKG_HANDLER(nm_busi::CTcpEndpointTester, nm_pkg::CPkgHB);
-
 	nm_framework::sn_engine_ptr_t pSNEngine = SYS_NOTRW_NEW(nm_framework::CSNEngine);
 	IF_TRUE_THEN_RETURN_CODE(pSNEngine->start(2, 2, nm_framework::EIEN_EPOLL, 100) < 0, -1);
 
@@ -104,7 +102,7 @@ int main()
 	}
 
 	int32_t i32Cnt = 0;
-	int32_t i32Ret = 0;
+	//int32_t i32Ret = 0;
 	while (i32Cnt++ < 1000009)
 	{
 		if (pB->is_opened())

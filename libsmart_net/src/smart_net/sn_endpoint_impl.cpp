@@ -980,7 +980,7 @@ namespace nm_smartnet
 		m_sm.post_evt(EE_INTERNAL_ERR, &i32ErrCode);
 	}
 
-#define RECV_BUF (8192)
+#define __RECV_BUF__ (8192)
 	void CRupEndpoint::handle_input_evt()
 	{
 		if (ES_OPENED != m_sm.get_cur_state()) ///有可能INPUT 处理线程先设置完毕，并开始接受数据，但是发送线程还在设置过程中，所以epoll要用level triger
@@ -989,7 +989,7 @@ namespace nm_smartnet
 		}
 
 		m_ui64RecvCnt++;
-		int32_t i32Ret = m_pSock->handle_can_recv(RECV_BUF);
+		int32_t i32Ret = m_pSock->handle_can_recv(__RECV_BUF__);
 		if (CMNERR_SUC == i32Ret)
 		{
 			on_recved_data(m_pSock->get_recv_data());
@@ -1018,7 +1018,7 @@ namespace nm_smartnet
 			else
 			{
 				///keep alive
-				if (++m_ui32CycleCnt  > __MAX_CYCLE_CNT__)
+				if (++m_ui32CycleCnt > __MAX_CYCLE_CNT__)
 				{
 					m_ui32CycleCnt = 0;
 					///need send hb?
@@ -1096,286 +1096,348 @@ namespace nm_smartnet
 		return m_sm.get_cur_state() == ES_OPENED ? m_pSock->send(pData) : CMNERR_COMMON_ERR;
 	}
 
-/*------------------------------------------------------------------------------*/
+	/*------------------------------------------------------------------------------*/
 
-#if 0
-using namespace nm_rmp;
-/**
- *
- * */
-CRmpEndpoint::CRmpEndpoint(nm_framework::sn_engine_ptr_t &pSnEngine, int32_t i32Type) :
-m_sm(this), m_pSNEngine(pSnEngine), m_i32Type(i32Type)
-{
-	CMN_ASSERT(ERMP_SEND_ENDPOINT == i32Type || ERMP_RECV_ENDPOINT == i32Type);
-	char buf[1024] =
-	{	0};
-	sprintf(buf, "%p_", this);
-	m_log.init("", buf, ELL_DEBUG, 60);
-	init_sm();
-}
-
-/**
- *
- * */
-CRmpEndpoint::~CRmpEndpoint()
-{
-}
-
-/**
- * init sm
- * */
-int32_t CRmpEndpoint::init_sm()
-{
-	//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT, &CRmpEndpoint::handling_close_while_adding_into_ot));
-	//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_added_into_ot_to_adding_into_it));
-	//
-	//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_added_into_ot_to_adding_into_it));
-	//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_CLOSE, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_added_into_ot_to_adding_into_it));
-	//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_ADDED_INTO_IT, ES_OPENED, &CRmpEndpoint::handling_added_into_ot_to_adding_into_it));
-	//
-	//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_OPENED, EE_CLOSE, ES_DELING_FROM_IT, &CRmpEndpoint::handling_added_into_ot_to_adding_into_it));
-	//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_OPENED, EE_INTERNAL_ERR, ES_DELING_FROM_IT, &CRmpEndpoint::handling_added_into_ot_to_adding_into_it));
-	//
-	//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_DELING_FROM_OT, &CRmpEndpoint::handling_added_into_ot_to_adding_into_it));
-	//		CMN_ASSERT(CMNERR_SUC == m_sm.reg_evt_state(ES_DELING_FROM_OT, EE_DELED_FROM_OT, ES_CLOSED, &CRmpEndpoint::handling_added_into_ot_to_adding_into_it));
-
-	m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDING_INTO_OT, &CRmpEndpoint::handling_closed_to_adding_into_ot);
-
-	///这个时候发生关闭事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_OUTPUT_TASK
-	m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT, &CRmpEndpoint::handling_close_while_adding_into_ot);
-	m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_INTERNAL_ERR, ES_CLOSED, &CRmpEndpoint::handling_internal_err_while_adding_into_ot);
-	m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_adding_into_ot_to_adding_into_it);
-
-	///这个时候发生关闭or internal err事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_INPUT_TASK
-	m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_internal_err_while_adding_into_it);
-	m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_CLOSE, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_close_while_adding_into_it);
-	m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_ADDED_INTO_IT, ES_OPENED, &CRmpEndpoint::handling_adding_into_it_to_opened);
-
-	///not handling internal err, when in the next two state.
-	m_sm.reg_evt_state(ES_OPENED, EE_INTERNAL_ERR, ES_DELING_FROM_IT, &CRmpEndpoint::handling_internal_err_while_opened);
-	m_sm.reg_evt_state(ES_OPENED, EE_CLOSE, ES_DELING_FROM_IT, &CRmpEndpoint::handling_close_while_opened);
-
-	m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_DELING_FROM_OT, &CRmpEndpoint::handling_deling_from_it_to_deling_from_ot);
-	m_sm.reg_evt_state(ES_DELING_FROM_OT, EE_DELED_FROM_OT, ES_CLOSED, &CRmpEndpoint::handling_deling_from_ot_to_closed);
-
-	m_sm.set_cur_state(ES_CLOSED);
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::open(const cmn_string_t &strMulticastIp, const cmn_string_t &strBindIp, u_int16_t ui16BindPort)
-{
-	SParasEx sp;
-	sp.strMulticast = strMulticastIp;
-	sp.strBindIp = strBindIp;
-	sp.ui16BindPort = ui16BindPort;
-
-	return m_sm.post_evt(EE_OPEN, &sp);
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::handling_closed_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-{
-	SParasEx *pSp = (SParasEx*) (pVoid);
-	m_strMulticastIp = pSp->strMulticast;
-	m_strBindIp = pSp->strBindIp;
-	m_ui16BindPort = pSp->ui16BindPort;
-
-	int32_t i32Ret = CMNERR_SUC;
-	do
+#if 1
+	using namespace nm_rmp;
+	/**
+	 *
+	 * */
+	CRmpEndpoint::CRmpEndpoint(nm_framework::sn_engine_ptr_t &pSnEngine, int32_t i32Type) :
+		m_sm(this), m_pSNEngine(pSnEngine), m_i32Type(i32Type)
 	{
-		int32_t i32Type = ERMP_SEND_ENDPOINT == m_i32Type ? nm_network::RMP_SEND_SOCK : nm_network::RMP_RECV_SOCK;
-		m_pSock = SYS_NOTRW_NEW(nm_network::CRmpSock(i32Type));
-		i32Ret = m_pSock->open(m_strMulticastIp);
+		CMN_ASSERT(ERMP_SEND_ENDPOINT == i32Type || ERMP_RECV_ENDPOINT == i32Type);
+		char buf[1024] = { 0 };
+		sprintf(buf, "%p_", this);
+		m_log.init("", buf, ELL_DEBUG, 60);
+		init_sm();
+	}
+
+	/**
+	 *
+	 * */
+	CRmpEndpoint::~CRmpEndpoint()
+	{
+	}
+
+	/**
+	 * init sm
+	 * */
+	int32_t CRmpEndpoint::init_sm()
+	{
+		m_sm.reg_evt_state(ES_CLOSED, EE_OPEN, ES_ADDING_INTO_OT, &CRmpEndpoint::handling_closed_to_adding_into_ot);
+
+		///这个时候发生关闭事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_OUTPUT_TASK
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_CLOSE, ES_ADDING_INTO_OT, &CRmpEndpoint::handling_close_while_adding_into_ot);
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_INTERNAL_ERR, ES_CLOSED, &CRmpEndpoint::handling_internal_err_while_adding_into_ot);
+		m_sm.reg_evt_state(ES_ADDING_INTO_OT, EE_ADDED_INTO_OT, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_adding_into_ot_to_adding_into_it);
+
+		///这个时候发生关闭or internal err事件，则应该只设置个标志位，状态还是ES_ADDING_INTO_INPUT_TASK
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_INTERNAL_ERR, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_internal_err_while_adding_into_it);
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_CLOSE, ES_ADDING_INTO_IT, &CRmpEndpoint::handling_close_while_adding_into_it);
+		m_sm.reg_evt_state(ES_ADDING_INTO_IT, EE_ADDED_INTO_IT, ES_OPENED, &CRmpEndpoint::handling_adding_into_it_to_opened);
+
+		///not handling internal err, when in the next two state.
+		m_sm.reg_evt_state(ES_OPENED, EE_INTERNAL_ERR, ES_DELING_FROM_IT, &CRmpEndpoint::handling_internal_err_while_opened);
+		m_sm.reg_evt_state(ES_OPENED, EE_CLOSE, ES_DELING_FROM_IT, &CRmpEndpoint::handling_close_while_opened);
+
+		m_sm.reg_evt_state(ES_DELING_FROM_IT, EE_DELED_FROM_IT, ES_DELING_FROM_OT, &CRmpEndpoint::handling_deling_from_it_to_deling_from_ot);
+		m_sm.reg_evt_state(ES_DELING_FROM_OT, EE_DELED_FROM_OT, ES_CLOSED, &CRmpEndpoint::handling_deling_from_ot_to_closed);
+
+		m_sm.set_cur_state(ES_CLOSED);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::open(const cmn_string_t &strMulticastIp, const cmn_string_t &strBindIp, u_int16_t ui16BindPort)
+	{
+		SParasEx sp;
+		sp.strMulticast = strMulticastIp;
+		sp.strBindIp = strBindIp;
+		sp.ui16BindPort = ui16BindPort;
+
+		return m_sm.post_evt(EE_OPEN, &sp);
+	}
+
+	int32_t CRmpEndpoint::close()
+	{
+		return m_sm.post_evt(EE_CLOSE, NULL);
+	}
+
+	int32_t CRmpEndpoint::send_data(nm_mem::mem_ptr_t &pData)
+	{
+		return m_sm.get_cur_state() == ES_OPENED ? m_pSock->send(pData) : CMNERR_COMMON_ERR;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::handling_closed_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		SParasEx *pSp = (SParasEx*) (pVoid);
+		m_strMulticastIp = pSp->strMulticast;
+		m_strBindIp = pSp->strBindIp;
+		m_ui16BindPort = pSp->ui16BindPort;
+
+		int32_t i32Ret = CMNERR_SUC;
+		do
+		{
+			int32_t i32Type = ERMP_SEND_ENDPOINT == m_i32Type ? nm_network::RMP_SEND_SOCK : nm_network::RMP_RECV_SOCK;
+			m_pSock = SYS_NOTRW_NEW(nm_network::CRmpSock(i32Type));
+			i32Ret = m_pSock->open(m_strMulticastIp);
+			if (CMNERR_SUC != i32Ret)
+			{
+				break;
+			}
+			i32Ret = m_pSock->set_nonblock(true);
+		}
+		while (false);
+
 		if (CMNERR_SUC != i32Ret)
 		{
-			break;
+			m_pSock = NULL;
+			return CMNERR_COMMON_ERR;
 		}
-		i32Ret = m_pSock->set_nonblock(true);
-	}
-	while (false);
 
-	if (CMNERR_SUC != i32Ret)
+		return m_pSNEngine->add_endpoint(rmp_endpoint_ptr_t(this), EIT_OUTPUT_TYPE);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
+		TRACE_LOG(m_log, ELL_DEBUG, "handle close evt\n");
+		m_i32SMPendingEvt = EE_CLOSE;
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	bool CRmpEndpoint::is_opened()
+	{
+		return m_sm.get_cur_state() == ES_OPENED;
+	}
+
+	/**
+	 *
+	 * */
+	void CRmpEndpoint::handle_input_evt()
+	{
+		if (ES_OPENED != m_sm.get_cur_state()) ///有可能INPUT 处理线程先设置完毕，并开始接受数据，但是发送线程还在设置过程中，所以epoll要用level triger
+		{
+			return;
+		}
+
+		int32_t i32Ret = m_pSock->handle_can_recv(__RECV_BUF__);
+		if (CMNERR_ODATA_READY == i32Ret)
+		{
+			mem_ptr_t pMem;
+			while (CMNERR_SUC == m_pSock->get_next_recved_data(pMem))
+			{
+				on_recved_data(pMem);
+			}
+		}
+		else if (CMNERR_RECV_PENDING == i32Ret)
+		{
+			CMN_ASSERT(false);
+		}
+		else if (CMNERR_SUC == i32Ret)
+		{
+
+		}
+		else
+		{
+			TRACE_LAST_ERR(m_log, "handle_input_evt");
+			m_sm.post_evt(EE_INTERNAL_ERR, NULL);
+		}
+	}
+
+	/**
+	 *
+	 * */
+	void CRmpEndpoint::handle_output_evt()
+	{
+
+	}
+
+	/**
+	 *
+	 * */
+	void CRmpEndpoint::handle_io_error(int32_t i32ErrCode)
+	{
+
+	}
+
+	/**
+	 *
+	 * */
+	sock_handle_t CRmpEndpoint::get_ioobj_handle()
+	{
+		return m_pSock->get_handle();
+	}
+
+	/**
+	 *
+	 * */
+	void CRmpEndpoint::handle_added_into_io_task(int32_t i32IoType, int32_t i32RetCode)
+	{
+		if (i32RetCode < 0)
+		{
+			m_sm.post_evt(EE_INTERNAL_ERR, NULL);
+		}
+
+		if (EIT_OUTPUT_TYPE == i32IoType)
+		{
+			m_sm.post_evt(EE_ADDED_INTO_OT, NULL);
+		}
+		else if (EIT_INPUT_TYPE == i32IoType)
+		{
+			m_sm.post_evt(EE_ADDED_INTO_IT, NULL);
+		}
+		else
+		{
+			CMN_ASSERT(false);
+		}
+	}
+
+	/**
+	 *
+	 * */
+	void CRmpEndpoint::handle_deled_from_io_task(int32_t i32IoType)
+	{
+		switch (i32IoType)
+		{
+			case EIT_INPUT_TYPE:
+			{
+				m_sm.post_evt(EE_DELED_FROM_IT, NULL);
+				break;
+			}
+			case EIT_OUTPUT_TYPE:
+			{
+				m_sm.post_evt(EE_DELED_FROM_OT, NULL);
+				break;
+			}
+			default:
+			{
+				CMN_ASSERT(false);
+				break;
+			}
+		}
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::handling_adding_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		if (EE_CLOSE == m_i32SMPendingEvt)
+		{
+			m_pSock->close();
+			m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_OUTPUT_TYPE);
+			m_sm.set_cur_state(ES_DELING_FROM_OT);
+			return CMNERR_COMMON_ERR;
+		}
+
+		CMN_ASSERT(EE_NONE == m_i32SMPendingEvt);
+
+		return m_pSNEngine->add_endpoint(rmp_endpoint_ptr_t(this), EIT_INPUT_TYPE);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		TRACE_LOG(m_log, ELL_DEBUG, "occured internal err\n");
+		m_i32SMPendingEvt = EE_INTERNAL_ERR;
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		TRACE_LOG(m_log, ELL_DEBUG, "occured internal err\n");
+		m_i32SMPendingEvt = EE_INTERNAL_ERR;
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		TRACE_LOG(m_log, ELL_DEBUG, "occurred close evt\n");
+		m_i32SMPendingEvt = EE_CLOSE;
+
+		return CMNERR_SUC;
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::handling_internal_err_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		TRACE_LOG(m_log, ELL_DEBUG, "occurred internal err\n");
+		m_pSock->close();
+
+		return m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_INPUT_TYPE);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::handling_close_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		TRACE_LOG(m_log, ELL_DEBUG, "occurred close evt\n");
+		m_pSock->close();
+
+		return m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_INPUT_TYPE);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::handling_deling_from_it_to_deling_from_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		return m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_OUTPUT_TYPE);
+	}
+
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::handling_deling_from_ot_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
+	{
+		m_sm.set_cur_state(ES_CLOSED);
+		on_closed();
 		m_pSock = NULL;
 		return CMNERR_COMMON_ERR;
 	}
 
-	return m_pSNEngine->add_endpoint(rmp_endpoint_ptr_t(this), EIT_OUTPUT_TYPE);
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::handling_close_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-{
-	TRACE_LOG(m_log, ELL_DEBUG, "handle close evt\n");
-	m_i32SMPendingEvt = EE_CLOSE;
-
-	return CMNERR_SUC;
-}
-
-/**
- *
- * */
-void CRmpEndpoint::handle_added_into_io_task(int32_t i32IoType, int32_t i32RetCode)
-{
-	if (i32RetCode < 0)
+	/**
+	 *
+	 * */
+	int32_t CRmpEndpoint::handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
-		m_sm.post_evt(EE_INTERNAL_ERR, NULL);
-	}
-
-	if (EIT_OUTPUT_TYPE == i32IoType)
-	{
-		m_sm.post_evt(EE_ADDED_INTO_OT, NULL);
-	}
-	else if (EIT_INPUT_TYPE == i32IoType)
-	{
-		m_sm.post_evt(EE_ADDED_INTO_IT, NULL);
-	}
-	else
-	{
-		CMN_ASSERT(false);
-	}
-}
-
-/**
- *
- * */
-void CRmpEndpoint::handle_deled_from_io_task(int32_t i32IoType)
-{
-	switch (i32IoType)
-	{
-		case EIT_INPUT_TYPE:
+		if (EE_NONE != m_i32SMPendingEvt)
 		{
-			m_sm.post_evt(EE_DELED_FROM_IT, NULL);
-			break;
+			m_pSock->close();
+			m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_OUTPUT_TYPE);
+			m_sm.set_cur_state(ES_DELING_FROM_OT);
+			return CMNERR_COMMON_ERR;
 		}
-		case EIT_OUTPUT_TYPE:
-		{
-			m_sm.post_evt(EE_DELED_FROM_OT, NULL);
-			break;
-		}
-		default:
-		{
-			CMN_ASSERT(false);
-			break;
-		}
+
+		///
+		on_opened();
+
+		return CMNERR_SUC;
 	}
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::handling_adding_into_ot_to_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-{
-	if (EE_CLOSE == m_i32SMPendingEvt)
-	{
-		m_pSock->close();
-		m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_OUTPUT_TYPE);
-		m_sm.set_cur_state(ES_DELING_FROM_OT);
-		return CMNERR_COMMON_ERR;
-	}
-
-	CMN_ASSERT(EE_NONE == m_i32SMPendingEvt);
-
-	return m_pSNEngine->add_endpoint(rmp_endpoint_ptr_t(this), EIT_INPUT_TYPE);
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::handling_internal_err_while_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-{
-	TRACE_LOG(m_log, ELL_DEBUG, "occured internal err\n");
-	m_i32SMPendingEvt = EE_INTERNAL_ERR;
-
-	return CMNERR_SUC;
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::handling_internal_err_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-{
-	TRACE_LOG(m_log, ELL_DEBUG, "occured internal err\n");
-	m_i32SMPendingEvt = EE_INTERNAL_ERR;
-
-	return CMNERR_SUC;
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::handling_close_while_adding_into_it(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-{
-	TRACE_LOG(m_log, ELL_DEBUG, "occurred close evt\n");
-	m_i32SMPendingEvt = EE_CLOSE;
-
-	return CMNERR_SUC;
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::handling_internal_err_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-{
-	TRACE_LOG(m_log, ELL_DEBUG, "occurred internal err\n");
-	m_pSock->close();
-
-	return m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_INPUT_TYPE);
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::handling_close_while_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-{
-	TRACE_LOG(m_log, ELL_DEBUG, "occurred close evt\n");
-	m_pSock->close();
-
-	return m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_INPUT_TYPE);
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::handling_deling_from_it_to_deling_from_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-{
-	return m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_OUTPUT_TYPE);
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::handling_deling_from_ot_to_closed(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-{
-	m_sm.set_cur_state(ES_CLOSED);
-	on_closed();
-	m_pSock = NULL;
-	return CMNERR_COMMON_ERR;
-}
-
-/**
- *
- * */
-int32_t CRmpEndpoint::handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
-{
-	if (EE_NONE != m_i32SMPendingEvt)
-	{
-		m_pSock->close();
-		m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_OUTPUT_TYPE);
-		m_sm.set_cur_state(ES_DELING_FROM_OT);
-		return CMNERR_COMMON_ERR;
-	}
-
-	///
-	on_opened();
-
-	return CMNERR_SUC;
-}
 #endif
 }

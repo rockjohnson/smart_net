@@ -278,7 +278,7 @@ namespace nm_smartnet
 		};
 	}
 
-#if 0
+#if 1
 	namespace nm_rmp
 	{
 		/**
@@ -332,8 +332,8 @@ namespace nm_smartnet
 			virtual sock_handle_t get_ioobj_handle();
 			virtual bool is_opened();
 			///
-			virtual void on_opened();
-			virtual void on_closed();
+			virtual void on_opened() = 0;
+			virtual void on_closed() = 0;
 			virtual void on_recved_data(nm_mem::mem_ptr_t &pData) = 0;
 		private:
 			int32_t init_sm();
