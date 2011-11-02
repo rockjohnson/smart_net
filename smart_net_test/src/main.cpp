@@ -8,7 +8,7 @@
 #include <iostream>
 using namespace std;
 
-#include "../busi/tcp_endpoint_tester.h"
+#include "busi/tcp_endpoint_tester.h"
 
 int main()
 {
@@ -20,13 +20,13 @@ int main()
 #if 1
 	std::cout<<"ok1"<<std::endl;
 
-	nm_smartnet::tcp_acceptor_ptr_t pTcpAcceptor = SYS_NOTRW_NEW(nm_smartnet::CRupAcceptor(pSNEngine));
+	nm_smartnet::nm_rup::tcp_acceptor_ptr_t pTcpAcceptor = SYS_NOTRW_NEW(nm_smartnet::nm_rup::CRupAcceptor(pSNEngine));
 
 	std::cout<<"ok2"<<std::endl;
 	IF_TRUE_THEN_RETURN_CODE(pTcpAcceptor->open(cmn_string_t("0.0.0.0"), 8888) < 0, -1);
 	std::cout<<"ok3"<<std::endl;
 
-	nm_smartnet::tcp_connector_ptr_t pTcpConnector = SYS_NOTRW_NEW(nm_smartnet::CRupConnector(pSNEngine));
+	nm_smartnet::nm_rup::tcp_connector_ptr_t pTcpConnector = SYS_NOTRW_NEW(nm_smartnet::nm_rup::CRupConnector(pSNEngine));
 	std::cout<<"ok4"<<std::endl;
 	IF_TRUE_THEN_RETURN_CODE(pTcpConnector->open(cmn_string_t("127.0.0.1"), 8888, 1000000) < 0, -1);
 	std::cout<<"ok5"<<std::endl;

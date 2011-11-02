@@ -1,7 +1,7 @@
 SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")		
 SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g3")	
 SET(CMAKE_CXX_FLAGS " -Wall")
-include_directories(../../comm_utils/src/)
+include_directories(../../libcomm_utils/src/)
 aux_source_directory(./network/ SRC_FILES)
 add_library(comm_net STATIC ${SRC_FILES})
 target_link_libraries(comm_net pthread)

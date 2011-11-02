@@ -11,14 +11,14 @@
 namespace nm_busi
 {
 
-	CTcpEndpointTester::CTcpEndpointTester(nm_smartnet::tcp_acceptor_ptr_t &pT) :
-		nm_smartnet::CRupEndpoint(pT)
+	CTcpEndpointTester::CTcpEndpointTester(nm_smartnet::nm_rup::tcp_acceptor_ptr_t &pT) :
+		nm_smartnet::nm_rup::CRupEndpoint(pT)
 	{
 		// TODO Auto-generated constructor stub
 	}
 
-	CTcpEndpointTester::CTcpEndpointTester(nm_smartnet::tcp_connector_ptr_t &pT) :
-		nm_smartnet::CRupEndpoint(pT)
+	CTcpEndpointTester::CTcpEndpointTester(nm_smartnet::nm_rup::tcp_connector_ptr_t &pT) :
+		nm_smartnet::nm_rup::CRupEndpoint(pT)
 	{
 		// TODO Auto-generated constructor stub
 	}

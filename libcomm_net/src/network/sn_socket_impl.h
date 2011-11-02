@@ -188,7 +188,7 @@ namespace nm_network
 
 		u_int64_t m_ui64LatestRecvedValidSeqNo;
 		u_int64_t m_ui64SendAckCnt; ///should be set by app level...
-		volatile u_int64_t m_ui64AppConfirmAck; ///经过应用层确认的ack。
+		volatile u_int64_t m_ui64AppConfirmAck; ///经过应用层确认的ack。这个变量还需要定时的发送给sender，通过ack消息。
 		volatile u_int64_t m_ui64AppConfirmAckTmp; ///上次发送ack时的记录数。
 		u_int64_t m_ui64UnvalidPkgBegin; ///the first data in the unvalid data vec.
 		u_int64_t m_ui64UnvalidPkgEnd; ///the last data in the unvalid data vec.

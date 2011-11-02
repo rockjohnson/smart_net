@@ -945,7 +945,7 @@ namespace nm_network
 			SRmpAck *pAck = (SRmpAck*) (buf + sizeof(SRmpHdr));
 			pAck->ui64SeqNo = m_ui64AppConfirmAckTmp;
 			pAck->ui64Id = m_epid.ui64Id;
-			i32Ret = udp_send(buf, pHdr->ui24Len, (const struct sockaddr*) (&m_addrSender));
+			CMN_ASSERT(CMNERR_SUC == udp_send(buf, pHdr->ui24Len, (const struct sockaddr*) (&m_addrSender)));
 		}
 	}
 

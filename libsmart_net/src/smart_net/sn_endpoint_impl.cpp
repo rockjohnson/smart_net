@@ -33,6 +33,8 @@ namespace nm_smartnet
 			u_int16_t ui16BindPort;
 		};
 	}
+
+	using namespace nm_rup;
 	/*--------------------------------------------------------------------------------------------------*/
 	/**
 	 *
@@ -1082,6 +1084,8 @@ namespace nm_smartnet
 
 	/*------------------------------------------------------------------------------*/
 
+#if 0
+	using namespace nm_rmp;
 	/**
 	 *
 	 * */
@@ -1358,4 +1362,5 @@ namespace nm_smartnet
 
 		return CMNERR_SUC;
 	}
+#endif
 }
