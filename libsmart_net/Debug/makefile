@@ -12,6 +12,7 @@ RM := rm -rf
 -include src/smart_net/subdir.mk
 -include src/framework/subdir.mk
 -include src/common/subdir.mk
+-include build/src/CMakeFiles/smart_net.dir/smart_net/subdir.mk
 -include build/src/CMakeFiles/smart_net.dir/framework/subdir.mk
 -include build/src/CMakeFiles/smart_net.dir/common/subdir.mk
 -include build/CMakeFiles/CompilerIdCXX/subdir.mk

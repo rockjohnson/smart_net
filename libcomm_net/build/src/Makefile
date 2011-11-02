@@ -16,6 +16,9 @@ SUFFIXES =
 
 .SUFFIXES: .hpux_make_needs_suffix_list
 
+# Produce verbose output by default.
+VERBOSE = 1
+
 # Suppress display of executed commands.
 $(VERBOSE).SILENT:
 
@@ -39,10 +42,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rock/Workspace/smart_net/smart_net/rmp
+CMAKE_SOURCE_DIR = /home/rock/Workspace/smart_net/smart_net/libcomm_net
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rock/Workspace/smart_net/smart_net/rmp/build
+CMAKE_BINARY_DIR = /home/rock/Workspace/smart_net/smart_net/libcomm_net/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -69,14 +72,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/rmp/build/CMakeFiles /home/rock/Workspace/smart_net/smart_net/rmp/build/src/CMakeFiles/progress.marks
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/rmp/build/CMakeFiles 0
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/libcomm_net/build/CMakeFiles /home/rock/Workspace/smart_net/smart_net/libcomm_net/build/src/CMakeFiles/progress.marks
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/libcomm_net/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -85,22 +88,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/comm_net.dir/rule:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/comm_net.dir/rule
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/comm_net.dir/rule
 .PHONY : src/CMakeFiles/comm_net.dir/rule
 
 # Convenience name for target.
@@ -109,7 +112,7 @@ comm_net: src/CMakeFiles/comm_net.dir/rule
 
 # fast build rule for target.
 comm_net/fast:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/build
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/build
 .PHONY : comm_net/fast
 
 network/sn_net_addr.o: network/sn_net_addr.cpp.o
@@ -117,7 +120,7 @@ network/sn_net_addr.o: network/sn_net_addr.cpp.o
 
 # target to build an object file
 network/sn_net_addr.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_net_addr.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_net_addr.cpp.o
 .PHONY : network/sn_net_addr.cpp.o
 
 network/sn_net_addr.i: network/sn_net_addr.cpp.i
@@ -125,7 +128,7 @@ network/sn_net_addr.i: network/sn_net_addr.cpp.i
 
 # target to preprocess a source file
 network/sn_net_addr.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_net_addr.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_net_addr.cpp.i
 .PHONY : network/sn_net_addr.cpp.i
 
 network/sn_net_addr.s: network/sn_net_addr.cpp.s
@@ -133,7 +136,7 @@ network/sn_net_addr.s: network/sn_net_addr.cpp.s
 
 # target to generate assembly for a file
 network/sn_net_addr.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_net_addr.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_net_addr.cpp.s
 .PHONY : network/sn_net_addr.cpp.s
 
 network/sn_socket_impl.o: network/sn_socket_impl.cpp.o
@@ -141,7 +144,7 @@ network/sn_socket_impl.o: network/sn_socket_impl.cpp.o
 
 # target to build an object file
 network/sn_socket_impl.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_socket_impl.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_socket_impl.cpp.o
 .PHONY : network/sn_socket_impl.cpp.o
 
 network/sn_socket_impl.i: network/sn_socket_impl.cpp.i
@@ -149,7 +152,7 @@ network/sn_socket_impl.i: network/sn_socket_impl.cpp.i
 
 # target to preprocess a source file
 network/sn_socket_impl.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_socket_impl.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_socket_impl.cpp.i
 .PHONY : network/sn_socket_impl.cpp.i
 
 network/sn_socket_impl.s: network/sn_socket_impl.cpp.s
@@ -157,7 +160,7 @@ network/sn_socket_impl.s: network/sn_socket_impl.cpp.s
 
 # target to generate assembly for a file
 network/sn_socket_impl.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_socket_impl.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(MAKE) -f src/CMakeFiles/comm_net.dir/build.make src/CMakeFiles/comm_net.dir/network/sn_socket_impl.cpp.s
 .PHONY : network/sn_socket_impl.cpp.s
 
 # Help Target
@@ -186,6 +189,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/rock/Workspace/smart_net/smart_net/rmp/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_net/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

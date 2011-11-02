@@ -12,6 +12,9 @@ SUFFIXES =
 
 .SUFFIXES: .hpux_make_needs_suffix_list
 
+# Produce verbose output by default.
+VERBOSE = 1
+
 # Suppress display of executed commands.
 $(VERBOSE).SILENT:
 
@@ -35,10 +38,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rock/Workspace/smart_net/smart_net/comm_utils
+CMAKE_SOURCE_DIR = /home/rock/Workspace/smart_net/smart_net/libcomm_utils
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rock/Workspace/smart_net/smart_net/comm_utils/build
+CMAKE_BINARY_DIR = /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/comm_utils.dir/depend.make
@@ -51,17 +54,17 @@ include src/CMakeFiles/comm_utils.dir/flags.make
 
 src/CMakeFiles/comm_utils.dir/common/base.cpp.o: src/CMakeFiles/comm_utils.dir/flags.make
 src/CMakeFiles/comm_utils.dir/common/base.cpp.o: ../src/common/base.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/comm_utils/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/comm_utils.dir/common/base.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/common/base.cpp.o -c /home/rock/Workspace/smart_net/smart_net/comm_utils/src/common/base.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/common/base.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/base.cpp
 
 src/CMakeFiles/comm_utils.dir/common/base.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/comm_utils.dir/common/base.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/comm_utils/src/common/base.cpp > CMakeFiles/comm_utils.dir/common/base.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/base.cpp > CMakeFiles/comm_utils.dir/common/base.cpp.i
 
 src/CMakeFiles/comm_utils.dir/common/base.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/comm_utils.dir/common/base.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/comm_utils/src/common/base.cpp -o CMakeFiles/comm_utils.dir/common/base.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/base.cpp -o CMakeFiles/comm_utils.dir/common/base.cpp.s
 
 src/CMakeFiles/comm_utils.dir/common/base.cpp.o.requires:
 .PHONY : src/CMakeFiles/comm_utils.dir/common/base.cpp.o.requires
@@ -74,17 +77,17 @@ src/CMakeFiles/comm_utils.dir/common/base.cpp.o.provides.build: src/CMakeFiles/c
 
 src/CMakeFiles/comm_utils.dir/common/err_info.cpp.o: src/CMakeFiles/comm_utils.dir/flags.make
 src/CMakeFiles/comm_utils.dir/common/err_info.cpp.o: ../src/common/err_info.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/comm_utils/build/CMakeFiles $(CMAKE_PROGRESS_2)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/comm_utils.dir/common/err_info.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/common/err_info.cpp.o -c /home/rock/Workspace/smart_net/smart_net/comm_utils/src/common/err_info.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/common/err_info.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/err_info.cpp
 
 src/CMakeFiles/comm_utils.dir/common/err_info.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/comm_utils.dir/common/err_info.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/comm_utils/src/common/err_info.cpp > CMakeFiles/comm_utils.dir/common/err_info.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/err_info.cpp > CMakeFiles/comm_utils.dir/common/err_info.cpp.i
 
 src/CMakeFiles/comm_utils.dir/common/err_info.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/comm_utils.dir/common/err_info.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/comm_utils/src/common/err_info.cpp -o CMakeFiles/comm_utils.dir/common/err_info.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/err_info.cpp -o CMakeFiles/comm_utils.dir/common/err_info.cpp.s
 
 src/CMakeFiles/comm_utils.dir/common/err_info.cpp.o.requires:
 .PHONY : src/CMakeFiles/comm_utils.dir/common/err_info.cpp.o.requires
@@ -97,17 +100,17 @@ src/CMakeFiles/comm_utils.dir/common/err_info.cpp.o.provides.build: src/CMakeFil
 
 src/CMakeFiles/comm_utils.dir/memory/mem.cpp.o: src/CMakeFiles/comm_utils.dir/flags.make
 src/CMakeFiles/comm_utils.dir/memory/mem.cpp.o: ../src/memory/mem.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/comm_utils/build/CMakeFiles $(CMAKE_PROGRESS_3)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/comm_utils.dir/memory/mem.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/memory/mem.cpp.o -c /home/rock/Workspace/smart_net/smart_net/comm_utils/src/memory/mem.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/memory/mem.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/mem.cpp
 
 src/CMakeFiles/comm_utils.dir/memory/mem.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/comm_utils.dir/memory/mem.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/comm_utils/src/memory/mem.cpp > CMakeFiles/comm_utils.dir/memory/mem.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/mem.cpp > CMakeFiles/comm_utils.dir/memory/mem.cpp.i
 
 src/CMakeFiles/comm_utils.dir/memory/mem.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/comm_utils.dir/memory/mem.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/comm_utils/src/memory/mem.cpp -o CMakeFiles/comm_utils.dir/memory/mem.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/mem.cpp -o CMakeFiles/comm_utils.dir/memory/mem.cpp.s
 
 src/CMakeFiles/comm_utils.dir/memory/mem.cpp.o.requires:
 .PHONY : src/CMakeFiles/comm_utils.dir/memory/mem.cpp.o.requires
@@ -120,17 +123,17 @@ src/CMakeFiles/comm_utils.dir/memory/mem.cpp.o.provides.build: src/CMakeFiles/co
 
 src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.o: src/CMakeFiles/comm_utils.dir/flags.make
 src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.o: ../src/log/smart_log.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/comm_utils/build/CMakeFiles $(CMAKE_PROGRESS_4)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/CMakeFiles $(CMAKE_PROGRESS_4)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/log/smart_log.cpp.o -c /home/rock/Workspace/smart_net/smart_net/comm_utils/src/log/smart_log.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/log/smart_log.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/smart_log.cpp
 
 src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/comm_utils.dir/log/smart_log.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/comm_utils/src/log/smart_log.cpp > CMakeFiles/comm_utils.dir/log/smart_log.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/smart_log.cpp > CMakeFiles/comm_utils.dir/log/smart_log.cpp.i
 
 src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/comm_utils.dir/log/smart_log.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/comm_utils/src/log/smart_log.cpp -o CMakeFiles/comm_utils.dir/log/smart_log.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/smart_log.cpp -o CMakeFiles/comm_utils.dir/log/smart_log.cpp.s
 
 src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.o.requires:
 .PHONY : src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.o.requires
@@ -143,17 +146,17 @@ src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.o.provides.build: src/CMakeFiles
 
 src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.o: src/CMakeFiles/comm_utils.dir/flags.make
 src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.o: ../src/utils/time_info.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/comm_utils/build/CMakeFiles $(CMAKE_PROGRESS_5)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/CMakeFiles $(CMAKE_PROGRESS_5)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/utils/time_info.cpp.o -c /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/time_info.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/utils/time_info.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/time_info.cpp
 
 src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/comm_utils.dir/utils/time_info.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/time_info.cpp > CMakeFiles/comm_utils.dir/utils/time_info.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/time_info.cpp > CMakeFiles/comm_utils.dir/utils/time_info.cpp.i
 
 src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/comm_utils.dir/utils/time_info.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/time_info.cpp -o CMakeFiles/comm_utils.dir/utils/time_info.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/time_info.cpp -o CMakeFiles/comm_utils.dir/utils/time_info.cpp.s
 
 src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.o.requires:
 .PHONY : src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.o.requires
@@ -166,17 +169,17 @@ src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.o.provides.build: src/CMakeFil
 
 src/CMakeFiles/comm_utils.dir/utils/utils.cpp.o: src/CMakeFiles/comm_utils.dir/flags.make
 src/CMakeFiles/comm_utils.dir/utils/utils.cpp.o: ../src/utils/utils.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/comm_utils/build/CMakeFiles $(CMAKE_PROGRESS_6)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/CMakeFiles $(CMAKE_PROGRESS_6)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/comm_utils.dir/utils/utils.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/utils/utils.cpp.o -c /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/utils.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/utils/utils.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/utils.cpp
 
 src/CMakeFiles/comm_utils.dir/utils/utils.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/comm_utils.dir/utils/utils.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/utils.cpp > CMakeFiles/comm_utils.dir/utils/utils.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/utils.cpp > CMakeFiles/comm_utils.dir/utils/utils.cpp.i
 
 src/CMakeFiles/comm_utils.dir/utils/utils.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/comm_utils.dir/utils/utils.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/utils.cpp -o CMakeFiles/comm_utils.dir/utils/utils.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/utils.cpp -o CMakeFiles/comm_utils.dir/utils/utils.cpp.s
 
 src/CMakeFiles/comm_utils.dir/utils/utils.cpp.o.requires:
 .PHONY : src/CMakeFiles/comm_utils.dir/utils/utils.cpp.o.requires
@@ -189,17 +192,17 @@ src/CMakeFiles/comm_utils.dir/utils/utils.cpp.o.provides.build: src/CMakeFiles/c
 
 src/CMakeFiles/comm_utils.dir/utils/file.cpp.o: src/CMakeFiles/comm_utils.dir/flags.make
 src/CMakeFiles/comm_utils.dir/utils/file.cpp.o: ../src/utils/file.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/comm_utils/build/CMakeFiles $(CMAKE_PROGRESS_7)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/CMakeFiles $(CMAKE_PROGRESS_7)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/comm_utils.dir/utils/file.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/utils/file.cpp.o -c /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/file.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/utils/file.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/file.cpp
 
 src/CMakeFiles/comm_utils.dir/utils/file.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/comm_utils.dir/utils/file.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/file.cpp > CMakeFiles/comm_utils.dir/utils/file.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/file.cpp > CMakeFiles/comm_utils.dir/utils/file.cpp.i
 
 src/CMakeFiles/comm_utils.dir/utils/file.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/comm_utils.dir/utils/file.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/file.cpp -o CMakeFiles/comm_utils.dir/utils/file.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/file.cpp -o CMakeFiles/comm_utils.dir/utils/file.cpp.s
 
 src/CMakeFiles/comm_utils.dir/utils/file.cpp.o.requires:
 .PHONY : src/CMakeFiles/comm_utils.dir/utils/file.cpp.o.requires
@@ -212,17 +215,17 @@ src/CMakeFiles/comm_utils.dir/utils/file.cpp.o.provides.build: src/CMakeFiles/co
 
 src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.o: src/CMakeFiles/comm_utils.dir/flags.make
 src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.o: ../src/utils/event_engine.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/comm_utils/build/CMakeFiles $(CMAKE_PROGRESS_8)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/CMakeFiles $(CMAKE_PROGRESS_8)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/utils/event_engine.cpp.o -c /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/event_engine.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/utils/event_engine.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/event_engine.cpp
 
 src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/comm_utils.dir/utils/event_engine.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/event_engine.cpp > CMakeFiles/comm_utils.dir/utils/event_engine.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/event_engine.cpp > CMakeFiles/comm_utils.dir/utils/event_engine.cpp.i
 
 src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/comm_utils.dir/utils/event_engine.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/comm_utils/src/utils/event_engine.cpp -o CMakeFiles/comm_utils.dir/utils/event_engine.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/event_engine.cpp -o CMakeFiles/comm_utils.dir/utils/event_engine.cpp.s
 
 src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.o.requires:
 .PHONY : src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.o.requires
@@ -235,17 +238,17 @@ src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.o.provides.build: src/CMake
 
 src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.o: src/CMakeFiles/comm_utils.dir/flags.make
 src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.o: ../src/thread/thread_ex.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/comm_utils/build/CMakeFiles $(CMAKE_PROGRESS_9)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/CMakeFiles $(CMAKE_PROGRESS_9)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.o -c /home/rock/Workspace/smart_net/smart_net/comm_utils/src/thread/thread_ex.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/thread/thread_ex.cpp
 
 src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/comm_utils/src/thread/thread_ex.cpp > CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/thread/thread_ex.cpp > CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.i
 
 src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/comm_utils/src/thread/thread_ex.cpp -o CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/thread/thread_ex.cpp -o CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.s
 
 src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.o.requires:
 .PHONY : src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.o.requires
@@ -283,8 +286,8 @@ lib/libcomm_utils.a: src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.o
 lib/libcomm_utils.a: src/CMakeFiles/comm_utils.dir/build.make
 lib/libcomm_utils.a: src/CMakeFiles/comm_utils.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX static library ../lib/libcomm_utils.a"
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && $(CMAKE_COMMAND) -P CMakeFiles/comm_utils.dir/cmake_clean_target.cmake
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/comm_utils.dir/link.txt --verbose=$(VERBOSE)
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && $(CMAKE_COMMAND) -P CMakeFiles/comm_utils.dir/cmake_clean_target.cmake
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/comm_utils.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/comm_utils.dir/build: lib/libcomm_utils.a
@@ -302,10 +305,10 @@ src/CMakeFiles/comm_utils.dir/requires: src/CMakeFiles/comm_utils.dir/thread/thr
 .PHONY : src/CMakeFiles/comm_utils.dir/requires
 
 src/CMakeFiles/comm_utils.dir/clean:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src && $(CMAKE_COMMAND) -P CMakeFiles/comm_utils.dir/cmake_clean.cmake
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src && $(CMAKE_COMMAND) -P CMakeFiles/comm_utils.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/comm_utils.dir/clean
 
 src/CMakeFiles/comm_utils.dir/depend:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/rock/Workspace/smart_net/smart_net/comm_utils /home/rock/Workspace/smart_net/smart_net/comm_utils/src /home/rock/Workspace/smart_net/smart_net/comm_utils/build /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src/CMakeFiles/comm_utils.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/rock/Workspace/smart_net/smart_net/libcomm_utils /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src/CMakeFiles/comm_utils.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/comm_utils.dir/depend
 

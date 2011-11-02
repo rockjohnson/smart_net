@@ -26,6 +26,7 @@ SUBDIRS := \
 src/smart_net \
 src/framework \
 src/common \
+build/src/CMakeFiles/smart_net.dir/smart_net \
 build/src/CMakeFiles/smart_net.dir/framework \
 build/src/CMakeFiles/smart_net.dir/common \
 build/CMakeFiles/CompilerIdCXX \

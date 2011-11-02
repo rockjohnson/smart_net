@@ -16,6 +16,9 @@ SUFFIXES =
 
 .SUFFIXES: .hpux_make_needs_suffix_list
 
+# Produce verbose output by default.
+VERBOSE = 1
+
 # Suppress display of executed commands.
 $(VERBOSE).SILENT:
 
@@ -39,10 +42,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rock/Workspace/smart_net/smart_net/comm_utils
+CMAKE_SOURCE_DIR = /home/rock/Workspace/smart_net/smart_net/libcomm_utils
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rock/Workspace/smart_net/smart_net/comm_utils/build
+CMAKE_BINARY_DIR = /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -69,14 +72,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/comm_utils/build/CMakeFiles /home/rock/Workspace/smart_net/smart_net/comm_utils/build/src/CMakeFiles/progress.marks
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/comm_utils/build/CMakeFiles 0
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/CMakeFiles /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/src/CMakeFiles/progress.marks
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -85,22 +88,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/comm_utils.dir/rule:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/comm_utils.dir/rule
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/comm_utils.dir/rule
 .PHONY : src/CMakeFiles/comm_utils.dir/rule
 
 # Convenience name for target.
@@ -109,7 +112,7 @@ comm_utils: src/CMakeFiles/comm_utils.dir/rule
 
 # fast build rule for target.
 comm_utils/fast:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/build
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/build
 .PHONY : comm_utils/fast
 
 common/base.o: common/base.cpp.o
@@ -117,7 +120,7 @@ common/base.o: common/base.cpp.o
 
 # target to build an object file
 common/base.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/base.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/base.cpp.o
 .PHONY : common/base.cpp.o
 
 common/base.i: common/base.cpp.i
@@ -125,7 +128,7 @@ common/base.i: common/base.cpp.i
 
 # target to preprocess a source file
 common/base.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/base.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/base.cpp.i
 .PHONY : common/base.cpp.i
 
 common/base.s: common/base.cpp.s
@@ -133,7 +136,7 @@ common/base.s: common/base.cpp.s
 
 # target to generate assembly for a file
 common/base.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/base.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/base.cpp.s
 .PHONY : common/base.cpp.s
 
 common/err_info.o: common/err_info.cpp.o
@@ -141,7 +144,7 @@ common/err_info.o: common/err_info.cpp.o
 
 # target to build an object file
 common/err_info.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/err_info.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/err_info.cpp.o
 .PHONY : common/err_info.cpp.o
 
 common/err_info.i: common/err_info.cpp.i
@@ -149,7 +152,7 @@ common/err_info.i: common/err_info.cpp.i
 
 # target to preprocess a source file
 common/err_info.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/err_info.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/err_info.cpp.i
 .PHONY : common/err_info.cpp.i
 
 common/err_info.s: common/err_info.cpp.s
@@ -157,7 +160,7 @@ common/err_info.s: common/err_info.cpp.s
 
 # target to generate assembly for a file
 common/err_info.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/err_info.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/common/err_info.cpp.s
 .PHONY : common/err_info.cpp.s
 
 log/smart_log.o: log/smart_log.cpp.o
@@ -165,7 +168,7 @@ log/smart_log.o: log/smart_log.cpp.o
 
 # target to build an object file
 log/smart_log.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.o
 .PHONY : log/smart_log.cpp.o
 
 log/smart_log.i: log/smart_log.cpp.i
@@ -173,7 +176,7 @@ log/smart_log.i: log/smart_log.cpp.i
 
 # target to preprocess a source file
 log/smart_log.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.i
 .PHONY : log/smart_log.cpp.i
 
 log/smart_log.s: log/smart_log.cpp.s
@@ -181,7 +184,7 @@ log/smart_log.s: log/smart_log.cpp.s
 
 # target to generate assembly for a file
 log/smart_log.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/log/smart_log.cpp.s
 .PHONY : log/smart_log.cpp.s
 
 memory/mem.o: memory/mem.cpp.o
@@ -189,7 +192,7 @@ memory/mem.o: memory/mem.cpp.o
 
 # target to build an object file
 memory/mem.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/memory/mem.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/memory/mem.cpp.o
 .PHONY : memory/mem.cpp.o
 
 memory/mem.i: memory/mem.cpp.i
@@ -197,7 +200,7 @@ memory/mem.i: memory/mem.cpp.i
 
 # target to preprocess a source file
 memory/mem.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/memory/mem.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/memory/mem.cpp.i
 .PHONY : memory/mem.cpp.i
 
 memory/mem.s: memory/mem.cpp.s
@@ -205,7 +208,7 @@ memory/mem.s: memory/mem.cpp.s
 
 # target to generate assembly for a file
 memory/mem.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/memory/mem.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/memory/mem.cpp.s
 .PHONY : memory/mem.cpp.s
 
 thread/thread_ex.o: thread/thread_ex.cpp.o
@@ -213,7 +216,7 @@ thread/thread_ex.o: thread/thread_ex.cpp.o
 
 # target to build an object file
 thread/thread_ex.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.o
 .PHONY : thread/thread_ex.cpp.o
 
 thread/thread_ex.i: thread/thread_ex.cpp.i
@@ -221,7 +224,7 @@ thread/thread_ex.i: thread/thread_ex.cpp.i
 
 # target to preprocess a source file
 thread/thread_ex.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.i
 .PHONY : thread/thread_ex.cpp.i
 
 thread/thread_ex.s: thread/thread_ex.cpp.s
@@ -229,7 +232,7 @@ thread/thread_ex.s: thread/thread_ex.cpp.s
 
 # target to generate assembly for a file
 thread/thread_ex.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/thread/thread_ex.cpp.s
 .PHONY : thread/thread_ex.cpp.s
 
 utils/event_engine.o: utils/event_engine.cpp.o
@@ -237,7 +240,7 @@ utils/event_engine.o: utils/event_engine.cpp.o
 
 # target to build an object file
 utils/event_engine.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.o
 .PHONY : utils/event_engine.cpp.o
 
 utils/event_engine.i: utils/event_engine.cpp.i
@@ -245,7 +248,7 @@ utils/event_engine.i: utils/event_engine.cpp.i
 
 # target to preprocess a source file
 utils/event_engine.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.i
 .PHONY : utils/event_engine.cpp.i
 
 utils/event_engine.s: utils/event_engine.cpp.s
@@ -253,7 +256,7 @@ utils/event_engine.s: utils/event_engine.cpp.s
 
 # target to generate assembly for a file
 utils/event_engine.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/event_engine.cpp.s
 .PHONY : utils/event_engine.cpp.s
 
 utils/file.o: utils/file.cpp.o
@@ -261,7 +264,7 @@ utils/file.o: utils/file.cpp.o
 
 # target to build an object file
 utils/file.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/file.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/file.cpp.o
 .PHONY : utils/file.cpp.o
 
 utils/file.i: utils/file.cpp.i
@@ -269,7 +272,7 @@ utils/file.i: utils/file.cpp.i
 
 # target to preprocess a source file
 utils/file.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/file.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/file.cpp.i
 .PHONY : utils/file.cpp.i
 
 utils/file.s: utils/file.cpp.s
@@ -277,7 +280,7 @@ utils/file.s: utils/file.cpp.s
 
 # target to generate assembly for a file
 utils/file.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/file.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/file.cpp.s
 .PHONY : utils/file.cpp.s
 
 utils/time_info.o: utils/time_info.cpp.o
@@ -285,7 +288,7 @@ utils/time_info.o: utils/time_info.cpp.o
 
 # target to build an object file
 utils/time_info.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.o
 .PHONY : utils/time_info.cpp.o
 
 utils/time_info.i: utils/time_info.cpp.i
@@ -293,7 +296,7 @@ utils/time_info.i: utils/time_info.cpp.i
 
 # target to preprocess a source file
 utils/time_info.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.i
 .PHONY : utils/time_info.cpp.i
 
 utils/time_info.s: utils/time_info.cpp.s
@@ -301,7 +304,7 @@ utils/time_info.s: utils/time_info.cpp.s
 
 # target to generate assembly for a file
 utils/time_info.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/time_info.cpp.s
 .PHONY : utils/time_info.cpp.s
 
 utils/utils.o: utils/utils.cpp.o
@@ -309,7 +312,7 @@ utils/utils.o: utils/utils.cpp.o
 
 # target to build an object file
 utils/utils.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/utils.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/utils.cpp.o
 .PHONY : utils/utils.cpp.o
 
 utils/utils.i: utils/utils.cpp.i
@@ -317,7 +320,7 @@ utils/utils.i: utils/utils.cpp.i
 
 # target to preprocess a source file
 utils/utils.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/utils.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/utils.cpp.i
 .PHONY : utils/utils.cpp.i
 
 utils/utils.s: utils/utils.cpp.s
@@ -325,7 +328,7 @@ utils/utils.s: utils/utils.cpp.s
 
 # target to generate assembly for a file
 utils/utils.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/utils.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(MAKE) -f src/CMakeFiles/comm_utils.dir/build.make src/CMakeFiles/comm_utils.dir/utils/utils.cpp.s
 .PHONY : utils/utils.cpp.s
 
 # Help Target
@@ -375,6 +378,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/rock/Workspace/smart_net/smart_net/comm_utils/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/rock/Workspace/smart_net/smart_net/libcomm_utils/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

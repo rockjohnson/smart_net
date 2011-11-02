@@ -12,6 +12,9 @@ SUFFIXES =
 
 .SUFFIXES: .hpux_make_needs_suffix_list
 
+# Produce verbose output by default.
+VERBOSE = 1
+
 # Suppress display of executed commands.
 $(VERBOSE).SILENT:
 
@@ -35,10 +38,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rock/Workspace/smart_net/smart_net/smart_net
+CMAKE_SOURCE_DIR = /home/rock/Workspace/smart_net/smart_net/libsmart_net
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rock/Workspace/smart_net/smart_net/smart_net/build
+CMAKE_BINARY_DIR = /home/rock/Workspace/smart_net/smart_net/libsmart_net/build
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/smart_net.dir/depend.make
@@ -51,17 +54,17 @@ include src/CMakeFiles/smart_net.dir/flags.make
 
 src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.o: src/CMakeFiles/smart_net.dir/flags.make
 src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.o: ../src/common/sn_err_info.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/smart_net/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/common/sn_err_info.cpp.o -c /home/rock/Workspace/smart_net/smart_net/smart_net/src/common/sn_err_info.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/common/sn_err_info.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/common/sn_err_info.cpp
 
 src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/smart_net.dir/common/sn_err_info.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/smart_net/src/common/sn_err_info.cpp > CMakeFiles/smart_net.dir/common/sn_err_info.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/common/sn_err_info.cpp > CMakeFiles/smart_net.dir/common/sn_err_info.cpp.i
 
 src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/smart_net.dir/common/sn_err_info.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/smart_net/src/common/sn_err_info.cpp -o CMakeFiles/smart_net.dir/common/sn_err_info.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/common/sn_err_info.cpp -o CMakeFiles/smart_net.dir/common/sn_err_info.cpp.s
 
 src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.o.requires:
 .PHONY : src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.o.requires
@@ -74,17 +77,17 @@ src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.o.provides.build: src/CMakeF
 
 src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.o: src/CMakeFiles/smart_net.dir/flags.make
 src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.o: ../src/framework/sn_io_task.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/smart_net/build/CMakeFiles $(CMAKE_PROGRESS_2)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.o -c /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_io_task.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_io_task.cpp
 
 src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_io_task.cpp > CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_io_task.cpp > CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.i
 
 src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_io_task.cpp -o CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_io_task.cpp -o CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.s
 
 src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.o.requires:
 .PHONY : src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.o.requires
@@ -97,17 +100,17 @@ src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.o.provides.build: src/CMak
 
 src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.o: src/CMakeFiles/smart_net.dir/flags.make
 src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.o: ../src/framework/sn_time_notifier.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/smart_net/build/CMakeFiles $(CMAKE_PROGRESS_3)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.o -c /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_time_notifier.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_time_notifier.cpp
 
 src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_time_notifier.cpp > CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_time_notifier.cpp > CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.i
 
 src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_time_notifier.cpp -o CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_time_notifier.cpp -o CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.s
 
 src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.o.requires:
 .PHONY : src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.o.requires
@@ -120,17 +123,17 @@ src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.o.provides.build: sr
 
 src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o: src/CMakeFiles/smart_net.dir/flags.make
 src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o: ../src/framework/sn_engine.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/smart_net/build/CMakeFiles $(CMAKE_PROGRESS_4)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/CMakeFiles $(CMAKE_PROGRESS_4)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o -c /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_engine.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_engine.cpp
 
 src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/smart_net.dir/framework/sn_engine.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_engine.cpp > CMakeFiles/smart_net.dir/framework/sn_engine.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_engine.cpp > CMakeFiles/smart_net.dir/framework/sn_engine.cpp.i
 
 src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/smart_net.dir/framework/sn_engine.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_engine.cpp -o CMakeFiles/smart_net.dir/framework/sn_engine.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_engine.cpp -o CMakeFiles/smart_net.dir/framework/sn_engine.cpp.s
 
 src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o.requires:
 .PHONY : src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o.requires
@@ -143,17 +146,17 @@ src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o.provides.build: src/CMake
 
 src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o: src/CMakeFiles/smart_net.dir/flags.make
 src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o: ../src/framework/sn_io_evt_notifier_impl.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/smart_net/build/CMakeFiles $(CMAKE_PROGRESS_5)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/CMakeFiles $(CMAKE_PROGRESS_5)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o -c /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_io_evt_notifier_impl.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_io_evt_notifier_impl.cpp
 
 src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_io_evt_notifier_impl.cpp > CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_io_evt_notifier_impl.cpp > CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.i
 
 src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_io_evt_notifier_impl.cpp -o CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_io_evt_notifier_impl.cpp -o CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.s
 
 src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o.requires:
 .PHONY : src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o.requires
@@ -166,17 +169,17 @@ src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o.provides.bu
 
 src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o: src/CMakeFiles/smart_net.dir/flags.make
 src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o: ../src/framework/sn_misc_task.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/smart_net/build/CMakeFiles $(CMAKE_PROGRESS_6)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/CMakeFiles $(CMAKE_PROGRESS_6)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o -c /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_misc_task.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_misc_task.cpp
 
 src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_misc_task.cpp > CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_misc_task.cpp > CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.i
 
 src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/smart_net/src/framework/sn_misc_task.cpp -o CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/framework/sn_misc_task.cpp -o CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.s
 
 src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o.requires:
 .PHONY : src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o.requires
@@ -189,17 +192,17 @@ src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o.provides.build: src/CM
 
 src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o: src/CMakeFiles/smart_net.dir/flags.make
 src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o: ../src/smart_net/sn_endpoint_impl.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/smart_net/build/CMakeFiles $(CMAKE_PROGRESS_7)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/CMakeFiles $(CMAKE_PROGRESS_7)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o -c /home/rock/Workspace/smart_net/smart_net/smart_net/src/smart_net/sn_endpoint_impl.cpp
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o -c /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/sn_endpoint_impl.cpp
 
 src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/smart_net/src/smart_net/sn_endpoint_impl.cpp > CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/sn_endpoint_impl.cpp > CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.i
 
 src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/smart_net/src/smart_net/sn_endpoint_impl.cpp -o CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/sn_endpoint_impl.cpp -o CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.s
 
 src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o.requires:
 .PHONY : src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o.requires
@@ -210,29 +213,6 @@ src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o.provides: src/CMak
 
 src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o.provides.build: src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o
 
-src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o: src/CMakeFiles/smart_net.dir/flags.make
-src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o: ../src/smart_net/sock.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rock/Workspace/smart_net/smart_net/smart_net/build/CMakeFiles $(CMAKE_PROGRESS_8)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/smart_net.dir/smart_net/sock.cpp.o -c /home/rock/Workspace/smart_net/smart_net/smart_net/src/smart_net/sock.cpp
-
-src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/smart_net.dir/smart_net/sock.cpp.i"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rock/Workspace/smart_net/smart_net/smart_net/src/smart_net/sock.cpp > CMakeFiles/smart_net.dir/smart_net/sock.cpp.i
-
-src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/smart_net.dir/smart_net/sock.cpp.s"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && /usr/lib64/ccache/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rock/Workspace/smart_net/smart_net/smart_net/src/smart_net/sock.cpp -o CMakeFiles/smart_net.dir/smart_net/sock.cpp.s
-
-src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o.requires:
-.PHONY : src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o.requires
-
-src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o.provides: src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o.requires
-	$(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o.provides.build
-.PHONY : src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o.provides
-
-src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o.provides.build: src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o
-
 # Object files for target smart_net
 smart_net_OBJECTS = \
 "CMakeFiles/smart_net.dir/common/sn_err_info.cpp.o" \
@@ -241,8 +221,7 @@ smart_net_OBJECTS = \
 "CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o" \
 "CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o" \
 "CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o" \
-"CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o" \
-"CMakeFiles/smart_net.dir/smart_net/sock.cpp.o"
+"CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o"
 
 # External object files for target smart_net
 smart_net_EXTERNAL_OBJECTS =
@@ -254,12 +233,11 @@ lib/libsmart_net.a: src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o
 lib/libsmart_net.a: src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o
 lib/libsmart_net.a: src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o
 lib/libsmart_net.a: src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o
-lib/libsmart_net.a: src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o
 lib/libsmart_net.a: src/CMakeFiles/smart_net.dir/build.make
 lib/libsmart_net.a: src/CMakeFiles/smart_net.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX static library ../lib/libsmart_net.a"
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && $(CMAKE_COMMAND) -P CMakeFiles/smart_net.dir/cmake_clean_target.cmake
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/smart_net.dir/link.txt --verbose=$(VERBOSE)
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && $(CMAKE_COMMAND) -P CMakeFiles/smart_net.dir/cmake_clean_target.cmake
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/smart_net.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/smart_net.dir/build: lib/libsmart_net.a
@@ -272,14 +250,13 @@ src/CMakeFiles/smart_net.dir/requires: src/CMakeFiles/smart_net.dir/framework/sn
 src/CMakeFiles/smart_net.dir/requires: src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o.requires
 src/CMakeFiles/smart_net.dir/requires: src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o.requires
 src/CMakeFiles/smart_net.dir/requires: src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o.requires
-src/CMakeFiles/smart_net.dir/requires: src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o.requires
 .PHONY : src/CMakeFiles/smart_net.dir/requires
 
 src/CMakeFiles/smart_net.dir/clean:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build/src && $(CMAKE_COMMAND) -P CMakeFiles/smart_net.dir/cmake_clean.cmake
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src && $(CMAKE_COMMAND) -P CMakeFiles/smart_net.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/smart_net.dir/clean
 
 src/CMakeFiles/smart_net.dir/depend:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/rock/Workspace/smart_net/smart_net/smart_net /home/rock/Workspace/smart_net/smart_net/smart_net/src /home/rock/Workspace/smart_net/smart_net/smart_net/build /home/rock/Workspace/smart_net/smart_net/smart_net/build/src /home/rock/Workspace/smart_net/smart_net/smart_net/build/src/CMakeFiles/smart_net.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/rock/Workspace/smart_net/smart_net/libsmart_net /home/rock/Workspace/smart_net/smart_net/libsmart_net/src /home/rock/Workspace/smart_net/smart_net/libsmart_net/build /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src/CMakeFiles/smart_net.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/smart_net.dir/depend
 

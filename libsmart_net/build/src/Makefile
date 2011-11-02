@@ -16,6 +16,9 @@ SUFFIXES =
 
 .SUFFIXES: .hpux_make_needs_suffix_list
 
+# Produce verbose output by default.
+VERBOSE = 1
+
 # Suppress display of executed commands.
 $(VERBOSE).SILENT:
 
@@ -39,10 +42,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rock/Workspace/smart_net/smart_net/smart_net
+CMAKE_SOURCE_DIR = /home/rock/Workspace/smart_net/smart_net/libsmart_net
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rock/Workspace/smart_net/smart_net/smart_net/build
+CMAKE_BINARY_DIR = /home/rock/Workspace/smart_net/smart_net/libsmart_net/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -69,14 +72,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/smart_net/build/CMakeFiles /home/rock/Workspace/smart_net/smart_net/smart_net/build/src/CMakeFiles/progress.marks
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/smart_net/build/CMakeFiles 0
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/CMakeFiles /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/src/CMakeFiles/progress.marks
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rock/Workspace/smart_net/smart_net/libsmart_net/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -85,22 +88,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/smart_net.dir/rule:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/smart_net.dir/rule
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/smart_net.dir/rule
 .PHONY : src/CMakeFiles/smart_net.dir/rule
 
 # Convenience name for target.
@@ -109,7 +112,7 @@ smart_net: src/CMakeFiles/smart_net.dir/rule
 
 # fast build rule for target.
 smart_net/fast:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/build
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/build
 .PHONY : smart_net/fast
 
 common/sn_err_info.o: common/sn_err_info.cpp.o
@@ -117,7 +120,7 @@ common/sn_err_info.o: common/sn_err_info.cpp.o
 
 # target to build an object file
 common/sn_err_info.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.o
 .PHONY : common/sn_err_info.cpp.o
 
 common/sn_err_info.i: common/sn_err_info.cpp.i
@@ -125,7 +128,7 @@ common/sn_err_info.i: common/sn_err_info.cpp.i
 
 # target to preprocess a source file
 common/sn_err_info.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.i
 .PHONY : common/sn_err_info.cpp.i
 
 common/sn_err_info.s: common/sn_err_info.cpp.s
@@ -133,7 +136,7 @@ common/sn_err_info.s: common/sn_err_info.cpp.s
 
 # target to generate assembly for a file
 common/sn_err_info.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/common/sn_err_info.cpp.s
 .PHONY : common/sn_err_info.cpp.s
 
 framework/sn_engine.o: framework/sn_engine.cpp.o
@@ -141,7 +144,7 @@ framework/sn_engine.o: framework/sn_engine.cpp.o
 
 # target to build an object file
 framework/sn_engine.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.o
 .PHONY : framework/sn_engine.cpp.o
 
 framework/sn_engine.i: framework/sn_engine.cpp.i
@@ -149,7 +152,7 @@ framework/sn_engine.i: framework/sn_engine.cpp.i
 
 # target to preprocess a source file
 framework/sn_engine.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.i
 .PHONY : framework/sn_engine.cpp.i
 
 framework/sn_engine.s: framework/sn_engine.cpp.s
@@ -157,7 +160,7 @@ framework/sn_engine.s: framework/sn_engine.cpp.s
 
 # target to generate assembly for a file
 framework/sn_engine.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_engine.cpp.s
 .PHONY : framework/sn_engine.cpp.s
 
 framework/sn_io_evt_notifier_impl.o: framework/sn_io_evt_notifier_impl.cpp.o
@@ -165,7 +168,7 @@ framework/sn_io_evt_notifier_impl.o: framework/sn_io_evt_notifier_impl.cpp.o
 
 # target to build an object file
 framework/sn_io_evt_notifier_impl.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o
 .PHONY : framework/sn_io_evt_notifier_impl.cpp.o
 
 framework/sn_io_evt_notifier_impl.i: framework/sn_io_evt_notifier_impl.cpp.i
@@ -173,7 +176,7 @@ framework/sn_io_evt_notifier_impl.i: framework/sn_io_evt_notifier_impl.cpp.i
 
 # target to preprocess a source file
 framework/sn_io_evt_notifier_impl.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.i
 .PHONY : framework/sn_io_evt_notifier_impl.cpp.i
 
 framework/sn_io_evt_notifier_impl.s: framework/sn_io_evt_notifier_impl.cpp.s
@@ -181,7 +184,7 @@ framework/sn_io_evt_notifier_impl.s: framework/sn_io_evt_notifier_impl.cpp.s
 
 # target to generate assembly for a file
 framework/sn_io_evt_notifier_impl.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.s
 .PHONY : framework/sn_io_evt_notifier_impl.cpp.s
 
 framework/sn_io_task.o: framework/sn_io_task.cpp.o
@@ -189,7 +192,7 @@ framework/sn_io_task.o: framework/sn_io_task.cpp.o
 
 # target to build an object file
 framework/sn_io_task.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.o
 .PHONY : framework/sn_io_task.cpp.o
 
 framework/sn_io_task.i: framework/sn_io_task.cpp.i
@@ -197,7 +200,7 @@ framework/sn_io_task.i: framework/sn_io_task.cpp.i
 
 # target to preprocess a source file
 framework/sn_io_task.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.i
 .PHONY : framework/sn_io_task.cpp.i
 
 framework/sn_io_task.s: framework/sn_io_task.cpp.s
@@ -205,7 +208,7 @@ framework/sn_io_task.s: framework/sn_io_task.cpp.s
 
 # target to generate assembly for a file
 framework/sn_io_task.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_io_task.cpp.s
 .PHONY : framework/sn_io_task.cpp.s
 
 framework/sn_misc_task.o: framework/sn_misc_task.cpp.o
@@ -213,7 +216,7 @@ framework/sn_misc_task.o: framework/sn_misc_task.cpp.o
 
 # target to build an object file
 framework/sn_misc_task.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o
 .PHONY : framework/sn_misc_task.cpp.o
 
 framework/sn_misc_task.i: framework/sn_misc_task.cpp.i
@@ -221,7 +224,7 @@ framework/sn_misc_task.i: framework/sn_misc_task.cpp.i
 
 # target to preprocess a source file
 framework/sn_misc_task.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.i
 .PHONY : framework/sn_misc_task.cpp.i
 
 framework/sn_misc_task.s: framework/sn_misc_task.cpp.s
@@ -229,7 +232,7 @@ framework/sn_misc_task.s: framework/sn_misc_task.cpp.s
 
 # target to generate assembly for a file
 framework/sn_misc_task.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.s
 .PHONY : framework/sn_misc_task.cpp.s
 
 framework/sn_time_notifier.o: framework/sn_time_notifier.cpp.o
@@ -237,7 +240,7 @@ framework/sn_time_notifier.o: framework/sn_time_notifier.cpp.o
 
 # target to build an object file
 framework/sn_time_notifier.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.o
 .PHONY : framework/sn_time_notifier.cpp.o
 
 framework/sn_time_notifier.i: framework/sn_time_notifier.cpp.i
@@ -245,7 +248,7 @@ framework/sn_time_notifier.i: framework/sn_time_notifier.cpp.i
 
 # target to preprocess a source file
 framework/sn_time_notifier.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.i
 .PHONY : framework/sn_time_notifier.cpp.i
 
 framework/sn_time_notifier.s: framework/sn_time_notifier.cpp.s
@@ -253,7 +256,7 @@ framework/sn_time_notifier.s: framework/sn_time_notifier.cpp.s
 
 # target to generate assembly for a file
 framework/sn_time_notifier.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/framework/sn_time_notifier.cpp.s
 .PHONY : framework/sn_time_notifier.cpp.s
 
 smart_net/sn_endpoint_impl.o: smart_net/sn_endpoint_impl.cpp.o
@@ -261,7 +264,7 @@ smart_net/sn_endpoint_impl.o: smart_net/sn_endpoint_impl.cpp.o
 
 # target to build an object file
 smart_net/sn_endpoint_impl.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o
 .PHONY : smart_net/sn_endpoint_impl.cpp.o
 
 smart_net/sn_endpoint_impl.i: smart_net/sn_endpoint_impl.cpp.i
@@ -269,7 +272,7 @@ smart_net/sn_endpoint_impl.i: smart_net/sn_endpoint_impl.cpp.i
 
 # target to preprocess a source file
 smart_net/sn_endpoint_impl.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.i
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.i
 .PHONY : smart_net/sn_endpoint_impl.cpp.i
 
 smart_net/sn_endpoint_impl.s: smart_net/sn_endpoint_impl.cpp.s
@@ -277,32 +280,8 @@ smart_net/sn_endpoint_impl.s: smart_net/sn_endpoint_impl.cpp.s
 
 # target to generate assembly for a file
 smart_net/sn_endpoint_impl.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.s
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.s
 .PHONY : smart_net/sn_endpoint_impl.cpp.s
-
-smart_net/sock.o: smart_net/sock.cpp.o
-.PHONY : smart_net/sock.o
-
-# target to build an object file
-smart_net/sock.cpp.o:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.o
-.PHONY : smart_net/sock.cpp.o
-
-smart_net/sock.i: smart_net/sock.cpp.i
-.PHONY : smart_net/sock.i
-
-# target to preprocess a source file
-smart_net/sock.cpp.i:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.i
-.PHONY : smart_net/sock.cpp.i
-
-smart_net/sock.s: smart_net/sock.cpp.s
-.PHONY : smart_net/sock.s
-
-# target to generate assembly for a file
-smart_net/sock.cpp.s:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(MAKE) -f src/CMakeFiles/smart_net.dir/build.make src/CMakeFiles/smart_net.dir/smart_net/sock.cpp.s
-.PHONY : smart_net/sock.cpp.s
 
 # Help Target
 help:
@@ -334,9 +313,6 @@ help:
 	@echo "... smart_net/sn_endpoint_impl.o"
 	@echo "... smart_net/sn_endpoint_impl.i"
 	@echo "... smart_net/sn_endpoint_impl.s"
-	@echo "... smart_net/sock.o"
-	@echo "... smart_net/sock.i"
-	@echo "... smart_net/sock.s"
 .PHONY : help
 
 
@@ -348,6 +324,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/rock/Workspace/smart_net/smart_net/smart_net/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/rock/Workspace/smart_net/smart_net/libsmart_net/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

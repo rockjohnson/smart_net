@@ -6,7 +6,6 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/smart_net.dir/framework/sn_io_evt_notifier_impl.cpp.o"
   "CMakeFiles/smart_net.dir/framework/sn_misc_task.cpp.o"
   "CMakeFiles/smart_net.dir/smart_net/sn_endpoint_impl.cpp.o"
-  "CMakeFiles/smart_net.dir/smart_net/sock.cpp.o"
   "../lib/libsmart_net.pdb"
   "../lib/libsmart_net.a"
 )

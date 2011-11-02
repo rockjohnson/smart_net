@@ -10,7 +10,7 @@ RM := rm -rf
 -include sources.mk
 -include subdir.mk
 -include src/subdir.mk
--include busi/subdir.mk
+-include src/busi/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -45,7 +45,7 @@ all: smart_net_test_debug
 smart_net_test_debug: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L"/home/rock/Workspace/smart_net/smart_net/libcomm_utils/Debug" -L"/home/rock/Workspace/smart_net/smart_net/libcomm_net/Debug" -L"/home/rock/Workspace/smart_net/smart_net/libsmart_net/Debug" -o"smart_net_test_debug" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"/home/rock/Workspace/smart_net/smart_net/libsmart_net/Debug" -L"/home/rock/Workspace/smart_net/smart_net/libcomm_net/Debug" -L"/home/rock/Workspace/smart_net/smart_net/libcomm_utils/Debug" -o"smart_net_test_debug" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -1,5 +1,5 @@
-src/network/sn_socket_impl.d: ../src/network/sn_socket_impl.cpp \
- ../src/network/sn_socket_impl.h \
+src/common/sn_err_info.d: ../src/common/sn_err_info.cpp \
+ ../src/common/sn_err_info.h \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/common.h \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/defines.h \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/containers.h \
@@ -11,19 +11,9 @@ src/network/sn_socket_impl.d: ../src/network/sn_socket_impl.cpp \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/../utils/../common/types.h \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/../utils/../common/err_info.h \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/../utils/../common/types.h \
- /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/err_info.h \
- /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/mem.h \
- /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/../common/common.h \
- /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/../utils/smart_ptr.h \
- /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/../utils/atomic.h \
- /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/smart_lock.h \
- /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/../common/common.h \
- ../src/network/sn_socket.h ../src/network/sn_net_addr.h \
- /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/smart_ptr.h \
- /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/utils.h \
- /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/time_info.h
+ /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/err_info.h
 
-../src/network/sn_socket_impl.h:
+../src/common/sn_err_info.h:
 
 /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/common.h:
 
@@ -48,25 +38,3 @@ src/network/sn_socket_impl.d: ../src/network/sn_socket_impl.cpp \
 /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/../utils/../common/types.h:
 
 /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/common/err_info.h:
-
-/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/mem.h:
-
-/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/../common/common.h:
-
-/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/../utils/smart_ptr.h:
-
-/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/../utils/atomic.h:
-
-/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/smart_lock.h:
-
-/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/../common/common.h:
-
-../src/network/sn_socket.h:
-
-../src/network/sn_net_addr.h:
-
-/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/smart_ptr.h:
-
-/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/utils.h:
-
-/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/time_info.h:
