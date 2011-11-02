@@ -134,7 +134,8 @@ public:\
 	///opcode 0 is reserved by smart_net
 	enum
 	{
-		EP_HB = 0
+		EP_HB = 0,
+		EP_TEST
 	};
 
 	///heart beat pkg....
@@ -150,6 +151,22 @@ public:\
 		{
 			return 0;
 		}
+	};
+
+	class CPkgTest
+	{
+	DECL_OPCODE(EP_TEST)
+	public:
+		static u_int32_t get_max_size()
+		{
+			return sizeof(CPkgTest);
+		}
+		u_int32_t get_real_size()
+		{
+			return sizeof(CPkgTest);
+		}
+
+		int32_t i32;
 	};
 //
 //	//��Ϊ����Ϣϵͳ�ĵ�����Ϣ��Ĵ�С����С��MAX_MEM_SIZE�����������¶���

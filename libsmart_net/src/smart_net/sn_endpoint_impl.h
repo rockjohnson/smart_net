@@ -284,12 +284,12 @@ namespace nm_smartnet
 		/**
 		 * reliable multicast endpoint.
 		 * */
+		enum
+		{
+			RMP_RECV_ENDPOINT = 0, RMP_SEND_ENDPOINT
+		};
 		class CRmpEndpoint: public nm_framework::IIoObj
 		{
-			enum
-			{
-				ERMP_RECV_ENDPOINT = 0, ERMP_SEND_ENDPOINT
-			};
 
 			enum
 			{
@@ -318,9 +318,10 @@ namespace nm_smartnet
 			DISALLOW_COPY_AND_ASSIGN( CRmpEndpoint);
 
 		public:
-			int32_t open(const cmn_string_t &strMulticastIP, const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
+			int32_t open(const cmn_string_t &strMulticastIP, const cmn_string_t &strBindIP, u_int16_t ui16BindPort, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt);
 			int32_t close();
 			int32_t send_data(nm_mem::mem_ptr_t &pData);
+			bool is_opened();
 
 		protected:
 			///
@@ -330,7 +331,7 @@ namespace nm_smartnet
 			virtual void handle_added_into_io_task(int32_t i32IoType, int32_t i32ReturnCode);
 			virtual void handle_deled_from_io_task(int32_t i32IoType);
 			virtual sock_handle_t get_ioobj_handle();
-			virtual bool is_opened();
+
 			///
 			virtual void on_opened() = 0;
 			virtual void on_closed() = 0;
@@ -360,6 +361,8 @@ namespace nm_smartnet
 			int32_t m_i32Type;
 			int32_t m_i32SMPendingEvt;
 			nm_utils::CSmartLog m_log;
+			u_int32_t m_ui32AckConfirmCnt;
+			u_int8_t m_ui8SenderId;
 		};
 		typedef nm_utils::CSmartPtr<nm_smartnet::nm_rmp::CRmpEndpoint> rmp_endpoint_ptr_t;
 	}

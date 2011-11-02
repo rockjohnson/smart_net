@@ -130,7 +130,7 @@ namespace nm_network
 
 	public:
 		int32_t open(sock_handle_t hSock);
-		int32_t open(const cmn_string_t &);
+		int32_t open(const cmn_string_t &strMulticastIp, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt);
 		int32_t close();
 		int32_t bind(const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
 		int32_t join_multicast_group();
@@ -187,7 +187,7 @@ namespace nm_network
 		sn_sock_addr_t m_addrSender;
 
 		u_int64_t m_ui64LatestRecvedValidSeqNo;
-		u_int64_t m_ui64SendAckCnt; ///should be set by app level...
+		u_int32_t m_ui32SendAckCnt; ///should be set by app level...
 		volatile u_int64_t m_ui64AppConfirmAck; ///经过应用层确认的ack。这个变量还需要定时的发送给sender，通过ack消息。
 		volatile u_int64_t m_ui64AppConfirmAckTmp; ///上次发送ack时的记录数。
 		u_int64_t m_ui64UnvalidPkgBegin; ///the first data in the unvalid data vec.

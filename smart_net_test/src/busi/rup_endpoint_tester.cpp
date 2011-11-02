@@ -6,29 +6,29 @@
  */
 #include <iostream>
 
-#include "tcp_endpoint_tester.h"
+#include "rup_endpoint_tester.h"
 
 namespace nm_busi
 {
 
-	CTcpEndpointTester::CTcpEndpointTester(nm_smartnet::nm_rup::tcp_acceptor_ptr_t &pT) :
+	CRupEndpointTester::CRupEndpointTester(nm_smartnet::nm_rup::tcp_acceptor_ptr_t &pT) :
 		nm_smartnet::nm_rup::CRupEndpoint(pT)
 	{
 		// TODO Auto-generated constructor stub
 	}
 
-	CTcpEndpointTester::CTcpEndpointTester(nm_smartnet::nm_rup::tcp_connector_ptr_t &pT) :
+	CRupEndpointTester::CRupEndpointTester(nm_smartnet::nm_rup::tcp_connector_ptr_t &pT) :
 		nm_smartnet::nm_rup::CRupEndpoint(pT)
 	{
 		// TODO Auto-generated constructor stub
 	}
 
-	CTcpEndpointTester::~CTcpEndpointTester()
+	CRupEndpointTester::~CRupEndpointTester()
 	{
 		// TODO Auto-generated destructor stub
 	}
 
-	void CTcpEndpointTester::on_opened()
+	void CRupEndpointTester::on_opened()
 	{
 		std::cout << "tester opened" << std::endl;
 //		nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgHB> ar(3);
@@ -37,18 +37,18 @@ namespace nm_busi
 //		send_data(ar.serialize());
 	}
 
-	void CTcpEndpointTester::on_closed()
+	void CRupEndpointTester::on_closed()
 	{
 		std::cout << "tester closed" << std::endl;
 		open();
 	}
 
-	void CTcpEndpointTester::on_recved_data(nm_mem::mem_ptr_t &pData)
+	void CRupEndpointTester::on_recved_data(nm_mem::mem_ptr_t &pData)
 	{
-		DISPATCH(CTcpEndpointTester);
+		DISPATCH(CRupEndpointTester);
 	}
 
-	void CTcpEndpointTester::handle_pkg(nm_pkg::CPkgHB &pkg, u_int32_t uiTag)
+	void CRupEndpointTester::handle_pkg(nm_pkg::CPkgHB &pkg, u_int32_t uiTag)
 	{
 		//
 //		static u_int64_t ui64 = 0;

@@ -1,4 +1,4 @@
-src/main.d: ../src/main.cpp ../src/busi/tcp_endpoint_tester.h \
+src/main.d: ../src/main.cpp ../src/busi/rup_endpoint_tester.h \
  /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/smart_net.h \
  /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/sn_endpoint_impl.h \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/state_machine.h \
@@ -55,9 +55,10 @@ src/main.d: ../src/main.cpp ../src/busi/tcp_endpoint_tester.h \
  /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/dispatcher.h \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/singleton.h \
  /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/pkg.h \
- /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/archive.h
+ /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/archive.h \
+ ../src/busi/rmp_endpoint_tester.h
 
-../src/busi/tcp_endpoint_tester.h:
+../src/busi/rup_endpoint_tester.h:
 
 /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/smart_net.h:
 
@@ -172,3 +173,5 @@ src/main.d: ../src/main.cpp ../src/busi/tcp_endpoint_tester.h \
 /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/pkg.h:
 
 /home/rock/Workspace/smart_net/smart_net/libsmart_net/src/smart_net/archive.h:
+
+../src/busi/rmp_endpoint_tester.h:

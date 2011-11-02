@@ -14,12 +14,12 @@
 namespace nm_busi
 {
 
-	class CTcpEndpointTester : public nm_smartnet::nm_rup::CRupEndpoint
+	class CRupEndpointTester : public nm_smartnet::nm_rup::CRupEndpoint
 	{
 	public:
-		CTcpEndpointTester(nm_smartnet::nm_rup::tcp_acceptor_ptr_t&);
-		CTcpEndpointTester(nm_smartnet::nm_rup::tcp_connector_ptr_t&);
-		virtual ~CTcpEndpointTester();
+		CRupEndpointTester(nm_smartnet::nm_rup::tcp_acceptor_ptr_t&);
+		CRupEndpointTester(nm_smartnet::nm_rup::tcp_connector_ptr_t&);
+		virtual ~CRupEndpointTester();
 
 	public:
 		void handle_pkg(nm_pkg::CPkgHB &, u_int32_t uiTag);
@@ -30,7 +30,7 @@ namespace nm_busi
 		virtual void on_closed();
 		virtual void on_recved_data(nm_mem::mem_ptr_t &pData);
 	};
-	typedef nm_utils::CSmartPtr<nm_busi::CTcpEndpointTester> tcp_ep_tester_ptr_t;
+	typedef nm_utils::CSmartPtr<nm_busi::CRupEndpointTester> rup_ep_tester_ptr_t;
 
 }
 

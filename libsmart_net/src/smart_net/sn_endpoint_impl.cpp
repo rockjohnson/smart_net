@@ -31,6 +31,8 @@ namespace nm_smartnet
 			cmn_string_t strMulticast;
 			cmn_string_t strBindIp;
 			u_int16_t ui16BindPort;
+			u_int32_t ui32AckConfirmCnt;
+			u_int8_t ui8SenderId;
 		};
 	}
 
@@ -1106,7 +1108,7 @@ namespace nm_smartnet
 	CRmpEndpoint::CRmpEndpoint(nm_framework::sn_engine_ptr_t &pSnEngine, int32_t i32Type) :
 		m_sm(this), m_pSNEngine(pSnEngine), m_i32Type(i32Type)
 	{
-		CMN_ASSERT(ERMP_SEND_ENDPOINT == i32Type || ERMP_RECV_ENDPOINT == i32Type);
+		CMN_ASSERT(RMP_SEND_ENDPOINT == i32Type || RMP_RECV_ENDPOINT == i32Type);
 		char buf[1024] = { 0 };
 		sprintf(buf, "%p_", this);
 		m_log.init("", buf, ELL_DEBUG, 60);
@@ -1150,12 +1152,14 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
-	int32_t CRmpEndpoint::open(const cmn_string_t &strMulticastIp, const cmn_string_t &strBindIp, u_int16_t ui16BindPort)
+	int32_t CRmpEndpoint::open(const cmn_string_t &strMulticastIp, const cmn_string_t &strBindIp, u_int16_t ui16BindPort, u_int8_t ui8SenderId, u_int32_t ui32AckCnt)
 	{
 		SParasEx sp;
 		sp.strMulticast = strMulticastIp;
 		sp.strBindIp = strBindIp;
 		sp.ui16BindPort = ui16BindPort;
+		sp.ui8SenderId = ui8SenderId;
+		sp.ui32AckConfirmCnt = ui32AckCnt;
 
 		return m_sm.post_evt(EE_OPEN, &sp);
 	}
@@ -1179,13 +1183,15 @@ namespace nm_smartnet
 		m_strMulticastIp = pSp->strMulticast;
 		m_strBindIp = pSp->strBindIp;
 		m_ui16BindPort = pSp->ui16BindPort;
+		m_ui8SenderId = pSp->ui8SenderId;
+		m_ui32AckConfirmCnt = pSp->ui32AckConfirmCnt;
 
 		int32_t i32Ret = CMNERR_SUC;
 		do
 		{
-			int32_t i32Type = ERMP_SEND_ENDPOINT == m_i32Type ? nm_network::RMP_SEND_SOCK : nm_network::RMP_RECV_SOCK;
+			int32_t i32Type = RMP_SEND_ENDPOINT == m_i32Type ? nm_network::RMP_SEND_SOCK : nm_network::RMP_RECV_SOCK;
 			m_pSock = SYS_NOTRW_NEW(nm_network::CRmpSock(i32Type));
-			i32Ret = m_pSock->open(m_strMulticastIp);
+			i32Ret = m_pSock->open(m_strMulticastIp, m_ui8SenderId, m_ui32AckConfirmCnt);
 			if (CMNERR_SUC != i32Ret)
 			{
 				break;
@@ -1443,7 +1449,7 @@ namespace nm_smartnet
 				break;
 			}
 
-			if (ERMP_RECV_ENDPOINT == m_i32Type)
+			if (RMP_RECV_ENDPOINT == m_i32Type)
 			{
 				///added into multicast group
 				i32Ret = m_pSock->join_multicast_group();

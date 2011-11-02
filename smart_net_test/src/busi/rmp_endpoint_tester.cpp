@@ -10,15 +10,4 @@
 namespace nm_busi
 {
 
-	CRmpEndpointTester::CRmpEndpointTester()
-	{
-		// TODO Auto-generated constructor stub
-
-	}
-
-	CRmpEndpointTester::~CRmpEndpointTester()
-	{
-		// TODO Auto-generated destructor stub
-	}
-
 }

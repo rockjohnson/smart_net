@@ -652,10 +652,12 @@ namespace nm_network
 	/**
 	 *
 	 * */
-	int32_t CRmpSock::open(const cmn_string_t &strMulticast)
+	int32_t CRmpSock::open(const cmn_string_t &strMulticast, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt)
 	{
 		ZERO_MEM(&m_addrMulticast, sizeof(m_addrMulticast));
 		m_addrMulticast.sin_addr.s_addr = inet_addr(strMulticast.c_str());
+		m_ui8SenderId = ui8SenderId;
+		m_ui32SendAckCnt = ui32AckConfirmCnt;
 
 		return open(INVALID_SOCKET);
 	}
@@ -934,7 +936,7 @@ namespace nm_network
 	void CRmpSock::set_ack()
 	{
 		m_ui64AppConfirmAck = m_ui64LatestRecvedValidSeqNo;
-		if ((m_ui64AppConfirmAck - m_ui64AppConfirmAckTmp) >= m_ui64SendAckCnt)
+		if ((m_ui64AppConfirmAck - m_ui64AppConfirmAckTmp) >= m_ui32SendAckCnt)
 		{
 			m_ui64AppConfirmAckTmp = m_ui64AppConfirmAck;
 			///send ack
