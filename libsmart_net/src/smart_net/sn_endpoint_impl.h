@@ -274,6 +274,7 @@ namespace nm_smartnet
 			u_int64_t m_ui64SendStore;
 			u_int64_t m_ui64RecvStore;
 			u_int32_t m_ui32CycleCnt;
+			bool m_bWillClose;
 		};
 	}
 

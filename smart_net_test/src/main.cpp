@@ -109,6 +109,7 @@ int main()
 	{
 		if (pB->is_opened())
 		{
+			sleep(1);
 //			nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgHB> ar(3);
 //			nm_pkg::CPkgHB *pPkg = ar.get_next_body();
 //			pPkg->set_id(i32Cnt);
