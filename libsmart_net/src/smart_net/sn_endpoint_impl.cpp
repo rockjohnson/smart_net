@@ -1113,6 +1113,9 @@ namespace nm_smartnet
 		sprintf(buf, "%p_", this);
 		m_log.init("", buf, ELL_DEBUG, 60);
 		init_sm();
+
+		set_io_evt(EIT_INPUT_TYPE, EPOLLIN);
+		set_io_evt(EIT_OUTPUT_TYPE, EPOLLOUT);
 	}
 
 	/**
@@ -1177,6 +1180,8 @@ namespace nm_smartnet
 	/**
 	 *
 	 * */
+#define __INIT_SPEED__ (100000)
+#define __KEEP_ALIVE__ (1000000)
 	int32_t CRmpEndpoint::handling_closed_to_adding_into_ot(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
 		SParasEx *pSp = (SParasEx*) (pVoid);
@@ -1191,7 +1196,7 @@ namespace nm_smartnet
 		{
 			int32_t i32Type = RMP_SEND_ENDPOINT == m_i32Type ? nm_network::RMP_SEND_SOCK : nm_network::RMP_RECV_SOCK;
 			m_pSock = SYS_NOTRW_NEW(nm_network::CRmpSock(i32Type));
-			i32Ret = m_pSock->open(m_strMulticastIp, m_ui8SenderId, m_ui32AckConfirmCnt);
+			i32Ret = m_pSock->open(m_strMulticastIp, m_ui8SenderId, m_ui32AckConfirmCnt, __KEEP_ALIVE__);
 			if (CMNERR_SUC != i32Ret)
 			{
 				break;

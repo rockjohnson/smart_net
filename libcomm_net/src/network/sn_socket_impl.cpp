@@ -556,7 +556,7 @@ namespace nm_network
 	 *
 	 * */
 	CRmpSock::CRmpSock(int32_t i32Type) :
-		m_i32Type(i32Type)
+		m_i32Type(i32Type), m_hSock(INVALID_SOCKET)
 	{
 		if (RMP_RECV_SOCK == i32Type)
 		{
@@ -603,8 +603,32 @@ namespace nm_network
 	/**
 	 *
 	 * */
-	int32_t CRmpSock::open(const cmn_string_t &strMulticast, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt)
+#define __INIT_SPEED__ (300000)
+	int32_t CRmpSock::open(const cmn_string_t &strMulticast, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt, u_int64_t ui64MaxKeepAliveTimeUs)
 	{
+		m_epid.ui64Id = 0;
+		m_ui64ValidPkgBegin = 0;
+		m_ui64ValidPkgEnd = 0;
+		ZERO_MEM(&m_addrSender, sizeof(m_addrSender));
+
+		m_ui64LatestRecvedValidSeqNo = 0;
+		m_ui64AppConfirmAck = 0;
+		m_ui64AppConfirmAckTmp = 0;
+		m_ui64UnvalidPkgBegin = 0; ///the first data in the unvalid data vec.
+		m_ui64UnvalidPkgEnd = 0; ///the last data in the unvalid data vec.
+		/*-----------------------------------------------------------------*/
+
+		/*send endpoint*/
+		/*-----------------------------------------------------------------*/
+		m_ui64ValidSendingDataHead = 0; ///最旧的没有接受到足够ack的包序列号, 0 is init value and not valid...
+		m_ui64ValidSendingDataTail = 1; ///最近一次成功放入发送窗口的包的下一个序号, 1 is init value...
+		m_ui64SendingSeqNo = 0; ///记录目前已经组播发送出去的包序列号, 0 is init value and not valid..
+		//m_ui64PkgSeqNoGenerator = 0; ///发送包的序列号生成记录器
+		m_ui64MaxKeepAliveTimeUs = ui64MaxKeepAliveTimeUs;
+		m_ui32Naks = 0;
+		m_ui32SendSpeed = __INIT_SPEED__; ///should set by app level first...
+
+
 		ZERO_MEM(&m_addrMulticast, sizeof(m_addrMulticast));
 		m_addrMulticast.sin_addr.s_addr = inet_addr(strMulticast.c_str());
 		m_ui8SenderId = ui8SenderId;
@@ -720,7 +744,7 @@ namespace nm_network
 		///added into send buf
 		{
 			nm_utils::spin_scopelk_t lk(m_lkSenderWin); ///just for handle multi senders.
-			if ((0 != m_ui64ValidSendingDataTail) && (m_ui64SendingSeqNo + 1) != m_ui64ValidSendingDataTail)
+			if (((1 < m_ui64ValidSendingDataTail) && (m_ui64SendingSeqNo + 1) != m_ui64ValidSendingDataTail))
 			{
 				if (CMNERR_SUC == m_vecSendWin[m_ui64ValidSendingDataTail - 1]->append(pMem->get_offset_data(pMem->get_init_offset()), pMem->get_len() - pMem->get_init_offset()))
 				{
@@ -752,7 +776,7 @@ namespace nm_network
 		for (;;)
 		{
 			///is there some data available?
-			if (((m_ui64SendingSeqNo + 1) == m_ui64ValidSendingDataTail))
+			if ((m_ui64SendingSeqNo + 1) == m_ui64ValidSendingDataTail)
 			{
 				i32Ret = CMNERR_NO_DATA;
 				break;
@@ -760,7 +784,17 @@ namespace nm_network
 			///
 			CMN_ASSERT(m_ui64SendingSeqNo < m_ui64ValidSendingDataTail);
 			///
+			bool bLocked = false;
+			if ((m_ui64SendingSeqNo + 2) == m_ui64ValidSendingDataTail)
+			{
+				bLocked = true;
+				m_lkSenderWin.lock();
+			}
 			i32Ret = udp_send(m_vecSendWin[m_ui64SendingSeqNo + 1], (const struct sockaddr*) (&m_addrMulticast));
+			if (bLocked)
+			{
+				m_lkSenderWin.unlock();
+			}
 			if ((CMNERR_IO_ERR == i32Ret) || (CMNERR_SEND_PENDING == i32Ret))
 			{
 				break;

@@ -56,6 +56,7 @@ namespace nm_pkg
 			CMN_ASSERT(NULL == m_pMem);
 			m_pMem = NEW_MEM(((HdrSize + s_ui32MaxPkgSize * m_i32Cnt) > __MAX_MEM_SIZE__ ? __MAX_MEM_SIZE__ : (HdrSize + s_ui32MaxPkgSize * m_i32Cnt)));
 			m_pMem->set_offset(m_ui32InitOffset);
+			m_pMem->set_init_offset(m_ui32InitOffset);
 			m_pHdr = new (m_pMem->get_tail_free_buf()) H(B::PKG_OPCODE, 0, bVer/*, bChk*/);
 			m_pMem->inc_len(HdrSize);
 			//m_pMem->inc_offset(HdrSize);

@@ -138,7 +138,7 @@ int main()
 	u_int32_t i32Cnt = 0;
 	while (++i32Cnt < 10000000)
 	{
-		if (pRmpSender->is_opened())
+		if (!pRmpSender->is_opened())
 		{
 			i32Cnt = 0;
 			sleep(1);

@@ -95,7 +95,11 @@ namespace nm_mem
 		}
 		void set_offset(u_int32_t ui32Offset)
 		{
-			m_ui32Offset = ui32Offset;
+			m_ui32Offset= ui32Offset;
+		}
+		void set_init_offset(u_int32_t ui32InitOffset)
+		{
+			 m_ui32InitOffset = ui32InitOffset;
 		}
 		inline int32_t append(cmn_byte_t* pBytes, u_int32_t ui32Len)
 		{
@@ -137,7 +141,7 @@ namespace nm_mem
 
 	private:
 		cmn_byte_t m_bytes[__MAX_MEM_SIZE__];
-		const u_int32_t m_ui32InitOffset;
+		u_int32_t m_ui32InitOffset;
 		u_int32_t m_ui32Sz;
 		u_int32_t m_ui32Offset;
 		u_int32_t m_ui32Len;
