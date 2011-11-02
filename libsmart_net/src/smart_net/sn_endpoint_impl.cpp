@@ -1261,7 +1261,15 @@ namespace nm_smartnet
 	 * */
 	void CRmpEndpoint::handle_output_evt()
 	{
+		if (ES_OPENED != m_sm.get_cur_state())
+		{
+			return;
+		}
 
+		if (m_pSock->handle_can_send() == CMNERR_IO_ERR)
+		{
+			m_sm.post_evt(EE_INTERNAL_ERR, NULL);
+		}
 	}
 
 	/**
@@ -1269,7 +1277,7 @@ namespace nm_smartnet
 	 * */
 	void CRmpEndpoint::handle_io_error(int32_t i32ErrCode)
 	{
-
+		(void) m_sm.post_evt(EE_INTERNAL_ERR, NULL);
 	}
 
 	/**
@@ -1426,18 +1434,35 @@ namespace nm_smartnet
 	 * */
 	int32_t CRmpEndpoint::handling_adding_into_it_to_opened(int32_t i32CurState, int32_t i32Evt, int32_t i32NextState, cmn_pvoid_t pVoid)
 	{
-		if (EE_NONE != m_i32SMPendingEvt)
+		int32_t i32Ret = CMNERR_SUC;
+		do
+		{
+			if (EE_NONE != m_i32SMPendingEvt)
+			{
+				i32Ret = CMNERR_COMMON_ERR;
+				break;
+			}
+
+			if (ERMP_RECV_ENDPOINT == m_i32Type)
+			{
+				///added into multicast group
+				i32Ret = m_pSock->join_multicast_group();
+			}
+		}
+		while (false);
+
+		if (CMNERR_SUC != i32Ret)
 		{
 			m_pSock->close();
-			m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_OUTPUT_TYPE);
-			m_sm.set_cur_state(ES_DELING_FROM_OT);
-			return CMNERR_COMMON_ERR;
+			m_pSNEngine->del_endpoint(rmp_endpoint_ptr_t(this), EIT_INPUT_TYPE);
+			m_sm.set_cur_state(ES_DELING_FROM_IT);
+		}
+		else
+		{
+			on_opened();
 		}
 
-		///
-		on_opened();
-
-		return CMNERR_SUC;
+		return i32Ret;
 	}
 #endif
 }
