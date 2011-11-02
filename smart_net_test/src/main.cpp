@@ -144,7 +144,7 @@ int main()
 			sleep(1);
 			continue;
 		}
-		nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgTest> ar;
+		nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgTest> ar(__RMP_ODATA_HDR_SIZE__);
 		nm_pkg::CPkgTest *pTest = ar.get_next_body();
 		pTest->i32 = 0;
 		pRmpSender->send_data(ar.serialize());

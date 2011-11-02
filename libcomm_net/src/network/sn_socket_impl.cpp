@@ -542,55 +542,6 @@ namespace nm_network
 	///pkgs which receiver handling
 	};
 
-#pragma pack(push, 4)
-	/**
-	 * rmp header
-	 * */
-	struct SRmpHdr
-	{
-		u_int32_t ui24Len :24;
-		u_int32_t ui8Opcode :8;
-		u_int32_t ui8SrcId :8;
-		u_int32_t ui24UnUse :24;
-	};
-
-	/**
-	 * rmp heartbeat pkg
-	 * */
-	struct SRmpHb
-	{
-		u_int64_t ui64LatestSeqNo;
-	};
-
-	/**
-	 *
-	 * */
-	struct SRmpNak
-	{
-		u_int64_t ui64Begin;
-		u_int64_t ui64End;
-		u_int64_t ui64Id;
-	};
-
-	/**
-	 *
-	 * */
-	struct SRmpAck
-	{
-		u_int64_t ui64SeqNo;
-		u_int64_t ui64Id;
-	};
-
-	/**
-	 *
-	 * */
-	struct SRmpOdata
-	{
-		u_int64_t ui64SeqNo;
-	};
-
-#pragma pack(pop)
-
 	typedef int32_t (CRmpSock::*P_FUN)(sn_sock_addr_t&);
 	struct SHander
 	{

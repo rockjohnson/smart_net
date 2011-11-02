@@ -40,31 +40,31 @@ namespace nm_network
 	typedef nm_utils::CSmartPtr<nm_network::CRupSock> rup_sock_ptr_t;
 	class CRupSock: public ISocket
 	{
-//		struct SSendInfo
-//		{
-//			SSendInfo(nm_mem::mem_ptr_t &ptr) :
-//				m_pData(ptr), /*m_uiLen(ptr->get_len()),*/
-//				m_uiOffset(ptr->get_offset())
-//			{
-//			}
-//			SSendInfo(const SSendInfo &other) :
-//				m_pData(other.m_pData) /*, m_uiLen(other.m_uiLen)*/, m_uiOffset(other.m_uiOffset)
-//			{
-//			}
-//
-//			u_int32_t get_offset()
-//			{
-//				return m_uiOffset;
-//			}
-//
-//			void set_offset(u_int32_t uiOffset)
-//			{
-//				m_uiOffset = uiOffset;
-//			}
-//
-//			nm_mem::mem_ptr_t m_pData;
-//			u_int32_t m_uiOffset;
-//		};
+		//		struct SSendInfo
+		//		{
+		//			SSendInfo(nm_mem::mem_ptr_t &ptr) :
+		//				m_pData(ptr), /*m_uiLen(ptr->get_len()),*/
+		//				m_uiOffset(ptr->get_offset())
+		//			{
+		//			}
+		//			SSendInfo(const SSendInfo &other) :
+		//				m_pData(other.m_pData) /*, m_uiLen(other.m_uiLen)*/, m_uiOffset(other.m_uiOffset)
+		//			{
+		//			}
+		//
+		//			u_int32_t get_offset()
+		//			{
+		//				return m_uiOffset;
+		//			}
+		//
+		//			void set_offset(u_int32_t uiOffset)
+		//			{
+		//				m_uiOffset = uiOffset;
+		//			}
+		//
+		//			nm_mem::mem_ptr_t m_pData;
+		//			u_int32_t m_uiOffset;
+		//		};
 
 	public:
 		CRupSock();
@@ -121,6 +121,54 @@ namespace nm_network
 	{
 		RMP_RECV_SOCK = 0, RMP_SEND_SOCK
 	};
+#pragma pack(push, 4)
+	/**
+	 * rmp header
+	 * */
+	struct SRmpHdr
+	{
+		u_int32_t ui24Len :24;
+		u_int32_t ui8Opcode :8;
+		u_int32_t ui8SrcId :8;
+		u_int32_t ui24UnUse :24;
+	};
+
+	/**
+	 * rmp heartbeat pkg
+	 * */
+	struct SRmpHb
+	{
+		u_int64_t ui64LatestSeqNo;
+	};
+
+	/**
+	 *
+	 * */
+	struct SRmpNak
+	{
+		u_int64_t ui64Begin;
+		u_int64_t ui64End;
+		u_int64_t ui64Id;
+	};
+
+	/**
+	 *
+	 * */
+	struct SRmpAck
+	{
+		u_int64_t ui64SeqNo;
+		u_int64_t ui64Id;
+	};
+
+	/**
+	 *
+	 * */
+	struct SRmpOdata
+	{
+		u_int64_t ui64SeqNo;
+	};
+
+#pragma pack(pop)
 	class CRmpSock: public ISocket
 	{
 		typedef std::vector<nm_mem::mem_ptr_t> mem_vec_t;
@@ -214,8 +262,10 @@ namespace nm_network
 		std::vector<nm_mem::mem_ptr_t> m_vecUnvalidPkgs;
 		struct SRecverInfo
 		{
-			SRecverInfo()
-			:ui64LastRecvedSeqNo(0), ui32Naks(0), ui64LastUpdateTimeUs(0){}
+			SRecverInfo() :
+				ui64LastRecvedSeqNo(0), ui32Naks(0), ui64LastUpdateTimeUs(0)
+			{
+			}
 
 			u_int64_t ui64LastRecvedSeqNo;
 			u_int32_t ui32Naks;
@@ -230,6 +280,7 @@ namespace nm_network
 		/*-----------------------------------------------------------------*/
 	};
 	typedef nm_utils::CSmartPtr<nm_network::CRmpSock> rmp_sock_ptr_t;
+#define __RMP_ODATA_HDR_SIZE__ ((sizeof(nm_network::SRmpHdr) + sizeof(nm_network::SRmpOdata)))
 }
 
 #endif /* SOCKET_H_ */

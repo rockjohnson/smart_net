@@ -93,7 +93,10 @@ namespace nm_mem
 		{
 			return m_ui32InitOffset;
 		}
-
+		void set_offset(u_int32_t ui32Offset)
+		{
+			m_ui32Offset = ui32Offset;
+		}
 		inline int32_t append(cmn_byte_t* pBytes, u_int32_t ui32Len)
 		{
 			if (get_total_free_size() < ui32Len)

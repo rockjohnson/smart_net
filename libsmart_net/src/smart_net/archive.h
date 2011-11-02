@@ -30,8 +30,8 @@ namespace nm_pkg
 	class CArchive
 	{
 	public:
-		CArchive(int32_t i32Cnt = -1/*estimated value*/) :
-			m_pHdr(NULL), m_i32Cnt((-1 == i32Cnt) ? __MAX_MEM_SIZE__ : i32Cnt), m_bPending(false)
+		CArchive(u_int32_t ui32InitOffset = 0, int32_t i32Cnt = -1/*estimated value*/) :
+			m_pHdr(NULL), m_i32Cnt((-1 == i32Cnt) ? __MAX_MEM_SIZE__ : i32Cnt), m_bPending(false), m_ui32InitOffset(ui32InitOffset)
 		{
 		}
 		~CArchive()
@@ -55,6 +55,7 @@ namespace nm_pkg
 			//static const u_int32_t s_ui32MaxPkgSize = B::get_max_size();
 			CMN_ASSERT(NULL == m_pMem);
 			m_pMem = NEW_MEM(((HdrSize + s_ui32MaxPkgSize * m_i32Cnt) > __MAX_MEM_SIZE__ ? __MAX_MEM_SIZE__ : (HdrSize + s_ui32MaxPkgSize * m_i32Cnt)));
+			m_pMem->set_offset(m_ui32InitOffset);
 			m_pHdr = new (m_pMem->get_tail_free_buf()) H(B::PKG_OPCODE, 0, bVer/*, bChk*/);
 			m_pMem->inc_len(HdrSize);
 			//m_pMem->inc_offset(HdrSize);
@@ -157,6 +158,7 @@ namespace nm_pkg
 		int32_t m_i32Cnt; //estimate how many package(body).
 		bool m_bPending; //one package is ready
 		nm_mem::mem_ptr_t m_pMem;
+		u_int32_t m_ui32InitOffset;
 #ifdef __USING_COMPRESSED_DATA__
 		mem_queue_t m_queue_compressed;
 #endif
