@@ -249,6 +249,7 @@ namespace nm_network
 			nm_mem::mem_ptr_t m_pMem;
 			int32_t i32Acks;
 		};
+		u_int32_t m_ui32SenderWinSize;
 		std::vector<mem_ptr_t> m_vecSendWin;
 		nm_utils::CSpinLock m_lkSenderWin;
 		volatile u_int64_t m_ui64ValidSendingDataHead; ///最旧的没有接受到足够ack的包序列号

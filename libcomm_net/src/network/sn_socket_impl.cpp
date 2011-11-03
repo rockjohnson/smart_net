@@ -481,7 +481,7 @@ namespace nm_network
 	 *
 	 * */
 	CRmpSock::CRmpSock(int32_t i32Type) :
-		m_i32Type(i32Type), m_hSock(INVALID_SOCKET)
+		m_i32Type(i32Type), m_hSock(INVALID_SOCKET), m_ui32SenderWinSize(__SEND_WIN_SIZE__)
 	{
 		if (RMP_RECV_SOCK == i32Type)
 		{
@@ -489,7 +489,7 @@ namespace nm_network
 		}
 		else if (RMP_SEND_SOCK == i32Type)
 		{
-			m_vecSendWin.resize(__SEND_WIN_SIZE__);
+			m_vecSendWin.resize(m_ui32SenderWinSize);
 #if (__USING_GOOGLE_MAP__)
 			m_mapRecvers.set_empty_key(0);
 #endif
@@ -669,21 +669,22 @@ namespace nm_network
 		///added into send buf
 		{
 			nm_utils::spin_scopelk_t lk(m_lkSenderWin); ///just for handle multi senders.
-			if (((1 < m_ui64ValidSendingDataTail) && (m_ui64SendingSeqNo + 1) != m_ui64ValidSendingDataTail))
+			if ((1 < m_ui64ValidSendingDataTail) && ((m_ui64SendingSeqNo + 1) != m_ui64ValidSendingDataTail) && (NULL != m_vecSendWin[(m_ui64ValidSendingDataTail - 1) % m_ui32SenderWinSize])
+					&& (CMNERR_SUC == m_vecSendWin[(m_ui64ValidSendingDataTail - 1) % m_ui32SenderWinSize]->append(pMem->get_offset_data(pMem->get_init_offset()),
+							pMem->get_len() - pMem->get_init_offset())))
 			{
-				if (CMNERR_SUC == m_vecSendWin[m_ui64ValidSendingDataTail - 1]->append(pMem->get_offset_data(pMem->get_init_offset()), pMem->get_len() - pMem->get_init_offset()))
-				{
-					pMem->reset();
-					return CMNERR_SUC;
-				}
-				else if ((m_ui64ValidSendingDataTail % m_vecSendWin.capacity()) == m_ui64ValidSendingDataHead)
-				{
-					return CMNERR_NO_SPACE;
-				}
+				pMem->reset();
+				return CMNERR_SUC;
+			}
+			///
+			if ((m_ui64ValidSendingDataTail % m_ui32SenderWinSize) == (m_ui64ValidSendingDataHead % m_ui32SenderWinSize))
+			{
+				return CMNERR_NO_SPACE;
 			}
 			///
 			pOdata->ui64SeqNo = m_ui64ValidSendingDataTail;
-			m_vecSendWin[pOdata->ui64SeqNo % m_vecSendWin.capacity()] = pMem;
+			m_vecSendWin[pOdata->ui64SeqNo % m_ui32SenderWinSize] = pMem;
+			pMem = NULL;
 			m_ui64ValidSendingDataTail++;
 		}
 
@@ -709,17 +710,15 @@ namespace nm_network
 			///
 			CMN_ASSERT(m_ui64SendingSeqNo < m_ui64ValidSendingDataTail);
 			///
-			bool bLocked = false;
+			mem_ptr_t pMem = m_vecSendWin[m_ui64SendingSeqNo + 1];
 			if ((m_ui64SendingSeqNo + 2) == m_ui64ValidSendingDataTail)
 			{
-				bLocked = true;
-				m_lkSenderWin.lock();
+				nm_utils::spin_scopelk_t lk(m_lkSenderWin);
+				m_vecSendWin[m_ui64SendingSeqNo + 1] = NULL;
 			}
-			i32Ret = udp_send(m_vecSendWin[m_ui64SendingSeqNo + 1], (const struct sockaddr*) (&m_addrMulticast));
-			if (bLocked)
-			{
-				m_lkSenderWin.unlock();
-			}
+			///
+			i32Ret = udp_send(pMem, (const struct sockaddr*) (&m_addrMulticast));
+			m_vecSendWin[m_ui64SendingSeqNo + 1] = pMem;
 			if ((CMNERR_IO_ERR == i32Ret) || (CMNERR_SEND_PENDING == i32Ret))
 			{
 				break;
