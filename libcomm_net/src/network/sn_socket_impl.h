@@ -19,6 +19,7 @@
 
 #include <memory/mem.h>
 #include <utils/smart_lock.h>
+#include <log/smart_log.h>
 
 #if (__USING_LOCK_FREE_CONTAINER__)
 #include <intrusive/optimistic_queue.h>
@@ -40,32 +41,6 @@ namespace nm_network
 	typedef nm_utils::CSmartPtr<nm_network::CRupSock> rup_sock_ptr_t;
 	class CRupSock: public ISocket
 	{
-		//		struct SSendInfo
-		//		{
-		//			SSendInfo(nm_mem::mem_ptr_t &ptr) :
-		//				m_pData(ptr), /*m_uiLen(ptr->get_len()),*/
-		//				m_uiOffset(ptr->get_offset())
-		//			{
-		//			}
-		//			SSendInfo(const SSendInfo &other) :
-		//				m_pData(other.m_pData) /*, m_uiLen(other.m_uiLen)*/, m_uiOffset(other.m_uiOffset)
-		//			{
-		//			}
-		//
-		//			u_int32_t get_offset()
-		//			{
-		//				return m_uiOffset;
-		//			}
-		//
-		//			void set_offset(u_int32_t uiOffset)
-		//			{
-		//				m_uiOffset = uiOffset;
-		//			}
-		//
-		//			nm_mem::mem_ptr_t m_pData;
-		//			u_int32_t m_uiOffset;
-		//		};
-
 	public:
 		CRupSock();
 		virtual ~CRupSock();
@@ -178,11 +153,12 @@ namespace nm_network
 
 	public:
 		int32_t open(sock_handle_t hSock);
-		int32_t open(const cmn_string_t &strMulticastIp, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt, u_int64_t ui64MaxKeepAliveTimeUs);
+		int32_t open(const cmn_string_t &strMulticastIp, u_int16_t ui16MulticastPort, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt, u_int64_t ui64MaxKeepAliveTimeUs);
 		int32_t close();
 		int32_t bind(const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
 		int32_t join_multicast_group();
 		int32_t leave_multicast_group();
+		int32_t set_multicast_ttl(int32_t i32TtlVal);
 		sock_handle_t get_handle();
 		bool is_opened();
 		int32_t set_nonblock(bool bFlag);
@@ -213,9 +189,8 @@ namespace nm_network
 		cmn_string_t m_strBindIp;
 		u_int16_t m_ui16BindPort;
 		//cmn_string_t m_strMulticastIp;
-		sock_handle_t m_hSock;
 		int32_t m_i32Type;
-
+		sock_handle_t m_hSock;
 		union
 		{
 			struct
@@ -225,6 +200,8 @@ namespace nm_network
 			};
 			u_int64_t ui64Id;
 		} m_epid;
+
+		nm_utils::CSmartLog m_log;
 
 		/*recv endpoint*/
 		/*-----------------------------------------------------------------*/

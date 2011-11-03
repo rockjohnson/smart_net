@@ -133,6 +133,11 @@ int main()
 #endif
 
 #if 1
+	nm_busi::rmp_ep_tester_ptr_t pRmpRecver = SYS_NOTRW_NEW(nm_busi::CRmpEndpointTester(pSNEngine, nm_smartnet::nm_rmp::RMP_RECV_ENDPOINT));
+	pRmpRecver->open(cmn_string_t("239.192.111.112"), cmn_string_t("0.0.0.0"), 8888, 11, 100);
+#endif
+
+#if 1
 	nm_busi::rmp_ep_tester_ptr_t pRmpSender = SYS_NOTRW_NEW(nm_busi::CRmpEndpointTester(pSNEngine, nm_smartnet::nm_rmp::RMP_SEND_ENDPOINT));
 	pRmpSender->open(cmn_string_t("239.192.111.112"), cmn_string_t("0.0.0.0"), 8888, 11, 100);
 	u_int32_t i32Cnt = 0;
@@ -149,11 +154,6 @@ int main()
 		pTest->i32 = 0;
 		pRmpSender->send_data(ar.serialize());
 	}
-#endif
-
-#if 1
-	nm_busi::rmp_ep_tester_ptr_t pRmpRecver = SYS_NOTRW_NEW(nm_busi::CRmpEndpointTester(pSNEngine, nm_smartnet::nm_rmp::RMP_RECV_ENDPOINT));
-	pRmpRecver->open(cmn_string_t("239.192.111.112"), cmn_string_t("0.0.0.0"), 8888, 11, 100);
 #endif
 
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!

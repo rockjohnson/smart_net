@@ -18,6 +18,13 @@ src/network/sn_socket_impl.d: ../src/network/sn_socket_impl.cpp \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/memory/../utils/atomic.h \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/smart_lock.h \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/../common/common.h \
+ /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/smart_log.h \
+ /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../common/common.h \
+ /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../utils/time_info.h \
+ /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../utils/../common/common.h \
+ /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../utils/smart_lock.h \
+ /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../utils/file.h \
+ /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../utils/utils.h \
  ../src/network/sn_socket.h ../src/network/sn_net_addr.h \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/smart_ptr.h \
  /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/utils.h \
@@ -60,6 +67,20 @@ src/network/sn_socket_impl.d: ../src/network/sn_socket_impl.cpp \
 /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/smart_lock.h:
 
 /home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/utils/../common/common.h:
+
+/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/smart_log.h:
+
+/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../common/common.h:
+
+/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../utils/time_info.h:
+
+/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../utils/../common/common.h:
+
+/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../utils/smart_lock.h:
+
+/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../utils/file.h:
+
+/home/rock/Workspace/smart_net/smart_net/libcomm_utils/src/log/../utils/utils.h:
 
 ../src/network/sn_socket.h:
 
