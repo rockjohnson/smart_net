@@ -13,10 +13,12 @@ using namespace std;
 
 int main()
 {
+	SET_PKG_HANDLER(nm_busi::CRupEndpointTester, nm_pkg::CPkgTest);
+
 	nm_framework::sn_engine_ptr_t pSNEngine = SYS_NOTRW_NEW(nm_framework::CSNEngine);
 	IF_TRUE_THEN_RETURN_CODE(pSNEngine->start(2, 2, nm_framework::EIEN_EPOLL, 100) < 0, -1);
 
-#if 0
+#if 1
 	std::cout<<"ok1"<<std::endl;
 
 	nm_smartnet::nm_rup::tcp_acceptor_ptr_t pTcpAcceptor = SYS_NOTRW_NEW(nm_smartnet::nm_rup::CRupAcceptor(pSNEngine));
@@ -43,7 +45,20 @@ int main()
 	nm_busi::rup_ep_tester_ptr_t pB = SYS_NOTRW_NEW(nm_busi::CRupEndpointTester(pTcpConnector));
 	pB->open();
 
-	sleep(10);
+	int i = 0;
+	for (; i < 1;)
+	{
+		if (pB->is_opened())
+		{
+			nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgTest> ar;
+			ar.get_next_body()->i32 = i++;
+			pB->send_data(ar.serialize());
+		}
+		sleep(1);
+	}
+
+
+	sleep(100000000);
 
 //	pB->close();
 //	pA->close();
@@ -132,12 +147,12 @@ int main()
 	}
 #endif
 
-#if 1
+#if 0
 	nm_busi::rmp_ep_tester_ptr_t pRmpRecver = SYS_NOTRW_NEW(nm_busi::CRmpEndpointTester(pSNEngine, nm_smartnet::nm_rmp::RMP_RECV_ENDPOINT));
 	pRmpRecver->open(cmn_string_t("239.192.111.112"), cmn_string_t("0.0.0.0"), 8888, 11, 100);
 #endif
 
-#if 1
+#if 0
 	nm_busi::rmp_ep_tester_ptr_t pRmpSender = SYS_NOTRW_NEW(nm_busi::CRmpEndpointTester(pSNEngine, nm_smartnet::nm_rmp::RMP_SEND_ENDPOINT));
 	pRmpSender->open(cmn_string_t("239.192.111.112"), cmn_string_t("0.0.0.0"), 8888, 11, 100);
 	u_int32_t i32Cnt = 0;

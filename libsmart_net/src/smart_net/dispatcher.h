@@ -51,7 +51,9 @@ namespace nm_pkg
 	public:
 		CDispatcher()
 		{
+#if (__USING_GOOGLE_MAP__)
 			m_hmFuns.set_empty_key(-1);
+#endif
 		}
 
 	public:

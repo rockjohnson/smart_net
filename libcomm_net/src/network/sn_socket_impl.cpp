@@ -231,7 +231,6 @@ namespace nm_network
 #endif
 		CMN_ASSERT(0 != i32Ret); //what the meaning if zero??
 
-		i32Ret = CMNERR_SUC;
 		if (pData->get_len() > i32Ret)
 		{
 			pData->dec_head_data(i32Ret);
@@ -240,6 +239,10 @@ namespace nm_network
 				m_qSendCache.push_front(pData);
 			}
 			i32Ret = CMNERR_SEND_PENDING;
+		}
+		else
+		{
+			i32Ret = CMNERR_SUC;
 		}
 
 		m_lkSending.unlock();
@@ -374,6 +377,7 @@ namespace nm_network
 	{
 		if (NULL != m_pRecvedData)
 		{
+			CMN_ASSERT(m_pRecvedData->get_len() == 0);
 			m_pRecvedData->move_data_ahead();
 		}
 		else
@@ -712,6 +716,10 @@ namespace nm_network
 		{
 			return CMNERR_SUC;
 		}
+		else
+		{
+
+		}
 		///
 		int32_t i32Ret = CMNERR_SUC;
 		for (;;)
@@ -725,15 +733,15 @@ namespace nm_network
 			///
 			CMN_ASSERT(m_ui64SendingSeqNo < m_ui64ValidSendingDataTail);
 			///
-			mem_ptr_t pMem = m_vecSendWin[m_ui64SendingSeqNo + 1];
+			mem_ptr_t pMem = m_vecSendWin[(m_ui64SendingSeqNo + 1) % m_ui32SenderWinSize];
 			if ((m_ui64SendingSeqNo + 2) == m_ui64ValidSendingDataTail)
 			{
 				nm_utils::spin_scopelk_t lk(m_lkSenderWin);
-				m_vecSendWin[m_ui64SendingSeqNo + 1] = NULL;
+				m_vecSendWin[(m_ui64SendingSeqNo + 1) % m_ui32SenderWinSize] = NULL;
 			}
 			///
 			i32Ret = udp_send(pMem, (const struct sockaddr*) (&m_addrMulticast));
-			m_vecSendWin[m_ui64SendingSeqNo + 1] = pMem;
+			m_vecSendWin[(m_ui64SendingSeqNo + 1) % m_ui32SenderWinSize] = pMem;
 			if ((CMNERR_IO_ERR == i32Ret) || (CMNERR_SEND_PENDING == i32Ret))
 			{
 				break;
@@ -1152,7 +1160,8 @@ namespace nm_network
 	{
 		CMN_ASSERT(pMem->get_offset() == 0 && pMem->get_len() == 0);
 #if (__USING_OLD_IO_METHOD__)
-		int32_t i32Ret = ::recvfrom(m_hSock, (char*) (pMem->get_buf()), pMem->get_size(), 0, (struct sockaddr*) (&remote_addr), (socklen_t*) (&uiAddrSize));
+		u_int32_t uiAddrSize = sizeof(struct sockaddr_in);
+		int32_t i32Ret = ::recvfrom(m_hSock, (char*) (pMem->get_buf()), pMem->get_size(), 0, (struct sockaddr*) (&sSrcAddr), (socklen_t*) (&uiAddrSize));
 #else
 		struct iovec iov[1];
 		iov[0].iov_base = pMem->get_buf();

@@ -22,7 +22,7 @@ namespace nm_busi
 		virtual ~CRupEndpointTester();
 
 	public:
-		void handle_pkg(nm_pkg::CPkgHB &, u_int32_t uiTag);
+		void handle_pkg(nm_pkg::CPkgTest &, u_int32_t uiTag);
 
 	protected:
 		///
