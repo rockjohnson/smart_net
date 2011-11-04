@@ -26,7 +26,7 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1553244672" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1400083906" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.877459388" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/comm_utils/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcomm_utils/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcds}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.verbose.113623043" name="Verbose (-v)" superClass="gnu.cpp.compiler.option.other.verbose" value="false" valueType="boolean"/>
@@ -46,11 +46,9 @@
 									<listOptionValue builtIn="false" value="pthread"/>
 									<listOptionValue builtIn="false" value="tcmalloc"/>
 									<listOptionValue builtIn="false" value="jemalloc"/>
-									<listOptionValue builtIn="false" value="cds"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.335266800" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/comm_utils/Debug}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcds/bin/gcc-amd64-linux-64}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcomm_utils/Debug}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.289812545" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>

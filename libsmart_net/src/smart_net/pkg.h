@@ -119,11 +119,11 @@ public:\
 	protected:
 		//all are in network byte order
 		u_int32_t m_uiLen; //total length, must be the first member
-		cmn_byte_t m_bType; //0: normal, 1: compressed....
-		cmn_byte_t m_bVer; //version & check code
 		u_int16_t m_usOpcode; //operate code
 		u_int32_t m_uiTag; //the tag which can uniquely identify one msg, host byte order is enough; 0 means no use;
 		//cmn_byte_t m_bChk;     //check code
+		cmn_byte_t m_bType; //0: normal, 1: compressed....
+		cmn_byte_t m_bVer; //version & check code
 	};
 
 	//pay attention, in fact, the following definitions are package bodys, not including package header, the header is CPkgHdr;

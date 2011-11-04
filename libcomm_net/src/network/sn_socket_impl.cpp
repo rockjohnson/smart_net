@@ -696,7 +696,7 @@ namespace nm_network
 				return CMNERR_SUC;
 			}
 			///
-			if ((m_ui64ValidSendingDataTail % m_ui32SenderWinSize) == (m_ui64ValidSendingDataHead % m_ui32SenderWinSize))
+			if (((m_ui64ValidSendingDataTail + 1) % m_ui32SenderWinSize) == (m_ui64ValidSendingDataHead % m_ui32SenderWinSize))
 			{
 				return CMNERR_NO_SPACE;
 			}
@@ -929,7 +929,7 @@ namespace nm_network
 	void CRmpSock::set_ack(bool bFlag)
 	{
 		m_ui64AppConfirmAck = m_ui64LatestRecvedValidSeqNo;
-		if (bFlag || (m_ui64AppConfirmAck - m_ui64AppConfirmAckTmp) >= m_ui32SendAckCnt)
+		if (0 < m_ui64AppConfirmAck && (bFlag || (m_ui64AppConfirmAck - m_ui64AppConfirmAckTmp) >= m_ui32SendAckCnt))
 		{
 			if (!bFlag)
 			{
@@ -1129,6 +1129,7 @@ namespace nm_network
 		if (pAck->ui64SeqNo < m_ui64ValidSendingDataHead)
 		{
 			CMN_ASSERT(false);
+			m_pMem->reset();
 			return CMNERR_SUC;
 		}
 

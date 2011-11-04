@@ -12,6 +12,8 @@
 #include <vector>
 #include <deque>
 #include <iostream>
+#include <google/dense_hash_map>
+#include <string>
 
 class CTestOne
 {
@@ -50,6 +52,12 @@ class CContainerTest: public CxxTest::TestSuite
 public:
 	void test_one()
 	{
+		google::dense_hash_map<std::string, int> b;
+		b.set_empty_key(std::string(""));
+		std::string str("aaa");
+		b[str] = 1;
+		int c = b[str];
+
 		//std::set<CTestOne> s;
 		std::deque<CTestOne> s;
 		CTestOne one;

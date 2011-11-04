@@ -19,37 +19,24 @@ int main() {
 static CContainerTest suite_CContainerTest;
 
 static CxxTest::List Tests_CContainerTest = { 0, 0 };
-CxxTest::StaticSuiteDescription suiteDescription_CContainerTest( "../test/test_containers.h", 48, "CContainerTest", suite_CContainerTest, Tests_CContainerTest );
+CxxTest::StaticSuiteDescription suiteDescription_CContainerTest( "../test/test_containers.h", 50, "CContainerTest", suite_CContainerTest, Tests_CContainerTest );
 
 static class TestDescription_CContainerTest_test_one : public CxxTest::RealTestDescription {
 public:
- TestDescription_CContainerTest_test_one() : CxxTest::RealTestDescription( Tests_CContainerTest, suiteDescription_CContainerTest, 51, "test_one" ) {}
+ TestDescription_CContainerTest_test_one() : CxxTest::RealTestDescription( Tests_CContainerTest, suiteDescription_CContainerTest, 53, "test_one" ) {}
  void runTest() { suite_CContainerTest.test_one(); }
 } testDescription_CContainerTest_test_one;
-
-#include "../test/test_file.h"
-
-static CFileTest suite_CFileTest;
-
-static CxxTest::List Tests_CFileTest = { 0, 0 };
-CxxTest::StaticSuiteDescription suiteDescription_CFileTest( "../test/test_file.h", 14, "CFileTest", suite_CFileTest, Tests_CFileTest );
-
-static class TestDescription_CFileTest_test_create : public CxxTest::RealTestDescription {
-public:
- TestDescription_CFileTest_test_create() : CxxTest::RealTestDescription( Tests_CFileTest, suiteDescription_CFileTest, 17, "test_create" ) {}
- void runTest() { suite_CFileTest.test_create(); }
-} testDescription_CFileTest_test_create;
 
 #include "../test/test_libcds.h"
 
 static CLibcdsTest suite_CLibcdsTest;
 
 static CxxTest::List Tests_CLibcdsTest = { 0, 0 };
-CxxTest::StaticSuiteDescription suiteDescription_CLibcdsTest( "../test/test_libcds.h", 32, "CLibcdsTest", suite_CLibcdsTest, Tests_CLibcdsTest );
+CxxTest::StaticSuiteDescription suiteDescription_CLibcdsTest( "../test/test_libcds.h", 29, "CLibcdsTest", suite_CLibcdsTest, Tests_CLibcdsTest );
 
 static class TestDescription_CLibcdsTest_test_queue : public CxxTest::RealTestDescription {
 public:
- TestDescription_CLibcdsTest_test_queue() : CxxTest::RealTestDescription( Tests_CLibcdsTest, suiteDescription_CLibcdsTest, 35, "test_queue" ) {}
+ TestDescription_CLibcdsTest_test_queue() : CxxTest::RealTestDescription( Tests_CLibcdsTest, suiteDescription_CLibcdsTest, 32, "test_queue" ) {}
  void runTest() { suite_CLibcdsTest.test_queue(); }
 } testDescription_CLibcdsTest_test_queue;
 

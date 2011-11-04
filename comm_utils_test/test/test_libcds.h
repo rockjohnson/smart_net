@@ -9,12 +9,9 @@
 #define __TEST_LIBCDS_H__
 
 #include <cxxtest/TestSuite.h>
-#include <cds/intrusive/optimistic_queue.h>
-#include <cds/gc/hp.h>
 
-namespace ci = cds::intrusive;
-typedef cds::gc::HP hp_gc;
 
+#if 0
 // Optimistic queue with Hazard Pointer garbage collector, base hook + item counter:
 struct Foo: public ci::optimistic_queue::node<hp_gc>
 {
@@ -27,6 +24,7 @@ struct Foo: public ci::optimistic_queue::node<hp_gc>
 
 	int i;
 };
+#endif
 
 class CLibcdsTest: public CxxTest::TestSuite
 {
@@ -34,6 +32,7 @@ public:
 	void test_queue()
 	{
 
+#if 0
 		cds::Initialize();
 
 		cds::gc::HP hzpGC;
@@ -56,6 +55,7 @@ public:
 		bb = a.empty();
 		std::cout << "optimisticQ size: " << a.size() << std::endl;
 		std::cout<<ii << j << std::endl;
+#endif
 	}
 };
 
