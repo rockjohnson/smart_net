@@ -178,7 +178,7 @@ namespace nm_network
 		int32_t sendep_handle_nak(sn_sock_addr_t&);
 		int32_t sendep_handle_ack(sn_sock_addr_t&);
 		int32_t get_next_recved_data(nm_mem::mem_ptr_t &pMem);
-		void set_ack();
+		void set_ack(bool bFlag = false);
 
 	private:
 		int32_t udp_send(nm_mem::mem_ptr_t &pMem, const struct sockaddr* pDestAddr);
@@ -212,11 +212,13 @@ namespace nm_network
 		sn_sock_addr_t m_addrSender;
 
 		u_int64_t m_ui64LatestRecvedValidSeqNo;
+		u_int64_t m_ui64LastSendNakTime;
 		u_int32_t m_ui32SendAckCnt; ///should be set by app level...
 		volatile u_int64_t m_ui64AppConfirmAck; ///经过应用层确认的ack。这个变量还需要定时的发送给sender，通过ack消息。
 		volatile u_int64_t m_ui64AppConfirmAckTmp; ///上次发送ack时的记录数。
 		u_int64_t m_ui64UnvalidPkgBegin; ///the first data in the unvalid data vec.
 		u_int64_t m_ui64UnvalidPkgEnd; ///the last data in the unvalid data vec.
+		u_int64_t m_ui64LastSendAckTime;
 		/*-----------------------------------------------------------------*/
 
 		/*send endpoint*/
@@ -232,12 +234,15 @@ namespace nm_network
 		volatile u_int64_t m_ui64ValidSendingDataHead; ///最旧的没有接受到足够ack的包序列号
 		volatile u_int64_t m_ui64ValidSendingDataTail; ///最近一次成功放入发送窗口的包的下一个序号
 		volatile u_int64_t m_ui64SendingSeqNo; ///记录目前已经组播发送出去的包序列号
+		u_int64_t m_ui64LastSpeedControlSeqNo;
+		u_int64_t m_ui64LastSpeedControlTime;
 		volatile u_int64_t m_ui64PkgSeqNoGenerator; ///发送包的序列号生成记录器
 		struct sockaddr_in m_addrMulticast;
 		u_int64_t m_ui64MaxKeepAliveTimeUs;
 		u_int32_t m_ui32Naks;
-		u_int32_t m_ui32SendSpeed; ///should set by app level first...
+		volatile u_int32_t m_ui32SendSpeed; ///should set by app level first...
 		std::vector<nm_mem::mem_ptr_t> m_vecUnvalidPkgs;
+		u_int32_t m_ui32UnvalidPkgsSize;
 		struct SRecverInfo
 		{
 			SRecverInfo() :
