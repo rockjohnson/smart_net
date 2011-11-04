@@ -753,7 +753,7 @@ namespace nm_network
 				pNak->ui64Id = m_epid.ui64Id;
 				if (pNak->ui64Begin <= pNak->ui64End)
 				{
-					i32Ret = udp_send(buf, pHdr->ui24Len, (const struct sockaddr*) (&m_addrSender));
+					CMN_ASSERT(CMNERR_SUC == udp_send(buf, pHdr->ui24Len, (const struct sockaddr*) (&m_addrSender)));
 				}
 			}
 
