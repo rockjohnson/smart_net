@@ -755,6 +755,7 @@ namespace nm_network
 				{
 					CMN_ASSERT(CMNERR_SUC == udp_send(buf, pHdr->ui24Len, (const struct sockaddr*) (&m_addrSender)));
 				}
+				TRACE_LOG(m_log, ELL_DEBUG, "send nak in timer thread, from %lu ~ %lu\n", pNak->ui64Begin, pNak->ui64End);
 			}
 
 			return CMNERR_SUC;
@@ -781,6 +782,7 @@ namespace nm_network
 				{
 					m_ui64LastSpeedControlTime = nm_utils::CTimeInfo::get_current_time_us();
 					m_ui64LastSpeedControlSeqNo = m_ui64SendingSeqNo;
+					TRACE_LOG(m_log, ELL_DEBUG, "control speed\n");
 					break;
 				}
 			}
@@ -1163,6 +1165,7 @@ namespace nm_network
 		if ((m_ui64SendingSeqNo - m_ui64ValidSendingDataHead) < (m_ui32SenderWinSize / 4))
 		{
 			m_ui32SendSpeed += __INC_SPEED__;
+			TRACE_LOG(m_log, ELL_DEBUG, "speed increased: %u\n", m_ui32SendSpeed);
 		}
 
 		return CMNERR_SUC;
