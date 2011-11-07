@@ -533,7 +533,7 @@ namespace nm_network
 	 *
 	 * */
 #define __INIT_SPEED__ (2000)
-	int32_t CRmpSock::open(const cmn_string_t &strMulticast, u_int16_t ui16MulticastPort, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt, u_int64_t ui64MaxKeepAliveTimeUs)
+	int32_t CRmpSock::open(const cmn_string_t &strMulticast, u_int16_t ui16MulticastPort, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt, u_int64_t ui64MaxKeepAliveTimeUs, u_int32_t ui32InitSendSpeed)
 	{
 		m_epid.ui64Id = 0;
 		m_ui64ValidPkgBegin = 0;
@@ -560,7 +560,7 @@ namespace nm_network
 		//m_ui64PkgSeqNoGenerator = 0; ///发送包的序列号生成记录器
 		m_ui64MaxKeepAliveTimeUs = ui64MaxKeepAliveTimeUs;
 		m_ui32Naks = 0;
-		m_ui32SendSpeed = __INIT_SPEED__; ///should set by app level first...
+		m_ui32SendSpeed = ui32InitSendSpeed; ///should set by app level first...
 
 
 		ZERO_MEM(&m_addrMulticast, sizeof(m_addrMulticast));
@@ -1074,6 +1074,7 @@ namespace nm_network
 	 * */
 #define __MAX_NAK_CNT__ (1000)
 #define __CUT_SPEED__ (10000)
+#define __INC_SPEED__ (1000)
 	int32_t CRmpSock::sendep_handle_nak(sn_sock_addr_t &sRecvAddr)
 	{
 		SRmpNak *pNak = (SRmpNak*) (m_pMem->get_data());
@@ -1157,6 +1158,12 @@ namespace nm_network
 		}
 
 		m_ui64ValidSendingDataHead = ui64MiniAckSeqNo + 1;
+
+		///speed control
+		if ((m_ui64SendingSeqNo - m_ui64ValidSendingDataHead) < (m_ui32SenderWinSize / 4))
+		{
+			m_ui32SendSpeed += __INC_SPEED__;
+		}
 
 		return CMNERR_SUC;
 	}

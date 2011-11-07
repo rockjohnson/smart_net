@@ -114,6 +114,7 @@ namespace nm_network
 	struct SRmpHb
 	{
 		u_int64_t ui64LatestSeqNo;
+		u_int64_t ui64OldestSeqNo; ///the oldest pkg of the sender now had.
 	};
 
 	/**
@@ -153,7 +154,7 @@ namespace nm_network
 
 	public:
 		int32_t open(sock_handle_t hSock);
-		int32_t open(const cmn_string_t &strMulticastIp, u_int16_t ui16MulticastPort, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt, u_int64_t ui64MaxKeepAliveTimeUs);
+		int32_t open(const cmn_string_t &strMulticastIp, u_int16_t ui16MulticastPort, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt, u_int64_t ui64MaxKeepAliveTimeUs, u_int32_t ui32InitSendSpeed);
 		int32_t close();
 		int32_t bind(const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
 		int32_t join_multicast_group();
@@ -219,6 +220,7 @@ namespace nm_network
 		u_int64_t m_ui64UnvalidPkgBegin; ///the first data in the unvalid data vec.
 		u_int64_t m_ui64UnvalidPkgEnd; ///the last data in the unvalid data vec.
 		u_int64_t m_ui64LastSendAckTime;
+		u_int32_t m_ui32RecvSpeed; ///the recv speed of recv ep...
 		/*-----------------------------------------------------------------*/
 
 		/*send endpoint*/
