@@ -46,12 +46,12 @@ public:\
 	int process(mem_ptr_t &pPkgMem, PKG &pkg, u_int32_t uiSrcIp, us16_t usSrcPort, u_int32_t uiPkgTag)
 
 #define PKG_VER 0x00
-	//#define CHECK_CODE 0x0
+//#define CHECK_CODE 0x0
 #define PKG_SIZE_TYPE_SIZE sizeof(u_int32_t)
 #define MINI_PKG_HDR_SIZE (PKG_SIZE_TYPE_SIZE + 1)  /*bytes*/ //����Ϣϵͳ�е�CPkgHdr�еģ�ǰ4���ֽ��Ǳ���Ϣ���ȣ���5���ֽ�Ϊ��Ϣ����
 #define NORMAL_PKG 0x00
 
-	//#define __USING_COMPRESSED_DATA__
+//#define __USING_COMPRESSED_DATA__
 
 #ifdef __USING_COMPRESSED_DATA__
 #define COMPRESSED_PKG 0x01

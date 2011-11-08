@@ -145,6 +145,10 @@ namespace nm_network
 	};
 
 #pragma pack(pop)
+
+	/**
+	 *
+	 * */
 	class CRmpSock: public ISocket
 	{
 		typedef std::vector<nm_mem::mem_ptr_t> mem_vec_t;
@@ -154,7 +158,7 @@ namespace nm_network
 
 	public:
 		int32_t open(sock_handle_t hSock);
-		int32_t open(const cmn_string_t &strMulticastIp, u_int16_t ui16MulticastPort, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt, u_int64_t ui64MaxKeepAliveTimeUs, u_int32_t ui32InitSendSpeed);
+		int32_t open(const cmn_string_t &strMulticastIp, u_int16_t ui16MulticastPort, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt, u_int64_t ui64MaxKeepAliveTimeUs, u_int32_t ui32InitSendSpeed, u_int64_t ui64HbInterval);
 		int32_t close();
 		int32_t bind(const cmn_string_t &strBindIP, u_int16_t ui16BindPort);
 		int32_t join_multicast_group();
@@ -236,6 +240,11 @@ namespace nm_network
 		volatile u_int64_t m_ui64ValidSendingDataHead; ///最旧的没有接受到足够ack的包序列号
 		volatile u_int64_t m_ui64ValidSendingDataTail; ///最近一次成功放入发送窗口的包的下一个序号
 		volatile u_int64_t m_ui64SendingSeqNo; ///记录目前已经组播发送出去的包序列号
+		u_int64_t m_ui64LastHbTime;
+		u_int64_t m_ui64HbInterval;
+		u_int32_t m_ui32SpeedHelper;
+		volatile u_int64_t m_ui64LastSendingSeqNo;
+		u_int64_t m_ui64LastSendAndAckWinSize;
 		u_int64_t m_ui64LastSpeedControlSeqNo;
 		u_int64_t m_ui64LastSpeedControlTime;
 		volatile u_int64_t m_ui64PkgSeqNoGenerator; ///发送包的序列号生成记录器

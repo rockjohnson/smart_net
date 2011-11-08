@@ -533,7 +533,8 @@ namespace nm_network
 	 *
 	 * */
 #define __INIT_SPEED__ (2000)
-	int32_t CRmpSock::open(const cmn_string_t &strMulticast, u_int16_t ui16MulticastPort, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt, u_int64_t ui64MaxKeepAliveTimeUs, u_int32_t ui32InitSendSpeed)
+	int32_t CRmpSock::open(const cmn_string_t &strMulticast, u_int16_t ui16MulticastPort, u_int8_t ui8SenderId, u_int32_t ui32AckConfirmCnt, u_int64_t ui64MaxKeepAliveTimeUs,
+			u_int32_t ui32InitSendSpeed, u_int64_t ui64HbInterval)
 	{
 		m_epid.ui64Id = 0;
 		m_ui64ValidPkgBegin = 0;
@@ -555,8 +556,13 @@ namespace nm_network
 		m_ui64ValidSendingDataHead = 0; ///最旧的没有接受到足够ack的包序列号, 0 is init value and not valid...
 		m_ui64ValidSendingDataTail = 1; ///最近一次成功放入发送窗口的包的下一个序号, 1 is init value...
 		m_ui64SendingSeqNo = 0; ///记录目前已经组播发送出去的包序列号, 0 is init value and not valid..
+		m_ui64LastSendingSeqNo = 0;
+		m_ui64LastSendAndAckWinSize = m_ui32SenderWinSize / 100;
+		m_ui32SpeedHelper = 0;
 		m_ui64LastSpeedControlSeqNo = 0;
 		m_ui64LastSpeedControlTime = 0;
+		m_ui64LastHbTime = 0;
+		m_ui64HbInterval = ui64HbInterval;
 		//m_ui64PkgSeqNoGenerator = 0; ///发送包的序列号生成记录器
 		m_ui64MaxKeepAliveTimeUs = ui64MaxKeepAliveTimeUs;
 		m_ui32Naks = 0;
@@ -636,7 +642,7 @@ namespace nm_network
 
 	int32_t CRmpSock::set_multicast_ttl(int32_t i32TtlVal)
 	{
-		return (0 == setsockopt(m_hSock, SOL_IP, IP_MULTICAST_TTL, (const char*) &i32TtlVal, sizeof(i32TtlVal)))  ;
+		return (0 == setsockopt(m_hSock, SOL_IP, IP_MULTICAST_TTL, (const char*) &i32TtlVal, sizeof(i32TtlVal)));
 	}
 
 	int32_t CRmpSock::leave_multicast_group()
@@ -739,8 +745,7 @@ namespace nm_network
 			{
 				m_ui64LastSendNakTime = ui64CurTm;
 			}
-			if (((ui64CurTm - m_ui64LastSendNakTime) > __SEND_NAK_INTERVAL__)
-					&& m_ui64LatestRecvedValidSeqNo < m_ui64UnvalidPkgBegin)
+			if (((ui64CurTm - m_ui64LastSendNakTime) > __SEND_NAK_INTERVAL__) && m_ui64LatestRecvedValidSeqNo < m_ui64UnvalidPkgBegin)
 			{
 				m_ui64LastSendNakTime = ui64CurTm;
 				cmn_byte_t buf[8192];
@@ -778,7 +783,7 @@ namespace nm_network
 				{
 					ui64CurMs = 1;
 				}
-				if ((((m_ui64SendingSeqNo - m_ui64LastSpeedControlSeqNo) ) / ui64CurMs ) > m_ui32SendSpeed)
+				if ((((m_ui64SendingSeqNo - m_ui64LastSpeedControlSeqNo)) / ui64CurMs) > m_ui32SendSpeed)
 				{
 					m_ui64LastSpeedControlTime = nm_utils::CTimeInfo::get_current_time_us();
 					m_ui64LastSpeedControlSeqNo = m_ui64SendingSeqNo;
@@ -790,6 +795,24 @@ namespace nm_network
 			///is there some data available?
 			if ((m_ui64SendingSeqNo + 1) == m_ui64ValidSendingDataTail)
 			{
+				u_int64_t ui64CurTime = nm_utils::CTimeInfo::get_current_time_us();
+				if (0 == m_ui64LastHbTime)
+				{
+					m_ui64LastHbTime = ui64CurTime;
+				}
+				if ((ui64CurTime - m_ui64LastHbTime) > m_ui64HbInterval)
+				{
+					cmn_byte_t buf[8192];
+					SRmpHdr *pHdr = (SRmpHdr*) buf;
+					pHdr->ui24Len = sizeof(SRmpHb) + sizeof(SRmpHdr);
+					pHdr->ui8Opcode = EP_HB;
+					pHdr->ui8SrcId = m_ui8SenderId;
+					SRmpHb *pHb = (SRmpHb*) (buf + sizeof(SRmpHdr));
+					pHb->ui64LatestSeqNo = m_ui64SendingSeqNo;
+					pHb->ui64OldestSeqNo = m_ui64ValidSendingDataHead;
+					CMN_ASSERT(CMNERR_SUC == udp_send(buf, pHdr->ui24Len, (const struct sockaddr*) (&m_addrMulticast)));
+				}
+
 				i32Ret = CMNERR_NO_DATA;
 				break;
 			}
@@ -1089,6 +1112,7 @@ namespace nm_network
 		{
 			m_ui32Naks = 0;
 			m_ui32SendSpeed -= __CUT_SPEED__;
+			TRACE_LOG(m_log, ELL_DEBUG, "dec thread : %u\n", m_ui32SendSpeed);
 		}
 
 		if (pNak->ui64Begin < m_ui64ValidSendingDataHead || pNak->ui64End >= m_ui64ValidSendingDataTail)
@@ -1121,6 +1145,7 @@ namespace nm_network
 	/**
 	 *
 	 * */
+#define __INC_SPEED_INTERVAL__ (10000)
 	int32_t CRmpSock::sendep_handle_ack(sn_sock_addr_t &sRecvAddr)
 	{
 		SRmpAck *pAck = (SRmpAck*) m_pMem->get_data();
@@ -1162,10 +1187,20 @@ namespace nm_network
 		m_ui64ValidSendingDataHead = ui64MiniAckSeqNo + 1;
 
 		///speed control
-		if ((m_ui64SendingSeqNo - m_ui64ValidSendingDataHead) < (m_ui32SenderWinSize / 4))
+		if ((m_ui64SendingSeqNo - m_ui64ValidSendingDataHead) < m_ui64LastSendAndAckWinSize)
 		{
-			m_ui32SendSpeed += __INC_SPEED__;
-			TRACE_LOG(m_log, ELL_DEBUG, "speed increased: %u\n", m_ui32SendSpeed);
+			m_ui32SpeedHelper++;
+			if (m_ui32SpeedHelper > 1000 && (m_ui64SendingSeqNo - m_ui64LastSendingSeqNo) > __INC_SPEED_INTERVAL__) ///必须是
+			{
+				m_ui64LastSendAndAckWinSize = m_ui64SendingSeqNo - m_ui64ValidSendingDataHead;
+				m_ui32SendSpeed += __INC_SPEED__;
+				TRACE_LOG(m_log, ELL_DEBUG, "speed increased: %u\n", m_ui32SendSpeed);
+			}
+			m_ui64LastSendingSeqNo = m_ui64SendingSeqNo;
+		}
+		else
+		{
+			m_ui32SpeedHelper = 0;
 		}
 
 		return CMNERR_SUC;
