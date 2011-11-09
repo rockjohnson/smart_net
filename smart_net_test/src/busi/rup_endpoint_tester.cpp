@@ -45,15 +45,18 @@ namespace nm_busi
 
 	void CRupEndpointTester::on_recved_data(nm_mem::mem_ptr_t &pData)
 	{
-		static int32_t i = 0;
-		i += pData->get_len();
-		std::cout<<"total : "<<i<<std::endl;
 		DISPATCH(CRupEndpointTester);
 	}
 
 	void CRupEndpointTester::handle_pkg(nm_pkg::CPkgTest &pkg, u_int32_t uiTag)
 	{
-		std::cout<<"recv: "<<pkg.i32<<std::endl;
+		//std::cout<<"recv: "<<pkg.i32<<std::endl;
+		static int32_t i = 0;
+		CMN_ASSERT(i++ == pkg.i32);
+		if (i % 10000 == 0)
+		{
+			std::cout<<i<<std::endl;
+		}
 
 //		nm_pkg::CArchive<nm_pkg::CPkgHdr, nm_pkg::CPkgTest> ar;
 //		ar.get_next_body()->i32 = pkg.i32 + 1;

@@ -18,7 +18,7 @@ int main()
 	nm_framework::sn_engine_ptr_t pSNEngine = SYS_NOTRW_NEW(nm_framework::CSNEngine);
 	IF_TRUE_THEN_RETURN_CODE(pSNEngine->start(2, 2, nm_framework::EIEN_EPOLL, 100) < 0, -1);
 
-#if 0
+#if 1
 	std::cout<<"ok1"<<std::endl;
 
 	nm_smartnet::nm_rup::tcp_acceptor_ptr_t pTcpAcceptor = SYS_NOTRW_NEW(nm_smartnet::nm_rup::CRupAcceptor(pSNEngine));
@@ -46,7 +46,7 @@ int main()
 	pB->open();
 
 	int i = 0;
-	for (; i < 1;)
+	for (; i < 1000001;)
 	{
 		if (pB->is_opened())
 		{
@@ -54,7 +54,7 @@ int main()
 			ar.get_next_body()->i32 = i++;
 			pB->send_data(ar.serialize());
 		}
-		sleep(1);
+		//sleep(1);
 	}
 
 
@@ -152,7 +152,7 @@ int main()
 	pRmpRecver->open(cmn_string_t("239.192.111.112"), cmn_string_t("0.0.0.0"), 8888, 11, 100);
 #endif
 
-#if 1
+#if 0
 	nm_busi::rmp_ep_tester_ptr_t pRmpSender = SYS_NOTRW_NEW(nm_busi::CRmpEndpointTester(pSNEngine, nm_smartnet::nm_rmp::RMP_SEND_ENDPOINT));
 	pRmpSender->open(cmn_string_t("239.192.111.112"), cmn_string_t("0.0.0.0"), 8888, 11, 100);
 	u_int32_t i32Cnt = 0;

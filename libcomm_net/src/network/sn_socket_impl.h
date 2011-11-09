@@ -62,7 +62,7 @@ namespace nm_network
 
 		//virtual int32_t sendex(nm_mem::mem_ptr_t&);
 		int32_t send(nm_mem::mem_ptr_t&);
-		int32_t send(cmn_pvoid_t pV, u_int32_t ui32Len);
+		int32_t send(cmn_byte_t *pV, u_int32_t ui32Len);
 
 		int32_t handle_can_recv(u_int32_t uiMemSize);
 		int32_t recv(cmn_pvoid_t pV, u_int32_t ui32Size);
@@ -90,7 +90,6 @@ namespace nm_network
 #define __MAX_IO_VEC_CNT__ (10)
 #define __UNORDERED_PKGS_CNT__ (100000)
 #define __SEND_WIN_SIZE__ (1000000)
-
 	typedef sockaddr_in sn_sock_addr_t;
 	enum
 	{
@@ -174,8 +173,8 @@ namespace nm_network
 		int32_t handle_can_recv(u_int32_t ui32MemSz);
 
 		int32_t get_local_bind_addr(sn_sock_addr_t&);
-		int32_t sendep_handle_data(sn_sock_addr_t&);
-		int32_t recvep_handle_data(sn_sock_addr_t&);
+		int32_t sendep_handle_pkg(sn_sock_addr_t&);
+		int32_t recvep_handle_pkg(sn_sock_addr_t&);
 		int32_t handle_can_send();
 		///
 		int32_t recvep_handle_odata(sn_sock_addr_t&);

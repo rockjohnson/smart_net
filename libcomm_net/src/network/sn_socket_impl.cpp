@@ -368,16 +368,121 @@ namespace nm_network
 		return i32Ret;
 	}
 
-	int32_t CRupSock::send(cmn_pvoid_t pV, u_int32_t ui32Len)
+	int32_t CRupSock::send(cmn_byte_t *pV, u_int32_t ui32Len)
 	{
+		nm_mem::mem_ptr_t pData;
+		if (!m_lkSending.try_lock()) ///try send lock failed
+		{
+			///put the msg into queue, then return.
+			nm_utils::spin_scopelk_t splk(m_lkSendQ);
+			if (m_qSendCache.empty())
+			{
+				nm_mem::mem_ptr_t pMem = NEW_MEM(ui32Len);
+				pMem->append(pV, ui32Len);
+				m_qSendCache.push_back(pMem);
+			}
+			else
+			{
+				if (!(CMNERR_SUC == m_qSendCache.back()->append(pV, ui32Len)))
+				{
+					nm_mem::mem_ptr_t pMem = NEW_MEM(ui32Len);
+					pMem->append(pV, ui32Len);
+					m_qSendCache.push_back(pMem);
+				}
+			}
 
+			return CMNERR_SEND_PENDING;
+		}
+		else
+		{
+			{
+				nm_utils::spin_scopelk_t splk(m_lkSendQ);
+				//if there have been a block of data needed sending, just push me after it.
+				if (!m_qSendCache.empty())
+				{
+					m_lkSending.unlock();
+
+					if (CMNERR_SUC != m_qSendCache.back()->append(pV, ui32Len))
+					{
+						nm_mem::mem_ptr_t pMem = NEW_MEM(ui32Len);
+						pMem->append(pV, ui32Len);
+						m_qSendCache.push_back(pMem);
+					}
+
+					return CMNERR_SEND_PENDING;
+				}
+			}
+			pData = NEW_MEM(ui32Len);
+			pData->append(pV, ui32Len);
+		}
+
+#if (__USING_OLD_IO_METHOD__)
+		int32_t i32Ret = ::send(m_hSock, (const char*) (pData->get_data()), pData->get_len(), 0/*MSG_NOSIGNAL*/);
+#else
+		struct iovec iov;
+		iov.iov_base = pData->get_data();
+		iov.iov_len = pData->get_len();
+		struct msghdr senddata;
+		senddata.msg_name = NULL;
+		senddata.msg_namelen = 0;
+		senddata.msg_iov = &iov;
+		senddata.msg_iovlen = 1;
+		senddata.msg_control = NULL;
+		senddata.msg_controllen = 0;
+		senddata.msg_flags = 0;
+		int32_t i32Ret = ::sendmsg(m_hSock, &senddata, 0);
+#endif
+		if (i32Ret < 0)
+		{
+#if (__PLATFORM__ == __PLATFORM_LINUX__)
+			if (EWOULDBLOCK/*EAGAIN*/== errno)
+#elif defined(__PLATEFORM_WINDOWS__)
+			if (WSAEWOULDBLOCK/*EAGAIN*/==::GetLastError())
+#endif
+			{
+				m_lkSending.unlock();
+				return CMNERR_SEND_PENDING;
+			}
+			else
+			{
+				m_lkSending.unlock();
+				return CMNERR_IO_ERR;
+			}
+		}
+
+#ifdef __FOR_DEBUG__
+		if (0 == i32Ret)
+		{
+			TRACE_LAST_ERR(send);
+			continue;
+		}
+#endif
+		CMN_ASSERT(0 != i32Ret); //what the meaning if zero??
+
+		if (pData->get_len() > i32Ret)
+		{
+			pData->dec_head_data(i32Ret);
+			{
+				nm_utils::spin_scopelk_t lk(m_lkSendQ);
+				m_qSendCache.push_front(pData);
+			}
+			i32Ret = CMNERR_SEND_PENDING;
+		}
+		else
+		{
+			i32Ret = CMNERR_SUC;
+		}
+
+		m_lkSending.unlock();
+
+		return i32Ret;
 	}
 
 	int32_t CRupSock::handle_can_recv(u_int32_t uiMemSize)
 	{
 		if (NULL != m_pRecvedData)
 		{
-			CMN_ASSERT(m_pRecvedData->get_len() == 0);
+			//CMN_ASSERT(m_pRecvedData->get_len() == 0);
 			m_pRecvedData->move_data_ahead();
 		}
 		else
@@ -576,7 +681,9 @@ namespace nm_network
 		m_ui8SenderId = ui8SenderId;
 		m_ui32SendAckCnt = ui32AckConfirmCnt;
 
-		m_log.init("", "rmpsock_", ELL_DEBUG, 60);
+		char buf[1024] = { 0 };
+		sprintf(buf, "%lu_", this);
+		m_log.init("", buf, ELL_DEBUG, 60);
 
 		return open(INVALID_SOCKET);
 	}
@@ -694,13 +801,6 @@ namespace nm_network
 		///added into send buf
 		{
 			nm_utils::spin_scopelk_t lk(m_lkSenderWin); ///just for handle multi senders.
-			if ((1 < m_ui64ValidSendingDataTail) && ((m_ui64SendingSeqNo + 1) != m_ui64ValidSendingDataTail) && (NULL != m_vecSendWin[(m_ui64ValidSendingDataTail - 1) % m_ui32SenderWinSize])
-					&& (CMNERR_SUC == m_vecSendWin[(m_ui64ValidSendingDataTail - 1) % m_ui32SenderWinSize]->append(pMem->get_offset_data(pMem->get_init_offset()),
-							pMem->get_len() - pMem->get_init_offset())))
-			{
-				pMem->reset();
-				return CMNERR_SUC;
-			}
 			///
 			if (((m_ui64ValidSendingDataTail + 1) % m_ui32SenderWinSize) == (m_ui64ValidSendingDataHead % m_ui32SenderWinSize))
 			{
@@ -709,9 +809,9 @@ namespace nm_network
 			///
 			pOdata->ui64SeqNo = m_ui64ValidSendingDataTail;
 			m_vecSendWin[pOdata->ui64SeqNo % m_ui32SenderWinSize] = pMem;
-			pMem = NULL;
 			m_ui64ValidSendingDataTail++;
 		}
+		pMem = NULL;
 
 		return CMNERR_SUC;
 	}
@@ -770,30 +870,8 @@ namespace nm_network
 		int32_t i32Ret = CMNERR_SUC;
 		for (;;)
 		{
-			///control send speed.
-			if ((m_ui64SendingSeqNo - m_ui64LastSpeedControlSeqNo) > __SPEED_CONTROL_INTERVAL__)
-			{
-				if (0 == m_ui64LastSpeedControlSeqNo)
-				{
-					m_ui64LastSpeedControlSeqNo = nm_utils::CTimeInfo::get_current_time_us();
-				}
-
-				u_int64_t ui64CurMs = ((nm_utils::CTimeInfo::get_current_time_us() - m_ui64LastSpeedControlTime) / 1000);
-				if (0 == ui64CurMs)
-				{
-					ui64CurMs = 1;
-				}
-				if ((((m_ui64SendingSeqNo - m_ui64LastSpeedControlSeqNo)) / ui64CurMs) > m_ui32SendSpeed)
-				{
-					m_ui64LastSpeedControlTime = nm_utils::CTimeInfo::get_current_time_us();
-					m_ui64LastSpeedControlSeqNo = m_ui64SendingSeqNo;
-					TRACE_LOG(m_log, ELL_DEBUG, "control speed\n");
-					break;
-				}
-			}
-
 			///is there some data available?
-			if ((m_ui64SendingSeqNo + 1) == m_ui64ValidSendingDataTail)
+			if (((m_ui64SendingSeqNo + 1 - m_ui64ValidSendingDataHead) > (m_ui32SenderWinSize / 10)) || ((m_ui64SendingSeqNo + 1) == m_ui64ValidSendingDataTail))
 			{
 				u_int64_t ui64CurTime = nm_utils::CTimeInfo::get_current_time_us();
 				if (0 == m_ui64LastHbTime)
@@ -813,21 +891,47 @@ namespace nm_network
 					CMN_ASSERT(CMNERR_SUC == udp_send(buf, pHdr->ui24Len, (const struct sockaddr*) (&m_addrMulticast)));
 				}
 
-				i32Ret = CMNERR_NO_DATA;
+				i32Ret = CMNERR_SUC;
 				break;
 			}
+			///
+#if 0
+			///control send speed.
+			if ((m_ui64SendingSeqNo - m_ui64LastSpeedControlSeqNo) > __SPEED_CONTROL_INTERVAL__)
+			{
+
+				if (0 == m_ui64LastSpeedControlSeqNo)
+				{
+					m_ui64LastSpeedControlSeqNo = nm_utils::CTimeInfo::get_current_time_us();
+				}
+
+				u_int64_t ui64CurMs = ((nm_utils::CTimeInfo::get_current_time_us() - m_ui64LastSpeedControlTime) / 1000);
+				if (0 == ui64CurMs)
+				{
+					ui64CurMs = 1;
+				}
+				if ((((m_ui64SendingSeqNo - m_ui64LastSpeedControlSeqNo)) / ui64CurMs) > m_ui32SendSpeed)
+				{
+					m_ui64LastSpeedControlTime = nm_utils::CTimeInfo::get_current_time_us();
+					m_ui64LastSpeedControlSeqNo = m_ui64SendingSeqNo;
+					TRACE_LOG(m_log, ELL_DEBUG, "control speed\n");
+					break;
+				}
+			}
+#else
+#endif
 			///
 			CMN_ASSERT(m_ui64SendingSeqNo < m_ui64ValidSendingDataTail);
 			///
 			mem_ptr_t pMem = m_vecSendWin[(m_ui64SendingSeqNo + 1) % m_ui32SenderWinSize];
-			if ((m_ui64SendingSeqNo + 2) == m_ui64ValidSendingDataTail)
-			{
-				nm_utils::spin_scopelk_t lk(m_lkSenderWin);
-				m_vecSendWin[(m_ui64SendingSeqNo + 1) % m_ui32SenderWinSize] = NULL;
-			}
+			//			if ((m_ui64SendingSeqNo + 2) == m_ui64ValidSendingDataTail)
+			//			{
+			//				nm_utils::spin_scopelk_t lk(m_lkSenderWin);
+			//				m_vecSendWin[(m_ui64SendingSeqNo + 1) % m_ui32SenderWinSize] = NULL;
+			//			}
 			///
 			i32Ret = udp_send(pMem, (const struct sockaddr*) (&m_addrMulticast));
-			m_vecSendWin[(m_ui64SendingSeqNo + 1) % m_ui32SenderWinSize] = pMem;
+			//			m_vecSendWin[(m_ui64SendingSeqNo + 1) % m_ui32SenderWinSize] = pMem;
 			if ((CMNERR_IO_ERR == i32Ret) || (CMNERR_SEND_PENDING == i32Ret))
 			{
 				break;
@@ -868,11 +972,11 @@ namespace nm_network
 
 			if (RMP_RECV_SOCK == m_i32Type)
 			{
-				i32Ret = recvep_handle_data(sSrcAddr);
+				i32Ret = recvep_handle_pkg(sSrcAddr);
 			}
 			else if (RMP_SEND_SOCK == m_i32Type)
 			{
-				i32Ret = sendep_handle_data(sSrcAddr);
+				i32Ret = sendep_handle_pkg(sSrcAddr);
 			}
 			else
 			{
@@ -889,13 +993,17 @@ namespace nm_network
 	}
 
 	///
-	int32_t CRmpSock::recvep_handle_data(sn_sock_addr_t &sSrcAddr)
+	int32_t CRmpSock::recvep_handle_pkg(sn_sock_addr_t &sSrcAddr)
 	{
 		///
 		SRmpHdr *pHdr = (SRmpHdr*) (m_pMem->get_data());
 		m_pMem->dec_head_data(sizeof(SRmpHdr));
 		///只要发送源ID是一致的，源地址不做校验
-		IF_TRUE_THEN_RETURN_CODE(((EP_DATA != pHdr->ui8Opcode && EP_HB != pHdr->ui8Opcode) || pHdr->ui8SrcId != m_ui8SenderId), CMNERR_COMMON_ERR);
+		if ((EP_DATA != pHdr->ui8Opcode && EP_HB != pHdr->ui8Opcode) || pHdr->ui8SrcId != m_ui8SenderId)
+		{
+			CMN_ASSERT(false);
+			return CMNERR_COMMON_ERR;
+		}
 		if (m_addrSender.sin_addr.s_addr != sSrcAddr.sin_addr.s_addr || m_addrSender.sin_port != sSrcAddr.sin_port)
 		{
 			m_addrSender.sin_addr.s_addr = sSrcAddr.sin_addr.s_addr;
@@ -909,11 +1017,15 @@ namespace nm_network
 	 *
 	 * i don't care who is receiver....:)...
 	 * */
-	int32_t CRmpSock::sendep_handle_data(sn_sock_addr_t &sSrcAddr)
+	int32_t CRmpSock::sendep_handle_pkg(sn_sock_addr_t &sSrcAddr)
 	{
 		///
 		SRmpHdr *pHdr = (SRmpHdr*) (m_pMem->get_data());
-		IF_TRUE_THEN_RETURN_CODE((EP_ACK != pHdr->ui8Opcode && EP_NAK != pHdr->ui8Opcode), CMNERR_COMMON_ERR);
+		if (EP_ACK != pHdr->ui8Opcode && EP_NAK != pHdr->ui8Opcode)
+		{
+			CMN_ASSERT(false);
+			return CMNERR_COMMON_ERR;
+		}
 		m_pMem->dec_head_data(sizeof(SRmpHdr));
 		return (this->*(pkg_handlers[pHdr->ui8Opcode].fun))(sSrcAddr);
 	}
@@ -1032,7 +1144,11 @@ namespace nm_network
 			///lost some pkg or wrong ordered.
 			///modify begin .end?
 			bool bFlag = true;
-			if (pOdata->ui64SeqNo < m_ui64UnvalidPkgBegin)
+			if (0 == m_ui64UnvalidPkgBegin)
+			{
+				m_ui64UnvalidPkgBegin = m_ui64UnvalidPkgEnd = pOdata->ui64SeqNo;
+			}
+			else if (pOdata->ui64SeqNo < m_ui64UnvalidPkgBegin)
 			{
 				m_ui64UnvalidPkgBegin = pOdata->ui64SeqNo;
 			}
@@ -1042,6 +1158,7 @@ namespace nm_network
 				{
 					///beyond limitation.
 					///discard it
+					CMN_ASSERT(false);
 					bFlag = false;
 					m_pMem->reset();
 				}
@@ -1071,6 +1188,7 @@ namespace nm_network
 	{
 		int32_t i32Ret = CMNERR_SUC;
 		SRmpHb *pHb = (SRmpHb*) (m_pMem->get_data());
+
 		if (pHb->ui64LatestSeqNo > m_ui64LatestRecvedValidSeqNo)
 		{
 			cmn_byte_t buf[8192];
@@ -1123,6 +1241,7 @@ namespace nm_network
 			return CMNERR_SUC;
 		}
 
+		m_pMem->reset();
 		///find the pkg and send again...
 		int32_t i32Ret = CMNERR_SUC;
 		for (u_int64_t ui64 = pNak->ui64Begin; ui64 <= pNak->ui64End; ui64++)
